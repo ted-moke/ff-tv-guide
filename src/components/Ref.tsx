@@ -1,5 +1,6 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import './Ref.css';
+import nflSchedule from '../assets/nfl-schedule-2024.json';
 
 interface FantasyTeam {
   name: string;
@@ -46,12 +47,52 @@ type Conference = 'AFC' | 'NFC' | 'Both';
 
 type SortOption = 'division' | 'players' | 'name';
 
+type ViewMode = 'overview' | 'matchup';
+
+interface NFLGame {
+  week: number;
+  date: string;
+  time: string;
+  away_team: string;
+  home_team: string;
+}
+
+// Utility functions
+const getCurrentWeek = () => {
+  const now = new Date();
+  const easternTime = new Date(now.toLocaleString("en-US", {timeZone: "America/New_York"}));
+  const seasonStart = new Date('2024-09-05T00:00:00-04:00'); // First game of 2024 season
+  
+  if (easternTime < seasonStart) {
+    return 1;
+  }
+
+  const weeksPassed = Math.floor((easternTime.getTime() - seasonStart.getTime()) / (7 * 24 * 60 * 60 * 1000));
+  return Math.min(Math.max(weeksPassed + 1, 1), 18); // Ensure week is between 1 and 18
+};
+
+const formatDateToLocal = (dateString: string, timeString: string) => {
+  const [month, day, year] = dateString.split('/');
+  const [hours, minutes] = timeString.split(':');
+  const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day), parseInt(hours), parseInt(minutes));
+  return date.toLocaleString();
+};
+
 const AIChatHistory: React.FC = () => {
+  const [viewMode, setViewMode] = useState<ViewMode>('overview');
   const [activeFantasyTeams, setActiveFantasyTeams] = useState<string[]>(FANTASY_TEAMS.map(team => team.name));
   const [activeConference, setActiveConference] = useState<Conference>('Both');
   const [sortBy, setSortBy] = useState<SortOption>('name');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [hideEmptyTeams, setHideEmptyTeams] = useState(false);  // New state for hiding empty teams
+  const [hideEmptyTeams, setHideEmptyTeams] = useState(false);
+  const [selectedWeek, setSelectedWeek] = useState(getCurrentWeek());
+
+  useEffect(() => {
+    // Update selected week when view mode changes to matchup
+    if (viewMode === 'matchup') {
+      setSelectedWeek(getCurrentWeek());
+    }
+  }, [viewMode]);
 
   const handleFantasyTeamToggle = (teamName: string) => {
     setActiveFantasyTeams(prev => 
@@ -94,46 +135,91 @@ const AIChatHistory: React.FC = () => {
         return a.team.localeCompare(b.team);
       }
     });
-  }, [activeConference, activeFantasyTeams, sortBy, hideEmptyTeams]);  // Add hideEmptyTeams to dependencies
+  }, [activeConference, activeFantasyTeams, sortBy, hideEmptyTeams]);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  const weeklySchedule = useMemo(() => {
+    return nflSchedule.filter(game => game.week === selectedWeek);
+  }, [selectedWeek]);
+
   return (
     <div className="sports-dashboard">
       <div className="mobile-header">
-        <h1>NFL Teams and Fantasy Players</h1>
+        <h1>NFL Fantasy Dashboard</h1>
         <button className="mobile-menu-toggle" onClick={toggleMobileMenu}>
           {isMobileMenuOpen ? 'Close' : 'Menu'}
         </button>
       </div>
       <aside className={`sidebar ${isMobileMenuOpen ? 'open' : ''}`}>
         <h2>Controls</h2>
-        <div className="control-group">
-          <h3>Conference</h3>
-          <div className="conference-tabs">
-            {(['AFC', 'NFC', 'Both'] as Conference[]).map(conf => (
-              <button 
-                key={conf}
-                className={activeConference === conf ? 'active' : ''} 
-                onClick={() => setActiveConference(conf)}
-              >
-                {conf}
-              </button>
-            ))}
-          </div>
+        <div className="control-group view-toggle">
+          <button 
+            className={viewMode === 'overview' ? 'active' : ''}
+            onClick={() => setViewMode('overview')}
+          >
+            Overview
+          </button>
+          <button 
+            className={viewMode === 'matchup' ? 'active' : ''}
+            onClick={() => setViewMode('matchup')}
+          >
+            Matchup Guide
+          </button>
         </div>
-        <div className="control-group">
-          <h3>Sort By</h3>
-          <div className="sort-dropdown">
-            <select value={sortBy} onChange={(e) => setSortBy(e.target.value as SortOption)}>
-              <option value="name">Team Name</option>
-              <option value="division">Division</option>
-              <option value="players">Number of Players</option>
+        {viewMode === 'overview' ? (
+          <>
+            <div className="control-group">
+              <h3>Conference</h3>
+              <div className="conference-tabs">
+                {(['AFC', 'NFC', 'Both'] as Conference[]).map(conf => (
+                  <button 
+                    key={conf}
+                    className={activeConference === conf ? 'active' : ''} 
+                    onClick={() => setActiveConference(conf)}
+                  >
+                    {conf}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="control-group">
+              <h3>Sort By</h3>
+              <div className="sort-dropdown">
+                <select value={sortBy} onChange={(e) => setSortBy(e.target.value as SortOption)}>
+                  <option value="name">Team Name</option>
+                  <option value="division">Division</option>
+                  <option value="players">Number of Players</option>
+                </select>
+              </div>
+            </div>
+            <div className="control-group">
+              <h3>Display Options</h3>
+              <label className="toggle-option">
+                <input
+                  type="checkbox"
+                  checked={hideEmptyTeams}
+                  onChange={() => setHideEmptyTeams(!hideEmptyTeams)}
+                />
+                Hide teams with no players
+              </label>
+            </div>
+          </>
+        ) : (
+          <div className="control-group">
+            <h3>Select Week</h3>
+            <select 
+              value={selectedWeek} 
+              onChange={(e) => setSelectedWeek(Number(e.target.value))}
+            >
+              {Array.from({length: 18}, (_, i) => i + 1).map(week => (
+                <option key={week} value={week}>Week {week}</option>
+              ))}
             </select>
           </div>
-        </div>
+        )}
         <div className="control-group">
           <h3>Fantasy Teams</h3>
           <div className="fantasy-team-list">
@@ -153,39 +239,40 @@ const AIChatHistory: React.FC = () => {
             ))}
           </div>
         </div>
-        <div className="control-group">
-          <h3>Display Options</h3>
-          <label className="toggle-option">
-            <input
-              type="checkbox"
-              checked={hideEmptyTeams}
-              onChange={() => setHideEmptyTeams(!hideEmptyTeams)}
-            />
-            Hide teams with no players
-          </label>
-        </div>
       </aside>
       <main className="main-content">
-        <div className="teams-grid">
-          {sortedGroupedPlayers.map(({ team, players, division }) => (
-            <div key={team} className="team-card">
-              <h2>
-                {team}
-                <span className="player-count">({players.length})</span>
-              </h2>
-              <p className="division">{division}</p>
-              {players.length > 0 ? (
-                <ul>
-                  {players.map(player => (
-                    <li key={player.name}>{player.name} <span className="fantasy-team">({player.fantasyTeam})</span></li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="no-players">No fantasy players in this team</p>
-              )}
-            </div>
-          ))}
-        </div>
+        {viewMode === 'overview' ? (
+          <div className="teams-grid">
+            {sortedGroupedPlayers.map(({ team, players, division }) => (
+              <div key={team} className="team-card">
+                <h2>
+                  {team}
+                  <span className="player-count">({players.length})</span>
+                </h2>
+                <p className="division">{division}</p>
+                {players.length > 0 ? (
+                  <ul>
+                    {players.map(player => (
+                      <li key={player.name}>{player.name} <span className="fantasy-team">({player.fantasyTeam})</span></li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="no-players">No fantasy players in this team</p>
+                )}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="matchup-guide">
+            <h2>Week {selectedWeek} Matchups</h2>
+            {weeklySchedule.map((game: NFLGame, index) => (
+              <div key={index} className="matchup">
+                <p>{game.away_team} @ {game.home_team}</p>
+                <p>Date: {formatDateToLocal(game.date, game.time)}</p>
+              </div>
+            ))}
+          </div>
+        )}
       </main>
     </div>
   );

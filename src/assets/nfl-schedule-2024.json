@@ -106,3 +106,33 @@
           "awayTeam": "Dallas Cowboys",
           "homeTeam": "Cleveland Browns",
           "location": null,
+          "channel": "FOX"
+        },
+        {
+          "date": "2024-09-08",
+          "time": "16:25",
+          "awayTeam": "Washington Commanders",
+          "homeTeam": "Tampa Bay Buccaneers",
+          "location": null,
+          "channel": "FOX"
+        },
+        {
+          "date": "2024-09-08",
+          "time": "20:20",
+          "awayTeam": "Los Angeles Rams",
+          "homeTeam": "Detroit Lions",
+          "location": null,
+          "channel": "NBC"
+        },
+        {
+          "date": "2024-09-09",
+          "time": "20:15",
+          "awayTeam": "New York Jets",
+          "homeTeam": "San Francisco 49ers",
+          "location": null,
+          "channel": "ESPN/ABC"
+        }
+      ]
+    }
+  ]
+}
