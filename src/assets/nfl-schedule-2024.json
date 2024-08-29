@@ -9,7 +9,6 @@
           "time": "20:20",
           "awayTeam": "Baltimore Ravens",
           "homeTeam": "Kansas City Chiefs",
-          "location": null,
           "channel": "NBC"
         },
         {
@@ -17,15 +16,14 @@
           "time": "20:15",
           "awayTeam": "Green Bay Packers",
           "homeTeam": "Philadelphia Eagles",
-          "location": "Sao Paulo",
-          "channel": "Peacock"
+          "channel": "Peacock",
+          "notes": "Sao Paulo"
         },
         {
           "date": "2024-09-08",
           "time": "13:00",
           "awayTeam": "Pittsburgh Steelers",
           "homeTeam": "Atlanta Falcons",
-          "location": null,
           "channel": "FOX"
         },
         {
@@ -33,7 +31,6 @@
           "time": "13:00",
           "awayTeam": "Arizona Cardinals",
           "homeTeam": "Buffalo Bills",
-          "location": null,
           "channel": "CBS"
         },
         {
@@ -41,7 +38,6 @@
           "time": "13:00",
           "awayTeam": "Tennessee Titans",
           "homeTeam": "Chicago Bears",
-          "location": null,
           "channel": "FOX"
         },
         {
@@ -49,7 +45,6 @@
           "time": "13:00",
           "awayTeam": "New England Patriots",
           "homeTeam": "Cincinnati Bengals",
-          "location": null,
           "channel": "CBS"
         },
         {
@@ -57,7 +52,6 @@
           "time": "13:00",
           "awayTeam": "Houston Texans",
           "homeTeam": "Indianapolis Colts",
-          "location": null,
           "channel": "CBS"
         },
         {
@@ -65,7 +59,6 @@
           "time": "13:00",
           "awayTeam": "Jacksonville Jaguars",
           "homeTeam": "Miami Dolphins",
-          "location": null,
           "channel": "CBS"
         },
         {
@@ -73,7 +66,6 @@
           "time": "13:00",
           "awayTeam": "Carolina Panthers",
           "homeTeam": "New Orleans Saints",
-          "location": null,
           "channel": "FOX"
         },
         {
@@ -81,7 +73,6 @@
           "time": "13:00",
           "awayTeam": "Minnesota Vikings",
           "homeTeam": "New York Giants",
-          "location": null,
           "channel": "FOX"
         },
         {
@@ -89,7 +80,6 @@
           "time": "16:05",
           "awayTeam": "Las Vegas Raiders",
           "homeTeam": "Los Angeles Chargers",
-          "location": null,
           "channel": "CBS"
         },
         {
@@ -97,7 +87,6 @@
           "time": "16:05",
           "awayTeam": "Denver Broncos",
           "homeTeam": "Seattle Seahawks",
-          "location": null,
           "channel": "CBS"
         },
         {
@@ -105,7 +94,6 @@
           "time": "16:25",
           "awayTeam": "Dallas Cowboys",
           "homeTeam": "Cleveland Browns",
-          "location": null,
           "channel": "FOX"
         },
         {
@@ -113,7 +101,6 @@
           "time": "16:25",
           "awayTeam": "Washington Commanders",
           "homeTeam": "Tampa Bay Buccaneers",
-          "location": null,
           "channel": "FOX"
         },
         {
@@ -121,7 +108,6 @@
           "time": "20:20",
           "awayTeam": "Los Angeles Rams",
           "homeTeam": "Detroit Lions",
-          "location": null,
           "channel": "NBC"
         },
         {
@@ -129,8 +115,390 @@
           "time": "20:15",
           "awayTeam": "New York Jets",
           "homeTeam": "San Francisco 49ers",
-          "location": null,
           "channel": "ESPN/ABC"
+        }
+      ]
+    },
+    {
+      "weekNumber": 2,
+      "games": [
+        {
+          "date": "2024-09-12",
+          "time": "20:15",
+          "awayTeam": "Buffalo Bills",
+          "homeTeam": "Miami Dolphins",
+          "location": null,
+          "channel": "Prime Video"
+        },
+        {
+          "date": "2024-09-15",
+          "time": "13:00",
+          "awayTeam": "Las Vegas Raiders",
+          "homeTeam": "Baltimore Ravens",
+          "location": null,
+          "channel": "CBS"
+        },
+        {
+          "date": "2024-09-15",
+          "time": "13:00",
+          "awayTeam": "Los Angeles Chargers",
+          "homeTeam": "Carolina Panthers",
+          "location": null,
+          "channel": "CBS"
+        },
+        {
+          "date": "2024-09-15",
+          "time": "13:00",
+          "awayTeam": "New Orleans Saints",
+          "homeTeam": "Dallas Cowboys",
+          "location": null,
+          "channel": "FOX"
+        },
+        {
+          "date": "2024-09-15",
+          "time": "13:00",
+          "awayTeam": "Tampa Bay Buccaneers",
+          "homeTeam": "Detroit Lions",
+          "location": null,
+          "channel": "FOX"
+        },
+        {
+          "date": "2024-09-15",
+          "time": "13:00",
+          "awayTeam": "Indianapolis Colts",
+          "homeTeam": "Green Bay Packers",
+          "location": null,
+          "channel": "FOX"
+        },
+        {
+          "date": "2024-09-15",
+          "time": "13:00",
+          "awayTeam": "Cleveland Browns",
+          "homeTeam": "Jacksonville Jaguars",
+          "location": null,
+          "channel": "CBS"
+        },
+        {
+          "date": "2024-09-15",
+          "time": "13:00",
+          "awayTeam": "San Francisco 49ers",
+          "homeTeam": "Minnesota Vikings",
+          "location": null,
+          "channel": "CBS"
+        },
+        {
+          "date": "2024-09-15",
+          "time": "13:00",
+          "awayTeam": "Seattle Seahawks",
+          "homeTeam": "New England Patriots",
+          "location": null,
+          "channel": "FOX"
+        },
+        {
+          "date": "2024-09-15",
+          "time": "13:00",
+          "awayTeam": "New York Jets",
+          "homeTeam": "Tennessee Titans",
+          "location": null,
+          "channel": "CBS"
+        },
+        {
+          "date": "2024-09-15",
+          "time": "13:00",
+          "awayTeam": "New York Giants",
+          "homeTeam": "Washington Commanders",
+          "location": null,
+          "channel": "FOX"
+        },
+        {
+          "date": "2024-09-15",
+          "time": "16:05",
+          "awayTeam": "Los Angeles Rams",
+          "homeTeam": "Arizona Cardinals",
+          "location": null,
+          "channel": "FOX"
+        },
+        {
+          "date": "2024-09-15",
+          "time": "16:25",
+          "awayTeam": "Pittsburgh Steelers",
+          "homeTeam": "Denver Broncos",
+          "location": null,
+          "channel": "CBS"
+        },
+        {
+          "date": "2024-09-15",
+          "time": "16:25",
+          "awayTeam": "Cincinnati Bengals",
+          "homeTeam": "Kansas City Chiefs",
+          "location": null,
+          "channel": "CBS"
+        },
+        {
+          "date": "2024-09-15",
+          "time": "20:20",
+          "awayTeam": "Chicago Bears",
+          "homeTeam": "Houston Texans",
+          "location": null,
+          "channel": "NBC"
+        },
+        {
+          "date": "2024-09-16",
+          "time": "20:15",
+          "awayTeam": "Atlanta Falcons",
+          "homeTeam": "Philadelphia Eagles",
+          "location": null,
+          "channel": "ESPN"
+        }
+      ]
+    },
+    {
+      "weekNumber": 3,
+      "games": [
+        {
+          "date": "2024-09-19",
+          "time": "20:15",
+          "awayTeam": "New England Patriots",
+          "homeTeam": "New York Jets",
+          "location": null,
+          "channel": "Prime Video"
+        },
+        {
+          "date": "2024-09-22",
+          "time": "13:00",
+          "awayTeam": "New York Giants",
+          "homeTeam": "Cleveland Browns",
+          "location": null,
+          "channel": "FOX"
+        },
+        {
+          "date": "2024-09-22",
+          "time": "13:00",
+          "awayTeam": "Chicago Bears",
+          "homeTeam": "Indianapolis Colts",
+          "location": null,
+          "channel": "CBS"
+        },
+        {
+          "date": "2024-09-22",
+          "time": "13:00",
+          "awayTeam": "Houston Texans",
+          "homeTeam": "Minnesota Vikings",
+          "location": null,
+          "channel": "CBS"
+        },
+        {
+          "date": "2024-09-22",
+          "time": "13:00",
+          "awayTeam": "Philadelphia Eagles",
+          "homeTeam": "New Orleans Saints",
+          "location": null,
+          "channel": "FOX"
+        },
+        {
+          "date": "2024-09-22",
+          "time": "13:00",
+          "awayTeam": "Los Angeles Chargers",
+          "homeTeam": "Pittsburgh Steelers",
+          "location": null,
+          "channel": "CBS"
+        },
+        {
+          "date": "2024-09-22",
+          "time": "13:00",
+          "awayTeam": "Denver Broncos",
+          "homeTeam": "Tampa Bay Buccaneers",
+          "location": null,
+          "channel": "FOX"
+        },
+        {
+          "date": "2024-09-22",
+          "time": "13:00",
+          "awayTeam": "Green Bay Packers",
+          "homeTeam": "Tennessee Titans",
+          "location": null,
+          "channel": "FOX"
+        },
+        {
+          "date": "2024-09-22",
+          "time": "16:05",
+          "awayTeam": "Carolina Panthers",
+          "homeTeam": "Las Vegas Raiders",
+          "location": null,
+          "channel": "CBS"
+        },
+        {
+          "date": "2024-09-22",
+          "time": "16:05",
+          "awayTeam": "Miami Dolphins",
+          "homeTeam": "Seattle Seahawks",
+          "location": null,
+          "channel": "CBS"
+        },
+        {
+          "date": "2024-09-22",
+          "time": "16:25",
+          "awayTeam": "Detroit Lions",
+          "homeTeam": "Arizona Cardinals",
+          "location": null,
+          "channel": "FOX"
+        },
+        {
+          "date": "2024-09-22",
+          "time": "16:25",
+          "awayTeam": "Baltimore Ravens",
+          "homeTeam": "Dallas Cowboys",
+          "location": null,
+          "channel": "FOX"
+        },
+        {
+          "date": "2024-09-22",
+          "time": "16:25",
+          "awayTeam": "San Francisco 49ers",
+          "homeTeam": "Los Angeles Rams",
+          "location": null,
+          "channel": "FOX"
+        },
+        {
+          "date": "2024-09-22",
+          "time": "20:20",
+          "awayTeam": "Kansas City Chiefs",
+          "homeTeam": "Atlanta Falcons",
+          "location": null,
+          "channel": "NBC"
+        },
+        {
+          "date": "2024-09-23",
+          "time": "19:30",
+          "awayTeam": "Jacksonville Jaguars",
+          "homeTeam": "Buffalo Bills",
+          "location": null,
+          "channel": "ESPN"
+        },
+        {
+          "date": "2024-09-23",
+          "time": "20:15",
+          "awayTeam": "Washington Commanders",
+          "homeTeam": "Cincinnati Bengals",
+          "location": null,
+          "channel": "ABC"
+        }
+      ]
+    },
+    {
+      "weekNumber": 4,
+      "games": [
+        {
+          "date": "2024-09-26",
+          "time": "20:15",
+          "awayTeam": "Dallas Cowboys",
+          "homeTeam": "New York Giants",
+          "channel": "Prime Video"
+        },
+        {
+          "date": "2024-09-29",
+          "time": "13:00",
+          "awayTeam": "New Orleans Saints",
+          "homeTeam": "Atlanta Falcons",
+          "channel": "FOX"
+        },
+        {
+          "date": "2024-09-29",
+          "time": "13:00",
+          "awayTeam": "Cincinnati Bengals",
+          "homeTeam": "Carolina Panthers",
+          "channel": "FOX"
+        },
+        {
+          "date": "2024-09-29",
+          "time": "13:00",
+          "awayTeam": "Los Angeles Rams",
+          "homeTeam": "Chicago Bears",
+          "channel": "FOX"
+        },
+        {
+          "date": "2024-09-29",
+          "time": "13:00",
+          "awayTeam": "Minnesota Vikings",
+          "homeTeam": "Green Bay Packers",
+          "channel": "CBS"
+        },
+        {
+          "date": "2024-09-29",
+          "time": "13:00",
+          "awayTeam": "Jacksonville Jaguars",
+          "homeTeam": "Houston Texans",
+          "channel": "CBS"
+        },
+        {
+          "date": "2024-09-29",
+          "time": "13:00",
+          "awayTeam": "Pittsburgh Steelers",
+          "homeTeam": "Indianapolis Colts",
+          "channel": "CBS"
+        },
+        {
+          "date": "2024-09-29",
+          "time": "13:00",
+          "awayTeam": "Denver Broncos",
+          "homeTeam": "New York Jets",
+          "channel": "CBS"
+        },
+        {
+          "date": "2024-09-29",
+          "time": "13:00",
+          "awayTeam": "Philadelphia Eagles",
+          "homeTeam": "Tampa Bay Buccaneers",
+          "channel": "FOX"
+        },
+        {
+          "date": "2024-09-29",
+          "time": "16:05",
+          "awayTeam": "Washington Commanders",
+          "homeTeam": "Arizona Cardinals",
+          "channel": "FOX"
+        },
+        {
+          "date": "2024-09-29",
+          "time": "16:05",
+          "awayTeam": "New England Patriots",
+          "homeTeam": "San Francisco 49ers",
+          "channel": "FOX"
+        },
+        {
+          "date": "2024-09-29",
+          "time": "16:25",
+          "awayTeam": "Kansas City Chiefs",
+          "homeTeam": "Los Angeles Chargers",
+          "channel": "CBS"
+        },
+        {
+          "date": "2024-09-29",
+          "time": "16:25",
+          "awayTeam": "Cleveland Browns",
+          "homeTeam": "Las Vegas Raiders",
+          "channel": "CBS"
+        },
+        {
+          "date": "2024-09-29",
+          "time": "20:20",
+          "awayTeam": "Buffalo Bills",
+          "homeTeam": "Baltimore Ravens",
+          "channel": "NBC"
+        },
+        {
+          "date": "2024-09-30",
+          "time": "19:30",
+          "awayTeam": "Tennessee Titans",
+          "homeTeam": "Miami Dolphins",
+          "channel": "ESPN"
+        },
+        {
+          "date": "2024-09-30",
+          "time": "20:15",
+          "awayTeam": "Seattle Seahawks",
+          "homeTeam": "Detroit Lions",
+          "channel": "ABC"
         }
       ]
     }

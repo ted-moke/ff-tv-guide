@@ -124,9 +124,8 @@ body {
 
 .teams-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
-  width: 100%; /* Add this to ensure full width */
+  width: 100%;
 }
 
 .team-card {
@@ -331,31 +330,186 @@ body {
   border-radius: 8px;
 }
 
-.matchup-guide h2 {
-  margin-top: 0;
-  color: #ffffff;
-  margin-bottom: 20px;
+.game-group {
+  margin-bottom: 30px;
+}
+
+.game-group h3 {
+  color: #007bff;
+  border-bottom: 1px solid #007bff;
+  padding-bottom: 5px;
+  margin-bottom: 15px;
+}
+
+.game-group-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* Increased from 300px to 350px */
+  gap: 20px; /* Increased from 15px to 20px for more spacing between cards */
 }
 
 .matchup {
   background-color: #1e1e1e;
   border-radius: 4px;
-  padding: 15px;
+  padding: 20px; /* Increased from 15px to 20px */
+  display: flex;
+  flex-direction: column;
+  min-height: 180px; /* Increased from 150px to 180px */
+}
+
+.matchup-header {
+  margin-bottom: 20px; /* Increased from 15px to 20px */
+}
+
+.team-names {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-size: 20px; /* Increased from 18px to 20px */
+  font-weight: bold;
+}
+
+.at-symbol {
+  margin: 0 10px;
+  color: #888;
+}
+
+.matchup-content {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+}
+
+.no-players-content {
+  justify-content: center;
+}
+
+.team-players {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.team {
+  width: 48%;
+}
+
+.away-team {
+  text-align: left;
+}
+
+.home-team {
+  text-align: right;
+}
+
+.player {
+  margin: 8px 0; /* Increased from 5px to 8px */
+  font-size: 15px; /* Increased from 14px to 15px */
+}
+
+.no-players {
+  color: #888;
+  font-style: italic;
+  font-size: 14px;
+}
+
+.matchup-footer {
+  text-align: right;
+  margin-top: 10px;
+}
+
+.channel {
+  color: #888;
+  font-size: 14px;
+}
+
+.game-group {
+  margin-bottom: 30px;
+}
+
+.game-group h3 {
+  color: #007bff;
+  border-bottom: 1px solid #007bff;
+  padding-bottom: 5px;
   margin-bottom: 15px;
 }
 
-.matchup p {
-  margin: 5px 0;
+@media (min-width: 768px) {
+  .game-group-content {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
 
-.toggle-option {
-  display: flex;
-  align-items: center;
-  font-size: 14px;
-  color: #e0e0e0;
+@media (min-width: 1200px) {
+  .game-group-content {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1600px) {
+  .game-group-content {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 2000px) {
+  .game-group-content {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .game-group-content {
+    grid-template-columns: 1fr;
+  }
+  /* ... (other mobile styles remain the same) */
+}
+
+@media (min-width: 768px) {
+  .teams-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1200px) {
+  .teams-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1600px) {
+  .teams-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 767px) {
+  .teams-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.player, .team-card li {
+  position: relative;
   cursor: pointer;
 }
 
-.toggle-option input[type="checkbox"] {
-  margin-right: 8px;
+.player:hover::after, .team-card li:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 1000;
+}
+
+.multi-team {
+  font-size: 0.8em;
+  color: #888;
+  margin-left: 5px;
 }

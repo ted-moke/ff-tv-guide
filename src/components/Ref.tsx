@@ -29,18 +29,18 @@ const NFL_TEAMS = {
 };
 
 const PLAYERS = [
-  { name: 'Tom Brady', team: 'Tampa Bay Buccaneers', fantasyTeam: "Tulsa Tango" },
-  { name: 'Patrick Mahomes', team: 'Kansas City Chiefs', fantasyTeam: "Papas Tatas" },
-  { name: 'Aaron Rodgers', team: 'Green Bay Packers', fantasyTeam: "Southie Sizzlers" },
-  { name: 'Derrick Henry', team: 'Tennessee Titans', fantasyTeam: "Tulsa Tango" },
-  { name: 'Travis Kelce', team: 'Kansas City Chiefs', fantasyTeam: "Papas Tatas" },
-  { name: 'Davante Adams', team: 'Las Vegas Raiders', fantasyTeam: "Southie Sizzlers" },
-  { name: 'Josh Allen', team: 'Buffalo Bills', fantasyTeam: "Tulsa Tango" },
-  { name: 'Tyreek Hill', team: 'Miami Dolphins', fantasyTeam: "Papas Tatas" },
-  { name: 'Cooper Kupp', team: 'Los Angeles Rams', fantasyTeam: "Southie Sizzlers" },
-  { name: 'Alvin Kamara', team: 'New Orleans Saints', fantasyTeam: "Tulsa Tango" },
-  { name: 'Justin Jefferson', team: 'Minnesota Vikings', fantasyTeam: "Papas Tatas" },
-  { name: 'Stefon Diggs', team: 'Buffalo Bills', fantasyTeam: "Southie Sizzlers" },
+  { name: 'Tom Brady', team: 'Tampa Bay Buccaneers', fantasyTeams: ["Tulsa Tango", "Papas Tatas"] },
+  { name: 'Patrick Mahomes', team: 'Kansas City Chiefs', fantasyTeams: ["Papas Tatas", "Southie Sizzlers", "Tulsa Tango"] },
+  { name: 'Aaron Rodgers', team: 'Green Bay Packers', fantasyTeams: ["Southie Sizzlers"] },
+  { name: 'Derrick Henry', team: 'Tennessee Titans', fantasyTeams: ["Tulsa Tango", "Papas Tatas"] },
+  { name: 'Travis Kelce', team: 'Kansas City Chiefs', fantasyTeams: ["Papas Tatas"] },
+  { name: 'Davante Adams', team: 'Las Vegas Raiders', fantasyTeams: ["Southie Sizzlers", "Tulsa Tango"] },
+  { name: 'Josh Allen', team: 'Buffalo Bills', fantasyTeams: ["Tulsa Tango"] },
+  { name: 'Tyreek Hill', team: 'Miami Dolphins', fantasyTeams: ["Papas Tatas"] },
+  { name: 'Cooper Kupp', team: 'Los Angeles Rams', fantasyTeams: ["Southie Sizzlers"] },
+  { name: 'Alvin Kamara', team: 'New Orleans Saints', fantasyTeams: ["Tulsa Tango"] },
+  { name: 'Justin Jefferson', team: 'Minnesota Vikings', fantasyTeams: ["Papas Tatas", "Southie Sizzlers"] },
+  { name: 'Stefon Diggs', team: 'Buffalo Bills', fantasyTeams: ["Southie Sizzlers"] },
 ];
 
 type Conference = 'AFC' | 'NFC' | 'Both';
@@ -49,12 +49,21 @@ type SortOption = 'division' | 'players' | 'name';
 
 type ViewMode = 'overview' | 'matchup';
 
+interface NFLSchedule {
+  season: number;
+  weeks: {
+    weekNumber: number;
+    games: NFLGame[];
+  }[];
+}
+
 interface NFLGame {
-  week: number;
   date: string;
   time: string;
-  away_team: string;
-  home_team: string;
+  awayTeam: string;
+  homeTeam: string;
+  location: string | null;
+  channel: string;
 }
 
 // Utility functions
@@ -72,10 +81,41 @@ const getCurrentWeek = () => {
 };
 
 const formatDateToLocal = (dateString: string, timeString: string) => {
-  const [month, day, year] = dateString.split('/');
+  const [year, month, day] = dateString.split('-');
   const [hours, minutes] = timeString.split(':');
-  const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day), parseInt(hours), parseInt(minutes));
-  return date.toLocaleString();
+  const date = new Date(Date.UTC(
+    parseInt(year),
+    parseInt(month) - 1,
+    parseInt(day),
+    parseInt(hours) + 4, // Convert EDT to UTC
+    parseInt(minutes)
+  ));
+  
+  return date.toLocaleString(undefined, {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    timeZoneName: 'short'
+  });
+};
+
+const groupGamesByStartTime = (games: NFLGame[]) => {
+  const groupedGames: { [key: string]: NFLGame[] } = {};
+  games.forEach(game => {
+    const key = `${game.date} ${game.time}`;
+    if (!groupedGames[key]) {
+      groupedGames[key] = [];
+    }
+    groupedGames[key].push(game);
+  });
+  return Object.entries(groupedGames).sort(([a], [b]) => {
+    const dateA = new Date(a.replace(' ', 'T') + 'Z');
+    const dateB = new Date(b.replace(' ', 'T') + 'Z');
+    return dateA.getTime() - dateB.getTime();
+  });
 };
 
 const AIChatHistory: React.FC = () => {
@@ -120,7 +160,7 @@ const AIChatHistory: React.FC = () => {
   const sortedGroupedPlayers = useMemo(() => {
     const groupedPlayers = getTeams(activeConference).map(team => ({
       team,
-      players: PLAYERS.filter(player => player.team === team && activeFantasyTeams.includes(player.fantasyTeam)),
+      players: PLAYERS.filter(player => player.team === team && activeFantasyTeams.includes(player.fantasyTeams[0])),
       division: Object.entries(NFL_TEAMS).find(([_, teams]) => teams.includes(team))?.[0] || ''
     }));
 
@@ -142,8 +182,20 @@ const AIChatHistory: React.FC = () => {
   };
 
   const weeklySchedule = useMemo(() => {
-    return nflSchedule.filter(game => game.week === selectedWeek);
+    const schedule = nflSchedule as NFLSchedule;
+    const selectedWeekSchedule = schedule.weeks.find(week => week.weekNumber === selectedWeek);
+    return selectedWeekSchedule ? groupGamesByStartTime(selectedWeekSchedule.games) : [];
   }, [selectedWeek]);
+
+  const getFantasyPlayersForTeam = (teamName: string) => {
+    return PLAYERS.filter(player => 
+      player.team === teamName && 
+      player.fantasyTeams.some(team => activeFantasyTeams.includes(team))
+    ).map(player => ({
+      ...player,
+      activeFantasyTeams: player.fantasyTeams.filter(team => activeFantasyTeams.includes(team))
+    })).sort((a, b) => a.name.localeCompare(b.name));
+  };
 
   return (
     <div className="sports-dashboard">
@@ -253,7 +305,10 @@ const AIChatHistory: React.FC = () => {
                 {players.length > 0 ? (
                   <ul>
                     {players.map(player => (
-                      <li key={player.name}>{player.name} <span className="fantasy-team">({player.fantasyTeam})</span></li>
+                      <li key={player.name} title={player.fantasyTeams.join(', ')}>
+                        {player.name}
+                        {player.fantasyTeams.length > 1 && <span className="multi-team"> x{player.fantasyTeams.length}</span>}
+                      </li>
                     ))}
                   </ul>
                 ) : (
@@ -265,12 +320,68 @@ const AIChatHistory: React.FC = () => {
         ) : (
           <div className="matchup-guide">
             <h2>Week {selectedWeek} Matchups</h2>
-            {weeklySchedule.map((game: NFLGame, index) => (
-              <div key={index} className="matchup">
-                <p>{game.away_team} @ {game.home_team}</p>
-                <p>Date: {formatDateToLocal(game.date, game.time)}</p>
-              </div>
-            ))}
+            {weeklySchedule.length > 0 ? (
+              weeklySchedule.map(([startTime, games], index) => (
+                <div key={index} className="game-group">
+                  <h3>{formatDateToLocal(startTime.split(' ')[0], startTime.split(' ')[1])}</h3>
+                  <div className="game-group-content">
+                    {games.map((game: NFLGame, gameIndex) => {
+                      const awayPlayers = getFantasyPlayersForTeam(game.awayTeam);
+                      const homePlayers = getFantasyPlayersForTeam(game.homeTeam);
+                      const hasPlayers = awayPlayers.length > 0 || homePlayers.length > 0;
+                      return (
+                        <div key={gameIndex} className="matchup">
+                          <div className="matchup-header">
+                            <div className="team-names">
+                              <span className="away-team">{game.awayTeam}</span>
+                              <span className="at-symbol">@</span>
+                              <span className="home-team">{game.homeTeam}</span>
+                            </div>
+                          </div>
+                          <div className={`matchup-content ${!hasPlayers ? 'no-players-content' : ''}`}>
+                            {hasPlayers ? (
+                              <div className="team-players">
+                                <div className="team away-team">
+                                  {awayPlayers.length > 0 ? (
+                                    awayPlayers.map(player => (
+                                      <p key={player.name} className="player" title={player.activeFantasyTeams.join(', ')}>
+                                        {player.name}
+                                        {player.activeFantasyTeams.length > 1 && <span className="multi-team"> x{player.activeFantasyTeams.length}</span>}
+                                      </p>
+                                    ))
+                                  ) : (
+                                    <p className="no-players">No fantasy players</p>
+                                  )}
+                                </div>
+                                <div className="team home-team">
+                                  {homePlayers.length > 0 ? (
+                                    homePlayers.map(player => (
+                                      <p key={player.name} className="player" title={player.activeFantasyTeams.join(', ')}>
+                                        {player.name}
+                                        {player.activeFantasyTeams.length > 1 && <span className="multi-team"> x{player.activeFantasyTeams.length}</span>}
+                                      </p>
+                                    ))
+                                  ) : (
+                                    <p className="no-players">No fantasy players</p>
+                                  )}
+                                </div>
+                              </div>
+                            ) : (
+                              <p className="no-players">No fantasy players</p>
+                            )}
+                          </div>
+                          <div className="matchup-footer">
+                            <span className="channel">{game.channel}</span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p>No games scheduled for this week.</p>
+            )}
           </div>
         )}
       </main>
