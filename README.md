@@ -1,6 +1,10 @@
 # Notes
 
-65 min 8/28/24
+14 min
+50 min (64 total) 8/28/24 1
+50 min (1h 54m) 8/28/24 2
+60 min (2h 54m) 8/29/24
+
 
 # React + TypeScript + Vite
 
@@ -52,3 +56,14 @@ export default tseslint.config({
   },
 })
 ```
+
+# Project Name
+
+## Setup
+
+### Prerequisites
+
+- Node.js (v14 or later)
+- npm (v6 or later)
+
+### Install Dependencies

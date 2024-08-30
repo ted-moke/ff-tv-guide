@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "NodeNext",  // Set this to NodeNext
+    "moduleResolution": "nodenext",  // Ensure this is set to nodenext
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./lib"  // Output directory for compiled files
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
+}
