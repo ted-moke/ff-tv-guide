@@ -1,0 +1,43 @@
+@import '../variables.css';
+
+.link {
+  text-decoration: none;
+}
+
+.primaryLinkButton {
+  border: none;
+  background: transparent;
+  color: var(--text-color);
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0.6em 1.2em;
+  font: inherit;
+}
+
+.primaryLinkButton:hover {
+  color: var(--primary-hover-color);
+}
+
+.primaryLinkButton:focus,
+.primaryLinkButton:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+.secondaryLinkButton {
+  border: none;
+  background: transparent;
+  color: var(--secondary-color);
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+  font: inherit;
+}
+
+.secondaryLinkButton:hover {
+  color: var(--secondary-hover-color);
+}
+
+.secondaryLinkButton:focus,
+.secondaryLinkButton:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}

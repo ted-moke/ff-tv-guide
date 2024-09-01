@@ -1,0 +1,31 @@
+:root {
+  --background-color: #121212;
+  --background-color-light: #e0e0e0;
+  --text-color: #e0e0e0;
+  --text-color-light: #121212;
+  --primary-color: #F58A07;
+  --primary-hover-color: #C67006; 
+  --primary-active-color: #945704;
+  --secondary-color: #0B7A75;
+  --secondary-hover-color: #09605C;
+  --secondary-active-color: #074A46;
+
+  /* 8-based sizing system */
+  --size0_5: 4px;
+  --size1: 8px;
+  --size1_5: 12px;
+  --size2: 16px;
+  --size2_5: 20px;
+  --size3: 24px;
+  --size3_5: 28px;
+  --size4: 32px;
+  --size4_5: 36px;
+  --size5: 40px;
+  --size6: 48px;
+  --size7: 56px;
+  --size8: 64px;
+  --size9: 72px;
+  --size10: 80px;
+}
+
+/* https://coolors.co/fffafb-2b2c28-131515-f58a07-0b7a75 */

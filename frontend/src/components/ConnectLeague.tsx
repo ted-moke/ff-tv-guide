@@ -1,8 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 const fetchPlatforms = async () => {
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/api/fantasyPlatforms`);
+  const idToken = localStorage.getItem("firebaseIdToken");
+  const response = await fetch('http://127.0.0.1:5001/fantasy-tv-guide/us-central1/api/fantasyPlatforms', {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${idToken}`,
+      'Content-Type': 'application/json'
+    }
+  });
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }

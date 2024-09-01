@@ -1,0 +1,19 @@
+@import '../variables.css';
+
+.primaryButton {
+    background-color: var(--primary-color);
+    color: var(--text-color-light);
+}
+
+.primaryButton:hover {
+    background-color: var(--primary-hover-color);
+}
+
+.secondaryButton {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+}
+
+.secondaryButton:hover {
+    background-color: var(--secondary-hover-color);
+}
