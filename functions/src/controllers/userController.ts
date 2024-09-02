@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
 import { admin, db } from "../firebase";
+import * as functions from "firebase-functions";
+
+const logger = functions.logger;
 
 export const registerUser = async (req: Request, res: Response) => {
-    console.log('registerUser', req.body);
+  logger.info("Received register request", { body: req.body });
   const { email, password, username } = req.body;
-
-  console.log('registerUser', email, password, username);
 
   try {
     const userRecord = await admin.auth().createUser({
@@ -20,8 +21,10 @@ export const registerUser = async (req: Request, res: Response) => {
       preferences: {},
     });
 
+    logger.info("User registered successfully", { uid: userRecord.uid });
     res.status(201).send({ uid: userRecord.uid });
   } catch (error) {
+    logger.error("Error in registerUser", error);
     res.status(400).send({ error: (error as Error).message });
   }
 };
@@ -62,6 +65,7 @@ export const getUserProfile = async (req: Request, res: Response) => {
 
     res.status(200).send(userDoc.data());
   } catch (error) {
+    
     res.status(400).send({ error: (error as Error).message });
   }
 };

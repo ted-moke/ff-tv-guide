@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { admin } from "../firebase";
 import { DecodedIdToken } from "firebase-admin/auth";
+import { logger } from "firebase-functions";
 
 // Add this interface
 interface AuthenticatedRequest extends Request {
@@ -14,6 +15,7 @@ export const authenticate = async (
 ) => {
   const idToken = req.headers.authorization?.split("Bearer ")[1];
   if (!idToken) {
+    logger.error(`No token provided ${req.headers.authorization}`);
     return res.status(401).send("Unauthorized");
   }
 

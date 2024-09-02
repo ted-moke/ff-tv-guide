@@ -6,8 +6,10 @@
     "node": "22"
   },
   "scripts": {
-    "build": "tsc --project tsconfig.json",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
     "serve": "firebase emulators:start",
+    "serve:dev": "yarn run build:watch & yarn run serve",
     "deploy": "firebase deploy",
     "lint": "eslint src/**/*.ts --config .eslintrc.cjs",
     "lint:js": "eslint lib/**/*.js --config .eslintrc-js.cjs",

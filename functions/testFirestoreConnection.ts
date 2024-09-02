@@ -17,5 +17,5 @@ app.get("/test", async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server23 is running on http://localhost:${port}`);
 });
