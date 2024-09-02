@@ -5,27 +5,40 @@ import * as functions from "firebase-functions";
 const logger = functions.logger;
 
 export const registerUser = async (req: Request, res: Response) => {
-  logger.info("Received register request", { body: req.body });
   const { email, password, username } = req.body;
 
   try {
+    logger.info("Attempting to create user", { email, username });
     const userRecord = await admin.auth().createUser({
       email,
       password,
       displayName: username,
     });
 
-    await db.collection("users").doc(userRecord.uid).set({
-      email,
-      username,
-      preferences: {},
-    });
+    logger.info("User created successfully", { uid: userRecord.uid });
 
-    logger.info("User registered successfully", { uid: userRecord.uid });
+    try {
+      logger.info("Attempting to create user document in Firestore", { uid: userRecord.uid });
+      await db.collection("users").doc(userRecord.uid).set({
+        username,
+        preferences: {},
+      });
+      logger.info("User document created in Firestore", { uid: userRecord.uid });
+    } catch (firestoreError) {
+      logger.error("Error creating user document in Firestore", firestoreError);
+      // If Firestore operation fails, delete the created Auth user
+      await admin.auth().deleteUser(userRecord.uid);
+      throw firestoreError;
+    }
+
     res.status(201).send({ uid: userRecord.uid });
   } catch (error) {
     logger.error("Error in registerUser", error);
-    res.status(400).send({ error: (error as Error).message });
+    if (error instanceof Error) {
+      res.status(400).send({ error: error.message });
+    } else {
+      res.status(400).send({ error: "An unknown error occurred" });
+    }
   }
 };
 
