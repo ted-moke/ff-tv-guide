@@ -16,7 +16,7 @@ const AuthPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { login, register } = useAuth();
+  const { login, register, isLoading: authLoading, error: authError } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -33,7 +33,7 @@ const AuthPage: React.FC = () => {
       if (isRegister) {
         await register({ username, email, password });
       } else {
-        await login({ username, password });
+        await login({ email, password });
       }
 
       navigate("/");
@@ -44,7 +44,7 @@ const AuthPage: React.FC = () => {
     }
   };
 
-  if (isLoading) {
+  if (isLoading || authLoading) {
     return <LoadingSpinner />;
   }
 
@@ -61,16 +61,16 @@ const AuthPage: React.FC = () => {
           password={password}
           setPassword={setPassword}
           onSubmit={handleSubmit}
-          error={error}
+          error={error || (authError as Error)?.message}
         />
       ) : (
         <LoginForm
-          username={username}
-          setUsername={setUsername}
+          email={email}
+          setEmail={setEmail}
           password={password}
           setPassword={setPassword}
           onSubmit={handleSubmit}
-          error={error}
+          error={error || (authError as Error)?.message}
         />
       )}
       <div className={styles.linkContainer}>

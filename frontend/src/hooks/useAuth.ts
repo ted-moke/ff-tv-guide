@@ -9,7 +9,7 @@ export const useAuth = () => {
   const navigate = useNavigate();
   const [isAuthEnabled, setIsAuthEnabled] = useState(location.pathname !== '/auth');
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ['auth'],
     queryFn: verifyToken,
     retry: false,
@@ -66,7 +66,7 @@ export const useAuth = () => {
   return { 
     user, 
     isLoading, 
-    isError, 
+    error, 
     login: loginMutation.mutateAsync, 
     register: registerMutation.mutateAsync,
     logout 

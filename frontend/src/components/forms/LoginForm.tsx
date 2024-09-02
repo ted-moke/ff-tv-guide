@@ -4,27 +4,26 @@ import Button from "../Button";
 import TextInput from "../TextInput";
 
 interface LoginFormProps {
-  username: string;
-  setUsername: (username: string) => void;
+  email: string;
+  setEmail: (email: string) => void;
   password: string;
   setPassword: (password: string) => void;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   error: string | null;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ username, setUsername, password, setPassword, onSubmit, error }) => {
+const LoginForm: React.FC<LoginFormProps> = ({ email, setEmail, password, setPassword, onSubmit, error }) => {
   return (
     <form className={styles.form} onSubmit={onSubmit}>
       <div className={styles.formGroup}>
-        <label htmlFor="username" className={styles.label}>
-          Username
+        <label htmlFor="email" className={styles.label}>
+          Email
         </label>
         <TextInput
-          type="text"
-          id="username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
+          type="email"
+          id="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
       </div>
       <div className={styles.formGroup}>
@@ -36,7 +35,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ username, setUsername, password, 
           id="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          required
         />
       </div>
       {error && <p className={styles.error}>{error}</p>}
