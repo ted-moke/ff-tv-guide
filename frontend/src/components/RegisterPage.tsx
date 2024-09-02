@@ -1,61 +1,28 @@
 import React, { useState } from "react";
-import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import styles from "./RegisterPage.module.css";
 import logo from "/vite.svg"; // Ensure the path to the logo is correct
 import Button from "./Button";
 import LinkButton from "./LinkButton";
 import TextInput from "./TextInput";
-
-const registerUser = async (userData: {
-  username: string;
-  email: string;
-  password: string;
-}) => {
-  const response = await fetch(`${import.meta.env.VITE_API_URL}/users/register`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(userData),
-  });
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.error);
-  }
-
-  return response.json();
-};
+import { useAuth } from '../hooks/useAuth';
 
 const RegisterPage: React.FC = () => {
+  const { register } = useAuth();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  const mutation: UseMutationResult<
-    any,
-    Error,
-    { username: string; email: string; password: string }
-  > = useMutation({
-    mutationFn: registerUser,
-    onSuccess: (data) => {
-      console.log("User registered successfully:", data);
-      // Redirect or show success message
-    },
-    onError: (error: Error) => {
-      setError(error.message);
-    },
-  });
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(null);
-    mutation.mutate({ username, email, password });
+    register({ username, email, password }, {
+      onError: (error: Error) => setError(error.message),
+    });
   };
 
   return (
-    <div className={styles.container}>
+    <div className="container">
       <img src={logo} alt="FF TV Guide Logo" className={styles.logo} />
       <h1>Create Your Account</h1>
       <form className={styles.form} onSubmit={handleSubmit}>

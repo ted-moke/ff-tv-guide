@@ -1,46 +1,35 @@
-import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import ConnectLeague from './components/ConnectLeague';
-import AIChatHistory from './components/Ref';
-import SplashPage from './components/SplashPage';
-import Login from './components/Login';
-import RegisterPage from './components/RegisterPage'; // Import the Register component
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { app } from './firebaseConfig'; // Ensure this import is at the top
+import { useAuth } from './hooks/useAuth';
+import AuthPage from './pages/AuthPage';
+import HomePage from './pages/HomePage';
+import LoadingSpinner from './components/LoadingSpinner';
 
 const queryClient = new QueryClient();
 
-function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true);
+const AuthenticatedRoute: React.FC<{ element: React.ReactElement }> = ({ element }) => {
+  const { user, isLoading } = useAuth();
 
-  useEffect(() => {
-    const auth = getAuth(app); // Use the initialized app
-    onAuthStateChanged(auth, (user) => {
-      setIsAuthenticated(!!user);
-      setLoading(false);
-    });
-  }, []);
-
-  if (loading) {
-    return <div>Loading...</div>;
+  if (isLoading) {
+    return <LoadingSpinner />;
   }
 
+  return user ? element : <Navigate to="/auth" />;
+};
+
+const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
         <Routes>
-          <Route path="/connect-league" element={isAuthenticated ? <ConnectLeague /> : <Navigate to="/splash" />} />
-          <Route path="/" element={isAuthenticated ? <AIChatHistory /> : <Navigate to="/splash" />} />
-          <Route path="/splash" element={<SplashPage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<RegisterPage />} /> {/* Add the register route */}
-          {/* Add other routes here */}
+          <Route path="/auth" element={<AuthPage />} />
+          <Route path="/" element={<AuthenticatedRoute element={<HomePage />} />} />
+          {/* Add other routes as needed */}
         </Routes>
       </Router>
     </QueryClientProvider>
   );
-}
+};
 
 export default App;

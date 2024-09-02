@@ -1,6 +1,7 @@
 import * as functions from "firebase-functions";
 import express from "express";
 import cors from "cors";
+import cookieParser from "cookie-parser";
 import { errorHandler } from "./middleware/errorMiddleware";
 import fantasyPlatformRoutes from "./routes/fantasyPlatformRoutes";
 import platformCredentialRoutes from "./routes/platformCredentialRoutes";
@@ -17,9 +18,11 @@ const app = express();
 
 app.use(cors({
   origin: process.env.FRONTEND_URL,
+  credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
+app.use(cookieParser());
 app.use(express.json());
 
 // Logging middleware

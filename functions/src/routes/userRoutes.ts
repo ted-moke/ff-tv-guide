@@ -5,6 +5,7 @@ import {
   changePassword,
   getUserProfile,
   updateUserProfile,
+  verifyToken
 } from "../controllers/userController";
 import { authenticate } from "../middleware/authMiddleware";
 
@@ -18,5 +19,8 @@ router.post("/login", loginUser);
 router.post("/change-password", authenticate, changePassword);
 router.get("/profile/:uid", authenticate, getUserProfile);
 router.put("/profile/:uid", authenticate, updateUserProfile);
+
+// New route to verify token
+router.get("/verify-token", verifyToken);
 
 export default router;

@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import './Ref.css';
+import './HomePage.module.css';
 import nflSchedule from '../assets/nfl-schedule-2024.json';
 
 interface FantasyTeam {

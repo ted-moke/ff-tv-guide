@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { admin, db } from "../firebase";
 import * as functions from "firebase-functions";
+import { FieldValue } from "firebase-admin/firestore";
 
 const logger = functions.logger;
 
@@ -20,18 +21,36 @@ export const registerUser = async (req: Request, res: Response) => {
     try {
       logger.info("Attempting to create user document in Firestore", { uid: userRecord.uid });
       await db.collection("users").doc(userRecord.uid).set({
+        email,
         username,
+        createdAt: new Date(),
         preferences: {},
       });
       logger.info("User document created in Firestore", { uid: userRecord.uid });
+
+      // Create a custom token for the new user
+      const token = await admin.auth().createCustomToken(userRecord.uid);
+      logger.info("Custom token created for user", { uid: userRecord.uid });
+
+      // Set the token as an HTTP-only cookie
+      res.cookie('authToken', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+        sameSite: 'strict',
+        maxAge: 3600000 // 1 hour
+      });
+
+      res.status(201).send({ 
+        uid: userRecord.uid,
+        email: email,
+        username: username
+      });
     } catch (firestoreError) {
       logger.error("Error creating user document in Firestore", firestoreError);
       // If Firestore operation fails, delete the created Auth user
       await admin.auth().deleteUser(userRecord.uid);
       throw firestoreError;
     }
-
-    res.status(201).send({ uid: userRecord.uid });
   } catch (error) {
     logger.error("Error in registerUser", error);
     if (error instanceof Error) {
@@ -49,7 +68,19 @@ export const loginUser = async (req: Request, res: Response) => {
     const userRecord = await admin.auth().getUserByEmail(email);
     const token = await admin.auth().createCustomToken(userRecord.uid);
 
-    res.status(200).send({ token });
+    // Set the token as an HTTP-only cookie
+    res.cookie('authToken', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 3600000 // 1 hour
+    });
+
+    res.status(200).send({ 
+      uid: userRecord.uid,
+      email: userRecord.email,
+      username: userRecord.displayName
+    });
   } catch (error) {
     res.status(400).send({ error: (error as Error).message });
   }
@@ -97,5 +128,27 @@ export const updateUserProfile = async (req: Request, res: Response) => {
     res.status(200).send({ message: "Profile updated successfully" });
   } catch (error) {
     res.status(400).send({ error: (error as Error).message });
+  }
+};
+
+export const verifyToken = async (req: Request, res: Response) => {
+  const token = req.cookies.authToken;
+
+  if (!token) {
+    return res.status(401).json({ error: "No token provided" });
+  }
+
+  try {
+    const decodedToken = await admin.auth().verifyIdToken(token);
+    const uid = decodedToken.uid;
+    const userRecord = await admin.auth().getUser(uid);
+
+    res.status(200).json({
+      uid: userRecord.uid,
+      email: userRecord.email,
+      username: userRecord.displayName
+    });
+  } catch (error) {
+    res.status(401).json({ error: "Invalid token" });
   }
 };
