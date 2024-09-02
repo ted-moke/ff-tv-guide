@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { admin, db } from "../firebase";
 import * as functions from "firebase-functions";
-import { FieldValue } from "firebase-admin/firestore";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 const logger = functions.logger;
 
@@ -65,8 +65,12 @@ export const loginUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   try {
-    const userRecord = await admin.auth().getUserByEmail(email);
-    const token = await admin.auth().createCustomToken(userRecord.uid);
+    // Use Firebase's signInWithEmailAndPassword method
+    const auth = getAuth();
+    const userCredential = await signInWithEmailAndPassword(auth, email, password);
+    const user = userCredential.user;
+
+    const token = await user.getIdToken();
 
     // Set the token as an HTTP-only cookie
     res.cookie('authToken', token, {
@@ -77,11 +81,12 @@ export const loginUser = async (req: Request, res: Response) => {
     });
 
     res.status(200).send({ 
-      uid: userRecord.uid,
-      email: userRecord.email,
-      username: userRecord.displayName
+      uid: user.uid,
+      email: user.email,
+      username: user.displayName
     });
   } catch (error) {
+    logger.error("Error in loginUser", error);
     res.status(400).send({ error: (error as Error).message });
   }
 };
@@ -135,7 +140,7 @@ export const verifyToken = async (req: Request, res: Response) => {
   const token = req.cookies.authToken;
 
   if (!token) {
-    return res.status(401).json({ error: "No token provided" });
+    return res.status(200).json({ authenticated: false, message: "No token provided" });
   }
 
   try {
@@ -144,11 +149,12 @@ export const verifyToken = async (req: Request, res: Response) => {
     const userRecord = await admin.auth().getUser(uid);
 
     res.status(200).json({
+      authenticated: true,
       uid: userRecord.uid,
       email: userRecord.email,
       username: userRecord.displayName
     });
   } catch (error) {
-    res.status(401).json({ error: "Invalid token" });
+    res.status(200).json({ authenticated: false, error: "Invalid token" });
   }
 };

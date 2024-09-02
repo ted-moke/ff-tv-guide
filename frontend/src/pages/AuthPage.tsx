@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../hooks/useAuth";
 import styles from "./AuthPage.module.css";
 import logo from "/vite.svg";
 import LinkButton from "../components/LinkButton";
-import LoginForm from '../components/forms/LoginForm';
-import RegisterForm from '../components/forms/RegisterForm';
-import LoadingSpinner from '../components/LoadingSpinner';
+import LoginForm from "../components/forms/LoginForm";
+import RegisterForm from "../components/forms/RegisterForm";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const AuthPage: React.FC = () => {
   const [isRegister, setIsRegister] = useState(false);
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -22,7 +22,7 @@ const AuthPage: React.FC = () => {
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
-    setIsRegister(searchParams.get('register') === 'true');
+    setIsRegister(searchParams.get("register") === "true");
   }, [location]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -33,9 +33,10 @@ const AuthPage: React.FC = () => {
       if (isRegister) {
         await register({ username, email, password });
       } else {
-        await login({ email, password });
+        await login({ username, password });
       }
-      navigate('/');
+
+      navigate("/");
     } catch (error) {
       setError((error as Error).message);
     } finally {
@@ -50,7 +51,7 @@ const AuthPage: React.FC = () => {
   return (
     <div className="container">
       <img src={logo} alt="FF TV Guide Logo" className="logo" />
-      <h1>{isRegister ? 'Create Your Account' : 'Sign In'}</h1>
+      <h1>{isRegister ? "Create Your Account" : "Sign In"}</h1>
       {isRegister ? (
         <RegisterForm
           username={username}
@@ -64,8 +65,8 @@ const AuthPage: React.FC = () => {
         />
       ) : (
         <LoginForm
-          email={email}
-          setEmail={setEmail}
+          username={username}
+          setUsername={setUsername}
           password={password}
           setPassword={setPassword}
           onSubmit={handleSubmit}
@@ -73,8 +74,12 @@ const AuthPage: React.FC = () => {
         />
       )}
       <div className={styles.linkContainer}>
-        <LinkButton to={isRegister ? '/auth?register=false' : '/auth?register=true'}>
-          {isRegister ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
+        <LinkButton
+          to={isRegister ? "/auth?register=false" : "/auth?register=true"}
+        >
+          {isRegister
+            ? "Already have an account? Sign In"
+            : "Don't have an account? Sign Up"}
         </LinkButton>
       </div>
     </div>
