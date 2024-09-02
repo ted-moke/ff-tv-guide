@@ -7,20 +7,18 @@ export enum ButtonColor {
   SECONDARY = 'secondary',
 }
 
-interface ButtonProps {
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   link?: string;
-  onClick?: () => void;
   color?: ButtonColor;
-  children: React.ReactNode;
 }
 
-const Button: React.FC<ButtonProps> = ({ link, onClick, color = ButtonColor.PRIMARY, children }) => {
+const Button: React.FC<ButtonProps> = ({ link, onClick, color = ButtonColor.PRIMARY, children, ...props }) => {
   const className = color === ButtonColor.PRIMARY ? styles.primaryButton : styles.secondaryButton;
 
   if (link) {
     return (
       <Link to={link}>
-        <button className={className} onClick={onClick}>
+        <button className={className} onClick={onClick} {...props}>
           {children}
         </button>
       </Link>
@@ -28,7 +26,7 @@ const Button: React.FC<ButtonProps> = ({ link, onClick, color = ButtonColor.PRIM
   }
 
   return (
-    <button onClick={onClick} className={className}>
+    <button onClick={onClick} className={className} {...props}>
       {children}
     </button>
   );

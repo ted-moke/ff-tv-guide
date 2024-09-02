@@ -5,7 +5,7 @@ import ConnectLeague from './components/ConnectLeague';
 import AIChatHistory from './components/Ref';
 import SplashPage from './components/SplashPage';
 import Login from './components/Login';
-import Register from './components/Register'; // Import the Register component
+import RegisterPage from './components/RegisterPage'; // Import the Register component
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { app } from './firebaseConfig'; // Ensure this import is at the top
 
@@ -35,7 +35,7 @@ function App() {
           <Route path="/" element={isAuthenticated ? <AIChatHistory /> : <Navigate to="/splash" />} />
           <Route path="/splash" element={<SplashPage />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} /> {/* Add the register route */}
+          <Route path="/register" element={<RegisterPage />} /> {/* Add the register route */}
           {/* Add other routes here */}
         </Routes>
       </Router>

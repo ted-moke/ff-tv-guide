@@ -17,6 +17,7 @@ This project is a backend service for managing fantasy sports platforms, leagues
     - [Fantasy Teams](#fantasy-teams)
     - [Fantasy Players](#fantasy-players)
     - [Fantasy Team Players](#fantasy-team-players)
+    - [User Management](#user-management)
   - [Authentication](#authentication)
   - [Error Handling](#error-handling)
   - [Testing](#testing)
@@ -239,6 +240,14 @@ yarn run seed
 
 - **List Fantasy Team Players:**
   - `GET /fantasyTeamPlayers`
+
+### User Management
+
+- `POST /users/register`: Register a new user
+- `POST /users/login`: Login a user
+- `POST /users/change-password`: Change user password
+- `GET /users/profile/:uid`: Get user profile
+- `PUT /users/profile/:uid`: Update user profile
 
 ## Authentication
 

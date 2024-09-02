@@ -1,19 +1,52 @@
 @import '../variables.css';
 
 .primaryButton {
+    border-radius: var(--size1);
+    border: 1px solid transparent;
+    padding: var(--size1) var(--size2);
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
     background-color: var(--primary-color);
     color: var(--text-color-light);
+    cursor: pointer;
+    transition: background-color 0.25s, border-color 0.25s;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
 }
 
 .primaryButton:hover {
     background-color: var(--primary-hover-color);
+    border-color: var(--text-color);
+}
+
+.primaryButton:focus,
+.primaryButton:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
 }
 
 .secondaryButton {
+    border-radius: var(--size1);
+    border: 1px solid transparent;
+    padding: var(--size1) var(--size2);
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
     background-color: var(--secondary-color);
     color: var(--text-color);
+    cursor: pointer;
+    transition: background-color 0.25s, border-color 0.25s;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
 }
 
 .secondaryButton:hover {
     background-color: var(--secondary-hover-color);
+}
+
+.secondaryButton:focus,
+.secondaryButton:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
 }

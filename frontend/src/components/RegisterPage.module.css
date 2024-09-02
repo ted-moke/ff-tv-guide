@@ -45,3 +45,8 @@
 .linkContainer {
   margin-top: var(--size2);
 }
+
+.error {
+  color: red;
+  margin-bottom: var(--size2);
+}

@@ -7,5 +7,5 @@ export const errorHandler = (
   next: NextFunction,
 ) => {
   console.error(err.stack);
-  res.status(500).send("Something broke!");
+  res.status(500).send({ error: "Something went wrong!" });
 };
