@@ -1,22 +1,50 @@
 import * as admin from "firebase-admin";
-import * as dotenv from "dotenv";
-import * as fs from "fs";
+import * as dotenv from 'dotenv';
+import * as path from 'path';
 
 dotenv.config();
 
-const serviceAccountPath = process.env.SERVICE_ACCOUNT_KEY_PATH;
+const serviceAccountPath = path.resolve(__dirname, '..', process.env.SERVICE_ACCOUNT_KEY_PATH || '');
+
 if (!serviceAccountPath) {
-  throw new Error("SERVICE_ACCOUNT_KEY_PATH is not defined");
+  throw new Error("SERVICE_ACCOUNT_KEY_PATH is not defined in the environment");
 }
 
-const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, "utf8"));
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount as admin.ServiceAccount),
-  databaseURL: process.env.FIREBASE_DATABASE_URL || undefined, // Use default if not provided
+console.log('serviceAccountPath')
+const serviceAccount = require(serviceAccountPath);
+console.log('Service account loaded:', {
+  project_id: serviceAccount.project_id,
+  client_email: serviceAccount.client_email
 });
 
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  projectId: process.env.FB_PROJECT_ID,
+  storageBucket: process.env.FB_STORAGE_BUCKET,
+  // Remove the authDomain line
+});
+
+if (process.env.FUNCTIONS_EMULATOR) {
+  console.log("Using Firebase emulators");
+  process.env.FIRESTORE_EMULATOR_HOST = 'localhost:8080';
+  process.env.FIREBASE_AUTH_EMULATOR_HOST = 'localhost:9099';
+}
+
 const db = admin.firestore();
+
+// Function to get and log app information
+const logAppInfo = () => {
+  const app = admin.app();
+  console.log('Firebase Admin App Information:', {
+    name: app.name,
+    projectId: app.options.projectId,
+    storageBucket: app.options.storageBucket,
+    databaseURL: app.options.databaseURL
+  });
+};
+
+// Call logAppInfo after initialization
+logAppInfo();
 
 // Function to initialize Firestore collections
 const initializeFirestore = async () => {

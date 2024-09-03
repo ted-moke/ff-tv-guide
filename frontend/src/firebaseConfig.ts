@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, connectAuthEmulator } from "firebase/auth";
+import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -12,7 +13,20 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+const db = getFirestore(app);
 
-console.log('auth', auth);
+if (import.meta.env.VITE_USE_FIREBASE_EMULATOR === 'true') {
+  connectAuthEmulator(auth, 'http://localhost:9099');
+  connectFirestoreEmulator(db, 'localhost', 8080);
+}
 
-export { auth, app };
+// Function to get and log app information
+const logAppInfo = () => {
+  console.log('Firebase Admin App Information:');
+  console.log('App Name:', app.name);
+  console.log('Project ID:', app.options.projectId);
+  console.log('Storage Bucket:', app.options.storageBucket);
+};
+
+logAppInfo();
+export { auth, db };
