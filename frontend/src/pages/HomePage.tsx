@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import './HomePage.module.css';
+import styles from './HomePage.module.css';
 import nflSchedule from '../assets/nfl-schedule-2024.json';
 
 interface FantasyTeam {
@@ -118,7 +118,7 @@ const groupGamesByStartTime = (games: NFLGame[]) => {
   });
 };
 
-const AIChatHistory: React.FC = () => {
+const HomePage: React.FC = () => {
   const [viewMode, setViewMode] = useState<ViewMode>('overview');
   const [activeFantasyTeams, setActiveFantasyTeams] = useState<string[]>(FANTASY_TEAMS.map(team => team.name));
   const [activeConference, setActiveConference] = useState<Conference>('Both');
@@ -198,24 +198,24 @@ const AIChatHistory: React.FC = () => {
   };
 
   return (
-    <div className="sports-dashboard">
-      <div className="mobile-header">
+    <div className={styles['sports-dashboard']}>
+      <div className={styles['mobile-header']}>
         <h1>NFL Fantasy Dashboard</h1>
-        <button className="mobile-menu-toggle" onClick={toggleMobileMenu}>
+        <button className={styles['mobile-menu-toggle']} onClick={toggleMobileMenu}>
           {isMobileMenuOpen ? 'Close' : 'Menu'}
         </button>
       </div>
-      <aside className={`sidebar ${isMobileMenuOpen ? 'open' : ''}`}>
+      <aside className={`${styles.sidebar} ${isMobileMenuOpen ? styles.open : ''}`}>
         <h2>Controls</h2>
-        <div className="control-group view-toggle">
+        <div className={styles['control-group']}>
           <button 
-            className={viewMode === 'overview' ? 'active' : ''}
+            className={viewMode === 'overview' ? styles.active : ''}
             onClick={() => setViewMode('overview')}
           >
             Overview
           </button>
           <button 
-            className={viewMode === 'matchup' ? 'active' : ''}
+            className={viewMode === 'matchup' ? styles.active : ''}
             onClick={() => setViewMode('matchup')}
           >
             Matchup Guide
@@ -223,13 +223,13 @@ const AIChatHistory: React.FC = () => {
         </div>
         {viewMode === 'overview' ? (
           <>
-            <div className="control-group">
+            <div className={styles['control-group']}>
               <h3>Conference</h3>
-              <div className="conference-tabs">
+              <div className={styles['conference-tabs']}>
                 {(['AFC', 'NFC', 'Both'] as Conference[]).map(conf => (
                   <button 
                     key={conf}
-                    className={activeConference === conf ? 'active' : ''} 
+                    className={activeConference === conf ? styles.active : ''} 
                     onClick={() => setActiveConference(conf)}
                   >
                     {conf}
@@ -237,9 +237,9 @@ const AIChatHistory: React.FC = () => {
                 ))}
               </div>
             </div>
-            <div className="control-group">
+            <div className={styles['control-group']}>
               <h3>Sort By</h3>
-              <div className="sort-dropdown">
+              <div className={styles['sort-dropdown']}>
                 <select value={sortBy} onChange={(e) => setSortBy(e.target.value as SortOption)}>
                   <option value="name">Team Name</option>
                   <option value="division">Division</option>
@@ -247,9 +247,9 @@ const AIChatHistory: React.FC = () => {
                 </select>
               </div>
             </div>
-            <div className="control-group">
+            <div className={styles['control-group']}>
               <h3>Display Options</h3>
-              <label className="toggle-option">
+              <label className={styles['toggle-option']}>
                 <input
                   type="checkbox"
                   checked={hideEmptyTeams}
@@ -260,7 +260,7 @@ const AIChatHistory: React.FC = () => {
             </div>
           </>
         ) : (
-          <div className="control-group">
+          <div className={styles['control-group']}>
             <h3>Select Week</h3>
             <select 
               value={selectedWeek} 
@@ -272,15 +272,15 @@ const AIChatHistory: React.FC = () => {
             </select>
           </div>
         )}
-        <div className="control-group">
+        <div className={styles['control-group']}>
           <h3>Fantasy Teams</h3>
-          <div className="fantasy-team-list">
-            <div className="fantasy-team-actions">
+          <div className={styles['fantasy-team-list']}>
+            <div className={styles['fantasy-team-actions']}>
               <button onClick={handleSelectAllFantasyTeams}>Select All</button>
               <button onClick={handleClearAllFantasyTeams}>Clear All</button>
             </div>
             {FANTASY_TEAMS.map(team => (
-              <label key={team.name} className="fantasy-team-item">
+              <label key={team.name} className={styles['fantasy-team-item']}>
                 <input
                   type="checkbox"
                   checked={activeFantasyTeams.includes(team.name)}
@@ -292,86 +292,86 @@ const AIChatHistory: React.FC = () => {
           </div>
         </div>
       </aside>
-      <main className="main-content">
+      <main className={styles['main-content']}>
         {viewMode === 'overview' ? (
-          <div className="teams-grid">
+          <div className={styles['teams-grid']}>
             {sortedGroupedPlayers.map(({ team, players, division }) => (
-              <div key={team} className="team-card">
+              <div key={team} className={styles['team-card']}>
                 <h2>
                   {team}
-                  <span className="player-count">({players.length})</span>
+                  <span className={styles['player-count']}>({players.length})</span>
                 </h2>
-                <p className="division">{division}</p>
+                <p className={styles.division}>{division}</p>
                 {players.length > 0 ? (
                   <ul>
                     {players.map(player => (
                       <li key={player.name} title={player.fantasyTeams.join(', ')}>
                         {player.name}
-                        {player.fantasyTeams.length > 1 && <span className="multi-team"> x{player.fantasyTeams.length}</span>}
+                        {player.fantasyTeams.length > 1 && <span className={styles['multi-team']}> x{player.fantasyTeams.length}</span>}
                       </li>
                     ))}
                   </ul>
                 ) : (
-                  <p className="no-players">No fantasy players in this team</p>
+                  <p className={styles['no-players']}>No fantasy players in this team</p>
                 )}
               </div>
             ))}
           </div>
         ) : (
-          <div className="matchup-guide">
+          <div className={styles['matchup-guide']}>
             <h2>Week {selectedWeek} Matchups</h2>
             {weeklySchedule.length > 0 ? (
               weeklySchedule.map(([startTime, games], index) => (
-                <div key={index} className="game-group">
+                <div key={index} className={styles['game-group']}>
                   <h3>{formatDateToLocal(startTime.split(' ')[0], startTime.split(' ')[1])}</h3>
-                  <div className="game-group-content">
+                  <div className={styles['game-group-content']}>
                     {games.map((game: NFLGame, gameIndex) => {
                       const awayPlayers = getFantasyPlayersForTeam(game.awayTeam);
                       const homePlayers = getFantasyPlayersForTeam(game.homeTeam);
                       const hasPlayers = awayPlayers.length > 0 || homePlayers.length > 0;
                       return (
-                        <div key={gameIndex} className="matchup">
-                          <div className="matchup-header">
-                            <div className="team-names">
-                              <span className="away-team">{game.awayTeam}</span>
-                              <span className="at-symbol">@</span>
-                              <span className="home-team">{game.homeTeam}</span>
+                        <div key={gameIndex} className={styles.matchup}>
+                          <div className={styles['matchup-header']}>
+                            <div className={styles['team-names']}>
+                              <span className={styles['away-team']}>{game.awayTeam}</span>
+                              <span className={styles['at-symbol']}>@</span>
+                              <span className={styles['home-team']}>{game.homeTeam}</span>
                             </div>
                           </div>
-                          <div className={`matchup-content ${!hasPlayers ? 'no-players-content' : ''}`}>
+                          <div className={`${styles['matchup-content']} ${!hasPlayers ? styles['no-players-content'] : ''}`}>
                             {hasPlayers ? (
-                              <div className="team-players">
-                                <div className="team away-team">
+                              <div className={styles['team-players']}>
+                                <div className={styles['away-team']}>
                                   {awayPlayers.length > 0 ? (
                                     awayPlayers.map(player => (
-                                      <p key={player.name} className="player" title={player.activeFantasyTeams.join(', ')}>
+                                      <p key={player.name} className={styles.player} title={player.activeFantasyTeams.join(', ')}>
                                         {player.name}
-                                        {player.activeFantasyTeams.length > 1 && <span className="multi-team"> x{player.activeFantasyTeams.length}</span>}
+                                        {player.activeFantasyTeams.length > 1 && <span className={styles['multi-team']}> x{player.activeFantasyTeams.length}</span>}
                                       </p>
                                     ))
                                   ) : (
-                                    <p className="no-players">No fantasy players</p>
+                                    <p className={styles['no-players']}>No fantasy players</p>
                                   )}
                                 </div>
-                                <div className="team home-team">
+                                <div className={styles['home-team']}>
                                   {homePlayers.length > 0 ? (
                                     homePlayers.map(player => (
-                                      <p key={player.name} className="player" title={player.activeFantasyTeams.join(', ')}>
+                                      <p key={player.name} className={styles.player} title={player.activeFantasyTeams.join(', ')}>
                                         {player.name}
-                                        {player.activeFantasyTeams.length > 1 && <span className="multi-team"> x{player.activeFantasyTeams.length}</span>}
+                                        {player.activeFantasyTeams.length > 1 && <span className={styles['multi-team']}> x{player.activeFantasyTeams.length}</span>}
                                       </p>
                                     ))
                                   ) : (
-                                    <p className="no-players">No fantasy players</p>
+                                    <p className={styles['no-players']}>No fantasy players</p>
                                   )}
                                 </div>
                               </div>
                             ) : (
-                              <p className="no-players">No fantasy players</p>
+                              <p className={styles['no-players']}>No fantasy players</p>
                             )}
                           </div>
-                          <div className="matchup-footer">
-                            <span className="channel">{game.channel}</span>
+                          <div className={styles['matchup-footer']}>
+                            <span className={styles.channel}>{game.channel}</span>
                           </div>
                         </div>
                       );
@@ -389,4 +389,4 @@ const AIChatHistory: React.FC = () => {
   );
 }
 
-export default AIChatHistory;
+export default HomePage;
