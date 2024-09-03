@@ -1,27 +1,39 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { verifyToken, loginUser, registerUser } from '../api/auth';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+
+interface AuthData {
+  authenticated: boolean;
+  uid?: string;
+  email?: string;
+  username?: string;
+}
 
 export const useAuth = () => {
   const queryClient = useQueryClient();
   const location = useLocation();
   const navigate = useNavigate();
-  const [isAuthEnabled, setIsAuthEnabled] = useState(location.pathname !== '/auth');
+  const [isAuthEnabled, setIsAuthEnabled] = useState(true);
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery<AuthData, Error>({
     queryKey: ['auth'],
     queryFn: verifyToken,
     retry: false,
-    enabled: isAuthEnabled, // Control query enabling with state
-    onError: () => {
+    enabled: isAuthEnabled,
+    onError: (error: Error) => {
+      console.error('Auth query error:', error);
+      setIsAuthEnabled(false);
       if (location.pathname !== '/auth') {
         navigate('/auth');
       }
     },
-    onSuccess: (data) => {
+    onSuccess: (data: AuthData) => {
       if (!data.authenticated) {
         queryClient.setQueryData(['auth'], null);
+        if (location.pathname !== '/auth') {
+          navigate('/auth');
+        }
       } else {
         queryClient.setQueryData(['auth'], data);
       }
@@ -32,34 +44,36 @@ export const useAuth = () => {
 
   const loginMutation = useMutation({
     mutationFn: loginUser,
-    onSuccess: (data) => {
+    onSuccess: (data: AuthData) => {
       queryClient.setQueryData(['auth'], data);
-      setIsAuthEnabled(true); // Re-enable the auth query after successful login
+      setIsAuthEnabled(true);
+      refetch();
       navigate('/');
     },
     onError: (error: Error) => {
-      setIsAuthEnabled(false); // Disable the auth query on login error
-      throw error; // Pass the error to the component
+      setIsAuthEnabled(false);
+      throw error;
     },
   });
 
   const registerMutation = useMutation({
     mutationFn: registerUser,
-    onSuccess: (data) => {
+    onSuccess: (data: AuthData) => {
       queryClient.setQueryData(['auth'], data);
-      setIsAuthEnabled(true); // Re-enable the auth query after successful registration
+      setIsAuthEnabled(true);
+      refetch();
       navigate('/');
     },
     onError: (error: Error) => {
-      setIsAuthEnabled(false); // Disable the auth query on registration error
-      throw error; // Pass the error to the component
+      setIsAuthEnabled(false);
+      throw error;
     },
   });
 
   const logout = () => {
     // Implement logout functionality here
     queryClient.setQueryData(['auth'], null);
-    setIsAuthEnabled(false); // Disable the auth query on logout
+    setIsAuthEnabled(false);
     navigate('/auth');
   };
 

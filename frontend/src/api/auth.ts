@@ -1,57 +1,99 @@
-import { auth } from '../firebaseConfig';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../firebaseConfig";
+import {
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  onAuthStateChanged,
+  User,
+} from "firebase/auth";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
+let currentUser: User | null = null;
+let currentToken: string | null = null;
+
+// Set up auth state listener
+onAuthStateChanged(auth, async (user) => {
+  currentUser = user;
+  if (user) {
+    currentToken = await user.getIdToken();
+    localStorage.setItem("authToken", currentToken);
+  } else {
+    currentToken = null;
+    localStorage.removeItem("authToken");
+  }
+});
+
 export const verifyToken = async () => {
-  const currentUser = auth.currentUser;
-  if (!currentUser) {
-    throw new Error('No user is currently logged in');
+  const token = currentToken || localStorage.getItem("authToken");
+
+  if (!token) {
+    return { authenticated: false };
   }
 
-  const idToken = await currentUser.getIdToken();
+  try {
+    const response = await fetch(`${API_URL}/users/verify-token`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      credentials: "include",
+    });
 
-  const response = await fetch(`${API_URL}/users/verify-token`, { 
-    method: 'GET',
-    headers: {
-      'Authorization': `Bearer ${idToken}`
-    },
-    credentials: 'include'
-  });
-
-  if (!response.ok) throw new Error('Failed to verify token');
-  return response.json();
+    if (!response.ok) throw new Error("Failed to verify token");
+    return response.json();
+  } catch (error) {
+    console.error("Error verifying token:", error);
+    return { authenticated: false };
+  }
 };
 
-export const registerUser = async (userData: { username: string; email: string; password: string }) => {
-  const userCredential = await createUserWithEmailAndPassword(auth, userData.email, userData.password);
+export const registerUser = async (userData: {
+  username: string;
+  email: string;
+  password: string;
+}) => {
+  const userCredential = await createUserWithEmailAndPassword(
+    auth,
+    userData.email,
+    userData.password
+  );
   const idToken = await userCredential.user.getIdToken();
 
   const response = await fetch(`${API_URL}/users/register`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${idToken}`
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${idToken}`,
     },
-    body: JSON.stringify({ username: userData.username, email: userData.email }),
-    credentials: 'include'
+    body: JSON.stringify({
+      username: userData.username,
+      email: userData.email,
+    }),
+    credentials: "include",
   });
-  if (!response.ok) throw new Error('Failed to register user');
+  if (!response.ok) throw new Error("Failed to register user");
   return response.json();
 };
 
-export const loginUser = async (credentials: { email: string; password: string }) => {
-  const userCredential = await signInWithEmailAndPassword(auth, credentials.email, credentials.password);
+export const loginUser = async (credentials: {
+  email: string;
+  password: string;
+}) => {
+  const userCredential = await signInWithEmailAndPassword(
+    auth,
+    credentials.email,
+    credentials.password
+  );
   const idToken = await userCredential.user.getIdToken();
 
   const response = await fetch(`${API_URL}/users/login`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${idToken}`
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${idToken}`,
     },
-    credentials: 'include'
+    credentials: "include",
   });
-  if (!response.ok) throw new Error('Failed to login');
+  if (!response.ok) throw new Error("Failed to login");
   return response.json();
 };

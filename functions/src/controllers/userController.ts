@@ -53,18 +53,6 @@ export const registerUser = async (req: Request, res: Response) => {
     });
     logger.info("User document created in Firestore", { uid });
 
-    // Create a custom token for the new user
-    const token = await admin.auth().createCustomToken(uid);
-    logger.info("Custom token created for user", { uid });
-
-    // Set the token as an HTTP-only cookie
-    res.cookie('authToken', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
-      sameSite: 'strict',
-      maxAge: 3600000 // 1 hour
-    });
-
     res.status(201).send({ 
       authenticated: true,
       uid,
@@ -95,18 +83,6 @@ export const loginUser = async (req: Request, res: Response) => {
     // Verify the ID token
     const decodedToken = await admin.auth().verifyIdToken(idToken);
     const uid = decodedToken.uid;
-
-    // Create a custom token for the authenticated user
-    const token = await admin.auth().createCustomToken(uid);
-    logger.info("Custom token created for user", { uid });
-
-    // Set the token as an HTTP-only cookie
-    res.cookie('authToken', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-      maxAge: 3600000 // 1 hour
-    });
 
     const userRecord = await admin.auth().getUser(uid);
 
@@ -191,7 +167,7 @@ export const verifyToken = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error("Error verifying token:", error);
-    res.status(401).json({ authenticated: false, error: "Invalid token" });
+    res.status(200).json({ authenticated: false, error: "Invalid token" });
   }
 };
 

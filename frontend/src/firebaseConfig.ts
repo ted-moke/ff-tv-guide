@@ -13,6 +13,8 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
+
+console.log('auth', auth)
 const db = getFirestore(app);
 
 if (import.meta.env.VITE_USE_FIREBASE_EMULATOR === 'true') {
