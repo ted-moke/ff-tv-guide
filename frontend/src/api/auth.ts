@@ -4,10 +4,21 @@ import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "fire
 const API_URL = import.meta.env.VITE_API_URL;
 
 export const verifyToken = async () => {
+  const currentUser = auth.currentUser;
+  if (!currentUser) {
+    throw new Error('No user is currently logged in');
+  }
+
+  const idToken = await currentUser.getIdToken();
+
   const response = await fetch(`${API_URL}/users/verify-token`, { 
     method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${idToken}`
+    },
     credentials: 'include'
   });
+
   if (!response.ok) throw new Error('Failed to verify token');
   return response.json();
 };

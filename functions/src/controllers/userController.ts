@@ -7,9 +7,11 @@ const logger = functions.logger;
 const verifyIdToken = async (idToken: string) => {
   if (process.env.FUNCTIONS_EMULATOR) {
     // For emulator, we need to disable token checks
-    return admin.auth().verifyIdToken(idToken, true);
+    console.log('verify resp', await admin.auth().verifyIdToken(idToken, true))
+    return await admin.auth().verifyIdToken(idToken, true);
   } else {
-    return admin.auth().verifyIdToken(idToken);
+    console.log('verify resp', await admin.auth().verifyIdToken(idToken))
+    return await admin.auth().verifyIdToken(idToken);
   }
 };
 
@@ -165,7 +167,8 @@ export const updateUserProfile = async (req: Request, res: Response) => {
 };
 
 export const verifyToken = async (req: Request, res: Response) => {
-  const token = req.cookies.authToken;
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(' ')[1];
 
   if (!token) {
     return res.status(200).json({ authenticated: false, message: "No token provided" });
@@ -176,14 +179,19 @@ export const verifyToken = async (req: Request, res: Response) => {
     const uid = decodedToken.uid;
     const userRecord = await admin.auth().getUser(uid);
 
+    // Fetch user data from Firestore
+    const userDoc = await db.collection("users").doc(uid).get();
+    const userData = userDoc.data();
+
     res.status(200).json({
       authenticated: true,
       uid: userRecord.uid,
       email: userRecord.email,
-      username: userRecord.displayName
+      username: userData?.username || userRecord.displayName
     });
   } catch (error) {
-    res.status(200).json({ authenticated: false, error: "Invalid token" });
+    console.error("Error verifying token:", error);
+    res.status(401).json({ authenticated: false, error: "Invalid token" });
   }
 };
 
