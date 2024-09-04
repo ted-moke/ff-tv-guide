@@ -8,7 +8,7 @@ export enum LinkButtonColor {
 }
 
 interface LinkButtonProps {
-  to: string;
+  to?: string;
   color?: LinkButtonColor;
   children: React.ReactNode;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
@@ -17,12 +17,18 @@ interface LinkButtonProps {
 const LinkButton: React.FC<LinkButtonProps> = ({ to, color = LinkButtonColor.PRIMARY, children, onClick }) => {
   const className = color === LinkButtonColor.PRIMARY ? styles.primaryLinkButton : styles.secondaryLinkButton;
 
-  return (
+  const buttonElement = (
+    <button className={className} onClick={onClick}>
+      {children}
+    </button>
+  );
+
+  return to ? (
     <Link to={to} className={styles.link}>
-      <button className={className} onClick={onClick}>
-        {children}
-      </button>
+      {buttonElement}
     </Link>
+  ) : (
+    buttonElement
   );
 };
 

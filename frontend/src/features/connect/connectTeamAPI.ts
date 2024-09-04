@@ -18,3 +18,17 @@ export const createPlatformCredential = async (credential: Omit<PlatformCredenti
 
   return response.json();
 };
+
+export const fetchUserPlatformCredentials = async (): Promise<PlatformCredential[]> => {
+  const response = await fetch(`${API_URL}/platform-credentials`, {
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch user platform credentials');
+  }
+
+  return response.json();
+};

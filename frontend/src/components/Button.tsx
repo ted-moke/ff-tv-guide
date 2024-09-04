@@ -5,6 +5,7 @@ import styles from './Button.module.css';
 export enum ButtonColor {
   PRIMARY = 'primary',
   SECONDARY = 'secondary',
+  CLEAR = 'clear',
 }
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -13,7 +14,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const Button: React.FC<ButtonProps> = ({ link, onClick, color = ButtonColor.PRIMARY, children, ...props }) => {
-  const className = color === ButtonColor.PRIMARY ? styles.primaryButton : styles.secondaryButton;
+  const className = styles[color];
 
   if (link) {
     return (

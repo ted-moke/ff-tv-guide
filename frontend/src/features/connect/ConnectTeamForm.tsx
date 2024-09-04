@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { usePlatforms } from '../platforms/usePlatforms';
 import { Platform } from '../platforms/platformTypes';
 import { createPlatformCredential } from './connectTeamAPI';
@@ -7,24 +7,31 @@ import { useAuth } from '../auth/useAuth';
 import Dropdown from '../../components/Dropdown';
 import TextInput from '../../components/TextInput';
 import Button from '../../components/Button';
+import LinkButton from '../../components/LinkButton';
 import styles from './ConnectTeamForm.module.css';
 
-const ConnectTeamForm: React.FC = () => {
+interface ConnectTeamFormProps {
+  onSuccess: () => void;
+  onCancel: () => void;
+}
+
+const ConnectTeamForm: React.FC<ConnectTeamFormProps> = ({ onSuccess, onCancel }) => {
   const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(null);
   const [credential, setCredential] = useState('');
   const { data: platforms, isLoading, error } = usePlatforms();
   const { user } = useAuth();
+  const queryClient = useQueryClient();
 
   const mutation = useMutation({
     mutationFn: createPlatformCredential,
     onSuccess: (result) => {
-      // Handle successful creation (e.g., show a success message, reset form)
       console.log('Platform credential created successfully', result);
+      queryClient.invalidateQueries({ queryKey: ['userCredentials'] });
       setSelectedPlatform(null);
       setCredential('');
+      onSuccess();
     },
     onError: (error) => {
-      // Handle error (e.g., show error message)
       console.error('Failed to create platform credential:', error);
     },
   });
@@ -36,8 +43,8 @@ const ConnectTeamForm: React.FC = () => {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    if (selectedPlatform && user) {
-      mutation.mutateAsync({
+    if (selectedPlatform && user?.uid) {
+      mutation.mutate({
         platformId: selectedPlatform.id,
         userId: user.uid,
         credential: credential,
@@ -46,7 +53,7 @@ const ConnectTeamForm: React.FC = () => {
   };
 
   if (isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error fetching platforms: {error.message}</div>;
+  if (error) return <div>Error fetching platforms: {(error as Error).message}</div>;
 
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
@@ -71,11 +78,14 @@ const ConnectTeamForm: React.FC = () => {
         />
       )}
 
-      <Button type="submit" disabled={!selectedPlatform || mutation.isLoading}>
-        {mutation.isLoading ? 'Connecting...' : 'Connect'}
-      </Button>
+      <div className={styles.buttonGroup}>
+        <LinkButton onClick={onCancel}>Cancel</LinkButton>
+        <Button type="submit" disabled={!selectedPlatform || mutation.isPending}>
+          {mutation.isPending ? 'Connecting...' : 'Connect'}
+        </Button>
+      </div>
 
-      {mutation.isError && <p className={styles.error}>Error: {mutation.error.message}</p>}
+      {mutation.isError && <p className={styles.error}>Error: {(mutation.error as Error).message}</p>}
       {mutation.isSuccess && <p className={styles.success}>Platform connected successfully!</p>}
     </form>
   );

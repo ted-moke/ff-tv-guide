@@ -29,3 +29,9 @@
 .button:hover {
   background-color: var(--primary-hover-color);
 }
+
+.buttonGroup {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}

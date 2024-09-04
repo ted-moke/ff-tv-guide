@@ -5,6 +5,7 @@ import {
   onAuthStateChanged,
   User,
 } from "firebase/auth";
+import { AuthData } from "./authTypes";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -23,7 +24,7 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-export const verifyToken = async () => {
+export const verifyToken = async (): Promise<AuthData> => {
   const token = currentToken || localStorage.getItem("authToken");
 
   if (!token) {

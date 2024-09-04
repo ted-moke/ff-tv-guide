@@ -2,13 +2,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { verifyToken, loginUser, registerUser } from './authAPI';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-
-interface AuthData {
-  authenticated: boolean;
-  uid?: string;
-  email?: string;
-  username?: string;
-}
+import { AuthData } from './authTypes'
 
 export const useAuth = () => {
   const queryClient = useQueryClient();
@@ -16,7 +10,7 @@ export const useAuth = () => {
   const navigate = useNavigate();
   const [isAuthEnabled, setIsAuthEnabled] = useState(true);
 
-  const { data, isLoading, error, refetch } = useQuery<AuthData, Error>({
+  const { data, isLoading, error, refetch } = useQuery<AuthData | null, Error, AuthData>({
     queryKey: ['auth'],
     queryFn: verifyToken,
     retry: false,

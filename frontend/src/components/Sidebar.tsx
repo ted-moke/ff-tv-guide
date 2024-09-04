@@ -134,8 +134,8 @@ const Sidebar: React.FC<SidebarProps> = ({
       <div className={`${styles["control-group"]} ${styles["fantasy-team-list-wrapper"]}`}>        <h3>Fantasy Teams</h3>
         <div className={styles["fantasy-team-list"]}>
           <div className={styles["fantasy-team-actions"]}>
-            <LinkButton to="#" onClick={handleSelectAllFantasyTeams}>Select All</LinkButton>
-            <LinkButton to="#" onClick={handleClearAllFantasyTeams}>Clear All</LinkButton>
+            <LinkButton onClick={handleSelectAllFantasyTeams}>Select All</LinkButton>
+            <LinkButton onClick={handleClearAllFantasyTeams}>Clear All</LinkButton>
           </div>
           {FANTASY_TEAMS.map((team) => (
             <Checkbox

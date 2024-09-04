@@ -1,6 +1,6 @@
 @import '../styles/variables.css';
 
-.primaryButton {
+.primary {
     border-radius: var(--size1);
     border: 1px solid transparent;
     padding: var(--size1) var(--size2);
@@ -16,17 +16,17 @@
     text-align: center;
 }
 
-.primaryButton:hover {
+.primary:hover {
     background-color: var(--primary-hover-color);
     border-color: var(--text-color);
 }
 
-.primaryButton:focus,
-.primaryButton:focus-visible {
+.primary:focus,
+.primary:focus-visible {
     outline: 4px auto -webkit-focus-ring-color;
 }
 
-.secondaryButton {
+.secondary {
     border-radius: var(--size1);
     border: 1px solid transparent;
     padding: var(--size1) var(--size2);
@@ -42,11 +42,24 @@
     text-align: center;
 }
 
-.secondaryButton:hover {
+.secondary:hover {
     background-color: var(--secondary-hover-color);
 }
 
-.secondaryButton:focus,
-.secondaryButton:focus-visible {
+.secondary:focus,
+.secondary:focus-visible {
     outline: 4px auto -webkit-focus-ring-color;
+}
+
+.clear {
+    background-color: transparent;
+    color: var(--text-color-secondary);
+    border: 1px solid var(--primary-color);
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.clear:hover {
+    background-color: var(--background-color-hover);
 }
