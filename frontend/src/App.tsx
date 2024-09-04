@@ -1,15 +1,23 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useAuth } from './hooks/useAuth';
-import AuthPage from './pages/AuthPage';
-import HomePage from './pages/HomePage';
-import SplashPage from './components/SplashPage';
-import LoadingSpinner from './components/LoadingSpinner';
+import React from "react";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { useAuth } from "./features/auth/useAuth";
+import AuthPage from "./pages/AuthPage";
+import HomePage from "./pages/HomePage";
+import SplashPage from "./pages/SplashPage";
+import ConnectTeam from "./pages/ConnectTeam"; // Add this import
+import LoadingSpinner from "./components/LoadingSpinner";
 
 const queryClient = new QueryClient();
 
-const AuthenticatedRoute: React.FC<{ element: React.ReactElement }> = ({ element }) => {
+const AuthenticatedRoute: React.FC<{ element: React.ReactElement }> = ({
+  element,
+}) => {
   const { user, isLoading } = useAuth();
 
   if (isLoading) {
@@ -30,8 +38,14 @@ const AppRoutes: React.FC = () => {
     <Routes>
       <Route path="/" element={user ? <HomePage /> : <SplashPage />} />
       <Route path="/auth" element={<AuthPage />} />
-      <Route path="/home" element={<AuthenticatedRoute element={<HomePage />} />} />
-      {/* Add other routes as needed */}
+      <Route
+        path="/home"
+        element={<AuthenticatedRoute element={<HomePage />} />}
+      />
+      <Route
+        path="/connect-team"
+        element={<AuthenticatedRoute element={<ConnectTeam />} />}
+      />
     </Routes>
   );
 };

@@ -148,6 +148,9 @@ const Sidebar: React.FC<SidebarProps> = ({
             />
           ))}
         </div>
+        <LinkButton to="/connect-team">
+          Connect Team
+        </LinkButton>
       </div>
     </aside>
   );

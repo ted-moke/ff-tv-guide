@@ -1,7 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { verifyToken, loginUser, registerUser } from '../api/auth';
+import { verifyToken, loginUser, registerUser } from './authAPI';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 interface AuthData {
   authenticated: boolean;

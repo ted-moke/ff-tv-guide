@@ -8,19 +8,36 @@ interface TextInputProps {
   value?: string;
   placeholder?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  label?: string;
+  required?: boolean;
+  className?: string;
 }
 
-const TextInput: React.FC<TextInputProps> = ({ type, id, name, value, placeholder, onChange }) => {
+const TextInput: React.FC<TextInputProps> = ({ 
+  type, 
+  id, 
+  name, 
+  value, 
+  placeholder, 
+  onChange, 
+  label,
+  required,
+  className
+}) => {
   return (
-    <input
-      type={type}
-      id={id}
-      name={name}
-      value={value}
-      placeholder={placeholder}
-      onChange={onChange}
-      className={styles.input}
-    />
+    <div className={styles.inputContainer}>
+      {label && <label htmlFor={id} className={styles.label}>{label}</label>}
+      <input
+        type={type}
+        id={id}
+        name={name}
+        value={value}
+        placeholder={placeholder}
+        onChange={onChange}
+        required={required}
+        className={`${styles.input} ${className || ''}`}
+      />
+    </div>
   );
 };
 

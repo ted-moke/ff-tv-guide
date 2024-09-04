@@ -1,9 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import styles from './SplashPage.module.css';
 import logo from "/vite.svg";
-import Button from "./Button";
-import LinkButton from "./LinkButton";
+import Button from "../components/Button";
+import LinkButton from "../components/LinkButton";
 
 const SplashPage: React.FC = () => {
   return (

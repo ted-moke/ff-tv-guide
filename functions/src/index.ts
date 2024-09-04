@@ -3,12 +3,11 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { errorHandler } from "./middleware/errorMiddleware";
-import fantasyPlatformRoutes from "./routes/fantasyPlatformRoutes";
-import platformCredentialRoutes from "./routes/platformCredentialRoutes";
-import fantasyLeagueRoutes from "./routes/fantasyLeagueRoutes";
-import fantasyTeamRoutes from "./routes/fantasyTeamRoutes";
-import fantasyPlayerRoutes from "./routes/fantasyPlayerRoutes";
-import fantasyTeamPlayerRoutes from "./routes/fantasyTeamPlayerRoutes";
+import { seedDatabase } from "./seed";
+import platformRoutes from "./routes/platformRoutes";
+import leagueRoutes from "./routes/leagueRoutes";
+import teamRoutes from "./routes/teamRoutes";
+import teamPlayerRoutes from "./routes/teamPlayerRoutes";
 import userRoutes from "./routes/userRoutes";
 
 const logger = functions.logger;
@@ -34,12 +33,15 @@ app.use((req, res, next) => {
 // Error handling middleware
 app.use(errorHandler);
 
-app.use("/fantasyPlatforms", fantasyPlatformRoutes);
-app.use("/platformCredentials", platformCredentialRoutes);
-app.use("/fantasyLeagues", fantasyLeagueRoutes);
-app.use("/fantasyTeams", fantasyTeamRoutes);
-app.use("/fantasyPlayers", fantasyPlayerRoutes);
-app.use("/fantasyTeamPlayers", fantasyTeamPlayerRoutes);
+app.use("/platforms", platformRoutes);
+app.use("/leagues", leagueRoutes);
+app.use("/teams", teamRoutes);
+app.use("/team-players", teamPlayerRoutes);
 app.use("/users", userRoutes);
+
+// Seed the database when the app initializes
+seedDatabase().catch(error => {
+  logger.error('Error seeding database:', error);
+});
 
 export const api = functions.https.onRequest(app);
