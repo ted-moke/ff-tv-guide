@@ -6,13 +6,14 @@ import {
   deletePlatformCredential,
   listPlatformCredentials,
 } from "../controllers/platformCredentialController";
+import { authenticate } from "../middleware/authMiddleware"; // Add this import
 
 const router = Router();
 
-router.post("/", createPlatformCredential);
-router.get("/:id", getPlatformCredential);
-router.put("/:id", updatePlatformCredential);
-router.delete("/:id", deletePlatformCredential);
-router.get("/", listPlatformCredentials);
+router.post("/", authenticate, createPlatformCredential);
+router.get("/:id", authenticate, getPlatformCredential);
+router.put("/:id", authenticate, updatePlatformCredential);
+router.delete("/:id", authenticate, deletePlatformCredential);
+router.get("/", authenticate, listPlatformCredentials); // Ensure authentication
 
 export default router;

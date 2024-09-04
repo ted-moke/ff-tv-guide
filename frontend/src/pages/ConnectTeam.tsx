@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { fetchUserPlatformCredentials } from '../features/connect/connectTeamAPI';
+import useCredentials from '../features/connect/useCredentials'; // Add this import
+import useExternalLeagues from '../features/connect/useExternalLeagues'; // Add this import
 import ConnectTeamForm from '../features/connect/ConnectTeamForm';
 import CredentialList from '../features/connect/CredentialList';
 import Button from '../components/Button';
@@ -9,19 +9,20 @@ import styles from './ConnectTeam.module.css';
 
 const ConnectTeam: React.FC = () => {
   const [showNewCredentialForm, setShowNewCredentialForm] = useState(false);
-  const { data: credentials, isLoading, error } = useQuery({
-    queryKey: ['userCredentials'],
-    queryFn: fetchUserPlatformCredentials
-  });
+  const [selectedCredential, setSelectedCredential] = useState<PlatformCredential | null>(null);
+  const { data: credentials, isLoading, error } = useCredentials();
 
   const handleSelectCredential = (credential: PlatformCredential) => {
-    // TODO: Implement logic for using the selected credential
-    console.log('Selected credential:', credential);
+    setSelectedCredential(credential);
   };
 
   const handleCancelNewCredential = () => {
     setShowNewCredentialForm(false);
   };
+
+  const { data: externalLeagues, isLoading: isLoadingLeagues, error: leaguesError } = useExternalLeagues(
+    selectedCredential?.id || ''
+  );
 
   if (isLoading) return <div>Loading credentials...</div>;
   if (error) return <div>Error loading credentials: {(error as Error).message}</div>;
@@ -30,7 +31,7 @@ const ConnectTeam: React.FC = () => {
     <div className={styles.container}>
       <h1 className={styles.title}>Connect Your Fantasy Team</h1>
       
-      {!showNewCredentialForm && (
+      {!selectedCredential && !showNewCredentialForm && (
         <>
           {credentials && credentials.length > 0 && (
             <CredentialList 
@@ -49,6 +50,21 @@ const ConnectTeam: React.FC = () => {
           onSuccess={() => setShowNewCredentialForm(false)} 
           onCancel={handleCancelNewCredential}
         />
+      )}
+
+      {selectedCredential && (
+        <div>
+          <h2>External Leagues</h2>
+          {isLoadingLeagues && <div>Loading leagues...</div>}
+          {leaguesError && <div>Error loading leagues: {(leaguesError as Error).message}</div>}
+          {externalLeagues && (
+            <ul>
+              {externalLeagues.map(league => (
+                <li key={league.id}>{league.name}</li>
+              ))}
+            </ul>
+          )}
+        </div>
       )}
     </div>
   );

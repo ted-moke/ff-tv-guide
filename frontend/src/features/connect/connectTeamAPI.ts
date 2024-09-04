@@ -20,10 +20,11 @@ export const createPlatformCredential = async (credential: Omit<PlatformCredenti
 };
 
 export const fetchUserPlatformCredentials = async (): Promise<PlatformCredential[]> => {
+  const authToken = localStorage.getItem('authToken');
   const response = await fetch(`${API_URL}/platform-credentials`, {
     headers: {
-      'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
-    },
+      'Authorization': `Bearer ${authToken}`
+    }
   });
 
   if (!response.ok) {

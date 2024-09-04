@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { admin } from "../firebase";
+import { admin } from '../firebase'; // Use the shared instance
 import { DecodedIdToken } from "firebase-admin/auth";
-import { logger } from "firebase-functions";
 
 // Add this interface
 interface AuthenticatedRequest extends Request {
@@ -13,17 +12,19 @@ export const authenticate = async (
   res: Response,
   next: NextFunction,
 ) => {
-  const idToken = req.headers.authorization?.split("Bearer ")[1];
-  if (!idToken) {
-    logger.error(`No token provided ${req.headers.authorization}`);
-    return res.status(401).send("Unauthorized");
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    return res.status(401).json({ error: 'Unauthorized' });
   }
 
+  const token = authHeader.split('Bearer ')[1];
+
   try {
-    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    const decodedToken = await admin.auth().verifyIdToken(token);
     req.user = decodedToken;
     next();
-  } catch (error: unknown) {
-    res.status(401).send(`Unauthorized: ${error}`);
+  } catch (error) {
+    return res.status(401).json({ error: 'Unauthorized' });
   }
 };

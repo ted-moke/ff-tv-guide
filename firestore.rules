@@ -15,5 +15,9 @@ service cloud.firestore {
     match /{document=**} {
       allow read, write: if request.time < timestamp.date(2024, 9, 28);
     }
+
+    match /platformCredentials/{credentialId} {
+      allow read: if request.auth != null;
+    }
   }
 }

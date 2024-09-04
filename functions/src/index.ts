@@ -9,7 +9,8 @@ import leagueRoutes from "./routes/leagueRoutes";
 import teamRoutes from "./routes/teamRoutes";
 import teamPlayerRoutes from "./routes/teamPlayerRoutes";
 import userRoutes from "./routes/userRoutes";
-import platformCredentialRoutes from "./routes/platformCredentialRoutes"
+import platformCredentialRoutes from "./routes/platformCredentialRoutes";
+import externalLeagueRoutes from "./routes/externalLeagueRoutes";
 
 const logger = functions.logger;
 logger.info('Initializing backend');
@@ -40,6 +41,7 @@ app.use("/leagues", leagueRoutes);
 app.use("/teams", teamRoutes);
 app.use("/team-players", teamPlayerRoutes);
 app.use("/users", userRoutes);
+app.use("/external-leagues", externalLeagueRoutes);
 
 // Seed the database when the app initializes
 seedDatabase().catch(error => {
