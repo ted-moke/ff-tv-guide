@@ -2,7 +2,6 @@ import React from "react";
 import styles from "./Sidebar.module.css";
 import { FANTASY_TEAMS, Conference, SortOption, ViewMode } from "../pages/HomePage";
 import LinkButton from './LinkButton';
-import Button from './Button';
 import MenuItem from './MenuItem';
 import Checkbox from './Checkbox';
 import Dropdown from './Dropdown';
