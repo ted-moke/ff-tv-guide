@@ -11,7 +11,7 @@ interface LinkButtonProps {
   to: string;
   color?: LinkButtonColor;
   children: React.ReactNode;
-  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void; // Add onClick prop
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const LinkButton: React.FC<LinkButtonProps> = ({ to, color = LinkButtonColor.PRIMARY, children, onClick }) => {

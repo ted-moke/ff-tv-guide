@@ -12,6 +12,7 @@ import HomePage from "./pages/HomePage";
 import SplashPage from "./pages/SplashPage";
 import ConnectTeam from "./pages/ConnectTeam"; // Add this import
 import LoadingSpinner from "./components/LoadingSpinner";
+import Navigation from "./components/Navigation";
 
 const queryClient = new QueryClient();
 
@@ -24,7 +25,14 @@ const AuthenticatedRoute: React.FC<{ element: React.ReactElement }> = ({
     return <LoadingSpinner />;
   }
 
-  return user ? element : <Navigate to="/" />;
+  return user ? (
+    <>
+      <Navigation />
+      {element}
+    </>
+  ) : (
+    <Navigate to="/" />
+  );
 };
 
 const AppRoutes: React.FC = () => {
@@ -36,7 +44,7 @@ const AppRoutes: React.FC = () => {
 
   return (
     <Routes>
-      <Route path="/" element={user ? <HomePage /> : <SplashPage />} />
+      <Route path="/" element={user ? <Navigate to="/home" /> : <SplashPage />} />
       <Route path="/auth" element={<AuthPage />} />
       <Route
         path="/home"

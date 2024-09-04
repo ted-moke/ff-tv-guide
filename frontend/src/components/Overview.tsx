@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import styles from './Overview.module.css';
-import { PLAYERS, NFL_TEAMS, getTeams } from '../pages/HomePage';
+import { PLAYERS, NFL_TEAMS } from '../features/nfl/nflData';
+import { getTeams } from '../pages/HomePage';
 
 interface OverviewProps {
   activeFantasyTeams: string[];

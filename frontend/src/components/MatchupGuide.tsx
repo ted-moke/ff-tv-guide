@@ -1,7 +1,10 @@
 import React, { useMemo } from 'react';
 import styles from './MatchupGuide.module.css';
-import { NFLGame, PLAYERS, formatDateToLocal, groupGamesByStartTime } from '../pages/HomePage';
-import nflSchedule from '../assets/nfl-schedule-2024.json'; // Import JSON file
+import { PLAYERS } from '../features/nfl/nflData';
+import { NFLGame } from '../features/nfl/nflTypes';
+import {formatDateToEastern } from '../utils/dateUtils'
+import { groupGamesByStartTime } from '../features/nfl/nflUtils'
+import nflSchedule from '../assets/nfl-schedule-2024.json';
 
 interface MatchupGuideProps {
   selectedWeek: number;
@@ -9,9 +12,20 @@ interface MatchupGuideProps {
   activeFantasyTeams: string[];
 }
 
+interface NflWeekSchedule {
+  weekNumber: number;
+  games: NFLGame[];
+}
+
+interface NFLSchedule {
+  season: number;
+  weeks: NflWeekSchedule[];
+}
+
 const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek, setSelectedWeek, activeFantasyTeams }) => {
   const weeklySchedule = useMemo(() => {
-    const selectedWeekSchedule = nflSchedule.weeks.find(week => week.weekNumber === selectedWeek);
+    const schedule = nflSchedule as NFLSchedule;
+    const selectedWeekSchedule = schedule.weeks.find(week => week.weekNumber === selectedWeek);
     return selectedWeekSchedule ? groupGamesByStartTime(selectedWeekSchedule.games) : [];
   }, [selectedWeek]);
 
@@ -31,7 +45,7 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek, setSelectedWe
       {weeklySchedule.length > 0 ? (
         weeklySchedule.map(([startTime, games], index) => (
           <div key={index} className={styles['game-group']}>
-            <h3>{formatDateToLocal(startTime.split(' ')[0], startTime.split(' ')[1])}</h3>
+            <h3>{formatDateToEastern(startTime.split(' ')[0], startTime.split(' ')[1])}</h3>
             <div className={styles['game-group-content']}>
               {games.map((game: NFLGame, gameIndex) => {
                 const awayPlayers = getFantasyPlayersForTeam(game.awayTeam);
