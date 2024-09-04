@@ -1,19 +1,21 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './HomePage.module.css';
-import nflSchedule from '../assets/nfl-schedule-2024.json';
+import Sidebar from '../components/Sidebar';
+import MatchupGuide from '../components/MatchupGuide';
+import Overview from '../components/Overview'; // Import Overview component
 
 interface FantasyTeam {
   name: string;
   league: string;
 }
 
-const FANTASY_TEAMS: FantasyTeam[] = [
+export const FANTASY_TEAMS: FantasyTeam[] = [
   { name: "Tulsa Tango", league: "Vince's League" },
   { name: "Papas Tatas", league: "All Star League" },
   { name: "Southie Sizzlers", league: "Forever League" },
 ];
 
-const NFL_TEAMS = {
+export const NFL_TEAMS = {
   AFC: [
     'Buffalo Bills', 'Miami Dolphins', 'New England Patriots', 'New York Jets',
     'Baltimore Ravens', 'Cincinnati Bengals', 'Cleveland Browns', 'Pittsburgh Steelers',
@@ -28,7 +30,7 @@ const NFL_TEAMS = {
   ]
 };
 
-const PLAYERS = [
+export const PLAYERS = [
   { name: 'Tom Brady', team: 'Tampa Bay Buccaneers', fantasyTeams: ["Tulsa Tango", "Papas Tatas"] },
   { name: 'Patrick Mahomes', team: 'Kansas City Chiefs', fantasyTeams: ["Papas Tatas", "Southie Sizzlers", "Tulsa Tango"] },
   { name: 'Aaron Rodgers', team: 'Green Bay Packers', fantasyTeams: ["Southie Sizzlers"] },
@@ -43,21 +45,12 @@ const PLAYERS = [
   { name: 'Stefon Diggs', team: 'Buffalo Bills', fantasyTeams: ["Southie Sizzlers"] },
 ];
 
-type Conference = 'AFC' | 'NFC' | 'Both';
+export type Conference = 'AFC' | 'NFC' | 'Both';
 
-type SortOption = 'division' | 'players' | 'name';
+export type SortOption = 'division' | 'players' | 'name';
 
-type ViewMode = 'overview' | 'matchup';
-
-interface NFLSchedule {
-  season: number;
-  weeks: {
-    weekNumber: number;
-    games: NFLGame[];
-  }[];
-}
-
-interface NFLGame {
+export type ViewMode = 'overview' | 'matchup';
+export interface NFLGame {
   date: string;
   time: string;
   awayTeam: string;
@@ -80,7 +73,7 @@ const getCurrentWeek = () => {
   return Math.min(Math.max(weeksPassed + 1, 1), 18); // Ensure week is between 1 and 18
 };
 
-const formatDateToLocal = (dateString: string, timeString: string) => {
+export const formatDateToLocal = (dateString: string, timeString: string) => {
   const [year, month, day] = dateString.split('-');
   const [hours, minutes] = timeString.split(':');
   const date = new Date(Date.UTC(
@@ -102,7 +95,7 @@ const formatDateToLocal = (dateString: string, timeString: string) => {
   });
 };
 
-const groupGamesByStartTime = (games: NFLGame[]) => {
+export const groupGamesByStartTime = (games: NFLGame[]) => {
   const groupedGames: { [key: string]: NFLGame[] } = {};
   games.forEach(game => {
     const key = `${game.date} ${game.time}`;
@@ -118,8 +111,15 @@ const groupGamesByStartTime = (games: NFLGame[]) => {
   });
 };
 
+export const getTeams = (conference: Conference) => {
+  if (conference === 'Both') {
+    return [...NFL_TEAMS.AFC, ...NFL_TEAMS.NFC];
+  }
+  return NFL_TEAMS[conference];
+};
+
 const HomePage: React.FC = () => {
-  const [viewMode, setViewMode] = useState<ViewMode>('overview');
+  const [viewMode, setViewMode] = useState<ViewMode>('matchup');
   const [activeFantasyTeams, setActiveFantasyTeams] = useState<string[]>(FANTASY_TEAMS.map(team => team.name));
   const [activeConference, setActiveConference] = useState<Conference>('Both');
   const [sortBy, setSortBy] = useState<SortOption>('name');
@@ -134,67 +134,8 @@ const HomePage: React.FC = () => {
     }
   }, [viewMode]);
 
-  const handleFantasyTeamToggle = (teamName: string) => {
-    setActiveFantasyTeams(prev => 
-      prev.includes(teamName) 
-        ? prev.filter(name => name !== teamName)
-        : [...prev, teamName]
-    );
-  };
-
-  const handleSelectAllFantasyTeams = () => {
-    setActiveFantasyTeams(FANTASY_TEAMS.map(team => team.name));
-  };
-
-  const handleClearAllFantasyTeams = () => {
-    setActiveFantasyTeams([]);
-  };
-
-  const getTeams = (conference: Conference) => {
-    if (conference === 'Both') {
-      return [...NFL_TEAMS.AFC, ...NFL_TEAMS.NFC];
-    }
-    return NFL_TEAMS[conference];
-  };
-
-  const sortedGroupedPlayers = useMemo(() => {
-    const groupedPlayers = getTeams(activeConference).map(team => ({
-      team,
-      players: PLAYERS.filter(player => player.team === team && activeFantasyTeams.includes(player.fantasyTeams[0])),
-      division: Object.entries(NFL_TEAMS).find(([_, teams]) => teams.includes(team))?.[0] || ''
-    }));
-
-    const filteredPlayers = hideEmptyTeams ? groupedPlayers.filter(team => team.players.length > 0) : groupedPlayers;
-
-    return filteredPlayers.sort((a, b) => {
-      if (sortBy === 'division') {
-        return a.division.localeCompare(b.division) || a.team.localeCompare(b.team);
-      } else if (sortBy === 'players') {
-        return b.players.length - a.players.length || a.team.localeCompare(b.team);
-      } else {
-        return a.team.localeCompare(b.team);
-      }
-    });
-  }, [activeConference, activeFantasyTeams, sortBy, hideEmptyTeams]);
-
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
-
-  const weeklySchedule = useMemo(() => {
-    const schedule = nflSchedule as NFLSchedule;
-    const selectedWeekSchedule = schedule.weeks.find(week => week.weekNumber === selectedWeek);
-    return selectedWeekSchedule ? groupGamesByStartTime(selectedWeekSchedule.games) : [];
-  }, [selectedWeek]);
-
-  const getFantasyPlayersForTeam = (teamName: string) => {
-    return PLAYERS.filter(player => 
-      player.team === teamName && 
-      player.fantasyTeams.some(team => activeFantasyTeams.includes(team))
-    ).map(player => ({
-      ...player,
-      activeFantasyTeams: player.fantasyTeams.filter(team => activeFantasyTeams.includes(team))
-    })).sort((a, b) => a.name.localeCompare(b.name));
   };
 
   return (
@@ -205,184 +146,36 @@ const HomePage: React.FC = () => {
           {isMobileMenuOpen ? 'Close' : 'Menu'}
         </button>
       </div>
-      <aside className={`${styles.sidebar} ${isMobileMenuOpen ? styles.open : ''}`}>
-        <h2>Controls</h2>
-        <div className={styles['control-group']}>
-          <button 
-            className={viewMode === 'overview' ? styles.active : ''}
-            onClick={() => setViewMode('overview')}
-          >
-            Overview
-          </button>
-          <button 
-            className={viewMode === 'matchup' ? styles.active : ''}
-            onClick={() => setViewMode('matchup')}
-          >
-            Matchup Guide
-          </button>
-        </div>
-        {viewMode === 'overview' ? (
-          <>
-            <div className={styles['control-group']}>
-              <h3>Conference</h3>
-              <div className={styles['conference-tabs']}>
-                {(['AFC', 'NFC', 'Both'] as Conference[]).map(conf => (
-                  <button 
-                    key={conf}
-                    className={activeConference === conf ? styles.active : ''} 
-                    onClick={() => setActiveConference(conf)}
-                  >
-                    {conf}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div className={styles['control-group']}>
-              <h3>Sort By</h3>
-              <div className={styles['sort-dropdown']}>
-                <select value={sortBy} onChange={(e) => setSortBy(e.target.value as SortOption)}>
-                  <option value="name">Team Name</option>
-                  <option value="division">Division</option>
-                  <option value="players">Number of Players</option>
-                </select>
-              </div>
-            </div>
-            <div className={styles['control-group']}>
-              <h3>Display Options</h3>
-              <label className={styles['toggle-option']}>
-                <input
-                  type="checkbox"
-                  checked={hideEmptyTeams}
-                  onChange={() => setHideEmptyTeams(!hideEmptyTeams)}
-                />
-                Hide teams with no players
-              </label>
-            </div>
-          </>
-        ) : (
-          <div className={styles['control-group']}>
-            <h3>Select Week</h3>
-            <select 
-              value={selectedWeek} 
-              onChange={(e) => setSelectedWeek(Number(e.target.value))}
-            >
-              {Array.from({length: 18}, (_, i) => i + 1).map(week => (
-                <option key={week} value={week}>Week {week}</option>
-              ))}
-            </select>
-          </div>
-        )}
-        <div className={styles['control-group']}>
-          <h3>Fantasy Teams</h3>
-          <div className={styles['fantasy-team-list']}>
-            <div className={styles['fantasy-team-actions']}>
-              <button onClick={handleSelectAllFantasyTeams}>Select All</button>
-              <button onClick={handleClearAllFantasyTeams}>Clear All</button>
-            </div>
-            {FANTASY_TEAMS.map(team => (
-              <label key={team.name} className={styles['fantasy-team-item']}>
-                <input
-                  type="checkbox"
-                  checked={activeFantasyTeams.includes(team.name)}
-                  onChange={() => handleFantasyTeamToggle(team.name)}
-                />
-                {team.name} ({team.league})
-              </label>
-            ))}
-          </div>
-        </div>
-      </aside>
+      <Sidebar
+        viewMode={viewMode}
+        setViewMode={setViewMode}
+        activeFantasyTeams={activeFantasyTeams}
+        setActiveFantasyTeams={setActiveFantasyTeams}
+        activeConference={activeConference}
+        setActiveConference={setActiveConference}
+        sortBy={sortBy}
+        setSortBy={setSortBy}
+        isMobileMenuOpen={isMobileMenuOpen}
+        toggleMobileMenu={toggleMobileMenu}
+        hideEmptyTeams={hideEmptyTeams}
+        setHideEmptyTeams={setHideEmptyTeams}
+        selectedWeek={selectedWeek}
+        setSelectedWeek={setSelectedWeek}
+      />
       <main className={styles['main-content']}>
         {viewMode === 'overview' ? (
-          <div className={styles['teams-grid']}>
-            {sortedGroupedPlayers.map(({ team, players, division }) => (
-              <div key={team} className={styles['team-card']}>
-                <h2>
-                  {team}
-                  <span className={styles['player-count']}>({players.length})</span>
-                </h2>
-                <p className={styles.division}>{division}</p>
-                {players.length > 0 ? (
-                  <ul>
-                    {players.map(player => (
-                      <li key={player.name} title={player.fantasyTeams.join(', ')}>
-                        {player.name}
-                        {player.fantasyTeams.length > 1 && <span className={styles['multi-team']}> x{player.fantasyTeams.length}</span>}
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p className={styles['no-players']}>No fantasy players in this team</p>
-                )}
-              </div>
-            ))}
-          </div>
+          <Overview
+            activeFantasyTeams={activeFantasyTeams}
+            activeConference={activeConference}
+            sortBy={sortBy}
+            hideEmptyTeams={hideEmptyTeams}
+          />
         ) : (
-          <div className={styles['matchup-guide']}>
-            <h2>Week {selectedWeek} Matchups</h2>
-            {weeklySchedule.length > 0 ? (
-              weeklySchedule.map(([startTime, games], index) => (
-                <div key={index} className={styles['game-group']}>
-                  <h3>{formatDateToLocal(startTime.split(' ')[0], startTime.split(' ')[1])}</h3>
-                  <div className={styles['game-group-content']}>
-                    {games.map((game: NFLGame, gameIndex) => {
-                      const awayPlayers = getFantasyPlayersForTeam(game.awayTeam);
-                      const homePlayers = getFantasyPlayersForTeam(game.homeTeam);
-                      const hasPlayers = awayPlayers.length > 0 || homePlayers.length > 0;
-                      return (
-                        <div key={gameIndex} className={styles.matchup}>
-                          <div className={styles['matchup-header']}>
-                            <div className={styles['team-names']}>
-                              <span className={styles['away-team']}>{game.awayTeam}</span>
-                              <span className={styles['at-symbol']}>@</span>
-                              <span className={styles['home-team']}>{game.homeTeam}</span>
-                            </div>
-                          </div>
-                          <div className={`${styles['matchup-content']} ${!hasPlayers ? styles['no-players-content'] : ''}`}>
-                            {hasPlayers ? (
-                              <div className={styles['team-players']}>
-                                <div className={styles['away-team']}>
-                                  {awayPlayers.length > 0 ? (
-                                    awayPlayers.map(player => (
-                                      <p key={player.name} className={styles.player} title={player.activeFantasyTeams.join(', ')}>
-                                        {player.name}
-                                        {player.activeFantasyTeams.length > 1 && <span className={styles['multi-team']}> x{player.activeFantasyTeams.length}</span>}
-                                      </p>
-                                    ))
-                                  ) : (
-                                    <p className={styles['no-players']}>No fantasy players</p>
-                                  )}
-                                </div>
-                                <div className={styles['home-team']}>
-                                  {homePlayers.length > 0 ? (
-                                    homePlayers.map(player => (
-                                      <p key={player.name} className={styles.player} title={player.activeFantasyTeams.join(', ')}>
-                                        {player.name}
-                                        {player.activeFantasyTeams.length > 1 && <span className={styles['multi-team']}> x{player.activeFantasyTeams.length}</span>}
-                                      </p>
-                                    ))
-                                  ) : (
-                                    <p className={styles['no-players']}>No fantasy players</p>
-                                  )}
-                                </div>
-                              </div>
-                            ) : (
-                              <p className={styles['no-players']}>No fantasy players</p>
-                            )}
-                          </div>
-                          <div className={styles['matchup-footer']}>
-                            <span className={styles.channel}>{game.channel}</span>
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              ))
-            ) : (
-              <p>No games scheduled for this week.</p>
-            )}
-          </div>
+          <MatchupGuide
+            selectedWeek={selectedWeek}
+            setSelectedWeek={setSelectedWeek}
+            activeFantasyTeams={activeFantasyTeams}
+          />
         )}
       </main>
     </div>

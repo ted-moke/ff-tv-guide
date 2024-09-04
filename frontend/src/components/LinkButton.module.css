@@ -10,7 +10,7 @@
   color: var(--text-color);
   text-decoration: underline;
   cursor: pointer;
-  padding: 0.6em 1.2em;
+  padding: var(--size1) var(--size2);
   font: inherit;
 }
 
@@ -29,7 +29,7 @@
   color: var(--secondary-color);
   text-decoration: underline;
   cursor: pointer;
-  padding: 0;
+  padding: var(--size1) var(--size2);
   font: inherit;
 }
 

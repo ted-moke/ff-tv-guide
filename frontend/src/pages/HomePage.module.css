@@ -5,25 +5,55 @@
   max-width: 100%; /* Changed from 1400px to 100% */
 }
 
-.sidebar {
-  width: 250px;
-  min-width: 250px; /* Add this to prevent sidebar from shrinking */
-  background-color: #1e1e1e;
-  padding: 20px;
-  overflow-y: auto;
-  height: 100%;
-}
-
 .main-content {
   flex-grow: 1;
   padding: 20px;
   overflow-y: auto;
   height: 100%;
   width: 100%; /* Add this to ensure full width */
+  margin-top: 60px; /* Adjust this value based on the header height */
+}
+
+@media (max-width: 768px) {
+  .sports-dashboard {
+    flex-direction: column;
+  }
+
+  .main-content {
+    padding: 10px;
+  }
 }
 
 .mobile-header {
   display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #1e1e1e;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+
+  .mobile-header h1 {
+    font-size: 18px;
+    margin: 0;
+  }
+
+  .mobile-menu-toggle {
+    background-color: #3c3c3c;
+    border: none;
+    color: #e0e0e0;
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
 }
 
 .control-group {
@@ -109,175 +139,6 @@
   margin-right: 8px;
 }
 
-.teams-grid {
-  display: grid;
-  gap: 20px;
-  width: 100%;
-}
-
-.team-card {
-  border: 1px solid #4c4c4c;
-  border-radius: 8px; /* Increased from 6px to 8px */
-  padding: 15px; /* Increased from 10px to 15px */
-  background-color: #2c2c2c;
-}
-
-.team-card h2 {
-  margin: 0 0 10px 0;
-  color: #ffffff;
-  background-color: #1e1e1e;
-  padding: 8px;
-  border-radius: 4px;
-  font-size: 16px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.team-card h2 .player-count {
-  font-size: 14px;
-  color: #888;
-}
-
-.team-card .division {
-  font-size: 12px;
-  color: #888;
-  margin: 0 0 8px 0;
-}
-
-.team-card ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  background-color: #1e1e1e;
-  border-radius: 4px;
-  padding: 8px;
-}
-
-.team-card li {
-  margin-bottom: 4px;
-  padding: 4px;
-  border-bottom: 1px solid #3c3c3c;
-  font-size: 14px;
-}
-
-.team-card li:last-child {
-  border-bottom: none;
-  margin-bottom: 0;
-}
-
-.no-players {
-  color: #888;
-  background-color: #1e1e1e;
-  padding: 8px;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-@media (min-width: 1921px) { /* For very large screens */
-  .teams-grid {
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  }
-}
-
-@media (max-width: 1200px) {
-  .teams-grid {
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  }
-}
-
-@media (max-width: 768px) {
-  .sports-dashboard {
-    flex-direction: column;
-  }
-
-  .mobile-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    background-color: #1e1e1e;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-  }
-
-  .mobile-header h1 {
-    font-size: 18px;
-    margin: 0;
-  }
-
-  .mobile-menu-toggle {
-    background-color: #3c3c3c;
-    border: none;
-    color: #e0e0e0;
-    padding: 8px 12px;
-    font-size: 14px;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: -100%; /* Change from -250px to -100% */
-    height: 100%;
-    width: 100%; /* Change from 250px to 100% */
-    max-width: 250px; /* Add this line to limit the maximum width */
-    transition: left 0.3s ease;
-    z-index: 1001;
-    background-color: #1e1e1e; /* Add this line to ensure the background is solid */
-  }
-
-  .sidebar.open {
-    left: 0;
-  }
-
-  .main-content {
-    padding: 10px;
-  }
-
-  .teams-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .control-group {
-    margin-bottom: 15px;
-  }
-
-  .conference-tabs {
-    flex-direction: row;
-    justify-content: space-between;
-  }
-
-  .conference-tabs button {
-    flex: 1;
-    margin-right: 5px;
-  }
-
-  .conference-tabs button:last-child {
-    margin-right: 0;
-  }
-
-  .sort-dropdown select {
-    width: 100%;
-  }
-
-  .fantasy-team-actions {
-    flex-direction: column;
-  }
-
-  .fantasy-team-actions button {
-    width: 100%;
-    margin-bottom: 5px;
-  }
-
-  .fantasy-team-item {
-    font-size: 16px;
-    padding: 8px 0;
-  }
-}
-
 .view-toggle {
   display: flex;
   justify-content: space-between;
@@ -309,194 +170,4 @@
 .view-toggle button:last-child {
   border-top-right-radius: 4px;
   border-bottom-right-radius: 4px;
-}
-
-.matchup-guide {
-  padding: 20px;
-  background-color: #2c2c2c;
-  border-radius: 8px;
-}
-
-.game-group {
-  margin-bottom: 30px;
-}
-
-.game-group h3 {
-  color: #007bff;
-  border-bottom: 1px solid #007bff;
-  padding-bottom: 5px;
-  margin-bottom: 15px;
-}
-
-.game-group-content {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); /* Increased from 300px to 350px */
-  gap: 20px; /* Increased from 15px to 20px for more spacing between cards */
-}
-
-.matchup {
-  background-color: #1e1e1e;
-  border-radius: 4px;
-  padding: 20px; /* Increased from 15px to 20px */
-  display: flex;
-  flex-direction: column;
-  min-height: 180px; /* Increased from 150px to 180px */
-}
-
-.matchup-header {
-  margin-bottom: 20px; /* Increased from 15px to 20px */
-}
-
-.team-names {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  font-size: 20px; /* Increased from 18px to 20px */
-  font-weight: bold;
-}
-
-.at-symbol {
-  margin: 0 10px;
-  color: #888;
-}
-
-.matchup-content {
-  flex-grow: 1;
-  display: flex;
-  align-items: center;
-}
-
-.no-players-content {
-  justify-content: center;
-}
-
-.team-players {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.team {
-  width: 48%;
-}
-
-.away-team {
-  text-align: left;
-}
-
-.home-team {
-  text-align: right;
-}
-
-.player {
-  margin: 8px 0; /* Increased from 5px to 8px */
-  font-size: 15px; /* Increased from 14px to 15px */
-}
-
-.no-players {
-  color: #888;
-  font-style: italic;
-  font-size: 14px;
-}
-
-.matchup-footer {
-  text-align: right;
-  margin-top: 10px;
-}
-
-.channel {
-  color: #888;
-  font-size: 14px;
-}
-
-.game-group {
-  margin-bottom: 30px;
-}
-
-.game-group h3 {
-  color: #007bff;
-  border-bottom: 1px solid #007bff;
-  padding-bottom: 5px;
-  margin-bottom: 15px;
-}
-
-@media (min-width: 768px) {
-  .game-group-content {
-    grid-template-columns: repeat(1, 1fr);
-  }
-}
-
-@media (min-width: 1200px) {
-  .game-group-content {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1600px) {
-  .game-group-content {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (min-width: 2000px) {
-  .game-group-content {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-@media (max-width: 768px) {
-  .game-group-content {
-    grid-template-columns: 1fr;
-  }
-  /* ... (other mobile styles remain the same) */
-}
-
-@media (min-width: 768px) {
-  .teams-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (min-width: 1200px) {
-  .teams-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
-}
-
-@media (min-width: 1600px) {
-  .teams-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
-@media (max-width: 767px) {
-  .teams-grid {
-    grid-template-columns: 1fr;
-  }
-}
-
-.player, .team-card li {
-  position: relative;
-  cursor: pointer;
-}
-
-.player:hover::after, .team-card li:hover::after {
-  content: attr(title);
-  position: absolute;
-  bottom: 100%;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #333;
-  color: #fff;
-  padding: 5px 10px;
-  border-radius: 4px;
-  font-size: 12px;
-  white-space: nowrap;
-  z-index: 1000;
-}
-
-.multi-team {
-  font-size: 0.8em;
-  color: #888;
-  margin-left: 5px;
 }

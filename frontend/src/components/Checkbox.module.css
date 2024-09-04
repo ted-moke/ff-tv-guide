@@ -1,0 +1,19 @@
+@import '../styles/variables.css';
+
+.checkboxContainer {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox {
+  width: var(--size2);
+  height: var(--size2);
+  margin-right: var(--size1);
+  cursor: pointer;
+  accent-color: var(--primary-color);
+}
+
+.label {
+  color: var(--text-color);
+  cursor: pointer;
+}

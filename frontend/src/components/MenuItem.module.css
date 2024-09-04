@@ -1,0 +1,20 @@
+@import '../styles/variables.css';
+
+.menuItem {
+  display: block;
+  padding: var(--size1) var(--size2);
+  color: var(--text-color);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.menuItem:hover {
+  background-color: var(--background-color-offset);
+  color: var(--text-color);
+}
+
+.menuItem.active {
+  background-color: var(--primary-color);
+  color: var(--text-color-light);
+}
