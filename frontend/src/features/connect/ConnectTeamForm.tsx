@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
 import { usePlatforms } from '../platforms/usePlatforms';
 import { Platform } from '../platforms/platformTypes';
+import { createPlatformCredential } from './connectTeamAPI';
+import { useAuth } from '../auth/useAuth';
 import Dropdown from '../../components/Dropdown';
 import TextInput from '../../components/TextInput';
 import Button from '../../components/Button';
@@ -8,21 +11,38 @@ import styles from './ConnectTeamForm.module.css';
 
 const ConnectTeamForm: React.FC = () => {
   const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(null);
-  const [email, setEmail] = useState('');
-  const [username, setUsername] = useState('');
-  const { data, isLoading, error } = usePlatforms();
+  const [credential, setCredential] = useState('');
+  const { data: platforms, isLoading, error } = usePlatforms();
+  const { user } = useAuth();
+
+  const mutation = useMutation({
+    mutationFn: createPlatformCredential,
+    onSuccess: (result) => {
+      // Handle successful creation (e.g., show a success message, reset form)
+      console.log('Platform credential created successfully', result);
+      setSelectedPlatform(null);
+      setCredential('');
+    },
+    onError: (error) => {
+      // Handle error (e.g., show error message)
+      console.error('Failed to create platform credential:', error);
+    },
+  });
 
   const handlePlatformChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const platform = data?.find(p => p.id === event.target.value) || null;
+    const platform = platforms?.find(p => p.id === event.target.value) || null;
     setSelectedPlatform(platform);
   };
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    // Handle form submission logic here
-    console.log('Selected platform:', selectedPlatform);
-    console.log('Email:', email);
-    console.log('Username:', username);
+    if (selectedPlatform && user) {
+      mutation.mutateAsync({
+        platformId: selectedPlatform.id,
+        userId: user.uid,
+        credential: credential,
+      });
+    }
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -35,39 +55,28 @@ const ConnectTeamForm: React.FC = () => {
         label="Select Platform:"
         value={selectedPlatform?.id || ''}
         onChange={handlePlatformChange}
-        options={data ? data.map(platform => ({ value: platform.id, label: platform.name })) : []}
+        options={platforms ? platforms.map(platform => ({ value: platform.id, label: platform.name })) : []}
         placeholder="--Select a platform--"
         required
       />
 
       {selectedPlatform && (
-        <>
-          {selectedPlatform.credentialType === 'email' && (
-            <TextInput
-              type="email"
-              id="email"
-              label="Email:"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          )}
-          {selectedPlatform.credentialType === 'username' && (
-            <TextInput
-              type="text"
-              id="username"
-              label="Username:"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          )}
-        </>
+        <TextInput
+          type={selectedPlatform.credentialType === 'email' ? 'email' : 'text'}
+          id="credential"
+          label={selectedPlatform.credentialType === 'email' ? 'Email:' : 'Username:'}
+          value={credential}
+          onChange={(e) => setCredential(e.target.value)}
+          required
+        />
       )}
 
-      <Button type="submit" disabled={!selectedPlatform}>
-        Connect
+      <Button type="submit" disabled={!selectedPlatform || mutation.isLoading}>
+        {mutation.isLoading ? 'Connecting...' : 'Connect'}
       </Button>
+
+      {mutation.isError && <p className={styles.error}>Error: {mutation.error.message}</p>}
+      {mutation.isSuccess && <p className={styles.success}>Platform connected successfully!</p>}
     </form>
   );
 };

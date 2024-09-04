@@ -9,6 +9,7 @@ import leagueRoutes from "./routes/leagueRoutes";
 import teamRoutes from "./routes/teamRoutes";
 import teamPlayerRoutes from "./routes/teamPlayerRoutes";
 import userRoutes from "./routes/userRoutes";
+import platformCredentialRoutes from "./routes/platformCredentialRoutes"
 
 const logger = functions.logger;
 logger.info('Initializing backend');
@@ -34,6 +35,7 @@ app.use((req, res, next) => {
 app.use(errorHandler);
 
 app.use("/platforms", platformRoutes);
+app.use("/platform-credentials", platformCredentialRoutes);
 app.use("/leagues", leagueRoutes);
 app.use("/teams", teamRoutes);
 app.use("/team-players", teamPlayerRoutes);
