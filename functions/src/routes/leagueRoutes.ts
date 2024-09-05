@@ -1,7 +1,8 @@
 import { Router } from 'express';
+import { upsertLeague } from '../controllers/leagueController';
 
 const router = Router();
 
-// ... route definitions ...
+router.post('/', upsertLeague);
 
 export default router;

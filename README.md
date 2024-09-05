@@ -7,7 +7,6 @@
 240 min (7h 54m) 8/29/24 2
 100 min (8h 54m) 9/1/24 1
 
-
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
