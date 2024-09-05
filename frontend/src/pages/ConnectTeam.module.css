@@ -35,6 +35,14 @@
   margin-top: 1rem;
 }
 
+
+.buttonGroup {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+  gap: 1rem;
+}
+
 .message {
   text-align: center;
   color: var(--color-text-primary);
@@ -42,4 +50,12 @@
   background-color: var(--color-surface);
   border-radius: var(--border-radius);
   box-shadow: var(--box-shadow);
+}
+
+ul {
+  padding: 0;
+}
+
+li {
+  list-style: none;
 }

@@ -1,6 +1,3 @@
-okay, there is going to be upsert league and team flows for each platform. right now we only have 2 platforms but it could be more like 4-8 in the near future. each will need unique endpoints and logic to integrate with how the platforms api is structured. how can we keep the api entry point relatively simply, and the chain of logic afterwards scalable while also ending up with consistent data models after the syncs are complete. i want to be very planned out for this. for now the input and high level flows are very similar, but the way we go about upserting teams differs quite a bit. this is what i'm thinking
-
-
 ### Upsert league (sleeper)
 1. input: leagueName, externalLeagueId, platformCredentialId
 2. upsert league

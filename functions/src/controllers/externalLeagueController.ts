@@ -29,9 +29,16 @@ export const getExternalLeagues = async (req: Request, res: Response) => {
 
     if (platformId === 'fleaflicker') {
       leagues = await fetchFromUrl(`${FLEAFLICKER_API_URL}${credential.credential}`);
-      leagues = leagues?.leagues;
+      leagues = leagues?.leagues.map((league: any) => ({
+        ...league,
+        id: league.id, // Fleaflicker uses 'id'
+      }));
     } else if (platformId === 'sleeper') {
       leagues = await fetchFromUrl(`${SLEEPER_API_URL}/${credential.externalUserId}/leagues/nfl/2024`);
+      leagues = leagues.map((league: any) => ({
+        ...league,
+        id: league.league_id, // Sleeper uses 'league_id'
+      }));
     } else {
       return res.status(400).json({ error: 'Unsupported platform' });
     }
