@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import styles from './Overview.module.css';
-import { PLAYERS } from '../features/nfl/nflData';
-import { getTeamsByConference } from '../features/nfl/nflTeams';
+import { getTeamsByConference, NFL_TEAMS } from '../features/nfl/nflTeams';
 import { Player } from '../features/nfl/nflTypes';
+import { usePlayers, getPlayersByTeam } from '../features/players/usePlayers';
 
 interface OverviewProps {
   activeFantasyTeams: string[];
@@ -18,11 +18,24 @@ interface GroupedPlayer {
 }
 
 const Overview: React.FC<OverviewProps> = ({ activeFantasyTeams, activeConference, sortBy, hideEmptyTeams }) => {
+  const { players, isLoading, error } = usePlayers();
+  let allPlayers: Player[] = [];
+
+  if (players) {
+    allPlayers = [...players.starters, ...players.others];
+  }
+
   const sortedGroupedPlayers = useMemo<GroupedPlayer[]>(() => {
-    const groupedPlayers: GroupedPlayer[] = getTeamsByConference(activeConference).map(team => {
+    console.log("allPlayers", allPlayers);
+    console.log("activeFantasyTeams", activeFantasyTeams);
+    console.log("activeConference", activeConference);
+    const teams = activeConference === 'Both' ? Object.values(NFL_TEAMS) : getTeamsByConference(activeConference);
+
+    const groupedPlayers: GroupedPlayer[] = teams.map(team => {
+      const teamPlayers = getPlayersByTeam(team.code, allPlayers);
       return {
         team: team.name,
-        players: PLAYERS.filter(player => player.team === team.code && activeFantasyTeams.includes(player.userTeams[0])),
+        players: teamPlayers.starters.concat(teamPlayers.others),
         division: team.division
       };
     });
@@ -38,31 +51,40 @@ const Overview: React.FC<OverviewProps> = ({ activeFantasyTeams, activeConferenc
         return a.team.localeCompare(b.team);
       }
     });
-  }, [activeConference, activeFantasyTeams, sortBy, hideEmptyTeams]);
+  }, [activeConference, activeFantasyTeams, sortBy, hideEmptyTeams, allPlayers]);
+
+  if (isLoading) return <div>Loading players...</div>;
+  if (error) {
+    console.error("Error in Overview:", error);
+    return <div>Error loading players: {(error as Error).message}</div>;
+  }
 
   return (
     <div className={styles['teams-grid']}>
-      {sortedGroupedPlayers.map(({ team, players, division }) => (
-        <div key={team} className={styles['team-card']}>
-          <h2>
-            {team}
-            <span className={styles['player-count']}>({players.length})</span>
-          </h2>
-          <p className={styles.division}>{division}</p>
-          {players.length > 0 ? (
-            <ul>
-              {players.map(player => (
-                <li key={player.name} title={player.userTeams.join(', ')}>
-                  {player.name}
-                  {player.userTeams.length > 1 && <span className={styles['multi-team']}> x{player.userTeams.length}</span>}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className={styles['no-players']}>No fantasy players in this team</p>
-          )}
-        </div>
-      ))}
+      {sortedGroupedPlayers.map(({ team, players, division }) => {
+        const playerCount = players.reduce((count, player) => count + player.userTeams.length, 0);
+        return (
+          <div key={team} className={styles['team-card']}>
+            <h2>
+              {team}
+              <span className={styles['player-count']}>({playerCount})</span>
+            </h2>
+            <p className={styles.division}>{division}</p>
+            {players.length > 0 ? (
+              <ul>
+                {players.map(player => (
+                  <li key={player.name} title={player.userTeams.join(', ')}>
+                    {player.name}
+                    {player.userTeams.length > 1 && <span className={styles['multi-team']}> x{player.userTeams.length}</span>}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className={styles['no-players']}>No fantasy players in this team</p>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 };

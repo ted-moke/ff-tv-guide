@@ -4,7 +4,6 @@ import Sidebar from '../components/Sidebar';
 import MatchupGuide from '../components/MatchupGuide';
 import Overview from '../components/Overview';
 import { Conference } from '../features/nfl/nflTypes'
-import { NFL_TEAMS } from '../features/nfl/nflData';
 
 interface FantasyTeam {
   name: string;
@@ -32,13 +31,6 @@ const getCurrentWeek = () => {
 
   const weeksPassed = Math.floor((easternTime.getTime() - seasonStart.getTime()) / (7 * 24 * 60 * 60 * 1000));
   return Math.min(Math.max(weeksPassed + 1, 1), 18); // Ensure week is between 1 and 18
-};
-
-export const getTeams = (conference: Conference) => {
-  if (conference === 'Both') {
-    return [...NFL_TEAMS.AFC, ...NFL_TEAMS.NFC];
-  }
-  return NFL_TEAMS[conference];
 };
 
 const HomePage: React.FC = () => {

@@ -1,10 +1,10 @@
 import React, { useMemo } from "react";
 import styles from "./MatchupGuide.module.css";
-import { NFLGame, NFLTeam, Player } from "../features/nfl/nflTypes";
+import { NFLGame, Player } from "../features/nfl/nflTypes";
 import { formatDateToEastern } from "../utils/dateUtils";
 import { groupGamesByStartTime } from "../features/nfl/nflUtils";
 import nflSchedule from "../assets/nfl-schedule-2024.json";
-import useUserTeams from "../features/teams/useUserTeams";
+import { usePlayers, getPlayersByTeam } from "../features/players/usePlayers";
 import { getTeamByName } from "../features/nfl/nflTeams";
 import Alert from "./Alert"; // Import the new Alert component
 
@@ -25,7 +25,14 @@ interface NFLSchedule {
 }
 
 const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
-  const { data: userTeams, isLoading, error } = useUserTeams();
+  const { players, isLoading, error } = usePlayers();
+  let starters: Player[] = [];
+  let others: Player[] = [];
+
+  if (players) {
+    starters = players.starters;
+    others = players.others;
+  }
 
   const weeklySchedule = useMemo(() => {
     const schedule = nflSchedule as NFLSchedule;
@@ -37,39 +44,6 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
       : [];
   }, [selectedWeek]);
 
-  const getFantasyPlayersForTeam = (nflTeam: NFLTeam) => {
-    if (!userTeams || !nflTeam) return { starters: [], others: [] };
-
-    const playerMap = new Map<string, Player>();
-
-    Object.values(userTeams).forEach((team) => {
-      team.playerData
-        .filter((player) => player.team === nflTeam.code)
-        .forEach((player) => {
-          const key = player.name;
-          if (playerMap.has(key)) {
-            playerMap.get(key)?.userTeams.push(team.leagueName);
-            if (player.rosterSlotType === "start")
-              playerMap.get(key)!.isStarter = true;
-          } else {
-            playerMap.set(key, {
-              ...player,
-              userTeams: [team.leagueName],
-              isStarter: player.rosterSlotType === "start",
-            });
-          }
-        });
-    });
-
-    const allPlayers = Array.from(playerMap.values()).sort((a, b) =>
-      a.name.localeCompare(b.name)
-    );
-    return {
-      starters: allPlayers.filter((player) => player.isStarter),
-      others: allPlayers.filter((player) => !player.isStarter),
-    };
-  };
-
   if (isLoading) return <div>Loading user teams...</div>;
   if (error) {
     console.error("Error in MatchupGuide:", error);
@@ -79,7 +53,7 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
   return (
     <div className={styles["matchup-guide"]}>
       <h2>Week {selectedWeek} Matchups</h2>
-      {userTeams && userTeams.length === 0 && (
+      {starters.length === 0 && others.length === 0 && (
         <Alert
           message="No fantasy teams connected."
           buttonText="Connect a Team"
@@ -101,10 +75,10 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
                 const homeTeam = getTeamByName(game.homeTeam);
 
                 const awayPlayers = awayTeam
-                  ? getFantasyPlayersForTeam(awayTeam)
+                  ? getPlayersByTeam(awayTeam.code, [...starters, ...others])
                   : { starters: [], others: [] };
                 const homePlayers = homeTeam
-                  ? getFantasyPlayersForTeam(homeTeam)
+                  ? getPlayersByTeam(homeTeam.code, [...starters, ...others])
                   : { starters: [], others: [] };
 
                 const starterCount =
