@@ -7,6 +7,7 @@ import {
   updateUserProfile,
   verifyToken
 } from "../controllers/userController";
+import { getUserTeams } from '../controllers/userTeamController'
 import { authenticate } from "../middleware/authMiddleware";
 
 const router = Router();
@@ -19,6 +20,8 @@ router.post("/login", loginUser);
 router.post("/change-password", authenticate, changePassword);
 router.get("/profile/:uid", authenticate, getUserProfile);
 router.put("/profile/:uid", authenticate, updateUserProfile);
+
+router.get('/:uid/teams', authenticate, getUserTeams);
 
 // New route to verify token
 router.get("/verify-token", verifyToken);

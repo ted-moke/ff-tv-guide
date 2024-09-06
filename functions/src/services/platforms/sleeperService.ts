@@ -114,10 +114,11 @@ export class SleeperService {
         if (!existingTeamQuery.empty) {
           // Update existing team
           const existingTeamDoc = existingTeamQuery.docs[0];
-          await existingTeamDoc.ref.update({...team});
+          await existingTeamDoc.ref.update({...team, id: existingTeamDoc.id});
         } else {
           // Create new team with auto-generated ID
-          await teamsCollection.add(team);
+          const newTeamRef = await teamsCollection.add(team);
+          await newTeamRef.update({ id: newTeamRef.id });
         }
       }
     }
@@ -192,18 +193,23 @@ export class SleeperService {
   private processPlayerData(players: string[], starters: string[]): Player[] {
     return players
       .map((playerId) => {
-        const playerInfo = this.nflPlayers[playerId];
-        if (!playerInfo) {
-          console.warn(`Player info not found for ID: ${playerId}`);
+        try {
+          const playerInfo = this.nflPlayers[playerId];
+          if (!playerInfo) {
+            console.warn(`Player info not found for ID: ${playerId}`);
+            return null;
+          }
+          return {
+            name: playerInfo.full_name,
+            logicalName: playerInfo.full_name.toLowerCase().replace(/\s/g, ""),
+            team: playerInfo.team,
+            position: playerInfo.position,
+            rosterSlotType: starters.includes(playerId) ? "start" : "bench",
+          };
+        } catch (error) {
+          console.error(`Error processing player with ID ${playerId}:`, error);
           return null;
         }
-        return {
-          name: playerInfo.full_name,
-          logicalName: playerInfo.full_name.toLowerCase().replace(/\s/g, ""),
-          team: playerInfo.team,
-          position: playerInfo.position,
-          rosterSlotType: starters.includes(playerId) ? "start" : "bench",
-        };
       })
       .filter((player) => player !== null) as Player[];
   }

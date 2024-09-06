@@ -18,6 +18,7 @@ export type Conference = 'AFC' | 'NFC' | 'Both';
 
 export interface NFLTeam {
   name: string;
+  code: string;
   division: string;
   conference: 'AFC' | 'NFC';
 }

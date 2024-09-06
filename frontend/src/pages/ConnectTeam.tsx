@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // Add this import
 import useCredentials from '../features/connect/useCredentials';
 import useExternalLeagues from '../features/connect/useExternalLeagues';
 import ConnectTeamForm from '../features/connect/ConnectTeamForm';
@@ -11,11 +12,13 @@ import { useConnectLeague } from '../features/league/useLeague';
 import styles from './ConnectTeam.module.css';
 
 const ConnectTeam: React.FC = () => {
+  const navigate = useNavigate(); // Add this line
   const [showNewCredentialForm, setShowNewCredentialForm] = useState(false);
   const [selectedCredential, setSelectedCredential] = useState<PlatformCredential | null>(null);
   const [selectedLeagues, setSelectedLeagues] = useState<string[]>([]);
+  const [isConnecting, setIsConnecting] = useState(false);
   const { data: credentials, isLoading, error } = useCredentials();
-  const { mutate: connectLeague } = useConnectLeague();
+  const { mutateAsync: connectLeague } = useConnectLeague();
 
   const handleSelectCredential = (credential: PlatformCredential) => {
     setSelectedCredential(credential);
@@ -44,17 +47,30 @@ const ConnectTeam: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    if (selectedCredential && selectedLeagues.length > 0 && externalLeagues) { // Add externalLeagues check
-      for (const leagueId of selectedLeagues) {
-        const league = externalLeagues.find(l => l.id === leagueId);
-        if (league) {
-          connectLeague({
-            leagueName: league.name,
-            externalLeagueId: league.id,
-            platformCredentialId: selectedCredential.id,
-            platformId: selectedCredential.platformId,
-          });
-        }
+    if (selectedCredential && selectedLeagues.length > 0 && externalLeagues) {
+      setIsConnecting(true);
+      try {
+        const connectPromises = selectedLeagues.map(leagueId => {
+          const league = externalLeagues.find(l => l.id === leagueId);
+          if (league) {
+            return connectLeague({
+              leagueName: league.name,
+              externalLeagueId: league.id,
+              platformCredentialId: selectedCredential.id,
+              platformId: selectedCredential.platformId,
+            });
+          }
+          return Promise.resolve();
+        });
+
+        await Promise.all(connectPromises);
+        console.log('All leagues connected successfully');
+        navigate('/');
+      } catch (error) {
+        console.error('Error connecting leagues:', error);
+        // Handle error (e.g., show an error message to the user)
+      } finally {
+        setIsConnecting(false);
       }
     }
   };
@@ -116,9 +132,13 @@ const ConnectTeam: React.FC = () => {
             <LinkButton onClick={() => setSelectedCredential(null)}>
               Back
             </LinkButton>
-            <Button onClick={handleSubmit} disabled={selectedLeagues.length === 0}>
-              Connect Selected Leagues
+            <Button 
+              onClick={handleSubmit} 
+              disabled={selectedLeagues.length === 0 || isConnecting}
+            >
+              {isConnecting ? 'Connecting...' : 'Connect Selected Leagues'}
             </Button>
+            {isConnecting && <div>Connecting leagues... Please wait.</div>}
           </div>
         </div>
       )}

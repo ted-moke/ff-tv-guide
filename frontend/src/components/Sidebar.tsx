@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styles from "./Sidebar.module.css";
-import { FANTASY_TEAMS, Conference, SortOption, ViewMode } from "../pages/HomePage";
+import { Conference, SortOption, ViewMode } from "../pages/HomePage";
 import LinkButton from './LinkButton';
 import MenuItem from './MenuItem';
 import Checkbox from './Checkbox';
 import Dropdown from './Dropdown';
 import logo from '/vite.svg';
+import useUserTeams from '../features/teams/useUserTeams';
 
 interface SidebarProps {
   viewMode: ViewMode;
@@ -40,6 +41,16 @@ const Sidebar: React.FC<SidebarProps> = ({
   selectedWeek,
   setSelectedWeek,
 }) => {
+  const { data: userTeams, isLoading, error } = useUserTeams();
+
+  const fantasyTeams = useMemo(() => {
+    if (!userTeams) return [];
+    return Object.values(userTeams).map(team => ({
+      name: team.name,
+      league: team.leagueName
+    }));
+  }, [userTeams]);
+
   const handleFantasyTeamToggle = (teamName: string) => {
     setActiveFantasyTeams((prev) =>
       prev.includes(teamName)
@@ -49,7 +60,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   };
 
   const handleSelectAllFantasyTeams = () => {
-    setActiveFantasyTeams(FANTASY_TEAMS.map((team) => team.name));
+    setActiveFantasyTeams(fantasyTeams.map((team) => team.name));
   };
 
   const handleClearAllFantasyTeams = () => {
@@ -131,22 +142,29 @@ const Sidebar: React.FC<SidebarProps> = ({
           />
         </div>
       )}
-      <div className={`${styles["control-group"]} ${styles["fantasy-team-list-wrapper"]}`}>        <h3>Fantasy Teams</h3>
-        <div className={styles["fantasy-team-list"]}>
-          <div className={styles["fantasy-team-actions"]}>
-            <LinkButton onClick={handleSelectAllFantasyTeams}>Select All</LinkButton>
-            <LinkButton onClick={handleClearAllFantasyTeams}>Clear All</LinkButton>
+      <div className={`${styles["control-group"]} ${styles["fantasy-team-list-wrapper"]}`}>
+        <h3>Fantasy Leagues</h3>
+        {isLoading ? (
+          <p>Loading leagues...</p>
+        ) : error ? (
+          <p>Error loading leagues: {(error as Error).message}</p>
+        ) : (
+          <div className={styles["fantasy-team-list"]}>
+            <div className={styles["fantasy-team-actions"]}>
+              <LinkButton onClick={handleSelectAllFantasyTeams}>Select All</LinkButton>
+              <LinkButton onClick={handleClearAllFantasyTeams}>Clear All</LinkButton>
+            </div>
+            {fantasyTeams.map((team) => (
+              <Checkbox
+                key={team.league}
+                id={team.league}
+                checked={activeFantasyTeams.includes(team.league)}
+                onChange={() => handleFantasyTeamToggle(team.league)}
+                label={`${team.league}`}
+              />
+            ))}
           </div>
-          {FANTASY_TEAMS.map((team) => (
-            <Checkbox
-              key={team.name}
-              id={team.name}
-              checked={activeFantasyTeams.includes(team.name)}
-              onChange={() => handleFantasyTeamToggle(team.name)}
-              label={`${team.name} (${team.league})`}
-            />
-          ))}
-        </div>
+        )}
         <LinkButton to="/connect-team">
           Connect Team
         </LinkButton>
