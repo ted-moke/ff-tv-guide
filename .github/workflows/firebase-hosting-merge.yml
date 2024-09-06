@@ -11,7 +11,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: yarn install --frozen-lockfile && yarn build
+
+      # Install and build frontend
+      - name: Install and Build Frontend
+        run: |
+          cd frontend
+          yarn install --frozen-lockfile
+          yarn build
+
+      # Install and build backend
+      - name: Install and Build Backend
+        run: |
+          cd functions
+          yarn install --frozen-lockfile
+
+      # Deploy to Firebase
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
