@@ -1,12 +1,13 @@
 import React, { useMemo } from "react";
 import styles from "./Sidebar.module.css";
-import { Conference, SortOption, ViewMode } from "../pages/HomePage";
-import LinkButton from './LinkButton';
-import MenuItem from './MenuItem';
-import Checkbox from './Checkbox';
-import Dropdown from './Dropdown';
-import logo from '/vite.svg';
-import useUserTeams from '../features/teams/useUserTeams';
+import { SortOption, ViewMode } from "../pages/HomePage";
+import { Conference } from "../features/nfl/nflTypes";
+import LinkButton from "./LinkButton";
+import MenuItem from "./MenuItem";
+import Checkbox from "./Checkbox";
+import Dropdown from "./Dropdown";
+import logo from "/vite.svg";
+import useUserTeams from "../features/teams/useUserTeams";
 
 interface SidebarProps {
   viewMode: ViewMode;
@@ -18,7 +19,6 @@ interface SidebarProps {
   sortBy: SortOption;
   setSortBy: (option: SortOption) => void;
   isMobileMenuOpen: boolean;
-  toggleMobileMenu: () => void;
   hideEmptyTeams: boolean;
   setHideEmptyTeams: (hide: boolean) => void;
   selectedWeek: number;
@@ -35,7 +35,6 @@ const Sidebar: React.FC<SidebarProps> = ({
   sortBy,
   setSortBy,
   isMobileMenuOpen,
-  toggleMobileMenu,
   hideEmptyTeams,
   setHideEmptyTeams,
   selectedWeek,
@@ -45,18 +44,14 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   const fantasyTeams = useMemo(() => {
     if (!userTeams) return [];
-    return Object.values(userTeams).map(team => ({
+    return Object.values(userTeams).map((team) => ({
       name: team.name,
-      league: team.leagueName
+      league: team.leagueName,
     }));
   }, [userTeams]);
 
   const handleFantasyTeamToggle = (teamName: string) => {
-    setActiveFantasyTeams((prev) =>
-      prev.includes(teamName)
-        ? prev.filter((name) => name !== teamName)
-        : [...prev, teamName]
-    );
+    setActiveFantasyTeams([...activeFantasyTeams, teamName]);
   };
 
   const handleSelectAllFantasyTeams = () => {
@@ -112,9 +107,9 @@ const Sidebar: React.FC<SidebarProps> = ({
               value={sortBy}
               onChange={(e) => setSortBy(e.target.value as SortOption)}
               options={[
-                { value: 'name', label: 'Team Name' },
-                { value: 'division', label: 'Division' },
-                { value: 'players', label: 'Number of Players' },
+                { value: "name", label: "Team Name" },
+                { value: "division", label: "Division" },
+                { value: "players", label: "Number of Players" },
               ]}
             />
           </div>
@@ -142,7 +137,9 @@ const Sidebar: React.FC<SidebarProps> = ({
           />
         </div>
       )}
-      <div className={`${styles["control-group"]} ${styles["fantasy-team-list-wrapper"]}`}>
+      <div
+        className={`${styles["control-group"]} ${styles["fantasy-team-list-wrapper"]}`}
+      >
         <h3>Fantasy Leagues</h3>
         {isLoading ? (
           <p>Loading leagues...</p>
@@ -151,8 +148,12 @@ const Sidebar: React.FC<SidebarProps> = ({
         ) : (
           <div className={styles["fantasy-team-list"]}>
             <div className={styles["fantasy-team-actions"]}>
-              <LinkButton onClick={handleSelectAllFantasyTeams}>Select All</LinkButton>
-              <LinkButton onClick={handleClearAllFantasyTeams}>Clear All</LinkButton>
+              <LinkButton onClick={handleSelectAllFantasyTeams}>
+                Select All
+              </LinkButton>
+              <LinkButton onClick={handleClearAllFantasyTeams}>
+                Clear All
+              </LinkButton>
             </div>
             {fantasyTeams.map((team) => (
               <Checkbox
@@ -165,9 +166,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             ))}
           </div>
         )}
-        <LinkButton to="/connect-team">
-          Connect Team
-        </LinkButton>
+        <LinkButton to="/connect-team">Connect Team</LinkButton>
       </div>
     </aside>
   );

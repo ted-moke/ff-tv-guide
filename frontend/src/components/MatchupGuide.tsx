@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import styles from "./MatchupGuide.module.css";
-import { NFLGame, NFLTeam } from "../features/nfl/nflTypes";
+import { NFLGame, NFLTeam, Player } from "../features/nfl/nflTypes";
 import { formatDateToEastern } from "../utils/dateUtils";
 import { groupGamesByStartTime } from "../features/nfl/nflUtils";
 import nflSchedule from "../assets/nfl-schedule-2024.json";
@@ -40,7 +40,7 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
   const getFantasyPlayersForTeam = (nflTeam: NFLTeam) => {
     if (!userTeams || !nflTeam) return { starters: [], others: [] };
 
-    const playerMap = new Map();
+    const playerMap = new Map<string, Player>();
 
     Object.values(userTeams).forEach((team) => {
       team.playerData
@@ -48,9 +48,9 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
         .forEach((player) => {
           const key = player.name;
           if (playerMap.has(key)) {
-            playerMap.get(key).userTeams.push(team.leagueName);
+            playerMap.get(key)?.userTeams.push(team.leagueName);
             if (player.rosterSlotType === "start")
-              playerMap.get(key).isStarter = true;
+              playerMap.get(key)!.isStarter = true;
           } else {
             playerMap.set(key, {
               ...player,
@@ -118,7 +118,7 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
 
                 const hasPlayers = totalPlayers > 0;
 
-                const renderPlayerList = (players: any[]) =>
+                const renderPlayerList = (players: Player[]) =>
                   players.map((player) => (
                     <p
                       key={player.name}

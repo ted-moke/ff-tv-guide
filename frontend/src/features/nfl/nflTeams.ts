@@ -1,4 +1,4 @@
-import { NFLTeam } from './nflTypes';
+import { NFLTeam, Conference } from './nflTypes';
 
 export const NFL_TEAMS: { [key: string]: NFLTeam } = {
   ARI: { name: 'Arizona Cardinals', code: 'ARI', conference: 'NFC', division: 'West' },
@@ -41,4 +41,8 @@ export const getTeamByName = (name: string): NFLTeam | undefined => {
 
 export const getTeamByCode = (code: string): NFLTeam | undefined => {
   return NFL_TEAMS[code.toUpperCase()];
+};
+
+export const getTeamsByConference = (conference: Conference): NFLTeam[] => {
+  return Object.values(NFL_TEAMS).filter(team => team.conference === conference);
 };

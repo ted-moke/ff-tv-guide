@@ -3,18 +3,15 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
-  User,
 } from "firebase/auth";
 import { AuthData } from "./authTypes";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-let currentUser: User | null = null;
 let currentToken: string | null = null;
 
 // Set up auth state listener
 onAuthStateChanged(auth, async (user) => {
-  currentUser = user;
   if (user) {
     currentToken = await user.getIdToken();
     localStorage.setItem("authToken", currentToken);

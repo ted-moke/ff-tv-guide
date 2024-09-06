@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react';
 import styles from './Overview.module.css';
-import { PLAYERS, NFL_TEAMS } from '../features/nfl/nflData';
-import { getTeams } from '../pages/HomePage';
+import { PLAYERS } from '../features/nfl/nflData';
+import { getTeamsByConference } from '../features/nfl/nflTeams';
+import { Player } from '../features/nfl/nflTypes';
 
 interface OverviewProps {
   activeFantasyTeams: string[];
@@ -10,13 +11,21 @@ interface OverviewProps {
   hideEmptyTeams: boolean;
 }
 
+interface GroupedPlayer {
+  team: string;
+  players: Player[];
+  division: string;
+}
+
 const Overview: React.FC<OverviewProps> = ({ activeFantasyTeams, activeConference, sortBy, hideEmptyTeams }) => {
-  const sortedGroupedPlayers = useMemo(() => {
-    const groupedPlayers = getTeams(activeConference).map(team => ({
-      team,
-      players: PLAYERS.filter(player => player.team === team && activeFantasyTeams.includes(player.fantasyTeams[0])),
-      division: Object.entries(NFL_TEAMS).find(([_, teams]) => teams.includes(team))?.[0] || ''
-    }));
+  const sortedGroupedPlayers = useMemo<GroupedPlayer[]>(() => {
+    const groupedPlayers: GroupedPlayer[] = getTeamsByConference(activeConference).map(team => {
+      return {
+        team: team.name,
+        players: PLAYERS.filter(player => player.team === team.code && activeFantasyTeams.includes(player.userTeams[0])),
+        division: team.division
+      };
+    });
 
     const filteredPlayers = hideEmptyTeams ? groupedPlayers.filter(team => team.players.length > 0) : groupedPlayers;
 
@@ -43,9 +52,9 @@ const Overview: React.FC<OverviewProps> = ({ activeFantasyTeams, activeConferenc
           {players.length > 0 ? (
             <ul>
               {players.map(player => (
-                <li key={player.name} title={player.fantasyTeams.join(', ')}>
+                <li key={player.name} title={player.userTeams.join(', ')}>
                   {player.name}
-                  {player.fantasyTeams.length > 1 && <span className={styles['multi-team']}> x{player.fantasyTeams.length}</span>}
+                  {player.userTeams.length > 1 && <span className={styles['multi-team']}> x{player.userTeams.length}</span>}
                 </li>
               ))}
             </ul>

@@ -1,5 +1,3 @@
-import { PlatformCredential } from '../platforms/platformTypes';
-
 const API_URL = import.meta.env.VITE_API_URL;
 
 export const connectLeague = async (leagueName: string, externalLeagueId: string, platformCredentialId: string, platformId: string) => {

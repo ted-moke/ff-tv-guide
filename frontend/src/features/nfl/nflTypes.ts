@@ -8,10 +8,19 @@ export interface NFLGame {
   notes?: string;
 }
 
+// export interface Player {
+//   name: string;
+//   team: string;
+//   fantasyTeams: string[];
+// }
+
 export interface Player {
   name: string;
   team: string;
-  fantasyTeams: string[];
+  position: string;
+  rosterSlotType: string;
+  userTeams: string[];
+  isStarter: boolean;
 }
 
 export type Conference = 'AFC' | 'NFC' | 'Both';

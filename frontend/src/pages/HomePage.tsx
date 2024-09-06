@@ -79,7 +79,6 @@ const HomePage: React.FC = () => {
         sortBy={sortBy}
         setSortBy={setSortBy}
         isMobileMenuOpen={isMobileMenuOpen}
-        toggleMobileMenu={toggleMobileMenu}
         hideEmptyTeams={hideEmptyTeams}
         setHideEmptyTeams={setHideEmptyTeams}
         selectedWeek={selectedWeek}
