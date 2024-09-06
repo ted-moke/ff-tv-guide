@@ -2,9 +2,6 @@
   "name": "fantasy-backend",
   "version": "1.0.0",
   "main": "lib/index.js",
-  "engines": {
-    "node": "22"
-  },
   "scripts": {
     "build": "tsc",
     "build:watch": "tsc --watch",
