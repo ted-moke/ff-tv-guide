@@ -5,6 +5,12 @@ import fetchFromUrl from '../utils/fetchFromUrl';
 
 const collection = db.collection("platformCredentials");
 
+interface AuthenticatedRequest extends Request {
+  user?: {
+    uid: string;
+  };
+}
+
 export const createPlatformCredential = async (req: Request, res: Response) => {
   try {
     const data: PlatformCredential = req.body;
@@ -56,7 +62,7 @@ export const deletePlatformCredential = async (req: Request, res: Response) => {
   }
 };
 
-export const listPlatformCredentials = async (req: Request, res: Response) => {
+export const listPlatformCredentials = async (req: AuthenticatedRequest, res: Response) => {
   const userId = req.user?.uid;
 
   if (!userId) {
@@ -75,6 +81,7 @@ export const listPlatformCredentials = async (req: Request, res: Response) => {
 
     return res.json(credentials);
   } catch (error) {
-    return res.status(500).json({ error: error.message });
+    const err = error as Error;
+    return res.status(500).json({ error: err.message });
   }
 };

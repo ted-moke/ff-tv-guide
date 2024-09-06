@@ -7,10 +7,8 @@ const logger = functions.logger;
 const verifyIdToken = async (idToken: string) => {
   if (process.env.FUNCTIONS_EMULATOR) {
     // For emulator, we need to disable token checks
-    console.log('verify resp', await admin.auth().verifyIdToken(idToken, true))
     return await admin.auth().verifyIdToken(idToken, true);
   } else {
-    console.log('verify resp', await admin.auth().verifyIdToken(idToken))
     return await admin.auth().verifyIdToken(idToken);
   }
 };
@@ -24,25 +22,9 @@ export const registerUser = async (req: Request, res: Response) => {
   }
 
   try {
-    console.log("Attempting to verify ID token");
-    console.log("Admin app config:", admin.app().options);
     const decodedToken = await verifyIdToken(idToken);
-    console.log("ID token verified successfully", { uid: decodedToken.uid });
 
     const uid = decodedToken.uid; // Add this line to fix the 'uid' not found errors
-
-    console.log("Fetching all users");
-    const listUsersResult = await admin.auth().listUsers();
-    console.log("Total users:", listUsersResult.users.length);
-    if (listUsersResult.users.length > 0) {
-      console.log("First user:", {
-        uid: listUsersResult.users[0].uid,
-        email: listUsersResult.users[0].email,
-        displayName: listUsersResult.users[0].displayName
-      });
-    } else {
-      console.log("No users found");
-    }
 
     logger.info("Attempting to create user document in Firestore", { uid });
     await db.collection("users").doc(uid).set({

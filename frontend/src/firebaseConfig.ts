@@ -22,13 +22,4 @@ if (import.meta.env.VITE_USE_FIREBASE_EMULATOR === 'true') {
   connectFirestoreEmulator(db, 'localhost', 8080);
 }
 
-// Function to get and log app information
-const logAppInfo = () => {
-  console.log('Firebase Admin App Information:');
-  console.log('App Name:', app.name);
-  console.log('Project ID:', app.options.projectId);
-  console.log('Storage Bucket:', app.options.storageBucket);
-};
-
-logAppInfo();
 export { auth, db };

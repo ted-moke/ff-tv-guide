@@ -54,29 +54,28 @@ export class SleeperService {
         ...leagueData,
         id: existingLeagueDoc.id,
       });
-      return { id: existingLeagueDoc.id, ...leagueData };
+      return leagueData;
     } else {
       const newLeagueRef = await leaguesCollection.add(leagueData);
       await newLeagueRef.update({ id: newLeagueRef.id });
-      return { id: newLeagueRef.id, ...leagueData };
+      return leagueData;
     }
   }
 
   async upsertTeams(league: League) {
-    console.log("Starting upsert teams: ", league.id);
     const week = this.getCurrentWeek();
     const matchups = await this.fetchMatchups(league.externalLeagueId, week);
     const rosters = await this.fetchRosters(league.externalLeagueId);
     const teamsCollection = db.collection("teams");
 
     // Create a map of roster_id to owner_id
-    const rosterOwnerMap = rosters.reduce((acc, roster) => {
+    const rosterOwnerMap = rosters.reduce((acc: { [key: string]: string }, roster: any) => {
       acc[roster.roster_id] = roster.owner_id;
       return acc;
     }, {});
 
     // Group teams by matchup_id
-    const matchupGroups = matchups.reduce((acc, team) => {
+    const matchupGroups = matchups.reduce((acc: { [key: string]: any[] }, team: any) => {
       if (!acc[team.matchup_id]) {
         acc[team.matchup_id] = [];
       }
@@ -88,7 +87,7 @@ export class SleeperService {
       const matchup = matchupGroups[matchupId];
       for (const teamData of matchup) {
         const opponentData = matchup.find(
-          (t) => t.roster_id !== teamData.roster_id
+          (t: any) => t.roster_id !== teamData.roster_id,
         );
         const team: Team = {
           externalTeamId: teamData.roster_id.toString(),
@@ -100,7 +99,7 @@ export class SleeperService {
           opponentId: opponentData ? opponentData.roster_id.toString() : "",
           playerData: this.processPlayerData(
             teamData.players,
-            teamData.starters
+            teamData.starters,
           ),
         };
 
@@ -114,7 +113,7 @@ export class SleeperService {
         if (!existingTeamQuery.empty) {
           // Update existing team
           const existingTeamDoc = existingTeamQuery.docs[0];
-          await existingTeamDoc.ref.update({...team, id: existingTeamDoc.id});
+          await existingTeamDoc.ref.update({ ...team, id: existingTeamDoc.id });
         } else {
           // Create new team with auto-generated ID
           const newTeamRef = await teamsCollection.add(team);
@@ -151,14 +150,14 @@ export class SleeperService {
         .get();
       for (const teamDoc of teamsQuery.docs) {
         const team = teamDoc.data() as Team;
-        console.log('checking team:', team.externalUserId)
+        console.log("checking team:", team.externalUserId);
         if (team.externalUserId === externalUserId) {
           await userTeamsCollection.add({
             userId: userId,
             teamId: teamDoc.id,
           });
           break; // We've found the user's team, no need to continue
-        } 
+        }
       }
     } catch (error) {
       throw new Error(`Error creating userTeam: ${userId}, ${league.id}`);
@@ -182,11 +181,16 @@ export class SleeperService {
 
   private fetchRosters(externalLeagueId: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      https.get(`https://api.sleeper.app/v1/league/${externalLeagueId}/rosters`, (res) => {
-        let data = '';
-        res.on('data', (chunk) => data += chunk);
-        res.on('end', () => resolve(JSON.parse(data)));
-      }).on('error', reject);
+      https
+        .get(
+          `https://api.sleeper.app/v1/league/${externalLeagueId}/rosters`,
+          (res) => {
+            let data = "";
+            res.on("data", (chunk) => (data += chunk));
+            res.on("end", () => resolve(JSON.parse(data)));
+          },
+        )
+        .on("error", reject);
     });
   }
 

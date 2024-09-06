@@ -10,12 +10,7 @@ if (!serviceAccountPath) {
   throw new Error("SERVICE_ACCOUNT_KEY_PATH is not defined in the environment");
 }
 
-console.log('serviceAccountPath')
 const serviceAccount = require(serviceAccountPath);
-console.log('Service account loaded:', {
-  project_id: serviceAccount.project_id,
-  client_email: serviceAccount.client_email
-});
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -32,20 +27,6 @@ if (process.env.FUNCTIONS_EMULATOR) {
 
 const db = admin.firestore();
 
-// Function to get and log app information
-const logAppInfo = () => {
-  const app = admin.app();
-  console.log('Firebase Admin App Information:', {
-    name: app.name,
-    projectId: app.options.projectId,
-    storageBucket: app.options.storageBucket,
-    databaseURL: app.options.databaseURL
-  });
-};
-
-// Call logAppInfo after initialization
-logAppInfo();
-
 // Function to initialize Firestore collections
 const initializeFirestore = async () => {
   try {
@@ -55,14 +36,11 @@ const initializeFirestore = async () => {
     if (!usersDoc.exists) {
       // Create a dummy document to ensure the collection exists
       await usersCollection.doc('dummy').set({ dummy: true });
-      console.log("'users' collection created successfully");
       
       // Immediately delete the dummy document
       await usersCollection.doc('dummy').delete();
-      console.log("Dummy document deleted");
-    } else {
-      console.log("'users' collection already exists");
     }
+
   } catch (error) {
     console.error("Error initializing Firestore:", error);
   }

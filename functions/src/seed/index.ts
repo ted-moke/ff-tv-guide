@@ -18,9 +18,6 @@ export const seedDatabase = async () => {
       await docRef.set(platform);
       console.log(`Seeded platform: ${platform.name}`);
     } else {
-      console.log(`Platform already exists: ${platform.name}`);
     }
   }
-
-  console.log('Database seeding completed');
 };

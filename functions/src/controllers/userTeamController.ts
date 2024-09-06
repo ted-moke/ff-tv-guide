@@ -3,9 +3,7 @@ import { db } from "../firebase";
 import { Team } from "../models/team";
 
 export const getUserTeams = async (req: Request, res: Response) => {
-  console.log("getUserTeams function called");
   const userId = req.params.uid; // This should match the route parameter
-  console.log("Fetching teams for user:", userId);
 
   try {
     // Get user teams
@@ -35,8 +33,6 @@ export const getUserTeams = async (req: Request, res: Response) => {
         id: doc.id,
       };
     });
-
-    console.log("Teams:", teams);
 
     res.status(200).json({ teams });
   } catch (error) {

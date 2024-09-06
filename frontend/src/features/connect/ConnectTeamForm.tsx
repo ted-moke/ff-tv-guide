@@ -24,8 +24,7 @@ const ConnectTeamForm: React.FC<ConnectTeamFormProps> = ({ onSuccess, onCancel }
 
   const mutation = useMutation({
     mutationFn: createPlatformCredential,
-    onSuccess: (result) => {
-      console.log('Platform credential created successfully', result);
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['userCredentials'] });
       setSelectedPlatform(null);
       setCredential('');
