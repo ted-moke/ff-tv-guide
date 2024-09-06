@@ -5,7 +5,7 @@ import { formatDateToEastern } from "../utils/dateUtils";
 import { groupGamesByStartTime } from "../features/nfl/nflUtils";
 import nflSchedule from "../assets/nfl-schedule-2024.json";
 import useUserTeams from "../features/teams/useUserTeams";
-import { getTeamByName } from '../features/nfl/nflTeams';
+import { getTeamByName } from "../features/nfl/nflTeams";
 
 interface MatchupGuideProps {
   selectedWeek: number;
@@ -23,9 +23,7 @@ interface NFLSchedule {
   weeks: NflWeekSchedule[];
 }
 
-const MatchupGuide: React.FC<MatchupGuideProps> = ({
-  selectedWeek,
-}) => {
+const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
   const { data: userTeams, isLoading, error } = useUserTeams();
 
   const weeklySchedule = useMemo(() => {
@@ -39,18 +37,41 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({
   }, [selectedWeek]);
 
   const getFantasyPlayersForTeam = (nflTeam: NFLTeam) => {
-    if (!userTeams || !nflTeam) return [];
+    if (!userTeams || !nflTeam) return { starters: [], others: [] };
 
-    return Object.values(userTeams)
-      .flatMap((team) =>
-        team.playerData.filter((player) => player.team === nflTeam.code)
-      )
-      .sort((a, b) => a.name.localeCompare(b.name));
+    const playerMap = new Map();
+
+    Object.values(userTeams).forEach((team) => {
+      team.playerData
+        .filter((player) => player.team === nflTeam.code)
+        .forEach((player) => {
+          const key = player.name;
+          if (playerMap.has(key)) {
+            playerMap.get(key).userTeams.push(team.leagueName);
+            if (player.rosterSlotType === "start")
+              playerMap.get(key).isStarter = true;
+          } else {
+            playerMap.set(key, {
+              ...player,
+              userTeams: [team.leagueName],
+              isStarter: player.rosterSlotType === "start",
+            });
+          }
+        });
+    });
+
+    const allPlayers = Array.from(playerMap.values()).sort((a, b) =>
+      a.name.localeCompare(b.name)
+    );
+    return {
+      starters: allPlayers.filter((player) => player.isStarter),
+      others: allPlayers.filter((player) => !player.isStarter),
+    };
   };
 
   if (isLoading) return <div>Loading user teams...</div>;
   if (error) {
-    console.error('Error in MatchupGuide:', error);
+    console.error("Error in MatchupGuide:", error);
     return <div>Error loading user teams: {(error as Error).message}</div>;
   }
 
@@ -71,81 +92,100 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({
                 const awayTeam = getTeamByName(game.awayTeam);
                 const homeTeam = getTeamByName(game.homeTeam);
 
-                const awayPlayers = (awayTeam && getFantasyPlayersForTeam(awayTeam)) ?? [];
-                const homePlayers = (homeTeam && getFantasyPlayersForTeam(homeTeam)) ?? [];
-                const hasPlayers =
-                  awayPlayers.length > 0 || homePlayers.length > 0;
+                const awayPlayers = awayTeam
+                  ? getFantasyPlayersForTeam(awayTeam)
+                  : { starters: [], others: [] };
+                const homePlayers = homeTeam
+                  ? getFantasyPlayersForTeam(homeTeam)
+                  : { starters: [], others: [] };
+
+                const starterCount =
+                  awayPlayers.starters.length + homePlayers.starters.length;
+                const totalPlayers = [
+                  ...awayPlayers.starters,
+                  ...awayPlayers.others,
+                  ...homePlayers.starters,
+                  ...homePlayers.others,
+                ].reduce((sum, player) => sum + player.userTeams.length, 0);
+
+                const hasPlayers = totalPlayers > 0;
+
+                const renderPlayerList = (players: any[]) =>
+                  players.map((player) => (
+                    <p
+                      key={player.name}
+                      className={styles.player}
+                      title={`${player.userTeams.join("\n")}`}
+                    >
+                      {player.name}
+                      <span className={styles["player-position"]}>
+                        {" "}
+                        ({player.position})
+                        {player.userTeams.length > 1
+                          ? ` x${player.userTeams.length}`
+                          : ""}
+                      </span>
+                    </p>
+                  ));
+
                 return (
                   <div key={gameIndex} className={styles.matchup}>
                     <div className={styles["matchup-header"]}>
                       <div className={styles["team-names"]}>
                         <span className={styles["away-team"]}>
-                          {game.awayTeam}
+                          {awayTeam?.code}
                         </span>
                         <span className={styles["at-symbol"]}>@</span>
                         <span className={styles["home-team"]}>
-                          {game.homeTeam}
+                          {homeTeam?.code}
                         </span>
                       </div>
+                      <div className={styles["matchup-subheader"]}>
+                        <div className={styles["player-count"]}>
+                          {hasPlayers
+                            ? `${starterCount} Starter${
+                                starterCount !== 1 ? "s" : ""
+                              } (${totalPlayers} total)`
+                            : "No Players"}
+                        </div>
+                        <div className={styles.channel}>{game.channel}</div>
+                      </div>
                     </div>
-                    <div
-                      className={`${styles["matchup-content"]} ${
-                        !hasPlayers ? styles["no-players-content"] : ""
-                      }`}
-                    >
+                    <div className={styles["matchup-content"]}>
                       {hasPlayers ? (
                         <div className={styles["team-players"]}>
-                          <div className={styles["away-team"]}>
-                            {awayPlayers.length > 0 ? (
-                              awayPlayers.map((player) => (
-                                <p
-                                  key={player.name}
-                                  className={styles.player}
-                                  title={player.position} // Changed from activeFantasyTeams to position
-                                >
-                                  {player.name}
-                                  <span className={styles["player-position"]}>
-                                    {" "}
-                                    ({player.position})
-                                  </span>
-                                </p>
-                              ))
-                            ) : (
-                              <p className={styles["no-players"]}>
-                                No fantasy players
-                              </p>
-                            )}
+                          <div className={styles["starters-row"]}>
+                            <div className={styles["away-starters"]}>
+                              <h4>Away Starters</h4>
+                              {renderPlayerList(awayPlayers.starters)}
+                            </div>
+                            <div className={styles["home-starters"]}>
+                              <h4>Home Starters</h4>
+                              {renderPlayerList(homePlayers.starters)}
+                            </div>
                           </div>
-                          <div className={styles["home-team"]}>
-                            {homePlayers.length > 0 ? (
-                              homePlayers.map((player) => (
-                                <p
-                                  key={player.name}
-                                  className={styles.player}
-                                  title={player.position} // Changed from activeFantasyTeams to position
-                                >
-                                  {player.name}
-                                  <span className={styles["player-position"]}>
-                                    {" "}
-                                    ({player.position})
-                                  </span>
-                                </p>
-                              ))
-                            ) : (
-                              <p className={styles["no-players"]}>
-                                No fantasy players
-                              </p>
-                            )}
-                          </div>
+                          {(awayPlayers.others.length > 0 ||
+                            homePlayers.others.length > 0) && (
+                            <>
+                              <hr className={styles["player-divider"]} />
+                              <div className={styles["bench-row"]}>
+                                <div className={styles["away-bench"]}>
+                                  <h4>Away Bench</h4>
+                                  {renderPlayerList(awayPlayers.others)}
+                                </div>
+                                <div className={styles["home-bench"]}>
+                                  <h4>Home Bench</h4>
+                                  {renderPlayerList(homePlayers.others)}
+                                </div>
+                              </div>
+                            </>
+                          )}
                         </div>
                       ) : (
                         <p className={styles["no-players"]}>
                           No fantasy players
                         </p>
                       )}
-                    </div>
-                    <div className={styles["matchup-footer"]}>
-                      <span className={styles.channel}>{game.channel}</span>
                     </div>
                   </div>
                 );

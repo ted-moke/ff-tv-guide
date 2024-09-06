@@ -3,7 +3,9 @@
   --background-color-offset: #1a1a1a;
   --background-color-light: #e0e0e0;
   --text-color: #e0e0e0;
+  --text-color-muted: #a0a0a0;
   --text-color-light: #121212;
+  --text-color-light-muted: #6e6e6e;
   --primary-color: #F58A07;
   --primary-hover-color: #C67006; 
   --primary-active-color: #945704;
