@@ -1,4 +1,5 @@
 export interface Team {
+  id?: string; // Add this line
   externalTeamId: string;
   leagueId: string;
   leagueName: string;

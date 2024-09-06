@@ -9,7 +9,7 @@ export class PlatformServiceFactory {
       case 'fleaflicker':
         return new FleaflickerService();
       default:
-        throw new Error('Unsupported platform');
+        throw new Error(`Unsupported platform: ${platformId}`);
     }
   }
 }
