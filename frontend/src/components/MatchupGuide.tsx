@@ -6,6 +6,7 @@ import { groupGamesByStartTime } from "../features/nfl/nflUtils";
 import nflSchedule from "../assets/nfl-schedule-2024.json";
 import useUserTeams from "../features/teams/useUserTeams";
 import { getTeamByName } from "../features/nfl/nflTeams";
+import Alert from "./Alert"; // Import the new Alert component
 
 interface MatchupGuideProps {
   selectedWeek: number;
@@ -78,6 +79,13 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
   return (
     <div className={styles["matchup-guide"]}>
       <h2>Week {selectedWeek} Matchups</h2>
+      {userTeams && userTeams.length === 0 && (
+        <Alert
+          message="No fantasy teams connected."
+          buttonText="Connect a Team"
+          onButtonClick={() => window.location.href = '/connect-team'}
+        />
+      )}
       {weeklySchedule.length > 0 ? (
         weeklySchedule.map(([startTime, games], index) => (
           <div key={index} className={styles["game-group"]}>

@@ -9,8 +9,8 @@
 }
 
 .game-group h3 {
-  color: var(--primary-color);
-  border-bottom: 1px solid var(--primary-color);
+  color: var(--text-color);
+  border-bottom: 1px solid var(--text-color-muted);
   padding-bottom: var(--size0_5);
   margin-bottom: var(--size2);
 }

@@ -14,18 +14,19 @@ export const getUserTeams = async (req: Request, res: Response) => {
       .where("userId", "==", userId) // Changed from uid to userId
       .get();
 
-    console.log("User teams snapshot:", userTeamsSnapshot.size);
-
     const teamIds = userTeamsSnapshot.docs.map((doc) => doc.data().teamId);
-    console.log("Team IDs:", teamIds);
+
+    // Early return if no team IDs
+    if (teamIds.length === 0) {
+      console.log("No teams found for user:", userId);
+      return res.status(200).json({ teams: [] });
+    }
 
     // Fetch full team data
     const teamsSnapshot = await db
       .collection("teams")
       .where("id", "in", teamIds)
       .get();
-
-    console.log("Teams snapshot:", teamsSnapshot.size);
 
     const teams = teamsSnapshot.docs.map((doc) => {
       const team = doc.data() as Team;
