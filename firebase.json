@@ -4,7 +4,7 @@
     "indexes": "firestore.indexes.json"
   },
   "hosting": {
-    "public": "public",
+    "public": "frontend/dist",  // Update this line to point to your frontend build directory
     "ignore": [
       "firebase.json",
       "**/.*",
