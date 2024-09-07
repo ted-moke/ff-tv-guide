@@ -12,6 +12,8 @@ const firebaseConfig = {
   apiUrl: import.meta.env.VITE_API_URL
 };
 
+console.log('firebaseConfig', firebaseConfig)
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
