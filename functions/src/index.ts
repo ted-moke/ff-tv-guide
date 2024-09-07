@@ -17,8 +17,19 @@ logger.info('Initializing backend');
 
 const app = express();
 
+const allowedOrigins = [
+  'http://localhost:5173', // Development URL
+  'https://fantasy-tv-guide.web.app' // Production URL
+];
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL,
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
