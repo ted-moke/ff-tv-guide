@@ -13,7 +13,7 @@ import platformCredentialRoutes from "./routes/platformCredentialRoutes";
 import externalLeagueRoutes from "./routes/externalLeagueRoutes";
 
 const logger = functions.logger;
-logger.info('Initializing backend');
+logger.info("Initializing backend");
 
 const app = express();
 
@@ -55,8 +55,8 @@ app.use("/users", userRoutes);
 app.use("/external-leagues", externalLeagueRoutes);
 
 // Seed the database when the app initializes
-seedDatabase().catch(error => {
-  logger.error('Error seeding database:', error);
+seedDatabase().catch((error) => {
+  logger.error("Error seeding database:", error);
 });
 
 export const api = functions.https.onRequest(app);

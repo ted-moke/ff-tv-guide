@@ -15,5 +15,5 @@ export interface Player {
   logicalName: string;
   team: string;
   position: string;
-  rosterSlotType: 'start' | 'bench' | 'ir' | 'taxi' | 'reserve';
+  rosterSlotType: "start" | "bench" | "ir" | "taxi" | "reserve";
 }

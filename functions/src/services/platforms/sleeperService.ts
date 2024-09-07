@@ -69,19 +69,25 @@ export class SleeperService {
     const teamsCollection = db.collection("teams");
 
     // Create a map of roster_id to owner_id
-    const rosterOwnerMap = rosters.reduce((acc: { [key: string]: string }, roster: any) => {
-      acc[roster.roster_id] = roster.owner_id;
-      return acc;
-    }, {});
+    const rosterOwnerMap = rosters.reduce(
+      (acc: { [key: string]: string }, roster: any) => {
+        acc[roster.roster_id] = roster.owner_id;
+        return acc;
+      },
+      {},
+    );
 
     // Group teams by matchup_id
-    const matchupGroups = matchups.reduce((acc: { [key: string]: any[] }, team: any) => {
-      if (!acc[team.matchup_id]) {
-        acc[team.matchup_id] = [];
-      }
-      acc[team.matchup_id].push(team);
-      return acc;
-    }, {});
+    const matchupGroups = matchups.reduce(
+      (acc: { [key: string]: any[] }, team: any) => {
+        if (!acc[team.matchup_id]) {
+          acc[team.matchup_id] = [];
+        }
+        acc[team.matchup_id].push(team);
+        return acc;
+      },
+      {},
+    );
 
     for (const matchupId in matchupGroups) {
       const matchup = matchupGroups[matchupId];

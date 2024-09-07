@@ -1,8 +1,8 @@
-import { Router } from 'express';
-import { getExternalLeagues } from '../controllers/externalLeagueController';
+import { Router } from "express";
+import { getExternalLeagues } from "../controllers/externalLeagueController";
 
 const router = Router();
 
-router.get('/', getExternalLeagues);
+router.get("/", getExternalLeagues);
 
 export default router;

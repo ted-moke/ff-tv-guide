@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { db } from "../firebase";
 import { PlatformCredential } from "../models/platformCredential";
-import fetchFromUrl from '../utils/fetchFromUrl';
+import fetchFromUrl from "../utils/fetchFromUrl";
 
 const collection = db.collection("platformCredentials");
 
@@ -15,8 +15,10 @@ export const createPlatformCredential = async (req: Request, res: Response) => {
   try {
     const data: PlatformCredential = req.body;
 
-    if (data.platformId === 'sleeper') {
-      const sleeperUser = await fetchFromUrl(`https://api.sleeper.app/v1/user/${data.credential}`);
+    if (data.platformId === "sleeper") {
+      const sleeperUser = await fetchFromUrl(
+        `https://api.sleeper.app/v1/user/${data.credential}`,
+      );
       data.externalUserId = sleeperUser.user_id;
     }
 
@@ -62,21 +64,25 @@ export const deletePlatformCredential = async (req: Request, res: Response) => {
   }
 };
 
-export const listPlatformCredentials = async (req: AuthenticatedRequest, res: Response) => {
+export const listPlatformCredentials = async (
+  req: AuthenticatedRequest,
+  res: Response,
+) => {
   const userId = req.user?.uid;
 
   if (!userId) {
-    return res.status(401).json({ error: 'Unauthorized' });
+    return res.status(401).json({ error: "Unauthorized" });
   }
 
   try {
-    const credentialsSnapshot = await db.collection('platformCredentials')
-      .where('userId', '==', userId)
+    const credentialsSnapshot = await db
+      .collection("platformCredentials")
+      .where("userId", "==", userId)
       .get();
 
-    const credentials = credentialsSnapshot.docs.map(doc => ({
+    const credentials = credentialsSnapshot.docs.map((doc) => ({
       id: doc.id,
-      ...doc.data()
+      ...doc.data(),
     }));
 
     return res.json(credentials);

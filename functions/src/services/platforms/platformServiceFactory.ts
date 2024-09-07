@@ -1,12 +1,12 @@
-import { SleeperService } from './sleeperService';
-import { FleaflickerService } from './fleaflickerService';
+import { SleeperService } from "./sleeperService";
+import { FleaflickerService } from "./fleaflickerService";
 
 export class PlatformServiceFactory {
   static getService(platformId: string) {
     switch (platformId) {
-      case 'sleeper':
+      case "sleeper":
         return new SleeperService();
-      case 'fleaflicker':
+      case "fleaflicker":
         return new FleaflickerService();
       default:
         throw new Error(`Unsupported platform: ${platformId}`);

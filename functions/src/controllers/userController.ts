@@ -35,11 +35,11 @@ export const registerUser = async (req: Request, res: Response) => {
     });
     logger.info("User document created in Firestore", { uid });
 
-    res.status(201).send({ 
+    res.status(201).send({
       authenticated: true,
       uid,
       email,
-      username
+      username,
     });
   } catch (error) {
     console.error("Error in registerUser", error);
@@ -47,10 +47,12 @@ export const registerUser = async (req: Request, res: Response) => {
       console.error("Error details:", {
         name: error.name,
         message: error.message,
-        stack: error.stack
+        stack: error.stack,
       });
     }
-    res.status(400).send({ authenticated: false, error: (error as Error).message });
+    res
+      .status(400)
+      .send({ authenticated: false, error: (error as Error).message });
   }
 };
 
@@ -68,15 +70,17 @@ export const loginUser = async (req: Request, res: Response) => {
 
     const userRecord = await admin.auth().getUser(uid);
 
-    res.status(200).send({ 
+    res.status(200).send({
       authenticated: true,
       uid: userRecord.uid,
       email: userRecord.email,
-      username: userRecord.displayName
+      username: userRecord.displayName,
     });
   } catch (error) {
     logger.error("Error in loginUser", error);
-    res.status(400).send({ authenticated: false, error: (error as Error).message });
+    res
+      .status(400)
+      .send({ authenticated: false, error: (error as Error).message });
   }
 };
 
@@ -126,10 +130,12 @@ export const updateUserProfile = async (req: Request, res: Response) => {
 
 export const verifyToken = async (req: Request, res: Response) => {
   const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.split(' ')[1];
+  const token = authHeader && authHeader.split(" ")[1];
 
   if (!token) {
-    return res.status(200).json({ authenticated: false, message: "No token provided" });
+    return res
+      .status(200)
+      .json({ authenticated: false, message: "No token provided" });
   }
 
   try {
@@ -145,11 +151,10 @@ export const verifyToken = async (req: Request, res: Response) => {
       authenticated: true,
       uid: userRecord.uid,
       email: userRecord.email,
-      username: userData?.username || userRecord.displayName
+      username: userData?.username || userRecord.displayName,
     });
   } catch (error) {
     console.error("Error verifying token:", error);
     res.status(200).json({ authenticated: false, error: "Invalid token" });
   }
 };
-

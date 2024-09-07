@@ -59,7 +59,8 @@ export class FleaflickerService {
           name: teamData.name,
           externalUsername: rosterData.ownerName,
           externalUserId: rosterData.ownerId.toString(), // Store the Fleaflicker owner ID
-          opponentId: matchup.teams.find((t: any) => t.id !== teamData.id)?.id || "",
+          opponentId:
+            matchup.teams.find((t: any) => t.id !== teamData.id)?.id || "",
           playerData: this.processPlayerData(rosterData.groups),
         };
 
