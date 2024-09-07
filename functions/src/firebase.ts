@@ -2,7 +2,9 @@ import * as admin from "firebase-admin";
 import * as dotenv from "dotenv";
 import * as path from "path";
 
-dotenv.config();
+const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development';
+
+dotenv.config({ path: path.resolve(__dirname, '..', envFile) });
 
 const serviceAccountPath = path.resolve(
   __dirname,
@@ -20,7 +22,6 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   projectId: process.env.FB_PROJECT_ID,
   storageBucket: process.env.FB_STORAGE_BUCKET,
-  // Remove the authDomain line
 });
 
 if (process.env.FUNCTIONS_EMULATOR) {
@@ -50,6 +51,8 @@ const initializeFirestore = async () => {
 };
 
 // Call the initialization function
-initializeFirestore().catch(console.error);
+initializeFirestore().then(() => {
+  console.log('Firestore initialization complete.')
+}).catch(console.error);
 
 export { admin, db };

@@ -7,7 +7,7 @@
     "build:watch": "tsc --watch",
     "serve": "firebase emulators:start --import=./emulator-data --export-on-exit",
     "serve:dev": "yarn run build:watch & yarn run serve",
-    "deploy": "firebase deploy",
+    "deploy": "NODE_ENV=production firebase deploy",
     "lint": "eslint src/**/*.ts --config .eslintrc.cjs",
     "seed": "ts-node src/seed/fantasyPlatforms.ts"
   },

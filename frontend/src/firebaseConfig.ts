@@ -20,7 +20,7 @@ const auth = getAuth(app);
 console.log('auth', auth)
 const db = getFirestore(app);
 
-if (import.meta.env.VITE_USE_FIREBASE_EMULATOR === 'true') {
+if (import.meta.env.MODE === 'development' && import.meta.env.VITE_USE_FIREBASE_EMULATOR === 'true') {
   connectAuthEmulator(auth, 'http://localhost:9099');
   connectFirestoreEmulator(db, 'localhost', 8080);
 }

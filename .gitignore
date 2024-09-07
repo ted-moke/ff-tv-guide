@@ -12,7 +12,7 @@ node_modules
 dist
 dist-ssr
 .env
-.env.production
+.env.*
 *.local
 functions/keys
 lib/

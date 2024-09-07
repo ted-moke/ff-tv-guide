@@ -6,9 +6,11 @@ const logger = functions.logger;
 
 const verifyIdToken = async (idToken: string) => {
   if (process.env.FUNCTIONS_EMULATOR) {
+    console.log("disabled token check");
     // For emulator, we need to disable token checks
     return await admin.auth().verifyIdToken(idToken, true);
   } else {
+    console.log("prod token check");
     return await admin.auth().verifyIdToken(idToken);
   }
 };
@@ -129,16 +131,16 @@ export const updateUserProfile = async (req: Request, res: Response) => {
 };
 
 export const verifyToken = async (req: Request, res: Response) => {
-  const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.split(" ")[1];
-
-  if (!token) {
-    return res
-      .status(200)
-      .json({ authenticated: false, message: "No token provided" });
-  }
-
   try {
+    const authHeader = req.headers.authorization;
+    const token = authHeader && authHeader.split(" ")[1];
+
+    if (!token) {
+      return res
+        .status(200)
+        .json({ authenticated: false, message: "No token provided" });
+    }
+
     const decodedToken = await admin.auth().verifyIdToken(token);
     const uid = decodedToken.uid;
     const userRecord = await admin.auth().getUser(uid);
