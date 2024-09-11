@@ -2,9 +2,12 @@ import * as admin from "firebase-admin";
 import * as dotenv from "dotenv";
 import * as path from "path";
 
-const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development';
+const envFile =
+  process.env.NODE_ENV === "production"
+    ? ".env.production"
+    : ".env.development";
 
-dotenv.config({ path: path.resolve(__dirname, '..', envFile) });
+dotenv.config({ path: path.resolve(__dirname, "..", envFile) });
 
 const serviceAccountPath = path.resolve(
   __dirname,
@@ -51,8 +54,21 @@ const initializeFirestore = async () => {
 };
 
 // Call the initialization function
-initializeFirestore().then(() => {
-  console.log('Firestore initialization complete.')
-}).catch(console.error);
+initializeFirestore()
+  .then(() => {
+    console.log("Firestore initialization complete.");
+  })
+  .catch(console.error);
 
-export { admin, db };
+// Custom function to verify ID token
+const verifyIdToken = async (idToken: string) => {
+  if (process.env.NODE_ENV !== "production") {
+    console.log("using development firebase, no token check");
+    // For development, we need to disable token checks
+    return await admin.auth().verifyIdToken(idToken, true);
+  } else {
+    return await admin.auth().verifyIdToken(idToken);
+  }
+};
+
+export { admin, db, verifyIdToken };

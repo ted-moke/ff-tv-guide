@@ -8,19 +8,14 @@ const firebaseConfig = {
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
   storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
-  apiUrl: import.meta.env.VITE_API_URL
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
 };
-
-console.log('firebaseConfig', firebaseConfig)
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
-
-console.log('auth', auth)
 const db = getFirestore(app);
 
-if (import.meta.env.MODE === 'development' && import.meta.env.VITE_USE_FIREBASE_EMULATOR === 'true') {
+if (import.meta.env.MODE === 'development') {
   connectAuthEmulator(auth, 'http://localhost:9099');
   connectFirestoreEmulator(db, 'localhost', 8080);
 }

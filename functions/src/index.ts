@@ -1,4 +1,3 @@
-import * as functions from "firebase-functions";
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -12,9 +11,6 @@ import userRoutes from "./routes/userRoutes";
 import platformCredentialRoutes from "./routes/platformCredentialRoutes";
 import externalLeagueRoutes from "./routes/externalLeagueRoutes";
 
-const logger = functions.logger;
-logger.info("Initializing backend");
-
 const app = express();
 
 const allowedOrigins = [
@@ -24,6 +20,7 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: (origin, callback) => {
+    console.log("origin", origin);
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
@@ -39,12 +36,10 @@ app.use(express.json());
 
 // Logging middleware
 app.use((req, res, next) => {
-  logger.info(`${req.method} ${req.originalUrl}`);
+  console.log(`${req.method} ${req.originalUrl}`);
+  console.log("req.headers", req.headers);
   next();
 });
-
-// Error handling middleware
-app.use(errorHandler);
 
 app.use("/platforms", platformRoutes);
 app.use("/platform-credentials", platformCredentialRoutes);
@@ -54,9 +49,15 @@ app.use("/team-players", teamPlayerRoutes);
 app.use("/users", userRoutes);
 app.use("/external-leagues", externalLeagueRoutes);
 
+// Error handling middleware should be last
+app.use(errorHandler);
+
 // Seed the database when the app initializes
 seedDatabase().catch((error) => {
-  logger.error("Error seeding database:", error);
+  console.error("Error seeding database:", error);
 });
 
-export const api = functions.https.onRequest(app);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});

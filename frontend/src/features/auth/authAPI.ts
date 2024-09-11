@@ -13,7 +13,7 @@ let currentToken: string | null = null;
 // Set up auth state listener
 onAuthStateChanged(auth, async (user) => {
   if (user) {
-    currentToken = await user.getIdToken();
+    currentToken = await user.getIdToken(true);  // Force token refresh
     localStorage.setItem("authToken", currentToken);
   } else {
     currentToken = null;

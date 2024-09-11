@@ -1,19 +1,5 @@
 import { Request, Response } from "express";
-import { admin, db } from "../firebase";
-import * as functions from "firebase-functions";
-
-const logger = functions.logger;
-
-const verifyIdToken = async (idToken: string) => {
-  if (process.env.FUNCTIONS_EMULATOR) {
-    console.log("disabled token check");
-    // For emulator, we need to disable token checks
-    return await admin.auth().verifyIdToken(idToken, true);
-  } else {
-    console.log("prod token check");
-    return await admin.auth().verifyIdToken(idToken);
-  }
-};
+import { admin, db, verifyIdToken } from "../firebase";
 
 export const registerUser = async (req: Request, res: Response) => {
   const { email, username } = req.body;
@@ -26,16 +12,16 @@ export const registerUser = async (req: Request, res: Response) => {
   try {
     const decodedToken = await verifyIdToken(idToken);
 
-    const uid = decodedToken.uid; // Add this line to fix the 'uid' not found errors
+    const uid = decodedToken.uid;
 
-    logger.info("Attempting to create user document in Firestore", { uid });
+    console.log("Attempting to create user document in Firestore", { uid });
     await db.collection("users").doc(uid).set({
       email,
       username,
       createdAt: new Date(),
       preferences: {},
     });
-    logger.info("User document created in Firestore", { uid });
+    console.log("User document created in Firestore", { uid });
 
     res.status(201).send({
       authenticated: true,
@@ -59,15 +45,14 @@ export const registerUser = async (req: Request, res: Response) => {
 };
 
 export const loginUser = async (req: Request, res: Response) => {
-  const idToken = req.headers.authorization?.split("Bearer ")[1];
-
-  if (!idToken) {
-    return res.status(401).send({ error: "No token provided" });
-  }
-
   try {
+    const idToken = req.headers.authorization?.split("Bearer ")[1];
+    if (!idToken) {
+      return res.status(401).send({ error: "No token provided" });
+    }
+
     // Verify the ID token
-    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    const decodedToken = await verifyIdToken(idToken);
     const uid = decodedToken.uid;
 
     const userRecord = await admin.auth().getUser(uid);
@@ -79,7 +64,7 @@ export const loginUser = async (req: Request, res: Response) => {
       username: userRecord.displayName,
     });
   } catch (error) {
-    logger.error("Error in loginUser", error);
+    console.error("Error in loginUser", error);
     res
       .status(400)
       .send({ authenticated: false, error: (error as Error).message });
@@ -141,7 +126,7 @@ export const verifyToken = async (req: Request, res: Response) => {
         .json({ authenticated: false, message: "No token provided" });
     }
 
-    const decodedToken = await admin.auth().verifyIdToken(token);
+    const decodedToken = await verifyIdToken(token);
     const uid = decodedToken.uid;
     const userRecord = await admin.auth().getUser(uid);
 
