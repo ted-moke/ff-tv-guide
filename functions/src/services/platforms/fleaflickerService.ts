@@ -1,4 +1,4 @@
-import { db } from "../../firebase";
+import { getDb } from "../../firebase";
 import { League } from "../../models/league";
 import { Team, Player } from "../../models/team";
 import https from "https";
@@ -13,6 +13,7 @@ export class FleaflickerService {
     externalLeagueId: string;
     platformCredentialId: string;
   }): Promise<League> {
+    const db = await getDb();
     const leaguesCollection = db.collection("leagues");
     const leagueData: League = {
       name: leagueName,
@@ -35,6 +36,7 @@ export class FleaflickerService {
   }
 
   async upsertTeams(league: League) {
+    const db = await getDb();
     const week = this.getCurrentWeek();
     const season = this.getCurrentSeason();
     const matchups = await this.fetchMatchups(
@@ -81,6 +83,7 @@ export class FleaflickerService {
     userId: string;
   }) {
     console.log("Upserting userTeams");
+    const db = await getDb();
     const teamsCollection = db.collection("teams");
     const userTeamsCollection = db.collection("userTeams");
 

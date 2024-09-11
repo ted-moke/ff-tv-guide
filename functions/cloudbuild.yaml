@@ -1,0 +1,9 @@
+steps:
+- name: 'gcr.io/cloudbuild/docker'
+  args: ['--build-arg', 'FIREBASE_SERVICE_ACCOUNT_KEY=$(firestore_service_acc)', '--tag', 'ff-tv-guide']
+  volumes:
+  - name: 'secret-volume'
+- name: 'gcr.io/cloudbuild/secret-manager-env'
+  args: ['--secret', 'firestore_service_acc', '--volume', 'secret-volume']
+  volumes:
+  - name: 'secret-volume'

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { admin, db, verifyIdToken } from "../firebase";
+import { getAdmin, getDb, verifyIdToken } from "../firebase";
 
 export const registerUser = async (req: Request, res: Response) => {
   const { email, username } = req.body;
@@ -11,9 +11,9 @@ export const registerUser = async (req: Request, res: Response) => {
 
   try {
     const decodedToken = await verifyIdToken(idToken);
-
     const uid = decodedToken.uid;
 
+    const db = await getDb();
     console.log("Attempting to create user document in Firestore", { uid });
     await db.collection("users").doc(uid).set({
       email,
@@ -51,10 +51,10 @@ export const loginUser = async (req: Request, res: Response) => {
       return res.status(401).send({ error: "No token provided" });
     }
 
-    // Verify the ID token
     const decodedToken = await verifyIdToken(idToken);
     const uid = decodedToken.uid;
 
+    const admin = await getAdmin();
     const userRecord = await admin.auth().getUser(uid);
 
     res.status(200).send({
@@ -75,6 +75,7 @@ export const changePassword = async (req: Request, res: Response) => {
   const { uid, newPassword } = req.body;
 
   try {
+    const admin = await getAdmin();
     await admin.auth().updateUser(uid, { password: newPassword });
     res.status(200).send({ message: "Password updated successfully" });
   } catch (error) {
@@ -86,6 +87,7 @@ export const getUserProfile = async (req: Request, res: Response) => {
   const { uid } = req.params;
 
   try {
+    const db = await getDb();
     const userDoc = await db.collection("users").doc(uid).get();
 
     if (!userDoc.exists) {
@@ -103,6 +105,8 @@ export const updateUserProfile = async (req: Request, res: Response) => {
   const { email, username, preferences } = req.body;
 
   try {
+    const admin = await getAdmin();
+    const db = await getDb();
     await admin.auth().updateUser(uid, { email, displayName: username });
     await db
       .collection("users")
@@ -117,6 +121,8 @@ export const updateUserProfile = async (req: Request, res: Response) => {
 
 export const verifyToken = async (req: Request, res: Response) => {
   try {
+    const admin = await getAdmin();
+    const db = await getDb();
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(" ")[1];
 

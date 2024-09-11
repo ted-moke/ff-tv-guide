@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { PlatformServiceFactory } from "../services/platforms/platformServiceFactory";
-import { db } from "../firebase";
+import { getDb } from "../firebase";
 
 export const upsertLeague = async (req: Request, res: Response) => {
   const { leagueName, externalLeagueId, platformCredentialId, platformId } =
@@ -16,6 +16,7 @@ export const upsertLeague = async (req: Request, res: Response) => {
   }
 
   try {
+    const db = await getDb();
     const platformCredentialRef = db
       .collection("platformCredentials")
       .doc(platformCredentialId);

@@ -1,4 +1,4 @@
-import { db } from "../firebase";
+import { getDb } from "../firebase";
 import { Platform } from "../models/platform";
 
 const platforms: Platform[] = [
@@ -8,6 +8,7 @@ const platforms: Platform[] = [
 ];
 
 export const seedDatabase = async () => {
+  const db = await getDb();
   const platformsCollection = db.collection("platforms");
 
   for (const platform of platforms) {

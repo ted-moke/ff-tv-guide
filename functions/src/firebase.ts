@@ -1,74 +1,74 @@
 import * as admin from "firebase-admin";
 import * as dotenv from "dotenv";
 import * as path from "path";
+import { getSecret } from "./utils/getSecret";
 
-const envFile =
-  process.env.NODE_ENV === "production"
-    ? ".env.production"
-    : ".env.development";
-
+const isProduction = process.env.NODE_ENV === "production";
+const envFile = isProduction ? ".env.production" : ".env.development";
 dotenv.config({ path: path.resolve(__dirname, "..", envFile) });
 
-const serviceAccountPath = path.resolve(
-  __dirname,
-  "..",
-  process.env.SERVICE_ACCOUNT_KEY_PATH || "",
-);
+let dbInstance: admin.firestore.Firestore | null = null;
+let adminInstance: typeof admin | null = null;
 
-if (!serviceAccountPath) {
-  throw new Error("SERVICE_ACCOUNT_KEY_PATH is not defined in the environment");
-}
+const initializeFirebase = async () => {
+  if (adminInstance) return; // Already initialized
 
-const serviceAccount = require(serviceAccountPath);
+  const serviceAccount = isProduction
+    ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY || "")
+    : await getSecret("firestore_service_acc");
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  projectId: process.env.FB_PROJECT_ID,
-  storageBucket: process.env.FB_STORAGE_BUCKET,
-});
+  admin.initializeApp({
+    credential: admin.credential.cert(JSON.parse(serviceAccount)),
+    projectId: process.env.FB_PROJECT_ID,
+    storageBucket: process.env.FB_STORAGE_BUCKET,
+  });
 
-if (process.env.FUNCTIONS_EMULATOR) {
-  console.log("Using Firebase emulators");
-  process.env.FIRESTORE_EMULATOR_HOST = "localhost:8080";
-  process.env.FIREBASE_AUTH_EMULATOR_HOST = "localhost:9099";
-}
+  if (process.env.FUNCTIONS_EMULATOR) {
+    console.log("Using Firebase emulators");
+    process.env.FIRESTORE_EMULATOR_HOST = "localhost:8080";
+    process.env.FIREBASE_AUTH_EMULATOR_HOST = "localhost:9099";
+  }
 
-const db = admin.firestore();
+  adminInstance = admin;
+  dbInstance = admin.firestore();
 
-// Function to initialize Firestore collections
+  // Initialize Firestore collections
+  await initializeFirestore();
+};
+
 const initializeFirestore = async () => {
+  if (!dbInstance) throw new Error("Firestore not initialized");
+
   try {
-    const usersCollection = db.collection("users");
+    const usersCollection = dbInstance.collection("users");
     const usersDoc = await usersCollection.doc("dummy").get();
 
     if (!usersDoc.exists) {
-      // Create a dummy document to ensure the collection exists
       await usersCollection.doc("dummy").set({ dummy: true });
-
-      // Immediately delete the dummy document
       await usersCollection.doc("dummy").delete();
     }
+    console.log("Firestore initialization complete.");
   } catch (error) {
     console.error("Error initializing Firestore:", error);
   }
 };
 
-// Call the initialization function
-initializeFirestore()
-  .then(() => {
-    console.log("Firestore initialization complete.");
-  })
-  .catch(console.error);
-
-// Custom function to verify ID token
-const verifyIdToken = async (idToken: string) => {
-  if (process.env.NODE_ENV !== "production") {
-    console.log("using development firebase, no token check");
-    // For development, we need to disable token checks
-    return await admin.auth().verifyIdToken(idToken, true);
-  } else {
-    return await admin.auth().verifyIdToken(idToken);
-  }
+export const getAdmin = async () => {
+  await initializeFirebase();
+  return adminInstance!;
 };
 
-export { admin, db, verifyIdToken };
+export const getDb = async () => {
+  await initializeFirebase();
+  return dbInstance!;
+};
+
+export const verifyIdToken = async (idToken: string) => {
+  await initializeFirebase();
+  if (process.env.NODE_ENV !== "production") {
+    console.log("using development firebase, no token check");
+    return await adminInstance!.auth().verifyIdToken(idToken, true);
+  } else {
+    return await adminInstance!.auth().verifyIdToken(idToken);
+  }
+};

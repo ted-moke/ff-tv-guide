@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { admin } from "../firebase"; // Use the shared instance
+import { getAdmin } from "../firebase"; // Use the shared instance
 import { DecodedIdToken } from "firebase-admin/auth";
 
 // Add this interface
@@ -21,6 +21,7 @@ export const authenticate = async (
   const token = authHeader.split("Bearer ")[1];
 
   try {
+    const admin = await getAdmin();
     const decodedToken = await admin.auth().verifyIdToken(token);
     req.user = decodedToken;
     next();

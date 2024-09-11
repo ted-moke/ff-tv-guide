@@ -1,4 +1,4 @@
-import { db } from "../../firebase";
+import { getDb } from "../../firebase";
 import { League } from "../../models/league";
 import { Team, Player } from "../../models/team";
 import https from "https";
@@ -37,6 +37,7 @@ export class SleeperService {
       platformCredentialId,
       externalLeagueId,
     );
+    const db = await getDb();
     const leaguesCollection = db.collection("leagues");
     const leagueData: League = {
       name: leagueName,
@@ -62,7 +63,8 @@ export class SleeperService {
     }
   }
 
-  async upsertTeams(league: League) {
+    async upsertTeams(league: League) {
+    const db = await getDb();
     const week = this.getCurrentWeek();
     const matchups = await this.fetchMatchups(league.externalLeagueId, week);
     const rosters = await this.fetchRosters(league.externalLeagueId);
@@ -139,15 +141,7 @@ export class SleeperService {
     userId: string;
   }) {
     try {
-      console.log(
-        "Starting upsert userTeam2:",
-        "uid",
-        userId,
-        "leagueid:",
-        league.id,
-        "extuid:",
-        externalUserId,
-      );
+      const db = await getDb();
       const teamsCollection = db.collection("teams");
       const userTeamsCollection = db.collection("userTeams");
 

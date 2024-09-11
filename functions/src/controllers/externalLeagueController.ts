@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { db } from "../firebase";
+import { getDb } from "../firebase";
 import fetchFromUrl from "../utils/fetchFromUrl";
 
 const FLEAFLICKER_API_URL =
@@ -14,6 +14,7 @@ export const getExternalLeagues = async (req: Request, res: Response) => {
   }
 
   try {
+    const db = await getDb();
     const credentialDoc = await db
       .collection("platformCredentials")
       .doc(credentialId as string)

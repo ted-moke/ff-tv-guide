@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
-import { db } from "../firebase";
+import { getDb } from "../firebase";
 import { Team } from "../models/team";
 
 export const getUserTeams = async (req: Request, res: Response) => {
   const userId = req.params.uid; // This should match the route parameter
 
   try {
+    const db = await getDb();
     // Get user teams
     const userTeamsSnapshot = await db
       .collection("userTeams")

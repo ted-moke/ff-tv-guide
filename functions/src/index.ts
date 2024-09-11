@@ -13,6 +13,8 @@ import externalLeagueRoutes from "./routes/externalLeagueRoutes";
 
 const app = express();
 
+console.log("Starting server");
+
 const allowedOrigins = [
   'http://localhost:5173', // Development URL
   'https://fantasy-tv-guide.web.app' // Production URL
@@ -36,8 +38,6 @@ app.use(express.json());
 
 // Logging middleware
 app.use((req, res, next) => {
-  console.log(`${req.method} ${req.originalUrl}`);
-  console.log("req.headers", req.headers);
   next();
 });
 
@@ -48,6 +48,10 @@ app.use("/teams", teamRoutes);
 app.use("/team-players", teamPlayerRoutes);
 app.use("/users", userRoutes);
 app.use("/external-leagues", externalLeagueRoutes);
+
+app.get("/health", (req, res) => {
+  res.send("OK");
+});
 
 // Error handling middleware should be last
 app.use(errorHandler);
