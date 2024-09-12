@@ -55,15 +55,15 @@ export class SleeperService {
         ...leagueData,
         id: existingLeagueDoc.id,
       });
-      return leagueData;
+      return { ...leagueData, id: existingLeagueDoc.id };
     } else {
       const newLeagueRef = await leaguesCollection.add(leagueData);
       await newLeagueRef.update({ id: newLeagueRef.id });
-      return leagueData;
+      return { ...leagueData, id: newLeagueRef.id };
     }
   }
 
-    async upsertTeams(league: League) {
+  async upsertTeams(league: League) {
     const db = await getDb();
     const week = this.getCurrentWeek();
     const matchups = await this.fetchMatchups(league.externalLeagueId, week);
@@ -99,7 +99,7 @@ export class SleeperService {
         );
         const team: Team = {
           externalTeamId: teamData.roster_id.toString(),
-          leagueId: league.id!,
+          leagueId: league.id || "",
           leagueName: league.name,
           name: `Team ${teamData.roster_id}`, // You might want to fetch actual team names separately
           externalUsername: "", // This information is not available in the matchups data
@@ -150,7 +150,6 @@ export class SleeperService {
         .get();
       for (const teamDoc of teamsQuery.docs) {
         const team = teamDoc.data() as Team;
-        console.log("checking team:", team.externalUserId);
         if (team.externalUserId === externalUserId) {
           await userTeamsCollection.add({
             userId: userId,
@@ -165,31 +164,29 @@ export class SleeperService {
   }
 
   private fetchMatchups(externalLeagueId: string, week: number): Promise<any> {
+    const url = `https://api.sleeper.app/v1/league/${externalLeagueId}/matchups/${week}`;
+    console.log("Fetching matchups from Sleeper", url);
     return new Promise((resolve, reject) => {
       https
-        .get(
-          `https://api.sleeper.app/v1/league/${externalLeagueId}/matchups/${week}`,
-          (res) => {
-            let data = "";
-            res.on("data", (chunk) => (data += chunk));
-            res.on("end", () => resolve(JSON.parse(data)));
-          },
-        )
+        .get(url, (res) => {
+          let data = "";
+          res.on("data", (chunk) => (data += chunk));
+          res.on("end", () => resolve(JSON.parse(data)));
+        })
         .on("error", reject);
     });
   }
 
   private fetchRosters(externalLeagueId: string): Promise<any> {
+    const url = `https://api.sleeper.app/v1/league/${externalLeagueId}/rosters`;
+    console.log("Fetching rosters from Sleeper", url);
     return new Promise((resolve, reject) => {
       https
-        .get(
-          `https://api.sleeper.app/v1/league/${externalLeagueId}/rosters`,
-          (res) => {
-            let data = "";
-            res.on("data", (chunk) => (data += chunk));
-            res.on("end", () => resolve(JSON.parse(data)));
-          },
-        )
+        .get(url, (res) => {
+          let data = "";
+          res.on("data", (chunk) => (data += chunk));
+          res.on("end", () => resolve(JSON.parse(data)));
+        })
         .on("error", reject);
     });
   }

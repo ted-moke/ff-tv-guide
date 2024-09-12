@@ -12,22 +12,17 @@ let adminInstance: typeof admin | null = null;
 
 const initializeFirebase = async () => {
   if (adminInstance) return; // Already initialized
+  console.log("Initializing Firebase. Production: ", isProduction);
 
   const serviceAccount = isProduction
     ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY || "")
     : await getSecret("firestore_service_acc");
 
   admin.initializeApp({
-    credential: admin.credential.cert(JSON.parse(serviceAccount)),
+    credential: admin.credential.cert(serviceAccount),
     projectId: process.env.FB_PROJECT_ID,
     storageBucket: process.env.FB_STORAGE_BUCKET,
   });
-
-  if (process.env.FUNCTIONS_EMULATOR) {
-    console.log("Using Firebase emulators");
-    process.env.FIRESTORE_EMULATOR_HOST = "localhost:8080";
-    process.env.FIREBASE_AUTH_EMULATOR_HOST = "localhost:9099";
-  }
 
   adminInstance = admin;
   dbInstance = admin.firestore();

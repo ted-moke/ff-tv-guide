@@ -18,7 +18,7 @@ export async function getSecret(secretName: string, secretVersion = 1) {
       secretVersion,
     );
 
-    return secretValue;
+    return JSON.parse(secretValue);
   } catch (error) {
     console.error(error);
   }
