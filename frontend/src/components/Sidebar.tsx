@@ -6,7 +6,6 @@ import LinkButton, { LinkButtonColor } from "./LinkButton";
 import MenuItem from "./MenuItem";
 import Checkbox from "./Checkbox";
 import Dropdown from "./Dropdown";
-import logo from "/vite.svg";
 import useUserTeams from "../features/teams/useUserTeams";
 
 interface SidebarProps {
@@ -21,8 +20,6 @@ interface SidebarProps {
   isMobileMenuOpen: boolean;
   hideEmptyTeams: boolean;
   setHideEmptyTeams: (hide: boolean) => void;
-  selectedWeek: number;
-  setSelectedWeek: (week: number) => void;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
@@ -37,8 +34,6 @@ const Sidebar: React.FC<SidebarProps> = ({
   isMobileMenuOpen,
   hideEmptyTeams,
   setHideEmptyTeams,
-  selectedWeek,
-  setSelectedWeek,
 }) => {
   const { data: userTeams, isLoading, error } = useUserTeams();
 

@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import styles from "./Navigation.module.css";
 import logo from "/vite.svg";
-import LinkButton from "./LinkButton";
 import Button, { ButtonColor } from "./Button";
 
 const Navigation: React.FC = () => {

@@ -74,8 +74,6 @@ const HomePage: React.FC = () => {
         isMobileMenuOpen={isMobileMenuOpen}
         hideEmptyTeams={hideEmptyTeams}
         setHideEmptyTeams={setHideEmptyTeams}
-        selectedWeek={selectedWeek}
-        setSelectedWeek={setSelectedWeek}
       />
       <main className={styles['main-content']}>
         {viewMode === 'overview' ? (
