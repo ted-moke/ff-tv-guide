@@ -21,6 +21,11 @@
   left: 0;
 }
 
+.connect-team-container {
+  width: 100%;
+  text-align: center;
+}
+
 @media (max-width: 768px) {
   .sidebar {
     position: fixed;

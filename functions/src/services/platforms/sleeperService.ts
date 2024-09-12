@@ -1,6 +1,7 @@
 import { getDb } from "../../firebase";
 import { League } from "../../models/league";
 import { Team, Player } from "../../models/team";
+import { getCurrentWeek } from "../../utils/getCurrentWeek";
 import https from "https";
 import * as fs from "fs";
 import * as path from "path";
@@ -65,7 +66,7 @@ export class SleeperService {
 
   async upsertTeams(league: League) {
     const db = await getDb();
-    const week = this.getCurrentWeek();
+    const week = getCurrentWeek();
     const matchups = await this.fetchMatchups(league.externalLeagueId, week);
     const rosters = await this.fetchRosters(league.externalLeagueId);
     const teamsCollection = db.collection("teams");
@@ -213,10 +214,5 @@ export class SleeperService {
         }
       })
       .filter((player) => player !== null) as Player[];
-  }
-
-  private getCurrentWeek(): number {
-    // Implement logic to determine current NFL week
-    return 1; // Placeholder
   }
 }

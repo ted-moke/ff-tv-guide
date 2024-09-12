@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import styles from "./Sidebar.module.css";
 import { SortOption, ViewMode } from "../pages/HomePage";
 import { Conference } from "../features/nfl/nflTypes";
-import LinkButton from "./LinkButton";
+import LinkButton, { LinkButtonColor } from "./LinkButton";
 import MenuItem from "./MenuItem";
 import Checkbox from "./Checkbox";
 import Dropdown from "./Dropdown";
@@ -66,10 +66,6 @@ const Sidebar: React.FC<SidebarProps> = ({
     <aside
       className={`${styles.sidebar} ${isMobileMenuOpen ? styles.open : ""}`}
     >
-      <div className={styles.branding}>
-        <img src={logo} alt="FF TV Guide Logo" className={styles.logo} />
-        <h1 className={styles.title}>FF TV Guide</h1>
-      </div>
       <div className={styles["control-group"]}>
         <MenuItem
           text="TV Guide"
@@ -84,7 +80,7 @@ const Sidebar: React.FC<SidebarProps> = ({
           onClick={() => setViewMode("overview")}
         />
       </div>
-      {viewMode === "overview" ? (
+      {viewMode === "overview" && (
         <>
           <div className={styles["control-group"]}>
             <h3>Conference</h3>
@@ -123,19 +119,6 @@ const Sidebar: React.FC<SidebarProps> = ({
             />
           </div>
         </>
-      ) : (
-        <div className={styles["control-group"]}>
-          <h3>Select Week</h3>
-          <Dropdown
-            id="selectedWeek"
-            value={selectedWeek.toString()}
-            onChange={(e) => setSelectedWeek(Number(e.target.value))}
-            options={Array.from({ length: 18 }, (_, i) => ({
-              value: (i + 1).toString(),
-              label: `Week ${i + 1}`,
-            }))}
-          />
-        </div>
       )}
       <div
         className={`${styles["control-group"]} ${styles["fantasy-team-list-wrapper"]}`}
@@ -166,7 +149,9 @@ const Sidebar: React.FC<SidebarProps> = ({
             ))}
           </div>
         )}
-        <LinkButton to="/connect-team">Connect Team</LinkButton>
+        <div className={styles["connect-team-container"]}>
+          <LinkButton color={LinkButtonColor.PRIMARY} to="/connect-team">+ Connect Team</LinkButton>
+        </div>
       </div>
     </aside>
   );

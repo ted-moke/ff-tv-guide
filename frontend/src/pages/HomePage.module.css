@@ -11,7 +11,6 @@
   overflow-y: auto;
   height: 100%;
   width: 100%; /* Add this to ensure full width */
-  margin-top: 60px; /* Adjust this value based on the header height */
 }
 
 @media (max-width: 768px) {

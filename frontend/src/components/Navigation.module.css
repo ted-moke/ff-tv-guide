@@ -1,6 +1,9 @@
 .navigation {
   background-color: var(--background-color);
   padding: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .navigation ul {
@@ -23,4 +26,21 @@
 
 .navigation a:hover {
   color: var(--primary-color);
+}
+
+.branding {
+  display: flex;
+  align-items: center;
+}
+
+.logo {
+  width: var(--size3);
+  height: var(--size3);
+  margin-right: var(--size1);
+}
+
+.title {
+  font-size: var(--size2);
+  color: var(--text-color);
+  margin-bottom: 0;
 }

@@ -1,4 +1,4 @@
-@import '../styles/variables.css';
+@import "../styles/variables.css";
 
 .menuItem {
   display: block;
@@ -10,11 +10,11 @@
 }
 
 .menuItem:hover {
-  background-color: var(--background-color-offset);
+  text-decoration: underline;
   color: var(--text-color);
 }
 
 .menuItem.active {
-  background-color: var(--primary-color);
-  color: var(--text-color-light);
+  background-color: var(--background-color-offset);
+  border-left: 2px solid var(--primary-color);
 }

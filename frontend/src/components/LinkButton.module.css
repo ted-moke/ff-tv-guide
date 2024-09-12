@@ -4,7 +4,7 @@
   text-decoration: none;
 }
 
-.primaryLinkButton {
+.linkButton {
   border: none;
   background: transparent;
   color: var(--text-color);
@@ -12,6 +12,14 @@
   cursor: pointer;
   padding: var(--size1) var(--size2);
   font: inherit;
+}
+
+.linkButton:hover {
+  color: var(--text-color-secondary);
+}
+
+.primaryLinkButton {
+  color: var(--primary-color);
 }
 
 .primaryLinkButton:hover {
@@ -24,13 +32,7 @@
 }
 
 .secondaryLinkButton {
-  border: none;
-  background: transparent;
   color: var(--secondary-color);
-  text-decoration: underline;
-  cursor: pointer;
-  padding: var(--size1) var(--size2);
-  font: inherit;
 }
 
 .secondaryLinkButton:hover {

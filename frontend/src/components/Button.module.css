@@ -52,14 +52,16 @@
 }
 
 .clear {
-    background-color: transparent;
-    color: var(--text-color-secondary);
-    border: 1px solid var(--primary-color);
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: 1px solid var(--text-color);
     padding: 0.5rem 1rem;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .clear:hover {
-    background-color: var(--background-color-hover);
+    background-color: var(--background-color-offset);
+    color: var(--primary-color);
+    border-color: var(--primary-color);
 }

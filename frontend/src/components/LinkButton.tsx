@@ -1,11 +1,23 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import styles from './LinkButton.module.css';
+import React from "react";
+import { Link } from "react-router-dom";
+import styles from "./LinkButton.module.css";
 
 export enum LinkButtonColor {
-  PRIMARY = 'primary',
-  SECONDARY = 'secondary',
+  DEFAULT = "default",
+  PRIMARY = "primary",
+  SECONDARY = "secondary",
 }
+
+const getLinkButtonClass = (color: LinkButtonColor) => {
+  switch (color) {
+    case LinkButtonColor.PRIMARY:
+      return styles.primaryLinkButton;
+    case LinkButtonColor.SECONDARY:
+      return styles.secondaryLinkButton;
+    default:
+      return "";
+  }
+};
 
 interface LinkButtonProps {
   to?: string;
@@ -14,11 +26,19 @@ interface LinkButtonProps {
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-const LinkButton: React.FC<LinkButtonProps> = ({ to, color = LinkButtonColor.PRIMARY, children, onClick }) => {
-  const className = color === LinkButtonColor.PRIMARY ? styles.primaryLinkButton : styles.secondaryLinkButton;
+const LinkButton: React.FC<LinkButtonProps> = ({
+  to,
+  color = LinkButtonColor.DEFAULT,
+  children,
+  onClick,
+}) => {
+  const linkButtonClass = getLinkButtonClass(color);
 
   const buttonElement = (
-    <button className={className} onClick={onClick}>
+    <button
+      className={`${styles.linkButton} ${linkButtonClass}`}
+      onClick={onClick}
+    >
       {children}
     </button>
   );

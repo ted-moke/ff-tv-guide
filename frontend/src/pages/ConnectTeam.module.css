@@ -18,6 +18,7 @@
   color: var(--color-text-primary);
   text-align: center;
   margin-bottom: 2rem;
+  margin-top: 1rem;
 }
 
 .form {
@@ -35,12 +36,15 @@
   margin-top: 1rem;
 }
 
-
 .buttonGroup {
+  width: 100%;
   display: flex;
   justify-content: flex-end;
-  margin-top: 1rem;
   gap: 1rem;
+}
+
+.backButton {
+  justify-content: flex-start;
 }
 
 .message {
@@ -58,4 +62,26 @@ ul {
 
 li {
   list-style: none;
+}
+
+.connectTeamFormWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
+.externalLeagueSelect h2,
+.externalLeagueSelect ul {
+  margin-top: 0;
+}
+
+.externalLeagueSelect h2 {
+  margin-bottom: 0;
+}
+
+.selectButtons {
+  display: flex;
+  justify-content: flex-start;
+  gap: var(--size2);
 }

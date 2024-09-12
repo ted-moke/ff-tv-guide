@@ -57,7 +57,7 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
         <Alert
           message="No fantasy teams connected."
           buttonText="Connect a Team"
-          onButtonClick={() => window.location.href = '/connect-team'}
+          onButtonClick={() => (window.location.href = "/connect-team")}
         />
       )}
       {weeklySchedule.length > 0 ? (
@@ -92,22 +92,34 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
 
                 const hasPlayers = totalPlayers > 0;
 
-                const renderPlayerList = (players: Player[]) =>
-                  players.map((player) => (
-                    <p
+                const renderPlayerList = (playersToRender: Player[]) =>
+                  playersToRender.map((player) => (
+                    <div
                       key={player.name}
                       className={styles.player}
                       title={`${player.userTeams.join("\n")}`}
                     >
-                      {player.name}
+                      <p className={styles["player-team"]}>{player.team}</p>
+                      <p
+                        className={`${styles["player-position"]} ${
+                          styles[player.position]
+                        }`}
+                      >
+                        {player.position}
+                      </p>
+                      <p className={styles["player-name"]}>{player.name}</p>
                       <span className={styles["player-position"]}>
                         {" "}
-                        ({player.position})
                         {player.userTeams.length > 1
                           ? ` x${player.userTeams.length}`
                           : ""}
                       </span>
-                    </p>
+                      <div className={styles["player-user-teams"]}>
+                        {player.userTeams.map((userTeam) => (
+                          <p>{userTeam}</p>
+                        ))}
+                      </div>
+                    </div>
                   ));
 
                 return (
@@ -136,32 +148,31 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
                     <div className={styles["matchup-content"]}>
                       {hasPlayers ? (
                         <div className={styles["team-players"]}>
-                          <div className={styles["starters-row"]}>
-                            <div className={styles["away-starters"]}>
-                              <h4>Away Starters</h4>
-                              {renderPlayerList(awayPlayers.starters)}
-                            </div>
-                            <div className={styles["home-starters"]}>
-                              <h4>Home Starters</h4>
-                              {renderPlayerList(homePlayers.starters)}
-                            </div>
-                          </div>
-                          {(awayPlayers.others.length > 0 ||
-                            homePlayers.others.length > 0) && (
+                          {awayPlayers.starters.length > 0 ||
+                          homePlayers.starters.length > 0 ? (
                             <>
-                              <hr className={styles["player-divider"]} />
-                              <div className={styles["bench-row"]}>
-                                <div className={styles["away-bench"]}>
-                                  <h4>Away Bench</h4>
-                                  {renderPlayerList(awayPlayers.others)}
+                              <h4>My Starters</h4>
+                              <div className={styles["starters"]}>
+                                <div className={styles["players-wrapper"]}>
+                                  {renderPlayerList(awayPlayers.starters)}
                                 </div>
-                                <div className={styles["home-bench"]}>
-                                  <h4>Home Bench</h4>
-                                  {renderPlayerList(homePlayers.others)}
+                                <div className={styles["players-wrapper"]}>
+                                  {renderPlayerList(homePlayers.starters)}
                                 </div>
                               </div>
                             </>
-                          )}
+                          ) : null}
+                          {awayPlayers.others.length > 0 ||
+                          homePlayers.others.length > 0 ? (
+                            <>
+                              <hr className={styles["player-divider"]} />
+                              <h4>My Bench</h4>
+                              <div className={styles["bench"]}>
+                                {renderPlayerList(awayPlayers.others)}
+                                {renderPlayerList(homePlayers.others)}
+                              </div>
+                            </>
+                          ) : null}
                         </div>
                       ) : (
                         <p className={styles["no-players"]}>

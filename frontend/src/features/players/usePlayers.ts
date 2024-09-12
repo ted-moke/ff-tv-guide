@@ -2,11 +2,31 @@ import { useMemo } from 'react';
 import { Player } from '../nfl/nflTypes';
 import useUserTeams from '../teams/useUserTeams';
 
+// Define the order of positions
+const positionOrder = ['QB', 'RB', 'WR', 'TE', 'K', 'DEF', 'DB', 'S', 'CB', 'DL', 'DE', 'LB'];
+
+// Custom sorting function
+const sortPlayers = (a: Player, b: Player) => {
+  const aIndex = positionOrder.indexOf(a.position);
+  const bIndex = positionOrder.indexOf(b.position);
+
+  if (aIndex !== bIndex) {
+    // If positions are different, sort by position order
+    return aIndex - bIndex;
+  } else if (aIndex === -1) {
+    // If both positions are not in the positionOrder array, sort alphabetically by position
+    return a.position.localeCompare(b.position);
+  } else {
+    // If positions are the same, sort alphabetically by name
+    return a.name.localeCompare(b.name);
+  }
+};
+
 export const getPlayersByTeam = (teamCode: string, players: Player[]): { starters: Player[], others: Player[] } => {
   const teamPlayers = players.filter(player => player.team === teamCode);
   return {
-    starters: teamPlayers.filter(player => player.isStarter),
-    others: teamPlayers.filter(player => !player.isStarter),
+    starters: teamPlayers.filter(player => player.isStarter).sort(sortPlayers),
+    others: teamPlayers.filter(player => !player.isStarter).sort(sortPlayers),
   };
 };
 
@@ -35,9 +55,7 @@ export const usePlayers = () => {
       });
     });
 
-    const allPlayers = Array.from(playerMap.values()).sort((a, b) =>
-      a.name.localeCompare(b.name)
-    );
+    const allPlayers = Array.from(playerMap.values()).sort(sortPlayers);
 
     return {
       starters: allPlayers.filter((player) => player.isStarter),

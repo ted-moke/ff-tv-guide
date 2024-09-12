@@ -13,6 +13,9 @@
   --secondary-hover-color: #09605C;
   --secondary-active-color: #074A46;
 
+  --color-red: #DB3069;
+  --color-blue: #84E6F8;
+
   /* 8-based sizing system */
   --size0_5: 4px;
   --size1: 8px;
