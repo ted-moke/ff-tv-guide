@@ -3,8 +3,17 @@ import { Link } from "react-router-dom";
 import styles from "./Navigation.module.css";
 import logo from "/vite.svg";
 import Button, { ButtonColor } from "./Button";
+import LinkButton from "./LinkButton";
+import { useAuth } from "../features/auth/useAuth";
+import { FaBars, FaTimes } from "react-icons/fa";
+import { useView } from "../features/view/ViewContext";
 
 const Navigation: React.FC = () => {
+  const { logout } = useAuth();
+  const { isMenuOpen, setIsMenuOpen } = useView();
+
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
   return (
     <nav className={styles.navigation}>
       <Link to="/home">
@@ -14,11 +23,19 @@ const Navigation: React.FC = () => {
         </div>
       </Link>
 
-      <ul>
-        <li>
-          <Button color={ButtonColor.CLEAR} link="/connect-team">Connect Team</Button>
-        </li>
-      </ul>
+      <div className={styles.mobileMenuIcon} onClick={toggleMenu}>
+        {isMenuOpen ? <FaTimes /> : <FaBars />}
+      </div>
+
+      {/* Desktop menu */}
+      <div className={styles.desktopMenu}>
+        <Button color={ButtonColor.CLEAR} link="/connect-team">
+          Connect Team
+        </Button>
+        <LinkButton onClick={logout}>
+          Logout
+        </LinkButton>
+      </div>
     </nav>
   );
 };

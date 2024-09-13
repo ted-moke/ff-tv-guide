@@ -29,7 +29,7 @@
 @media (max-width: 768px) {
   .sidebar {
     position: fixed;
-    top: 0;
+    top: 51px;
     left: -100%; /* Change from -250px to -100% */
     height: 100%;
     width: 100%; /* Change from 250px to 100% */
@@ -79,4 +79,16 @@
 
 .fantasy-team-list-wrapper h3 {
   margin-bottom: var(--size0_5);
+}
+
+.mobile-menu-items {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .mobile-menu-items {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size1);
+  }
 }

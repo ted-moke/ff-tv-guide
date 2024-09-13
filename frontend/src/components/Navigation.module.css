@@ -44,3 +44,31 @@
   color: var(--text-color);
   margin-bottom: 0;
 }
+
+.itemsGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--size1);
+}
+
+.mobileMenuIcon {
+  display: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.desktopMenu {
+  display: flex;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .desktopMenu {
+    display: none;
+  }
+
+  .mobileMenuIcon {
+    display: block;
+  }
+
+}

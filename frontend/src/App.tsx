@@ -12,7 +12,8 @@ import HomePage from "./pages/HomePage";
 import SplashPage from "./pages/SplashPage";
 import ConnectTeam from "./pages/ConnectTeam"; // Add this import
 import LoadingSpinner from "./components/LoadingSpinner";
-import Navigation from "./components/Navigation";
+import Layout from "./components/ui/Layout";
+import { ViewProvider } from "./features/view/ViewContext";
 
 const queryClient = new QueryClient();
 
@@ -25,14 +26,7 @@ const AuthenticatedRoute: React.FC<{ element: React.ReactElement }> = ({
     return <LoadingSpinner />;
   }
 
-  return user ? (
-    <>
-      <Navigation />
-      {element}
-    </>
-  ) : (
-    <Navigate to="/" />
-  );
+  return user ? <Layout>{element}</Layout> : <Navigate to="/" />;
 };
 
 const AppRoutes: React.FC = () => {
@@ -44,7 +38,10 @@ const AppRoutes: React.FC = () => {
 
   return (
     <Routes>
-      <Route path="/" element={user ? <Navigate to="/home" /> : <SplashPage />} />
+      <Route
+        path="/"
+        element={user ? <Navigate to="/home" /> : <SplashPage />}
+      />
       <Route path="/auth" element={<AuthPage />} />
       <Route
         path="/home"
@@ -61,9 +58,11 @@ const AppRoutes: React.FC = () => {
 const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <Router>
-        <AppRoutes />
-      </Router>
+      <ViewProvider>
+        <Router>
+          <AppRoutes />
+        </Router>
+      </ViewProvider>
     </QueryClientProvider>
   );
 };

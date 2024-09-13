@@ -6,7 +6,7 @@ interface MenuItemProps {
   text: string;
   to: string;
   isActive: boolean;
-  onClick: () => void;
+  onClick?: () => void;
 }
 
 const MenuItem: React.FC<MenuItemProps> = ({ text, to, isActive, onClick }) => {

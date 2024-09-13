@@ -1,78 +1,60 @@
-import React, { useMemo } from "react";
+import React from "react";
 import styles from "./Sidebar.module.css";
-import { SortOption, ViewMode } from "../pages/HomePage";
 import { Conference } from "../features/nfl/nflTypes";
-import LinkButton, { LinkButtonColor } from "./LinkButton";
 import MenuItem from "./MenuItem";
 import Checkbox from "./Checkbox";
 import Dropdown from "./Dropdown";
-import useUserTeams from "../features/teams/useUserTeams";
+import { SortOption, useView } from "../features/view/ViewContext";
+// import FantasyTeamOptions from "./FantasyTeamOptions";
+// import LinkButton from "./LinkButton";
+import { useAuth } from "../features/auth/useAuth";
+import Button, { ButtonColor } from "./Button";
+import { useLocation } from "react-router-dom";
 
-interface SidebarProps {
-  viewMode: ViewMode;
-  setViewMode: (mode: ViewMode) => void;
-  activeFantasyTeams: string[];
-  setActiveFantasyTeams: (teams: string[]) => void;
-  activeConference: Conference;
-  setActiveConference: (conference: Conference) => void;
-  sortBy: SortOption;
-  setSortBy: (option: SortOption) => void;
-  isMobileMenuOpen: boolean;
-  hideEmptyTeams: boolean;
-  setHideEmptyTeams: (hide: boolean) => void;
-}
+const Sidebar: React.FC = () => {
+  const {
+    viewMode,
+    setViewMode,
+    activeConference,
+    setActiveConference,
+    sortBy,
+    setSortBy,
+    hideEmptyTeams,
+    setHideEmptyTeams,
+    isMenuOpen,
+    setIsMenuOpen,
+  } = useView();
 
-const Sidebar: React.FC<SidebarProps> = ({
-  viewMode,
-  setViewMode,
-  activeFantasyTeams,
-  setActiveFantasyTeams,
-  activeConference,
-  setActiveConference,
-  sortBy,
-  setSortBy,
-  isMobileMenuOpen,
-  hideEmptyTeams,
-  setHideEmptyTeams,
-}) => {
-  const { data: userTeams, isLoading, error } = useUserTeams();
+  const location = useLocation();
 
-  const fantasyTeams = useMemo(() => {
-    if (!userTeams) return [];
-    return Object.values(userTeams).map((team) => ({
-      name: team.name,
-      league: team.leagueName,
-    }));
-  }, [userTeams]);
-
-  const handleFantasyTeamToggle = (teamName: string) => {
-    setActiveFantasyTeams([...activeFantasyTeams, teamName]);
-  };
-
-  const handleSelectAllFantasyTeams = () => {
-    setActiveFantasyTeams(fantasyTeams.map((team) => team.name));
-  };
-
-  const handleClearAllFantasyTeams = () => {
-    setActiveFantasyTeams([]);
-  };
+  const { logout } = useAuth();
 
   return (
-    <aside
-      className={`${styles.sidebar} ${isMobileMenuOpen ? styles.open : ""}`}
-    >
+    <aside className={`${styles.sidebar} ${isMenuOpen ? styles.open : ""}`}>
       <div className={styles["control-group"]}>
         <MenuItem
           text="TV Guide"
-          to="#"
-          isActive={viewMode === "matchup"}
-          onClick={() => setViewMode("matchup")}
+          to="/home"
+          isActive={location.pathname === "/home" && viewMode === "matchup"}
+          onClick={() => {
+            setViewMode("matchup");
+            setIsMenuOpen(false);
+          }}
         />
         <MenuItem
           text="NFL Teams"
-          to="#"
-          isActive={viewMode === "overview"}
-          onClick={() => setViewMode("overview")}
+          to="/home"
+          isActive={location.pathname === "/home" && viewMode === "overview"}
+          onClick={() => {
+            setViewMode("overview");
+            setIsMenuOpen(false);
+          }}
+        />
+        <MenuItem
+          text="Connect Leagues"
+          to="/connect-team"
+          isActive={location.pathname === "/connect-team"}
+          onClick={() => setIsMenuOpen(false)}
         />
       </div>
       {viewMode === "overview" && (
@@ -115,38 +97,17 @@ const Sidebar: React.FC<SidebarProps> = ({
           </div>
         </>
       )}
-      <div
-        className={`${styles["control-group"]} ${styles["fantasy-team-list-wrapper"]}`}
-      >
-        <h3>Fantasy Leagues</h3>
-        {isLoading ? (
-          <p>Loading leagues...</p>
-        ) : error ? (
-          <p>Error loading leagues: {(error as Error).message}</p>
-        ) : (
-          <div className={styles["fantasy-team-list"]}>
-            <div className={styles["fantasy-team-actions"]}>
-              <LinkButton onClick={handleSelectAllFantasyTeams}>
-                Select All
-              </LinkButton>
-              <LinkButton onClick={handleClearAllFantasyTeams}>
-                Clear All
-              </LinkButton>
-            </div>
-            {fantasyTeams.map((team) => (
-              <Checkbox
-                key={team.league}
-                id={team.league}
-                checked={activeFantasyTeams.includes(team.league)}
-                onChange={() => handleFantasyTeamToggle(team.league)}
-                label={`${team.league}`}
-              />
-            ))}
-          </div>
-        )}
-        <div className={styles["connect-team-container"]}>
-          <LinkButton color={LinkButtonColor.PRIMARY} to="/connect-team">+ Connect Team</LinkButton>
-        </div>
+      {/* <FantasyTeamOptions /> */}
+      <div className={styles["mobile-menu-items"]}>
+        <Button
+          color={ButtonColor.CLEAR}
+          onClick={() => {
+            setIsMenuOpen(false);
+            logout();
+          }}
+        >
+          Logout
+        </Button>
       </div>
     </aside>
   );
