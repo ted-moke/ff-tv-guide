@@ -1,14 +1,14 @@
 # TODO
 
 big stuff
-2. sign out
-3. logo
-4. mobile
-6. sleeper/ff logos around
-7. domain
 5. opponents
+7. domain
+6. sleeper/ff logos around
 1. fleaflicker connect
+3. x - logo
 2. x - deploy
+2. x - sign out
+4. x - mobile
 
 smaller
 5. delete credential
