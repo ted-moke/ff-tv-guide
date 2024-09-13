@@ -46,42 +46,40 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
           if (typeof games === "string") {
             return null;
           }
-          
-          return (
-          <div key={index} className={styles["game-group"]}>
-            
-            <h3>
-              {formatDateToEastern(
-                typeof startTime === "string" ? startTime.split(" ")[0] : "",
-                typeof startTime === "string" ? startTime.split(" ")[1] : ""
-              )}
-            </h3>
 
-            <div className={styles["game-group-content"]}>
-              {games.map((game, gameIndex) => (
-                <div key={gameIndex} className={styles.matchup}>
-                  <div className={styles["matchup-header"]}>
-                    <div className={styles["team-names"]}>
-                      <span className={styles["away-team"]}>
-                        {game.awayTeam?.code}
-                      </span>
-                      <span className={styles["at-symbol"]}>@</span>
-                      <span className={styles["home-team"]}>
-                        {game.homeTeam?.code}
-                      </span>
-                    </div>
-                    <div className={styles["matchup-subheader"]}>
-                      <div className={styles["player-count"]}>
-                        {game.hasPlayers
-                          ? `${game.starterCount} Starter${
-                              game.starterCount !== 1 ? "s" : ""
-                            } (${game.totalPlayers} total)`
-                          : "No Players"}
+          return (
+            <div key={index} className={styles["game-group"]}>
+              <h3>
+                {formatDateToEastern(
+                  typeof startTime === "string" ? startTime.split(" ")[0] : "",
+                  typeof startTime === "string" ? startTime.split(" ")[1] : ""
+                )}
+              </h3>
+
+              <div className={styles["game-group-content"]}>
+                {games.map((game, gameIndex) => (
+                  <div key={gameIndex} className={styles.matchup}>
+                    <div className={styles["matchup-header"]}>
+                      <div className={styles["team-names"]}>
+                        <span className={styles["away-team"]}>
+                          {game.awayTeam?.code}
+                        </span>
+                        <span className={styles["at-symbol"]}>@</span>
+                        <span className={styles["home-team"]}>
+                          {game.homeTeam?.code}
+                        </span>
                       </div>
-                      <div className={styles.channel}>{game.channel}</div>
+                      <div className={styles["matchup-subheader"]}>
+                        <div className={styles["player-count"]}>
+                          {game.hasPlayers
+                            ? `${game.starterCount} Starter${
+                                game.starterCount !== 1 ? "s" : ""
+                              } (${game.totalPlayers} total)`
+                            : "No Players"}
+                        </div>
+                        <div className={styles.channel}>{game.channel}</div>
+                      </div>
                     </div>
-                  </div>
-                  <div className={styles["matchup-content"]}>
                     {game.hasPlayers ? (
                       <div className={styles["team-players"]}>
                         {game.awayPlayers.starters.length > 0 ||
@@ -93,8 +91,6 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
                                 <PlayerList
                                   players={game.awayPlayers.starters}
                                 />
-                              </div>
-                              <div className={styles["players-wrapper"]}>
                                 <PlayerList
                                   players={game.homePlayers.starters}
                                 />
@@ -118,11 +114,11 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
                       <p className={styles["no-players"]}>No fantasy players</p>
                     )}
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        )})
+          );
+        })
       ) : (
         <p>No games scheduled for this week.</p>
       )}

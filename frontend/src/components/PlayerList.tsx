@@ -1,13 +1,13 @@
 import React from 'react';
 import { Player } from "../features/nfl/nflTypes";
-import styles from "./MatchupGuide.module.css";
+import styles from "./PlayerList.module.css";
 
 interface PlayerListProps {
   players: Player[];
 }
 
 const PlayerList: React.FC<PlayerListProps> = ({ players }) => {
-  return (
+  return (  
     <>
       {players.map((player) => (
         <div
@@ -23,12 +23,9 @@ const PlayerList: React.FC<PlayerListProps> = ({ players }) => {
           >
             {player.position}
           </p>
-          <p className={styles["player-name"]}>{player.name}</p>
-          <span className={styles["player-position"]}>
-            {player.userTeams.length > 1
+          <p className={styles["player-name"]}>{player.name}{player.userTeams.length > 1
               ? ` x${player.userTeams.length}`
-              : ""}
-          </span>
+              : ""}</p>
           <div className={styles["player-user-teams"]}>
             {player.userTeams.map((userTeam) => (
               <p key={`${player.name}-${userTeam}`}>{userTeam}</p>

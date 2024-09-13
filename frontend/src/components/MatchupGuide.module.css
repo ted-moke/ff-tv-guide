@@ -70,12 +70,6 @@
   color: var(--text-color-secondary);
 }
 
-.matchup-content {
-  flex-grow: 1;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-
 .no-players-content {
   justify-content: center;
   align-items: center;
@@ -106,67 +100,6 @@
   margin-bottom: var(--size1);
 }
 
-.player {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: var(--size1);
-  padding: var(--size0_5);
-}
-
-.player p {
-  margin: 0;
-}
-
-.player-team {
-  color: var(--text-color-muted);
-  min-width: 30px;
-}
-
-.player-user-teams {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.player-user-teams p {
-  font-size: var(--size1);
-  margin-bottom: 0;
-}
-
-.player-position {
-  min-width: 30px;
-  color: var(--text-color-muted);
-}
-
-.player-position.QB {
-  color: var(--color-red);
-}
-
-.player-position.RB {
-  color: var(--secondary-color);
-}
-
-.player-position.WR {
-  color: var(--color-blue);
-}
-
-.player-position.TE {
-  color: var(--primary-color);
-}
-
-.player-name {
-  min-width: 100px;
-}
-
-.player-divider {
-  grid-column: 1 / -1;
-  margin: 1rem 0;
-  border: none;
-  border-top: 1px solid var(--text-color-muted);
-  width: 100%;
-}
 
 .team-players h4 {
   margin-top: 0;
@@ -179,6 +112,14 @@
   text-align: center;
   font-size: var(--size2);
   color: var(--text-color-secondary);
+}
+
+.player-divider {
+  grid-column: 1 / -1;
+  margin: 1rem 0;
+  border: none;
+  border-top: 1px solid var(--text-color-muted);
+  width: 100%;
 }
 
 @media (max-width: 768px) {
