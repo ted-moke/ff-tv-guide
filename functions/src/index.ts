@@ -17,12 +17,12 @@ console.log("Starting server");
 
 const allowedOrigins = [
   'http://localhost:5173', // Development URL
-  'https://fantasy-tv-guide.web.app' // Production URL
+  process.env.FRONTEND_URL,
+  process.env.FRONTEND_URL?.replace(/^https?:\/\//, 'https://www.') || ''
 ];
 
 app.use(cors({
   origin: (origin, callback) => {
-    console.log("origin", origin);
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
@@ -38,6 +38,9 @@ app.use(express.json());
 
 // Logging middleware
 app.use((req, res, next) => {
+  if (req.path !== "/health" && req.path !== "/users/verify-token") {
+    console.log(`${req.method} ${req.url}`);
+  }
   next();
 });
 

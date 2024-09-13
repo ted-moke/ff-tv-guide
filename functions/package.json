@@ -10,7 +10,7 @@
     "serve": "npm run build && node lib/index.js",
     "serve:dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
     "emulate": "firebase emulators:start --only firestore,auth --import=./emulator-data --export-on-exit",
-    "deploy": "NODE_ENV=production firebase deploy --only firestore,hosting",
+    "deploy": "NODE_ENV=production firebase deploy --only firestore && gcloud run deploy fftvguide --source .",
     "lint": "eslint src/**/*.ts --config .eslintrc.cjs"
   },
   "dependencies": {

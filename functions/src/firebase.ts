@@ -61,7 +61,6 @@ export const getDb = async () => {
 export const verifyIdToken = async (idToken: string) => {
   await initializeFirebase();
   if (process.env.NODE_ENV !== "production") {
-    console.log("using development firebase, no token check");
     return await adminInstance!.auth().verifyIdToken(idToken, true);
   } else {
     return await adminInstance!.auth().verifyIdToken(idToken);

@@ -18,6 +18,7 @@ functions/keys
 lib/
 keys
 emulator-data/
+.firebase
 
 # Editor directories and files
 .vscode/*
