@@ -24,25 +24,39 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
     return <div>Error loading user teams: {(error as Error).message}</div>;
   }
 
+  // if processedSchedule is a string, return an empty array
+  if (typeof processedSchedule === "string") {
+    return <div>No games scheduled for this week.</div>;
+  }
+
   return (
     <div className={styles["matchup-guide"]}>
       <h2>Week {selectedWeek} Matchups</h2>
-      {players && players.starters.length === 0 && players.others.length === 0 && (
-        <Alert
-          message="No fantasy teams connected."
-          buttonText="Connect a Team"
-          onButtonClick={() => (window.location.href = "/connect-team")}
-        />
-      )}
+      {players &&
+        players.starters.length === 0 &&
+        players.others.length === 0 && (
+          <Alert
+            message="No fantasy teams connected."
+            buttonText="Connect a Team"
+            onButtonClick={() => (window.location.href = "/connect-team")}
+          />
+        )}
       {processedSchedule.length > 0 ? (
-        processedSchedule.map(([startTime, games], index) => (
+        processedSchedule.map(([startTime, games], index) => {
+          if (typeof games === "string") {
+            return null;
+          }
+          
+          return (
           <div key={index} className={styles["game-group"]}>
+            
             <h3>
               {formatDateToEastern(
-                startTime.split(" ")[0],
-                startTime.split(" ")[1]
+                typeof startTime === "string" ? startTime.split(" ")[0] : "",
+                typeof startTime === "string" ? startTime.split(" ")[1] : ""
               )}
             </h3>
+
             <div className={styles["game-group-content"]}>
               {games.map((game, gameIndex) => (
                 <div key={gameIndex} className={styles.matchup}>
@@ -76,10 +90,14 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
                             <h4>My Starters</h4>
                             <div className={styles["starters"]}>
                               <div className={styles["players-wrapper"]}>
-                                <PlayerList players={game.awayPlayers.starters} />
+                                <PlayerList
+                                  players={game.awayPlayers.starters}
+                                />
                               </div>
                               <div className={styles["players-wrapper"]}>
-                                <PlayerList players={game.homePlayers.starters} />
+                                <PlayerList
+                                  players={game.homePlayers.starters}
+                                />
                               </div>
                             </div>
                           </>
@@ -97,16 +115,14 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
                         ) : null}
                       </div>
                     ) : (
-                      <p className={styles["no-players"]}>
-                        No fantasy players
-                      </p>
+                      <p className={styles["no-players"]}>No fantasy players</p>
                     )}
                   </div>
                 </div>
               ))}
             </div>
           </div>
-        ))
+        )})
       ) : (
         <p>No games scheduled for this week.</p>
       )}

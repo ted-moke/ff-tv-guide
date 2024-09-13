@@ -1,12 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styles from "./Navigation.module.css";
-import logo from "/vite.svg";
 import Button, { ButtonColor } from "./Button";
 import LinkButton from "./LinkButton";
 import { useAuth } from "../features/auth/useAuth";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { useView } from "../features/view/ViewContext";
+import FFTVGLogo from "../assets/FFTVGLogo";
 
 const Navigation: React.FC = () => {
   const { logout } = useAuth();
@@ -18,8 +18,7 @@ const Navigation: React.FC = () => {
     <nav className={styles.navigation}>
       <Link to="/home">
         <div className={styles.branding}>
-          <img src={logo} alt="FF TV Guide Logo" className={styles.logo} />
-          <h1 className={styles.title}>FF TV Guide</h1>
+          <FFTVGLogo withText />
         </div>
       </Link>
 
@@ -30,7 +29,7 @@ const Navigation: React.FC = () => {
       {/* Desktop menu */}
       <div className={styles.desktopMenu}>
         <Button color={ButtonColor.CLEAR} link="/connect-team">
-          Connect Team
+          Connect a League
         </Button>
         <LinkButton onClick={logout}>
           Logout

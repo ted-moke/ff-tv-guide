@@ -1,0 +1,40 @@
+@import "../styles/variables.css";
+
+.logoWrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--size0_5);
+}
+
+.logoContainer {
+  position: relative;
+}
+
+.logoContainer > h1 {
+  position: absolute;
+  top: 54%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: var(--size2);
+}
+
+.logoWrapper h1 {
+  font-size: var(--size2);
+  margin: 0; 
+}
+
+.large h1 {
+  font-size: var(--size4);
+}
+
+.logoWrapper .text {
+  margin-top: var(--size0_5);
+}
+
+.logoWrapper.large .text {
+  margin-top: 6px;
+}
+
+.logoText {
+  color: var(--primary-color);
+} 

@@ -1,5 +1,9 @@
 @import "../styles/variables.css";
 
+.logoContainer {
+  margin-bottom: var(--size2);
+}
+
 .linkContainer {
     margin-top: var(--size2);
   }

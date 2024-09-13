@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../features/auth/useAuth";
 import styles from "./AuthPage.module.css";
-import logo from "/vite.svg";
 import LinkButton from "../components/LinkButton";
 import LoginForm from "../components/forms/LoginForm";
 import RegisterForm from "../components/forms/RegisterForm";
 import LoadingSpinner from "../components/LoadingSpinner";
+import FFTVGLogo from "../assets/FFTVGLogo";
 
 const AuthPage: React.FC = () => {
   const [isRegister, setIsRegister] = useState(false);
@@ -16,7 +16,12 @@ const AuthPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { login, register, isLoading: authLoading, error: authError } = useAuth();
+  const {
+    login,
+    register,
+    isLoading: authLoading,
+    error: authError,
+  } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -50,7 +55,9 @@ const AuthPage: React.FC = () => {
 
   return (
     <div className="container">
-      <img src={logo} alt="FF TV Guide Logo" className="logo" />
+      <div className={styles.logoContainer}>
+        <FFTVGLogo size="large" withText />
+      </div>
       <h1>{isRegister ? "Create Your Account" : "Sign In"}</h1>
       {isRegister ? (
         <RegisterForm

@@ -1,8 +1,8 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { verifyToken, loginUser, registerUser } from './authAPI';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { AuthData } from './authTypes'
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { verifyToken, loginUser, registerUser } from "./authAPI";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { AuthData } from "./authTypes";
 
 export const useAuth = () => {
   const queryClient = useQueryClient();
@@ -10,8 +10,12 @@ export const useAuth = () => {
   const navigate = useNavigate();
   const [isAuthEnabled, setIsAuthEnabled] = useState(true);
 
-  const { data, isLoading, isError, isSuccess, error, refetch } = useQuery<AuthData | null, Error, AuthData>({
-    queryKey: ['auth'],
+  const { data, isLoading, isError, isSuccess, error, refetch } = useQuery<
+    AuthData | null,
+    Error,
+    AuthData
+  >({
+    queryKey: ["auth"],
     queryFn: verifyToken,
     retry: false,
     enabled: isAuthEnabled,
@@ -19,19 +23,19 @@ export const useAuth = () => {
 
   useEffect(() => {
     if (isError) {
-      console.error('Auth query error:', error);
+      console.error("Auth query error:", error);
       setIsAuthEnabled(false);
-      if (location.pathname !== '/auth') {
-        navigate('/auth');
+      if (location.pathname !== "/auth") {
+        navigate("/auth");
       }
     }
   }, [isError, error, location.pathname, navigate]);
 
   useEffect(() => {
     if (isSuccess && data && !data.authenticated) {
-      queryClient.setQueryData(['auth'], null);
-      if (location.pathname !== '/auth') {
-        navigate('/');
+      queryClient.setQueryData(["auth"], null);
+      if (location.pathname !== "/auth") {
+        navigate("/");
       }
     }
   }, [isSuccess, data, location.pathname, navigate, queryClient]);
@@ -41,10 +45,10 @@ export const useAuth = () => {
   const loginMutation = useMutation({
     mutationFn: loginUser,
     onSuccess: (data: AuthData) => {
-      queryClient.setQueryData(['auth'], data);
+      queryClient.setQueryData(["auth"], data);
       setIsAuthEnabled(true);
       refetch();
-      navigate('/');
+      navigate("/");
     },
     onError: (error: Error) => {
       setIsAuthEnabled(false);
@@ -55,10 +59,10 @@ export const useAuth = () => {
   const registerMutation = useMutation({
     mutationFn: registerUser,
     onSuccess: (data: AuthData) => {
-      queryClient.setQueryData(['auth'], data);
+      queryClient.setQueryData(["auth"], data);
       setIsAuthEnabled(true);
       refetch();
-      navigate('/');
+      navigate("/");
     },
     onError: (error: Error) => {
       setIsAuthEnabled(false);
@@ -68,17 +72,18 @@ export const useAuth = () => {
 
   const logout = () => {
     // Implement logout functionality here
-    queryClient.setQueryData(['auth'], null);
+    localStorage.removeItem("authToken");
     setIsAuthEnabled(false);
-    navigate('/auth');
+    queryClient.setQueryData(["auth"], null);
+    navigate("/auth");
   };
 
-  return { 
-    user, 
-    isLoading, 
-    error, 
-    login: loginMutation.mutateAsync, 
+  return {
+    user,
+    isLoading,
+    error,
+    login: loginMutation.mutateAsync,
     register: registerMutation.mutateAsync,
-    logout 
+    logout,
   };
 };

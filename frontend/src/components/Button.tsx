@@ -18,7 +18,7 @@ const Button: React.FC<ButtonProps> = ({ link, onClick, color = ButtonColor.PRIM
 
   if (link) {
     return (
-      <Link to={link}>
+      <Link to={link} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <button className={className} onClick={onClick} {...props}>
           {children}
         </button>

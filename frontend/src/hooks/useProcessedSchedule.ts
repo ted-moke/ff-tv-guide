@@ -3,7 +3,7 @@ import { NFLGame, Player } from "../features/nfl/nflTypes";
 import { getTeamByName } from "../features/nfl/nflTeams";
 import { getPlayersByTeam } from "../features/players/usePlayers";
 
-interface ProcessedGame extends NFLGame {
+interface ProcessedGame extends Omit<NFLGame, 'awayTeam' | 'homeTeam'> {
   awayTeam: ReturnType<typeof getTeamByName>;
   homeTeam: ReturnType<typeof getTeamByName>;
   awayPlayers: {

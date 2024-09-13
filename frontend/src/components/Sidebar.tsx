@@ -51,7 +51,7 @@ const Sidebar: React.FC = () => {
           }}
         />
         <MenuItem
-          text="Connect Leagues"
+          text="Connect a League"
           to="/connect-team"
           isActive={location.pathname === "/connect-team"}
           onClick={() => setIsMenuOpen(false)}

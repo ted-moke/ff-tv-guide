@@ -8,21 +8,18 @@ import { AuthData } from "./authTypes";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-let currentToken: string | null = null;
-
 // Set up auth state listener
 onAuthStateChanged(auth, async (user) => {
   if (user) {
-    currentToken = await user.getIdToken(true);  // Force token refresh
-    localStorage.setItem("authToken", currentToken);
+    const token = await user.getIdToken(true);  // Force token refresh
+    localStorage.setItem("authToken", token);
   } else {
-    currentToken = null;
     localStorage.removeItem("authToken");
   }
 });
 
 export const verifyToken = async (): Promise<AuthData> => {
-  const token = currentToken || localStorage.getItem("authToken");
+  const token = localStorage.getItem("authToken");
 
   if (!token) {
     return { authenticated: false };
@@ -83,7 +80,6 @@ export const loginUser = async (credentials: {
     credentials.password
   );
   const idToken = await userCredential.user.getIdToken();
-
   const response = await fetch(`${API_URL}/users/login`, {
     method: "POST",
     headers: {
