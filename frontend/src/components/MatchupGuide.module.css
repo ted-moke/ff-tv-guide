@@ -33,7 +33,6 @@
   justify-content: center;
   align-items: center;
   padding: var(--size1) var(--size2);
-  background-color: var(--background-color);
   border-bottom: 1px solid var(--border-color);
   border-top-left-radius: var(--size0_5);
   border-top-right-radius: var(--size0_5);
@@ -51,8 +50,8 @@
   font-weight: bold;
   color: var(--text-color);
   display: flex;
-  justify-content: space-evenly;
   width: 100%;
+  gap: var(--size1);
 }
 
 .away-team,
