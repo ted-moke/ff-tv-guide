@@ -134,10 +134,17 @@
 
 .self-starters {
   color: var(--color-green);
+  font-size: var(--size3);
   font-weight: bold;
 }
 
 .opponent-starters {
   color: var(--color-red);
+  font-size: var(--size3);
+
   font-weight: bold;
+}
+
+.starters-none {
+  color: var(--text-color-muted);
 }

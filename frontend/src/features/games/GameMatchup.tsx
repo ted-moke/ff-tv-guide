@@ -35,10 +35,16 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game }) => {
           <div className={styles["player-count"]}>
             {game.hasPlayers ? (
               <>
-                <span className={styles["self-starters"]}>
+                <span
+                  className={`${styles["self-starters"]} ${
+                    game.starters.length === 0 ? styles["starters-none"] : ""
+                  }`}
+                >
                   {game.totals.self.starters}
                 </span>
-                {" Player Starting"}
+                {"  Player"}
+                {game.starters.length !== 1 ? "s " : " "}
+                {"Starting"}
                 {/* {" vs "}
                 <span className={styles["opponent-starters"]}>
                   {game.totals.opponent.starters}
@@ -66,9 +72,11 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game }) => {
               </div>
             </div>
           )}
+          {game.starters.length > 0 && game.others.length > 0 && (
+            <hr className={styles["divider"]} />
+          )}
           {game.others.length > 0 && (
             <>
-              <hr className={styles["divider"]} />
               <LinkButton
                 onClick={toggleBench}
                 color={LinkButtonColor.MUTED}
