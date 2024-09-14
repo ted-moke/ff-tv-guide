@@ -11,7 +11,7 @@ import AuthPage from "./pages/AuthPage";
 import HomePage from "./pages/HomePage";
 import SplashPage from "./pages/SplashPage";
 import ConnectTeam from "./pages/ConnectTeam"; // Add this import
-import LoadingSpinner from "./components/LoadingSpinner";
+import LoadingSpinner from "./components/ui/LoadingSpinner";
 import Layout from "./components/ui/Layout";
 import { ViewProvider } from "./features/view/ViewContext";
 

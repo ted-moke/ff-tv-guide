@@ -1,0 +1,18 @@
+.alert {
+  background-color: var(--alert-background-color);
+  color: var(--alert-text-color);
+  padding: var(--size2);
+  border: 1px solid var(--primary-color);
+  border-radius: var(--size0_5);
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--size2);
+}
+
+.alert p {
+  margin: 0;
+}
+
+.alert button {
+  margin-left: var(--size2);
+}

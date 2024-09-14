@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import styles from "./Navigation.module.css";
-import Button, { ButtonColor } from "./Button";
-import LinkButton from "./LinkButton";
+import Button, { ButtonColor } from "./ui/Button";
+import LinkButton from "./ui/LinkButton";
 import { useAuth } from "../features/auth/useAuth";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { useView } from "../features/view/ViewContext";

@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './SplashPage.module.css';
-import Button from "../components/Button";
-import LinkButton from "../components/LinkButton";
+import Button from "../components/ui/Button";
+import LinkButton from "../components/ui/LinkButton";
 import FFTVGLogo from '../assets/FFTVGLogo';
 
 const SplashPage: React.FC = () => {

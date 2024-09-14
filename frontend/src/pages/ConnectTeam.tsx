@@ -4,13 +4,13 @@ import useCredentials from "../features/connect/useCredentials";
 import useExternalLeagues from "../features/connect/useExternalLeagues";
 import ConnectTeamForm from "../features/connect/ConnectTeamForm";
 import CredentialList from "../features/connect/CredentialList";
-import Button from "../components/Button";
-import LinkButton from "../components/LinkButton"; // Add this import
-import Checkbox from "../components/Checkbox";
+import Button from "../components/ui/Button";
+import LinkButton from "../components/ui/LinkButton"; // Add this import
+import Checkbox from "../components/ui/Checkbox";
 import { PlatformCredential } from "../features/platforms/platformTypes";
 import { useConnectLeague } from "../features/league/useLeague";
 import styles from "./ConnectTeam.module.css";
-import LoadingSpinner from "../components/LoadingSpinner";
+import LoadingSpinner from "../components/ui/LoadingSpinner";
 
 const ConnectTeam: React.FC = () => {
   const navigate = useNavigate(); // Add this line

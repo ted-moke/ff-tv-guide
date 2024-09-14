@@ -1,0 +1,70 @@
+.teams-grid {
+  display: grid;
+  gap: 20px;
+  width: 100%;
+}
+
+.team-card {
+  border: 1px solid #4c4c4c;
+  border-radius: 8px;
+  padding: 15px;
+  background-color: #2c2c2c;
+}
+
+.team-card h2 {
+  margin: 0 0 10px 0;
+  color: #ffffff;
+  background-color: #1e1e1e;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.team-card h2 .player-count {
+  font-size: 14px;
+  color: #888;
+}
+
+.team-card .division {
+  font-size: 12px;
+  color: #888;
+  margin: 0 0 8px 0;
+}
+
+.team-card ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  background-color: #1e1e1e;
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.team-card li {
+  margin-bottom: 4px;
+  padding: 4px;
+  border-bottom: 1px solid #3c3c3c;
+  font-size: 14px;
+}
+
+.team-card li:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.no-players {
+  color: #888;
+  background-color: #1e1e1e;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.multi-team {
+  font-size: 0.8em;
+  color: #888;
+  margin-left: 5px;
+}

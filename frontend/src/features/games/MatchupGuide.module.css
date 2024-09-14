@@ -1,0 +1,135 @@
+@import "../../styles/variables.css";
+
+.game-group {
+  margin-bottom: var(--size4);
+}
+
+.game-group h3 {
+  color: var(--text-color);
+  border-bottom: 1px solid var(--text-color-muted);
+  padding-bottom: var(--size0_5);
+  margin-bottom: var(--size2);
+}
+
+.game-group-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: var(--size2);
+}
+
+.matchup {
+  background-color: var(--background-color-offset);
+  border-radius: var(--size0_5);
+  padding: var(--size2);
+  display: flex;
+  flex-direction: column;
+  min-height: 180px;
+  gap: var(--size2);
+}
+
+.matchup-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: var(--size1) var(--size2);
+  border-bottom: 1px solid var(--border-color);
+  border-top-left-radius: var(--size0_5);
+  border-top-right-radius: var(--size0_5);
+  gap: var(--size1);
+}
+
+.matchup-subheader {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.team-names {
+  font-size: var(--size3);
+  font-weight: bold;
+  color: var(--text-color);
+  display: flex;
+  width: 100%;
+  gap: var(--size1);
+}
+
+.away-team,
+.home-team {
+  text-align: center;
+}
+
+.at-symbol {
+  margin: 0 var(--size1);
+  color: var(--text-color-muted);
+  font-weight: normal;
+}
+
+.total-players {
+  font-size: var(--size1_5);
+  color: var(--text-color-secondary);
+}
+
+.no-players-content {
+  justify-content: center;
+  align-items: center;
+}
+
+.team-players {
+  display: flex;
+  flex-direction: column;
+}
+
+.starters-row,
+.bench-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--size2);
+}
+
+.channel {
+  color: var(--text-color-muted);
+}
+
+.starters,
+.bench {
+  width: 100%;
+}
+
+.players-wrapper > *:last-child {
+  margin-bottom: var(--size1);
+}
+
+
+.team-players h4 {
+  margin-top: 0;
+  margin-bottom: var(--size1);
+  font-size: var(--size2);
+  color: var(--text-color-muted);
+}
+
+.player-count {
+  text-align: center;
+  font-size: var(--size2);
+  color: var(--text-color-secondary);
+}
+
+.player-divider {
+  grid-column: 1 / -1;
+  margin: 1rem 0;
+  border: none;
+  border-top: 1px solid var(--text-color-muted);
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .starters-row,
+  .bench-row {
+    grid-template-columns: 1fr;
+  }
+
+  .starters,
+  .bench {
+    margin-top: var(--size2);
+  }
+}

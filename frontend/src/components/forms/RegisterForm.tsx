@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from "./AuthForms.module.css";
-import Button from "../Button";
-import TextInput from "../TextInput";
+import Button from "../ui/Button";
+import TextInput from "../ui/TextInput";
 
 interface RegisterFormProps {
   username: string;

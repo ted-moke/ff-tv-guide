@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './HomePage.module.css';
-import MatchupGuide from '../components/MatchupGuide';
-import Overview from '../components/Overview';
+import MatchupGuide from '../features/games/MatchupGuide';
+import Overview from './Overview';
 import { useView } from '../features/view/ViewContext';
 
 const HomePage: React.FC = () => {

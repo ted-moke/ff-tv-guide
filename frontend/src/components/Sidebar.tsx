@@ -1,14 +1,14 @@
 import React from "react";
 import styles from "./Sidebar.module.css";
 import { Conference } from "../features/nfl/nflTypes";
-import MenuItem from "./MenuItem";
-import Checkbox from "./Checkbox";
-import Dropdown from "./Dropdown";
+import MenuItem from "./ui/MenuItem";
+import Checkbox from "./ui/Checkbox";
+import Dropdown from "./ui/Dropdown";
 import { SortOption, useView } from "../features/view/ViewContext";
 // import FantasyTeamOptions from "./FantasyTeamOptions";
 // import LinkButton from "./LinkButton";
 import { useAuth } from "../features/auth/useAuth";
-import Button, { ButtonColor } from "./Button";
+import Button, { ButtonColor } from "./ui/Button";
 import { useLocation } from "react-router-dom";
 
 const Sidebar: React.FC = () => {

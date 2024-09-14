@@ -1,0 +1,67 @@
+@import '../../styles/variables.css';
+
+.primary {
+    border-radius: var(--size1);
+    border: 1px solid transparent;
+    padding: var(--size1) var(--size2);
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    background-color: var(--primary-color);
+    color: var(--text-color-light);
+    cursor: pointer;
+    transition: background-color 0.25s, border-color 0.25s;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.primary:hover {
+    background-color: var(--primary-hover-color);
+    border-color: var(--text-color);
+}
+
+.primary:focus,
+.primary:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
+}
+
+.secondary {
+    border-radius: var(--size1);
+    border: 1px solid transparent;
+    padding: var(--size1) var(--size2);
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: background-color 0.25s, border-color 0.25s;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.secondary:hover {
+    background-color: var(--secondary-hover-color);
+}
+
+.secondary:focus,
+.secondary:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
+}
+
+.clear {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: 1px solid var(--text-color);
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.clear:hover {
+    background-color: var(--background-color-offset);
+    color: var(--primary-color);
+    border-color: var(--primary-color);
+}

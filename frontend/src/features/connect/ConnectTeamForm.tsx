@@ -4,10 +4,10 @@ import { usePlatforms } from '../platforms/usePlatforms';
 import { Platform } from '../platforms/platformTypes';
 import { createPlatformCredential } from './connectTeamAPI';
 import { useAuth } from '../auth/useAuth';
-import Dropdown from '../../components/Dropdown';
-import TextInput from '../../components/TextInput';
-import Button from '../../components/Button';
-import LinkButton from '../../components/LinkButton';
+import Dropdown from '../../components/ui/Dropdown';
+import TextInput from '../../components/ui/TextInput';
+import Button from '../../components/ui/Button';
+import LinkButton from '../../components/ui/LinkButton';
 import styles from './ConnectTeamForm.module.css';
 
 interface ConnectTeamFormProps {

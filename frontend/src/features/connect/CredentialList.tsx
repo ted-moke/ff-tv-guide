@@ -1,6 +1,6 @@
 import React from 'react';
 import { PlatformCredential } from '../platforms/platformTypes';
-import Button, { ButtonColor } from '../../components/Button';
+import Button, { ButtonColor } from '../../components/ui/Button';
 import styles from './CredentialList.module.css';
 
 interface CredentialListProps {

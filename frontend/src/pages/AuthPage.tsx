@@ -2,10 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../features/auth/useAuth";
 import styles from "./AuthPage.module.css";
-import LinkButton from "../components/LinkButton";
+import LinkButton from "../components/ui/LinkButton";
 import LoginForm from "../components/forms/LoginForm";
 import RegisterForm from "../components/forms/RegisterForm";
-import LoadingSpinner from "../components/LoadingSpinner";
+import LoadingSpinner from "../components/ui/LoadingSpinner";
 import FFTVGLogo from "../assets/FFTVGLogo";
 
 const AuthPage: React.FC = () => {
