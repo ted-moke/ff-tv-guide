@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import styles from "./Navigation.module.css";
 import Button, { ButtonColor } from "./ui/Button";
 import LinkButton from "./ui/LinkButton";
@@ -16,11 +15,9 @@ const Navigation: React.FC = () => {
 
   return (
     <nav className={styles.navigation}>
-      <Link to="/home">
-        <div className={styles.branding}>
-          <FFTVGLogo withText />
-        </div>
-      </Link>
+      <div className={styles.branding}>
+        <FFTVGLogo withText />
+      </div>
 
       <div className={styles.mobileMenuIcon} onClick={toggleMenu}>
         {isMenuOpen ? <Close /> : <Menu />}
@@ -31,9 +28,7 @@ const Navigation: React.FC = () => {
         <Button color={ButtonColor.CLEAR} link="/connect-team">
           Connect a League
         </Button>
-        <LinkButton onClick={logout}>
-          Logout
-        </LinkButton>
+        <LinkButton onClick={logout}>Logout</LinkButton>
       </div>
     </nav>
   );

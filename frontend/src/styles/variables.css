@@ -48,9 +48,9 @@
   --font-size-small: var(--size1);
   --font-size-medium: var(--size1_5);
   --font-size-large: var(--size2);
-  --font-size-xl: var(--size3);
-  --font-size-xxl: var(--size4);
-  --font-size-xxxl: var(--size5);
+  --font-size-xl: var(--size2_5);
+  --font-size-xxl: var(--size3);
+  --font-size-xxxl: var(--size4);
 }
  
 /* https://coolors.co/fca311-a14da0-357ded-95c623-cd4631 */

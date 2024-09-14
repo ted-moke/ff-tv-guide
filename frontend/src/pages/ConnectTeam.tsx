@@ -100,9 +100,6 @@ const ConnectTeam: React.FC = () => {
   return (
     <div className={styles.container}>
       <div>
-        <div className={`${styles.buttonGroup} ${styles.backButton}`}>
-          <LinkButton to="/home">Exit to Home</LinkButton>
-        </div>
         <h1 className={styles.title}>Connect Your Fantasy Team</h1>
 
         {!selectedCredential && !showNewCredentialForm && (
@@ -130,7 +127,6 @@ const ConnectTeam: React.FC = () => {
 
         {selectedCredential && (
           <div className={`${styles.connectTeamFormWrapper} ${styles.externalLeagueSelect}`}>
-            <h2>External Leagues</h2>
             {isLoadingLeagues && <div>Loading leagues...</div>}
             {leaguesError && (
               <div>
