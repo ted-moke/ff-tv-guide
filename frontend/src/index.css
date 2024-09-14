@@ -5,7 +5,6 @@
     line-height: 1.5;
     font-weight: 400;
   
-    color-scheme: light dark;
     color: var(--text-color);
     background-color: var(--background-color);
   
@@ -123,17 +122,3 @@
     margin-bottom: var(--size2);
   }
 
-
-  
-  @media (prefers-color-scheme: light) {
-    :root {
-      color: var(--text-color-light);
-      background-color: var(--background-color-light);
-    }
-    a:hover {
-      color: var(--primary-color-light);
-    }
-    button {
-      background-color: var(--background-color-light);
-    }
-  }
