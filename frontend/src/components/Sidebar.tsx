@@ -14,7 +14,7 @@ import { useLocation } from "react-router-dom";
 const Sidebar: React.FC = () => {
   const {
     viewMode,
-    setViewMode,
+    // setViewMode,
     activeConference,
     setActiveConference,
     sortBy,

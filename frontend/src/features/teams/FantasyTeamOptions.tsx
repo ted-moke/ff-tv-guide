@@ -1,13 +1,14 @@
 import React, { useMemo } from "react";
 import styles from "./FantasyTeamOptions.module.css";
 import LinkButton, { LinkButtonColor } from "../../components/ui/LinkButton";
-import Checkbox from "../../components/ui/Checkbox";
+// import Checkbox from "../../components/ui/Checkbox";
 import useUserTeams from "./useUserTeams";
 import { useView } from "../view/ViewContext";
 import { useNavigate } from "react-router-dom";
 
 const FantasyTeamOptions: React.FC = () => {
-  const { activeFantasyTeams, setActiveFantasyTeams, setIsMenuOpen } = useView();
+  // const { activeFantasyTeams, setActiveFantasyTeams, setIsMenuOpen } = useView();
+  const { setIsMenuOpen } = useView();
   const navigate = useNavigate();
   const { data: userTeams, isLoading, error } = useUserTeams();
 
