@@ -9,11 +9,15 @@ interface PlayerProps {
 
 const PlayerCondensed: React.FC<PlayerProps> = ({ player }) => {
   if (!player) return null;
+
+  const userTeams = player.copies.map(copy => copy.leagueName);
+  const uniqueUserTeams = [...new Set(userTeams)];
+
   return (
     <div
       key={player.name}
       className={styles.player}
-      title={`${player.userTeams.join("\n")}`}
+      title={`${uniqueUserTeams.join("\n")}`}
     >
       <p className={`${styles["player-team"]} ${styles[player.team]}`}>
         {player.team}
@@ -23,8 +27,12 @@ const PlayerCondensed: React.FC<PlayerProps> = ({ player }) => {
       </p>
       <p className={styles["player-name"]}>{player.name}</p>
       <div className={styles["player-user-teams"]}>
-        {player.userTeams.map((userTeam) => (
-          <Pip key={`${player.name}-${userTeam}`} type="self" style="full" />
+        {player.copies.map((copy, index) => (
+          <Pip 
+            key={`${player.name}-${copy.leagueId}-${index}`} 
+            type={copy.team} 
+            style={copy.rosterSlotType === 'starter' ? "full" : "outline"}
+          />
         ))}
       </div>
     </div>

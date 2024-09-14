@@ -1,9 +1,22 @@
-import { useMemo } from 'react';
-import { Player } from '../nfl/nflTypes';
-import useUserTeams from '../teams/useUserTeams';
+import { useMemo } from "react";
+import { Player, OwnedPlayer } from "../nfl/nflTypes";
+import useUserTeams from "../teams/useUserTeams";
 
 // Define the order of positions
-const positionOrder = ['QB', 'RB', 'WR', 'TE', 'K', 'DEF', 'DB', 'S', 'CB', 'DL', 'DE', 'LB'];
+const positionOrder = [
+  "QB",
+  "RB",
+  "WR",
+  "TE",
+  "K",
+  "DEF",
+  "DB",
+  "S",
+  "CB",
+  "DL",
+  "DE",
+  "LB",
+];
 
 // Custom sorting function
 const sortPlayers = (a: Player, b: Player) => {
@@ -22,46 +35,55 @@ const sortPlayers = (a: Player, b: Player) => {
   }
 };
 
-export const getPlayersByTeam = (teamCode: string, players: Player[]): { starters: Player[], others: Player[] } => {
-  const teamPlayers = players.filter(player => player.team === teamCode);
-  return {
-    starters: teamPlayers.filter(player => player.isStarter).sort(sortPlayers),
-    others: teamPlayers.filter(player => !player.isStarter).sort(sortPlayers),
-  };
-};
-
 export const usePlayers = () => {
   const { data: userTeams, isLoading, error } = useUserTeams();
+  debugger
 
-  const { starters, others } = useMemo(() => {
-    if (!userTeams) return { starters: [], others: [] };
+  const players: Player[] = useMemo(() => {
+    if (!userTeams) return [];
 
     const playerMap = new Map<string, Player>();
 
-    Object.values(userTeams).forEach((team) => {
-      team.playerData.forEach((player) => {
-        const key = player.name;
-        if (playerMap.has(key)) {
-          playerMap.get(key)?.userTeams.push(team.leagueName);
-          if (player.rosterSlotType === "start")
-            playerMap.get(key)!.isStarter = true;
-        } else {
+    userTeams.forEach(team => {
+      team.playerData.forEach(player => {
+        const key = `${player.name}-${player.team}`;
+        if (!playerMap.has(key)) {
           playerMap.set(key, {
-            ...player,
-            userTeams: [team.leagueName],
-            isStarter: player.rosterSlotType === "start",
+            name: player.name,
+            team: player.team,
+            position: player.position,
+            copies: []
           });
         }
+        const ownedPlayer: OwnedPlayer = {
+          leagueName: team.leagueName,
+          leagueId: team.leagueId,
+          rosterSlotType: player.rosterSlotType as 'start' | 'bench' | 'bestBall',
+          team: 'self'
+        };
+        playerMap.get(key)!.copies.push(ownedPlayer);
       });
     });
 
-    const allPlayers = Array.from(playerMap.values()).sort(sortPlayers);
-
-    return {
-      starters: allPlayers.filter((player) => player.isStarter),
-      others: allPlayers.filter((player) => !player.isStarter),
-    };
+    return Array.from(playerMap.values());
   }, [userTeams]);
 
-  return { players: { starters, others }, isLoading, error };
+  return { players, isLoading, error };
 };
+
+// Update getPlayersByTeam function to use the new Player type
+export const getPlayersByTeam = (
+  teamCode: string,
+  players: Player[]
+): { starters: Player[]; others: Player[] } => {
+  const teamPlayers = players.filter((player) => player.team === teamCode);
+  return {
+    starters: teamPlayers
+      .filter((player) => player.copies.some(copy => copy.rosterSlotType === 'start'))
+      .sort(sortPlayers),
+    others: teamPlayers
+      .filter((player) => !player.copies.some(copy => copy.rosterSlotType === 'start'))
+      .sort(sortPlayers),
+  };
+};
+

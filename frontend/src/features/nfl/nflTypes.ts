@@ -14,13 +14,17 @@ export interface NFLGame {
 //   fantasyTeams: string[];
 // }
 
+export interface OwnedPlayer {
+  leagueName: string;
+  leagueId: string;
+  rosterSlotType: 'start' | 'bench' | 'bestBall';
+  team: 'self' | 'opponent';
+}
 export interface Player {
   name: string;
   team: string;
   position: string;
-  rosterSlotType: string;
-  userTeams: string[];
-  isStarter: boolean;
+  copies: OwnedPlayer[];
 }
 
 export type Conference = 'AFC' | 'NFC' | 'Both';

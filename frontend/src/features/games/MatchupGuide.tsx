@@ -1,12 +1,10 @@
 import React from "react";
 import styles from "./MatchupGuide.module.css";
 import { formatDateToEastern } from "../../utils/dateUtils";
-import { usePlayers } from "../players/usePlayers";
 import Alert from "../../components/ui/Alert";
 import Player from "../players/Player";
-import { useWeeklySchedule } from "../../hooks/useWeeklySchedule";
-import { useProcessedSchedule } from "../../hooks/useProcessedSchedule";
 import PlayerCondensed from "../players/PlayerCondensed";
+import { useMatchupPlayers } from "../players/useMatchupPlayers";
 
 interface MatchupGuideProps {
   selectedWeek: number;
@@ -15,9 +13,7 @@ interface MatchupGuideProps {
 }
 
 const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
-  const { players, isLoading, error } = usePlayers();
-  const weeklySchedule = useWeeklySchedule(selectedWeek);
-  const processedSchedule = useProcessedSchedule(weeklySchedule, players);
+  const { matchupPlayers, isLoading, error } = useMatchupPlayers(selectedWeek);
 
   if (isLoading) return <div>Loading user teams...</div>;
   if (error) {
@@ -25,109 +21,82 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
     return <div>Error loading user teams: {(error as Error).message}</div>;
   }
 
-  // if processedSchedule is a string, return an empty array
-  if (typeof processedSchedule === "string") {
+  if (!matchupPlayers) {
     return <div>No games scheduled for this week.</div>;
   }
 
   return (
     <div className={styles["matchup-guide"]}>
-      <h2>Week {selectedWeek} Matchups</h2>
-      {players &&
-        players.starters.length === 0 &&
-        players.others.length === 0 && (
-          <Alert
-            message="No fantasy teams connected."
-            buttonText="Connect a Team"
-            onButtonClick={() => (window.location.href = "/connect-team")}
-          />
-        )}
-      {processedSchedule.length > 0 ? (
-        processedSchedule.map(([startTime, games], index) => {
-          if (typeof games === "string") {
-            return null;
-          }
-
-          return (
-            <div key={index} className={styles["game-group"]}>
-              <h3>
-                {formatDateToEastern(
-                  typeof startTime === "string" ? startTime.split(" ")[0] : "",
-                  typeof startTime === "string" ? startTime.split(" ")[1] : ""
-                )}
-              </h3>
-
-              <div className={styles["game-group-content"]}>
-                {games.map((game, gameIndex) => (
-                  <div key={gameIndex} className={styles.matchup}>
-                    <div className={styles["matchup-header"]}>
-                      <div className={styles["team-names"]}>
-                        <span className={styles["away-team"]}>
-                          {game.awayTeam?.code}
-                        </span>
-                        <span className={styles["at-symbol"]}>@</span>
-                        <span className={styles["home-team"]}>
-                          {game.homeTeam?.code}
-                        </span>
-                      </div>
-                      <div className={styles["matchup-subheader"]}>
-                        <div className={styles["player-count"]}>
-                          {game.hasPlayers
-                            ? `${game.starterCount} Starter${
-                                game.starterCount !== 1 ? "s" : ""
-                              } (${game.totalPlayers} total)`
-                            : "No Players"}
-                        </div>
-                        <div className={styles.channel}>{game.channel}</div>
-                      </div>
+      <h2>Week {matchupPlayers.weekNumber} Matchups</h2>
+      {matchupPlayers.games.upcoming.length === 0 &&
+       matchupPlayers.games.inProgress.length === 0 &&
+       matchupPlayers.games.completed.length === 0 && (
+        <Alert
+          message="No fantasy teams connected."
+          buttonText="Connect a Team"
+          onButtonClick={() => (window.location.href = "/connect-team")}
+        />
+      )}
+      {Object.entries(matchupPlayers.games).map(([status, games]) => (
+        <div key={status} className={styles["game-group"]}>
+          <h3>{status.charAt(0).toUpperCase() + status.slice(1)} Games</h3>
+          <div className={styles["game-group-content"]}>
+            {games.map((game, gameIndex) => (
+              <div key={gameIndex} className={styles.matchup}>
+                <div className={styles["matchup-header"]}>
+                  <div className={styles["team-names"]}>
+                    <span className={styles["away-team"]}>{game.awayTeam?.code}</span>
+                    <span className={styles["at-symbol"]}>@</span>
+                    <span className={styles["home-team"]}>{game.homeTeam?.code}</span>
+                  </div>
+                  <div className={styles["matchup-subheader"]}>
+                    <div className={styles["player-count"]}>
+                      {game.hasPlayers
+                        ? `${game.totals.self.starters + game.totals.opponent.starters} Starter${
+                            game.totals.self.starters + game.totals.opponent.starters !== 1 ? "s" : ""
+                          } (${game.totals.self.total + game.totals.opponent.total} total)`
+                        : "No Players"}
                     </div>
-                    {game.hasPlayers ? (
-                      <div className={styles["team-players"]}>
-                        {game.awayPlayers.starters.length > 0 ||
-                        game.homePlayers.starters.length > 0 ? (
-                          <>
-                            <div className={styles["starters"]}>
-                              <div className={styles["players-wrapper"]}>
-                                {game.awayPlayers.starters.map((player) => (
-                                  <PlayerCondensed
-                                    key={`${player.name}-away`}
-                                    player={player}
-                                  />
-                                ))}
-                                {game.homePlayers.starters.map((player) => (
-                                  <PlayerCondensed
-                                    key={`${player.name}-home`}
-                                    player={player}
-                                  />
-                                ))}
-                              </div>
-                            </div>
-                          </>
-                        ) : null}
-                        {game.awayPlayers.others.length > 0 ||
-                        game.homePlayers.others.length > 0 ? (
-                          <>
-                            <hr className={styles["player-divider"]} />
-                            <h4>My Bench</h4>
-                            <div className={styles["bench"]}>
-                              <Player players={game.awayPlayers.others} />
-                              <Player players={game.homePlayers.others} />
-                            </div>
-                          </>
-                        ) : null}
+                    <div className={styles.channel}>{game.channel}</div>
+                  </div>
+                </div>
+                {game.hasPlayers ? (
+                  <div className={styles["team-players"]}>
+                    {game.starters.length > 0 && (
+                      <div className={styles["starters"]}>
+                        <div className={styles["players-wrapper"]}>
+                          {game.starters.map((player) => (
+                            <PlayerCondensed
+                              key={`${player.name}-${player.team}`}
+                              player={player}
+                            />
+                          ))}
+                        </div>
                       </div>
-                    ) : (
-                      <p className={styles["no-players"]}>No fantasy players</p>
+                    )}
+                    {game.others.length > 0 && (
+                      <>
+                        <hr className={styles["player-divider"]} />
+                        <h4>My Bench</h4>
+                        <div className={styles["bench"]}>
+                          {game.others.map((player) => (
+                            <PlayerCondensed
+                              key={`${player.name}-${player.team}`}
+                              player={player}
+                            />
+                          ))}
+                        </div>
+                      </>
                     )}
                   </div>
-                ))}
+                ) : (
+                  <p className={styles["no-players"]}>No fantasy players</p>
+                )}
               </div>
-            </div>
-          );
-        })
-      ) : (
-        <p>No games scheduled for this week.</p>
-      )}
+            ))}
+          </div>
+        </div>
+      ))}
     </div>
   );
 };
