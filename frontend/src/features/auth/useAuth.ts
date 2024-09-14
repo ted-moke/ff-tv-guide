@@ -33,7 +33,8 @@ export const useAuth = () => {
 
   useEffect(() => {
     if (isSuccess && data && !data.authenticated) {
-      queryClient.setQueryData(["auth"], null);
+      _clearAuthData();
+
       if (location.pathname !== "/auth") {
         navigate("/");
       }
@@ -71,11 +72,14 @@ export const useAuth = () => {
   });
 
   const logout = () => {
-    // Implement logout functionality here
+    _clearAuthData();
+    navigate("/auth");
+  };
+
+  const _clearAuthData = () => {
     localStorage.removeItem("authToken");
     setIsAuthEnabled(false);
     queryClient.setQueryData(["auth"], null);
-    navigate("/auth");
   };
 
   return {

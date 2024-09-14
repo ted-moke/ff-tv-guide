@@ -25,7 +25,7 @@ withText = false,
   return (
     <div className={`${styles.logoWrapper} ${className}`}>
       <div className={styles.logoContainer}>
-        <LuTv fontSize={fontSize} />
+        <LuTv fontSize={fontSize} color="var(--primary-color)" />
         <h1 className={styles.logoText}>FF</h1>
       </div>
       {withText && <h1 className={styles.text}>TV Guide</h1>}

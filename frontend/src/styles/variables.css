@@ -1,4 +1,11 @@
 :root {
+
+  --color-red: #CD4631;
+  --color-blue: #357DED;
+  --color-green: #95C623;
+  --color-yellow: #FCA311;
+  --color-purple: #A14DA0;
+
   --background-color: #121212;
   --background-color-offset: #1a1a1a;
   --background-color-light: #e0e0e0;
@@ -6,15 +13,13 @@
   --text-color-muted: #a0a0a0;
   --text-color-light: #121212;
   --text-color-light-muted: #6e6e6e;
-  --primary-color: #F58A07;
-  --primary-hover-color: #C67006; 
-  --primary-active-color: #945704;
-  --secondary-color: #0B7A75;
-  --secondary-hover-color: #09605C;
-  --secondary-active-color: #074A46;
+  --primary-color: var(--color-yellow);
+  --primary-hover-color: #DE8A02; 
+  --primary-active-color: #DE8A02;
+  --secondary-color: var(--color-green);
+  --secondary-hover-color: #769C1C;
+  --secondary-active-color: #769C1C;
 
-  --color-red: #DB3069;
-  --color-blue: #84E6F8;
 
   /* 8-based sizing system */
   --size0_5: 4px;
@@ -33,5 +38,5 @@
   --size9: 72px;
   --size10: 80px;
 }
-
-/* https://coolors.co/fffafb-2b2c28-131515-f58a07-0b7a75 */
+ 
+/* https://coolors.co/fca311-a14da0-357ded-95c623-cd4631 */

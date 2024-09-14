@@ -54,6 +54,10 @@
     color: var(--primary-color);
   }
   
+  .player-position.K {
+    color: var(--color-purple);
+  }
+  
   .player-name {
     /* min-width: 100px; */
   }
