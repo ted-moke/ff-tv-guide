@@ -4,7 +4,7 @@ import styles from "./Navigation.module.css";
 import Button, { ButtonColor } from "./ui/Button";
 import LinkButton from "./ui/LinkButton";
 import { useAuth } from "../features/auth/useAuth";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { LuMenu as Menu, LuX as Close } from "react-icons/lu";
 import { useView } from "../features/view/ViewContext";
 import FFTVGLogo from "../assets/FFTVGLogo";
 
@@ -23,7 +23,7 @@ const Navigation: React.FC = () => {
       </Link>
 
       <div className={styles.mobileMenuIcon} onClick={toggleMenu}>
-        {isMenuOpen ? <FaTimes /> : <FaBars />}
+        {isMenuOpen ? <Close /> : <Menu />}
       </div>
 
       {/* Desktop menu */}

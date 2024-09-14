@@ -1,4 +1,5 @@
 @import "../../styles/variables.css";
+@import "../../styles/utils.css";
 
 .game-group {
   margin-bottom: var(--size4);
@@ -15,7 +16,6 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: var(--size2);
-  max-width: 500px;
 }
 
 .matchup {
@@ -25,18 +25,13 @@
   display: flex;
   flex-direction: column;
   min-height: 180px;
-  gap: var(--size2);
+  max-width: 500px;
 }
 
 .matchup-header {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: var(--size1) var(--size2);
-  border-bottom: 1px solid var(--border-color);
-  border-top-left-radius: var(--size0_5);
-  border-top-right-radius: var(--size0_5);
   gap: var(--size1);
 }
 
@@ -97,11 +92,6 @@
   width: 100%;
 }
 
-.players-wrapper > *:last-child {
-  margin-bottom: var(--size1);
-}
-
-
 .team-players h4 {
   margin-top: 0;
   margin-bottom: var(--size1);
@@ -115,11 +105,10 @@
   color: var(--text-color-secondary);
 }
 
-.player-divider {
-  grid-column: 1 / -1;
-  margin: 1rem 0;
+.divider {
+  margin: var(--size2) 0;
   border: none;
-  border-top: 1px solid var(--text-color-muted);
+  border-top: 1px solid var(--background-color-offset-2);
   width: 100%;
 }
 
@@ -128,9 +117,27 @@
   .bench-row {
     grid-template-columns: 1fr;
   }
+}
 
-  .starters,
-  .bench {
-    margin-top: var(--size2);
-  }
+.bench-button {
+  width: 100%;
+  text-align: left;
+  margin-bottom: var(--size2);
+}
+
+.bench-button-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--size1);
+}
+
+.self-starters {
+  color: var(--color-green);
+  font-weight: bold;
+}
+
+.opponent-starters {
+  color: var(--color-red);
+  font-weight: bold;
 }

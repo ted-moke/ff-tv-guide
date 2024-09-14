@@ -4,7 +4,7 @@ import { getTeamByName } from "../features/nfl/nflTeams";
 import { getPlayersByTeam } from "../features/players/usePlayers";
 import { BucketedGames } from "../hooks/useWeeklySchedule"; // Add this import
 
-interface ProcessedGame extends Omit<NFLGame, "awayTeam" | "homeTeam"> {
+export interface ProcessedGame extends Omit<NFLGame, "awayTeam" | "homeTeam"> {
   awayTeam: ReturnType<typeof getTeamByName>;
   homeTeam: ReturnType<typeof getTeamByName>;
   starters: Player[];

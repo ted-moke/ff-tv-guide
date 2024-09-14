@@ -8,10 +8,14 @@
   border: none;
   background: transparent;
   color: var(--text-color);
-  text-decoration: underline;
+  /* text-decoration: underline; */
   cursor: pointer;
   padding: var(--size1) var(--size2);
   font: inherit;
+}
+
+.underline {
+  text-decoration: underline;
 }
 
 .linkButton:hover {
@@ -41,5 +45,18 @@
 
 .secondaryLinkButton:focus,
 .secondaryLinkButton:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+.mutedLinkButton {
+  color: var(--text-color-muted);
+}
+
+.mutedLinkButton:hover {
+  color: var(--text-color-secondary);
+}
+
+.mutedLinkButton:focus,
+.mutedLinkButton:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }

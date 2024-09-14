@@ -33,7 +33,7 @@
   overflow-wrap: break-word; /* Allow long words to break */
 }
 
-.player-position.QB {
+/* .player-position.QB {
   color: var(--color-red);
 }
 
@@ -51,4 +51,4 @@
 
 .player-position.K {
   color: var(--color-purple);
-}
+} */

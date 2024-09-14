@@ -10,8 +10,7 @@ interface PlayerProps {
 const PlayerCondensed: React.FC<PlayerProps> = ({ player }) => {
   if (!player) return null;
 
-  const userTeams = player.copies.map(copy => copy.leagueName);
-  const uniqueUserTeams = [...new Set(userTeams)];
+  const uniqueUserTeams = [...new Set(player.copies.map(copy => copy.leagueName))];
 
   return (
     <div
@@ -31,7 +30,7 @@ const PlayerCondensed: React.FC<PlayerProps> = ({ player }) => {
           <Pip 
             key={`${player.name}-${copy.leagueId}-${index}`} 
             type={copy.team} 
-            style={copy.rosterSlotType === 'starter' ? "full" : "outline"}
+            style={copy.rosterSlotType === 'start' ? "full" : copy.rosterSlotType === 'bestBall' ? "stroked" : "dash"}
           />
         ))}
       </div>

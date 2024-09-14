@@ -35,34 +35,62 @@ const sortPlayers = (a: Player, b: Player) => {
   }
 };
 
+// Sorting function for copies
+const sortCopies = (a: OwnedPlayer, b: OwnedPlayer): number => {
+  const order = {
+    start: 0,
+    bestBall: 1,
+    bench: 2,
+  };
+  const teamOrder = {
+    self: 0,
+    opponent: 1,
+  };
+
+  if (a.rosterSlotType !== b.rosterSlotType) {
+    return order[a.rosterSlotType] - order[b.rosterSlotType];
+  }
+  if (a.team !== b.team) {
+    return teamOrder[a.team] - teamOrder[b.team];
+  }
+  return a.leagueName.localeCompare(b.leagueName);
+};
+
 export const usePlayers = () => {
   const { data: userTeams, isLoading, error } = useUserTeams();
-  debugger
 
   const players: Player[] = useMemo(() => {
     if (!userTeams) return [];
 
     const playerMap = new Map<string, Player>();
 
-    userTeams.forEach(team => {
-      team.playerData.forEach(player => {
+    userTeams.forEach((team) => {
+      team.playerData.forEach((player) => {
         const key = `${player.name}-${player.team}`;
         if (!playerMap.has(key)) {
           playerMap.set(key, {
             name: player.name,
             team: player.team,
             position: player.position,
-            copies: []
+            copies: [],
           });
         }
         const ownedPlayer: OwnedPlayer = {
           leagueName: team.leagueName,
           leagueId: team.leagueId,
-          rosterSlotType: player.rosterSlotType as 'start' | 'bench' | 'bestBall',
-          team: 'self'
+          rosterSlotType: player.rosterSlotType as
+            | "start"
+            | "bench"
+            | "bestBall",
+          team: "self",
         };
         playerMap.get(key)!.copies.push(ownedPlayer);
       });
+    });
+
+    // Sort copies for each player
+    playerMap.forEach((player) => {
+      player.copies.sort(sortCopies);
     });
 
     return Array.from(playerMap.values());
@@ -79,11 +107,15 @@ export const getPlayersByTeam = (
   const teamPlayers = players.filter((player) => player.team === teamCode);
   return {
     starters: teamPlayers
-      .filter((player) => player.copies.some(copy => copy.rosterSlotType === 'start'))
+      .filter((player) =>
+        player.copies.some((copy) => copy.rosterSlotType === "start")
+      )
       .sort(sortPlayers),
     others: teamPlayers
-      .filter((player) => !player.copies.some(copy => copy.rosterSlotType === 'start'))
+      .filter(
+        (player) =>
+          !player.copies.some((copy) => copy.rosterSlotType === "start")
+      )
       .sort(sortPlayers),
   };
 };
-
