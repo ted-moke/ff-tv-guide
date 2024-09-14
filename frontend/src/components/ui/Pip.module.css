@@ -1,0 +1,31 @@
+@import "../../styles/variables.css";
+
+.pip {
+    width: 8px;
+    height: 8px;
+    display: inline-block;
+}
+
+.self {
+    background-color: var(--color-green);
+}
+
+.opponent {
+    background-color: var(--color-red);
+}
+
+.full {
+    border-radius: 50%;
+}
+
+.stroked {
+    border: 2px solid currentColor;
+    border-radius: 50%;
+    background-color: transparent;
+}
+
+.dash {
+    width: 8px;
+    height: 2px;
+    background-color: currentColor;
+}

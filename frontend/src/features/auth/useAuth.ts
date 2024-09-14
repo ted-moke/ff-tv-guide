@@ -33,11 +33,16 @@ export const useAuth = () => {
 
   useEffect(() => {
     if (isSuccess && data && !data.authenticated) {
+      console.log("User is not authenticated, clearing auth data");
       _clearAuthData();
 
       if (location.pathname !== "/auth") {
         navigate("/");
       }
+    } else if (isSuccess && data && data.authenticated) {
+      console.log("User is authenticated, setting auth data");
+      // queryClient.setQueryData(["auth"], data);
+      // setIsAuthEnabled(true);
     }
   }, [isSuccess, data, location.pathname, navigate, queryClient]);
 
@@ -77,6 +82,7 @@ export const useAuth = () => {
   };
 
   const _clearAuthData = () => {
+    console.log("Clearing auth data");
     localStorage.removeItem("authToken");
     setIsAuthEnabled(false);
     queryClient.setQueryData(["auth"], null);

@@ -6,6 +6,7 @@ import Alert from "../../components/ui/Alert";
 import Player from "../players/Player";
 import { useWeeklySchedule } from "../../hooks/useWeeklySchedule";
 import { useProcessedSchedule } from "../../hooks/useProcessedSchedule";
+import PlayerCondensed from "../players/PlayerCondensed";
 
 interface MatchupGuideProps {
   selectedWeek: number;
@@ -88,13 +89,13 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
                             <div className={styles["starters"]}>
                               <div className={styles["players-wrapper"]}>
                                 {game.awayPlayers.starters.map((player) => (
-                                  <Player
+                                  <PlayerCondensed
                                     key={`${player.name}-away`}
                                     player={player}
                                   />
                                 ))}
                                 {game.homePlayers.starters.map((player) => (
-                                  <Player
+                                  <PlayerCondensed
                                     key={`${player.name}-home`}
                                     player={player}
                                   />

@@ -11,6 +11,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 // Set up auth state listener
 onAuthStateChanged(auth, async (user) => {
   if (user) {
+    console.log("User is signed in, grabbing new token and setting");
     const token = await user.getIdToken(true);  // Force token refresh
     localStorage.setItem("authToken", token);
   } else {
