@@ -13,6 +13,7 @@ export class FleaflickerService {
     externalLeagueId: string;
     platformCredentialId: string;
   }): Promise<League> {
+    console.log("FF Upserting league");
     const db = await getDb();
     const leaguesCollection = db.collection("leagues");
     const leagueData: League = {
@@ -36,24 +37,27 @@ export class FleaflickerService {
   }
 
   async upsertTeams(league: League) {
-    const db = await getDb();
-    const week = this.getCurrentWeek();
-    const season = this.getCurrentSeason();
-    const matchups = await this.fetchMatchups(
-      league.externalLeagueId,
-      week,
-      season,
-    );
-    const teamsCollection = db.collection("teams");
+    try {
+      console.log("FF Upserting teams");
+      const db = await getDb();
+      const week = this.getCurrentWeek();
+      const season = this.getCurrentSeason();
+      const matchups = await this.fetchMatchups(
+        league.externalLeagueId,
+        week,
+        season,
+      );
+      const teamsCollection = db.collection("teams");
 
-    for (const matchup of matchups) {
-      for (const teamData of matchup.teams) {
+      const addAndUpdateTeam = async (teamData: any, opponentId: string) => {
+        // console.log("FF Upserting team", teamData.id);
         const rosterData = await this.fetchRoster(
           league.externalLeagueId,
           teamData.id,
           season,
           week,
         );
+        // console.log("FF Roster data", rosterData);
         const team: Team = {
           externalTeamId: teamData.id,
           leagueId: league.id!,
@@ -61,15 +65,24 @@ export class FleaflickerService {
           name: teamData.name,
           externalUsername: rosterData.ownerName,
           externalUserId: rosterData.ownerId.toString(), // Store the Fleaflicker owner ID
-          opponentId:
-            matchup.teams.find((t: any) => t.id !== teamData.id)?.id || "",
+          opponentId: opponentId,
           playerData: this.processPlayerData(rosterData.groups),
         };
 
         await teamsCollection
           .doc(team.externalTeamId)
           .set(team, { merge: true });
+      };
+
+      for (const matchup of matchups) {
+        console.log("FF Matchup", matchups);
+
+        await addAndUpdateTeam(matchup.away, matchup.home.id);
+        await addAndUpdateTeam(matchup.home, matchup.away.id);
       }
+    } catch (error) {
+      console.error("Error upserting teams", error);
+      throw error;
     }
   }
 

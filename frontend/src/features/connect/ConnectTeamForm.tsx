@@ -9,6 +9,7 @@ import TextInput from '../../components/ui/TextInput';
 import Button from '../../components/ui/Button';
 import LinkButton from '../../components/ui/LinkButton';
 import styles from './ConnectTeamForm.module.css';
+import LoadingSpinner from '../../components/ui/LoadingSpinner';
 
 interface ConnectTeamFormProps {
   onSuccess: () => void;
@@ -21,6 +22,10 @@ const ConnectTeamForm: React.FC<ConnectTeamFormProps> = ({ onSuccess, onCancel }
   const { data: platforms, isLoading, error } = usePlatforms();
   const { user } = useAuth();
   const queryClient = useQueryClient();
+
+  const manuallyFilteredPlatforms = platforms?.filter(
+    (platform) => platform.id !== "fleaflicker"
+  );
 
   const mutation = useMutation({
     mutationFn: createPlatformCredential,
@@ -51,7 +56,7 @@ const ConnectTeamForm: React.FC<ConnectTeamFormProps> = ({ onSuccess, onCancel }
     }
   };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <LoadingSpinner />;
   if (error) return <div>Error fetching platforms: {(error as Error).message}</div>;
 
   return (
@@ -61,7 +66,7 @@ const ConnectTeamForm: React.FC<ConnectTeamFormProps> = ({ onSuccess, onCancel }
         label="Select Platform:"
         value={selectedPlatform?.id || ''}
         onChange={handlePlatformChange}
-        options={platforms ? platforms.map(platform => ({ value: platform.id, label: platform.name })) : []}
+        options={manuallyFilteredPlatforms ? manuallyFilteredPlatforms.map(platform => ({ value: platform.id, label: platform.name })) : []}
         placeholder="--Select a platform--"
         required
       />

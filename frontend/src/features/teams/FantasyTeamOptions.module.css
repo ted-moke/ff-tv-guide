@@ -1,0 +1,31 @@
+@import "../../styles/variables.css";
+
+
+.fantasy-team-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--size1);
+  }
+  
+  .fantasy-team-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: var(--size1);
+  }
+  
+  .fantasy-team-list-wrapper h3 {
+    margin-bottom: var(--size0_5);
+  }
+
+.fantasy-team-basic-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size1_5);
+  padding-left: var(--size1);
+}
+
+.fantasy-team-basic-list p {
+  font-size: var(--size-2);
+  color: var(--text-color-muted);
+  margin: 0;
+}

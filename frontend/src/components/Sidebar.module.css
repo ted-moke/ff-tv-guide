@@ -65,21 +65,6 @@
   margin-bottom: var(--size2);
 }
 
-.fantasy-team-actions {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: var(--size1);
-}
-
-.fantasy-team-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: var(--size1);
-}
-
-.fantasy-team-list-wrapper h3 {
-  margin-bottom: var(--size0_5);
-}
 
 .mobile-menu-items {
   display: none;

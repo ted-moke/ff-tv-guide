@@ -26,31 +26,26 @@ const AuthenticatedRoute: React.FC<{ element: React.ReactElement }> = ({
     return <LoadingSpinner />;
   }
 
-  return user ? <Layout>{element}</Layout> : <Navigate to="/" />;
+  console.log('user', user)
+
+  return user ? <Layout>{element}</Layout> : <Navigate to="/splash" />;
 };
 
 const AppRoutes: React.FC = () => {
-  const { user, isLoading } = useAuth();
-
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
-
   return (
     <Routes>
-      <Route
-        path="/"
-        element={user ? <Navigate to="/home" /> : <SplashPage />}
-      />
       <Route path="/auth" element={<AuthPage />} />
       <Route
-        path="/home"
+        path="/"
         element={<AuthenticatedRoute element={<HomePage />} />}
       />
       <Route
         path="/connect-team"
         element={<AuthenticatedRoute element={<ConnectTeam />} />}
       />
+      <Route path="/splash" element={<SplashPage />} />
+      {/* catch 404 errors */}
+      <Route path="*" element={<div>404: Page not found</div>} />
     </Routes>
   );
 };

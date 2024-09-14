@@ -3,6 +3,7 @@ import styles from "./MatchupGuide.module.css";
 import Alert from "../../components/ui/Alert";
 import { useMatchupPlayers } from "../players/useMatchupPlayers";
 import GameMatchup from "./GameMatchup";
+import LoadingSpinner from "../../components/ui/LoadingSpinner";
 
 interface MatchupGuideProps {
   selectedWeek: number;
@@ -13,7 +14,7 @@ interface MatchupGuideProps {
 const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
   const { matchupPlayers, isLoading, error } = useMatchupPlayers(selectedWeek);
 
-  if (isLoading) return <div>Loading user teams...</div>;
+  if (isLoading) return <LoadingSpinner />;
   if (error) {
     console.error("Error in MatchupGuide:", error);
     return <div>Error loading user teams: {(error as Error).message}</div>;

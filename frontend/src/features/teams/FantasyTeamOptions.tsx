@@ -1,9 +1,9 @@
 import React, { useMemo } from "react";
-import styles from "./Sidebar.module.css";
-import LinkButton, { LinkButtonColor } from "./LinkButton";
-import Checkbox from "./Checkbox";
-import useUserTeams from "../features/teams/useUserTeams";
-import { useView } from "../features/view/ViewContext";
+import styles from "./FantasyTeamOptions.module.css";
+import LinkButton, { LinkButtonColor } from "../../components/ui/LinkButton";
+import Checkbox from "../../components/ui/Checkbox";
+import useUserTeams from "./useUserTeams";
+import { useView } from "../view/ViewContext";
 import { useNavigate } from "react-router-dom";
 
 const FantasyTeamOptions: React.FC = () => {
@@ -19,27 +19,35 @@ const FantasyTeamOptions: React.FC = () => {
     }));
   }, [userTeams]);
 
-  const handleFantasyTeamToggle = (teamName: string) => {
-    setActiveFantasyTeams([...activeFantasyTeams, teamName]);
-  };
+  // const handleFantasyTeamToggle = (teamName: string) => {
+  //   setActiveFantasyTeams([...activeFantasyTeams, teamName]);
+  // };
 
-  const handleSelectAllFantasyTeams = () => {
-    setActiveFantasyTeams(fantasyTeams.map((team) => team.name));
-  };
+  // const handleSelectAllFantasyTeams = () => {
+  //   setActiveFantasyTeams(fantasyTeams.map((team) => team.name));
+  // };
 
-  const handleClearAllFantasyTeams = () => {
-    setActiveFantasyTeams([]);
-  };
+  // const handleClearAllFantasyTeams = () => {
+  //   setActiveFantasyTeams([]);
+  // };
 
   return (
     <div className={`${styles["control-group"]} ${styles["fantasy-team-list-wrapper"]}`}>
-      <h3>Fantasy Leagues</h3>
+      <h4>Fantasy Leagues</h4>
       {isLoading ? (
         <p>Loading leagues...</p>
       ) : error ? (
         <p>Error loading leagues: {(error as Error).message}</p>
       ) : (
-        <div className={styles["fantasy-team-list"]}>
+        <div className={styles["fantasy-team-basic-list"]}>
+            {fantasyTeams.map((team) => {
+              return (
+                <p key={team.league}>
+                  {team.league}
+                </p>
+              );
+            })}
+          {/*         <div className={styles["fantasy-team-list"]}>
           <div className={styles["fantasy-team-actions"]}>
             <LinkButton onClick={handleSelectAllFantasyTeams}>
               Select All
@@ -56,7 +64,7 @@ const FantasyTeamOptions: React.FC = () => {
               onChange={() => handleFantasyTeamToggle(team.league)}
               label={`${team.league}`}
             />
-          ))}
+          ))} */}
         </div>
       )}
       <div className={styles["connect-team-container"]}>

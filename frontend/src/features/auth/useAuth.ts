@@ -4,11 +4,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { AuthData } from "./authTypes";
 
-export const useAuth = () => {
+export const useAuth = ({ enabled = true }: { enabled?: boolean } = {}) => {
   const queryClient = useQueryClient();
   const location = useLocation();
   const navigate = useNavigate();
-  const [isAuthEnabled, setIsAuthEnabled] = useState(true);
+  const [isAuthEnabled, setIsAuthEnabled] = useState(enabled);
 
   const { data, isLoading, isError, isSuccess, error, refetch } = useQuery<
     AuthData | null,

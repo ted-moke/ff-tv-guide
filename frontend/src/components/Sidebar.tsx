@@ -5,7 +5,7 @@ import MenuItem from "./ui/MenuItem";
 import Checkbox from "./ui/Checkbox";
 import Dropdown from "./ui/Dropdown";
 import { SortOption, useView } from "../features/view/ViewContext";
-// import FantasyTeamOptions from "./FantasyTeamOptions";
+import FantasyTeamOptions from "../features/teams/FantasyTeamOptions";
 // import LinkButton from "./LinkButton";
 import { useAuth } from "../features/auth/useAuth";
 import Button, { ButtonColor } from "./ui/Button";
@@ -34,22 +34,20 @@ const Sidebar: React.FC = () => {
       <div className={styles["control-group"]}>
         <MenuItem
           text="TV Guide"
-          to="/home"
-          isActive={location.pathname === "/home" && viewMode === "matchup"}
+          to="/"
+          isActive={location.pathname === "/"}
           onClick={() => {
-            setViewMode("matchup");
             setIsMenuOpen(false);
           }}
         />
-        <MenuItem
+        {/* <MenuItem
           text="NFL Teams"
-          to="/home"
-          isActive={location.pathname === "/home" && viewMode === "overview"}
+          to="/nfl"
+          isActive={location.pathname === "/nfl"}
           onClick={() => {
-            setViewMode("overview");
             setIsMenuOpen(false);
           }}
-        />
+        /> */}
         <MenuItem
           text="Connect a League"
           to="/connect-team"
@@ -97,7 +95,7 @@ const Sidebar: React.FC = () => {
           </div>
         </>
       )}
-      {/* <FantasyTeamOptions /> */}
+      <FantasyTeamOptions />
       <div className={styles["mobile-menu-items"]}>
         <Button
           color={ButtonColor.CLEAR}

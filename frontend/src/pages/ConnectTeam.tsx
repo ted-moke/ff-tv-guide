@@ -22,6 +22,10 @@ const ConnectTeam: React.FC = () => {
   const { data: credentials, isLoading, error } = useCredentials();
   const { mutateAsync: connectLeague } = useConnectLeague();
 
+  const manuallyFilteredCredentials = credentials?.filter(
+    (credential) => credential.platformId !== "fleaflicker"
+  );
+
   const handleSelectCredential = (credential: PlatformCredential) => {
     setSelectedCredential(credential);
   };
@@ -103,10 +107,10 @@ const ConnectTeam: React.FC = () => {
 
         {!selectedCredential && !showNewCredentialForm && (
           <>
-            {credentials && credentials.length > 0 && (
+            {manuallyFilteredCredentials && manuallyFilteredCredentials.length > 0 && (
               <div className={styles.connectTeamFormWrapper}>
                 <CredentialList
-                  credentials={credentials as PlatformCredential[]}
+                  credentials={manuallyFilteredCredentials as PlatformCredential[]}
                   onSelectCredential={handleSelectCredential}
                 />
                 <LinkButton onClick={() => setShowNewCredentialForm(true)}>

@@ -21,7 +21,7 @@ const AuthPage: React.FC = () => {
     register,
     isLoading: authLoading,
     error: authError,
-  } = useAuth();
+  } = useAuth({ enabled: false });
   const location = useLocation();
   const navigate = useNavigate();
 

@@ -15,7 +15,7 @@
   top: 54%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: var(--size2);
+  font-size: var(--size3);
 }
 
 .logoWrapper h1 {

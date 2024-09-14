@@ -3,7 +3,7 @@ import styles from "./FFTVGLogo.module.css";
 
 const sizeMap = {
   small: {
-    fontSize: 40,
+    fontSize: 44,
     className: styles.small,
   },
   large: {
@@ -14,7 +14,7 @@ const sizeMap = {
 
 const FFTVGLogo = ({
   size = "small",
-withText = false,
+  withText = false,
 }: {
   size?: "small" | "large";
   withText?: boolean;

@@ -8,7 +8,6 @@
   border: none;
   background: transparent;
   color: var(--text-color);
-  /* text-decoration: underline; */
   cursor: pointer;
   padding: var(--size1) var(--size2);
   font: inherit;
@@ -19,7 +18,7 @@
 }
 
 .linkButton:hover {
-  color: var(--text-color-secondary);
+  color: var(--primary-hover-color);
 }
 
 .primaryLinkButton {

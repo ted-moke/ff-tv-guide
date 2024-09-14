@@ -33,11 +33,24 @@
   --size4: 32px;
   --size4_5: 36px;
   --size5: 40px;
+  --size5_5: 44px;
   --size6: 48px;
+  --size6_5: 52px;
   --size7: 56px;
+  --size7_5: 60px;
   --size8: 64px;
+  --size8_5: 68px;
   --size9: 72px;
+  --size9_5: 76px;
   --size10: 80px;
+  --size10_5: 84px;
+
+  --font-size-small: var(--size1);
+  --font-size-medium: var(--size1_5);
+  --font-size-large: var(--size2);
+  --font-size-xl: var(--size3);
+  --font-size-xxl: var(--size4);
+  --font-size-xxxl: var(--size5);
 }
  
 /* https://coolors.co/fca311-a14da0-357ded-95c623-cd4631 */
