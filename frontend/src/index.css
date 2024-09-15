@@ -82,7 +82,6 @@
   }
   
   button {
-    border-radius: var(--size1);
     border: 1px solid transparent;
     padding: var(--size1) var(--size2);
     font-size: 1em;

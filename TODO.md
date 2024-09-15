@@ -1,25 +1,14 @@
 # TODO
 
-big stuff
-1. remove team overview?
-2. disable ff sync
-3. x-domain
-4. x - logo
-5.  x - deploy
-6.  x - sign out
-7.  x - mobile
+## big stuff
 
-smaller
-1. x - remove or hook up select/deselect teams
-2. x - getWeek function on backend
-
-next
-1. sleeper/ff logos around
+1. launchh!!
+2. fleaflicker connect
 3. opponents
-4.  fleaflicker connect
-5. delete credential
-- schedule sync
-- filter by team
-- nfl team overview
-- connect league error handling UI
+4. schedule sync
+5. nfl team overview
+6. delete credential
+7. sleeper/ff logos around
 
+- filter by team
+- connect league error handling UI

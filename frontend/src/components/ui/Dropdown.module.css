@@ -4,7 +4,7 @@
   width: 100%;
   padding: var(--size1);
   border: 1px solid var(--background-color-offset);
-  border-radius: var(--size0_5);
+  border-radius: var(--border-radius-small);
   background-color: var(--background-color-offset);
   color: var(--text-color);
   font-size: 1rem;

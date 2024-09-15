@@ -3,7 +3,7 @@
   color: var(--alert-text-color);
   padding: var(--size2);
   border: 1px solid var(--primary-color);
-  border-radius: var(--size0_5);
+  border-radius: var(--border-radius-medium);
   display: flex;
   align-items: center;
   margin-bottom: var(--size2);

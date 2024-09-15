@@ -15,12 +15,12 @@
 }
 
 .full {
-    border-radius: 50%;
+    border-radius: var(--border-radius-full);
 }
 
 .stroked {
     border: 2px solid currentColor;
-    border-radius: 50%;
+    border-radius: var(--border-radius-full);
     background-color: transparent;
 }
 

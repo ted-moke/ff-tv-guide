@@ -51,6 +51,11 @@
   --font-size-xl: var(--size2_5);
   --font-size-xxl: var(--size3);
   --font-size-xxxl: var(--size4);
+
+  --border-radius-small: var(--size0_5);
+  --border-radius-medium: var(--size1);
+  --border-radius-large: var(--size2);
+  --border-radius-full: 50%;
 }
  
 /* https://coolors.co/fca311-a14da0-357ded-95c623-cd4631 */

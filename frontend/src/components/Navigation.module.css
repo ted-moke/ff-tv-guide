@@ -68,7 +68,7 @@
     height: var(--size5);
     align-items: center;
     justify-content: center;
-    border-radius: 10px;
+    border-radius: var(--border-radius-medium);
     border: 1px solid var(--background-color-offset-2);
   }
 

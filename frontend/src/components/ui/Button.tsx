@@ -19,7 +19,7 @@ const Button: React.FC<ButtonProps> = ({ link, onClick, color = ButtonColor.PRIM
   if (link) {
     return (
       <Link to={link} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <button className={className} onClick={onClick} {...props}>
+        <button className={`${className} ${styles.button}`} onClick={onClick} {...props}>
           {children}
         </button>
       </Link>
@@ -27,7 +27,7 @@ const Button: React.FC<ButtonProps> = ({ link, onClick, color = ButtonColor.PRIM
   }
 
   return (
-    <button onClick={onClick} className={className} {...props}>
+    <button onClick={onClick} className={`${className} ${styles.button}`} {...props}>
       {children}
     </button>
   );

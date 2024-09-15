@@ -1,5 +1,10 @@
 @import "../../styles/variables.css";
 
+.connect-team-container {
+  display: flex;
+  justify-content: center;
+  margin-top: var(--size1);
+}
 
 .fantasy-team-actions {
     display: flex;

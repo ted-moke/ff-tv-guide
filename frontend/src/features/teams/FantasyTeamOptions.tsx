@@ -33,7 +33,7 @@ const FantasyTeamOptions: React.FC = () => {
   // };
 
   return (
-    <div className={`${styles["control-group"]} ${styles["fantasy-team-list-wrapper"]}`}>
+    <div className={styles["fantasy-team-list-wrapper"]}>
       <h4>Fantasy Leagues</h4>
       {isLoading ? (
         <p>Loading leagues...</p>
@@ -41,13 +41,9 @@ const FantasyTeamOptions: React.FC = () => {
         <p>Error loading leagues: {(error as Error).message}</p>
       ) : (
         <div className={styles["fantasy-team-basic-list"]}>
-            {fantasyTeams.map((team) => {
-              return (
-                <p key={team.league}>
-                  {team.league}
-                </p>
-              );
-            })}
+          {fantasyTeams.map((team) => {
+            return <p key={team.league}>{team.league}</p>;
+          })}
           {/*         <div className={styles["fantasy-team-list"]}>
           <div className={styles["fantasy-team-actions"]}>
             <LinkButton onClick={handleSelectAllFantasyTeams}>
@@ -69,10 +65,15 @@ const FantasyTeamOptions: React.FC = () => {
         </div>
       )}
       <div className={styles["connect-team-container"]}>
-        <LinkButton color={LinkButtonColor.PRIMARY} onClick={() => {
-          setIsMenuOpen(false);
-          navigate("/connect-team");
-        }} >+ Connect Team</LinkButton>
+        <LinkButton
+          color={LinkButtonColor.PRIMARY}
+          onClick={() => {
+            setIsMenuOpen(false);
+            navigate("/connect-team");
+          }}
+        >
+          + Connect a League
+        </LinkButton>
       </div>
     </div>
   );

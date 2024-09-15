@@ -1,13 +1,16 @@
 @import '../../styles/variables.css';
 
-.primary {
-    border-radius: var(--size1);
+.button {
+    border-radius: var(--border-radius-medium);
     border: 1px solid transparent;
     padding: var(--size1) var(--size2);
     font-size: 1em;
     font-weight: 500;
     font-family: inherit;
     background-color: var(--primary-color);
+}
+
+.primary {
     color: var(--text-color-light);
     cursor: pointer;
     transition: background-color 0.25s, border-color 0.25s;
@@ -27,12 +30,6 @@
 }
 
 .secondary {
-    border-radius: var(--size1);
-    border: 1px solid transparent;
-    padding: var(--size1) var(--size2);
-    font-size: 1em;
-    font-weight: 500;
-    font-family: inherit;
     background-color: var(--secondary-color);
     color: var(--text-color);
     cursor: pointer;

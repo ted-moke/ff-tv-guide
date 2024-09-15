@@ -31,16 +31,17 @@ const Sidebar: React.FC = () => {
 
   return (
     <aside className={`${styles.sidebar} ${isMenuOpen ? styles.open : ""}`}>
-      <div className={styles["control-group"]}>
-        <MenuItem
-          text="TV Guide"
-          to="/"
-          isActive={location.pathname === "/"}
-          onClick={() => {
-            setIsMenuOpen(false);
-          }}
-        />
-        {/* <MenuItem
+      <div className={styles["sidebar-wrapper"]}>
+        <div className={styles["control-group"]}>
+          <MenuItem
+            text="TV Guide"
+            to="/"
+            isActive={location.pathname === "/"}
+            onClick={() => {
+              setIsMenuOpen(false);
+            }}
+          />
+          {/* <MenuItem
           text="NFL Teams"
           to="/nfl"
           isActive={location.pathname === "/nfl"}
@@ -48,64 +49,65 @@ const Sidebar: React.FC = () => {
             setIsMenuOpen(false);
           }}
         /> */}
-        <MenuItem
-          text="Connect a League"
-          to="/connect-team"
-          isActive={location.pathname === "/connect-team"}
-          onClick={() => setIsMenuOpen(false)}
-        />
-      </div>
-      {viewMode === "overview" && (
-        <>
-          <div className={styles["control-group"]}>
-            <h3>Conference</h3>
-            <div className={styles["conference-tabs"]}>
-              {(["AFC", "NFC", "Both"] as Conference[]).map((conf) => (
-                <MenuItem
-                  key={conf}
-                  text={conf}
-                  to="#"
-                  isActive={activeConference === conf}
-                  onClick={() => setActiveConference(conf)}
-                />
-              ))}
+          <MenuItem
+            text="Connect a League"
+            to="/connect-team"
+            isActive={location.pathname === "/connect-team"}
+            onClick={() => setIsMenuOpen(false)}
+          />
+        </div>
+        {viewMode === "overview" && (
+          <>
+            <div className={styles["control-group"]}>
+              <h3>Conference</h3>
+              <div className={styles["conference-tabs"]}>
+                {(["AFC", "NFC", "Both"] as Conference[]).map((conf) => (
+                  <MenuItem
+                    key={conf}
+                    text={conf}
+                    to="#"
+                    isActive={activeConference === conf}
+                    onClick={() => setActiveConference(conf)}
+                  />
+                ))}
+              </div>
             </div>
-          </div>
-          <div className={styles["control-group"]}>
-            <h3>Sort By</h3>
-            <Dropdown
-              id="sortBy"
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as SortOption)}
-              options={[
-                { value: "name", label: "Team Name" },
-                { value: "division", label: "Division" },
-                { value: "players", label: "Number of Players" },
-              ]}
-            />
-          </div>
-          <div className={styles["control-group"]}>
-            <h3>Display Options</h3>
-            <Checkbox
-              id="hideEmptyTeams"
-              checked={hideEmptyTeams}
-              onChange={() => setHideEmptyTeams(!hideEmptyTeams)}
-              label="Hide teams with no players"
-            />
-          </div>
-        </>
-      )}
-      <FantasyTeamOptions />
-      <div className={styles["mobile-menu-items"]}>
-        <Button
-          color={ButtonColor.CLEAR}
-          onClick={() => {
-            setIsMenuOpen(false);
-            logout();
-          }}
-        >
-          Logout
-        </Button>
+            <div className={styles["control-group"]}>
+              <h3>Sort By</h3>
+              <Dropdown
+                id="sortBy"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as SortOption)}
+                options={[
+                  { value: "name", label: "Team Name" },
+                  { value: "division", label: "Division" },
+                  { value: "players", label: "Number of Players" },
+                ]}
+              />
+            </div>
+            <div className={styles["control-group"]}>
+              <h3>Display Options</h3>
+              <Checkbox
+                id="hideEmptyTeams"
+                checked={hideEmptyTeams}
+                onChange={() => setHideEmptyTeams(!hideEmptyTeams)}
+                label="Hide teams with no players"
+              />
+            </div>
+          </>
+        )}
+        <FantasyTeamOptions />
+        <div className={styles["mobile-menu-items"]}>
+          <Button
+            color={ButtonColor.CLEAR}
+            onClick={() => {
+              setIsMenuOpen(false);
+              logout();
+            }}
+          >
+            Logout
+          </Button>
+        </div>
       </div>
     </aside>
   );
