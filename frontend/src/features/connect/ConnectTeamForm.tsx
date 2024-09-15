@@ -77,6 +77,7 @@ const ConnectTeamForm: React.FC<ConnectTeamFormProps> = ({ onSuccess, onCancel }
           id="credential"
           label={selectedPlatform.credentialType === 'email' ? 'Email:' : 'Username:'}
           value={credential}
+          placeholder={selectedPlatform.credentialType === 'email' ? 'Email' : 'Username'}
           onChange={(e) => setCredential(e.target.value)}
           required
         />

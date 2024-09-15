@@ -26,6 +26,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
         <TextInput
           type="text"
           id="username"
+          placeholder="Username"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
@@ -38,6 +39,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
         <TextInput
           type="email"
           id="email"
+          placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
@@ -50,6 +52,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
         <TextInput
           type="password"
           id="password"
+          placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required

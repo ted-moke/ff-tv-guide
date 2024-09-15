@@ -21,6 +21,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ email, setEmail, password, setPas
         </label>
         <TextInput
           type="email"
+          placeholder="Email"
           id="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -33,6 +34,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ email, setEmail, password, setPas
         <TextInput
           type="password"
           id="password"
+          placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />

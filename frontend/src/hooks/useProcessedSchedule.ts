@@ -135,8 +135,8 @@ export const useProcessedSchedule = (
     const processedGames: ProcessedGames = {
       weekNumber: weeklySchedule.weekNumber,
       games: {
-        upcoming: weeklySchedule.games.upcoming.map(processGameBucket),
         inProgress: weeklySchedule.games.inProgress.map(processGameBucket),
+        upcoming: weeklySchedule.games.upcoming.map(processGameBucket),
         completed: weeklySchedule.games.completed.map(processGameBucket),
       },
       hasPlayers: false,
