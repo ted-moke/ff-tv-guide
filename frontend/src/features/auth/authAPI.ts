@@ -8,16 +8,14 @@ import { AuthData } from "./authTypes";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-// Set up auth state listener
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    console.log("User is signed in, grabbing new token and setting");
-    const token = await user.getIdToken(true);  // Force token refresh
-    localStorage.setItem("authToken", token);
-  } else {
-    localStorage.removeItem("authToken");
-  }
-});
+// // Set up auth state listener
+// onAuthStateChanged(auth, async (user) => {
+//   if (user) {
+//     console.log("User is signed in, grabbing new token and setting");
+//     const token = await user.getIdToken();  // Force token refresh
+//     localStorage.setItem("authToken", token);
+//   }
+// });
 
 export const verifyToken = async (): Promise<AuthData> => {
   const token = localStorage.getItem("authToken");
@@ -68,7 +66,15 @@ export const registerUser = async (userData: {
     credentials: "include",
   });
   if (!response.ok) throw new Error("Failed to register user");
-  return response.json();
+  const data = await response.json();
+  
+  if (data.authenticated) {
+    localStorage.setItem("authToken", idToken);
+  } else {
+    throw new Error("Failed to login");
+  }
+
+  return data;
 };
 
 export const loginUser = async (credentials: {
@@ -90,5 +96,13 @@ export const loginUser = async (credentials: {
     credentials: "include",
   });
   if (!response.ok) throw new Error("Failed to login");
-  return response.json();
+
+  const data = await response.json();
+  if (data.authenticated) {
+    localStorage.setItem("authToken", idToken);
+  } else {
+    throw new Error("Failed to login");
+  }
+
+  return data;
 };
