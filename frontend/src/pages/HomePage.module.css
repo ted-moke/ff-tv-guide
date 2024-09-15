@@ -7,7 +7,6 @@
 
 .main-content {
   flex-grow: 1;
-  padding: 20px;
   overflow-y: auto;
   height: 100%;
   width: 100%; /* Add this to ensure full width */
@@ -16,10 +15,6 @@
 @media (max-width: 768px) {
   .sports-dashboard {
     flex-direction: column;
-  }
-
-  .main-content {
-    padding: 10px;
   }
 }
 

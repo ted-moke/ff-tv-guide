@@ -44,4 +44,5 @@
 
 .content {
   grid-area: content;
+  padding: var(--size2_5) var(--size2);
 }

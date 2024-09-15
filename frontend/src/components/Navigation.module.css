@@ -1,9 +1,10 @@
 .navigation {
-  background-color: var(--background-color);
-  padding: 1rem;
+  background-color: var(--background-color-offset);
+  padding: var(--size1) var(--size1_5);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 }
 
 .navigation ul {
@@ -62,7 +63,13 @@
   }
 
   .mobileMenuIcon {
-    display: block;
+    display: flex;
+    width: var(--size5);
+    height: var(--size5);
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    border: 1px solid var(--background-color-offset-2);
   }
 
 }

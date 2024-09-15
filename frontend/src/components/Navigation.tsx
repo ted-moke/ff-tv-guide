@@ -20,7 +20,7 @@ const Navigation: React.FC = () => {
       </div>
 
       <div className={styles.mobileMenuIcon} onClick={toggleMenu}>
-        {isMenuOpen ? <Close /> : <Menu />}
+        {isMenuOpen ? <Close /> : <Menu color="var(--text-color)" />}
       </div>
 
       {/* Desktop menu */}

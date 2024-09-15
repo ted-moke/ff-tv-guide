@@ -11,7 +11,7 @@ interface CredentialListProps {
 const CredentialList: React.FC<CredentialListProps> = ({ credentials, onSelectCredential }) => {
   return (
     <div className={styles.credentialList}>
-      <h2>Your Connected Accounts</h2>
+      <h3>Your Connected Accounts</h3>
       {credentials.map((credential) => (
         <div key={credential.credential} className={styles.credentialItem}>
           <span>{credential.platformId}: {credential.credential}</span>
