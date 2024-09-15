@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "./MatchupGuide.module.css";
+import styles from "./GameMatchup.module.css";
 import PlayerCondensed from "../players/PlayerCondensed";
 import { ProcessedGame } from "../../hooks/useProcessedSchedule";
 import { Player } from "../nfl/nflTypes";
@@ -61,15 +61,13 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game }) => {
       {game.hasPlayers ? (
         <div className={styles["team-players"]}>
           {game.starters.length > 0 && (
-            <div className={styles["starters"]}>
-              <div className={styles["players-wrapper"]}>
-                {game.starters.map((player: Player) => (
-                  <PlayerCondensed
-                    key={`${player.name}-${player.team}`}
-                    player={player}
-                  />
-                ))}
-              </div>
+            <div className={styles["players-wrapper"]}>
+              {game.starters.map((player: Player) => (
+                <PlayerCondensed
+                  key={`${player.name}-${player.team}`}
+                  player={player}
+                />
+              ))}
             </div>
           )}
           {game.starters.length > 0 && game.others.length > 0 && (
@@ -89,7 +87,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game }) => {
                 </div>
               </LinkButton>
               {isBenchExpanded && (
-                <div className={styles["bench"]}>
+                <div className={styles["players-wrapper"]}>
                   {game.others.map((player: Player) => (
                     <PlayerCondensed
                       key={`${player.name}-${player.team}`}

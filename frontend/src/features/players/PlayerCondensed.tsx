@@ -25,15 +25,21 @@ const PlayerCondensed: React.FC<PlayerProps> = ({ player }) => {
         {player.position}
       </p>
       <p className={styles["player-name"]}>{player.name}</p>
-      <div className={styles["player-user-teams"]}>
+      <div className={styles["player-user-teams-text"]}>
         {player.copies.map((copy, index) => (
-          <Pip 
-            key={`${player.name}-${copy.leagueId}-${index}`} 
-            type={copy.team} 
-            style={copy.rosterSlotType === 'start' ? "full" : copy.rosterSlotType === 'bestBall' ? "stroked" : "dash"}
-          />
+          <p key={`${player.name}-${copy.leagueId}-${index}`}>{copy.shortLeagueName}</p>
         ))}
       </div>
+      {/* // <div className={styles["player-user-teams"]}>
+      //   {player.copies.map((copy, index) => (
+      //     <p key={`${player.name}-${copy.leagueId}-${index}`}>{copy.shortLeagueName}</p>
+      //     <Pip 
+      //       key={`${player.name}-${copy.leagueId}-${index}`} 
+      //       type={copy.team} 
+      //       style={copy.rosterSlotType === 'start' ? "full" : copy.rosterSlotType === 'bestBall' ? "stroked" : "dash"}
+      //     />
+      //   ))}
+      // </div> */}
     </div>
   );
 };

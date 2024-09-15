@@ -16,6 +16,7 @@ export interface NFLGame {
 
 export interface OwnedPlayer {
   leagueName: string;
+  shortLeagueName: string;
   leagueId: string;
   rosterSlotType: 'start' | 'bench' | 'bestBall';
   team: 'self' | 'opponent';

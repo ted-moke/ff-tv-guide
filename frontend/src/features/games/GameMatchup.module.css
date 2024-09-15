@@ -1,0 +1,146 @@
+@import "../../styles/variables.css";
+@import "../../styles/utils.css";
+
+.matchup {
+  background-color: var(--background-color-offset);
+  border-radius: var(--size0_5);
+  padding: var(--size2);
+  display: flex;
+  flex-direction: column;
+  min-height: 180px;
+  max-width: 500px;
+}
+
+.matchup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--size1);
+}
+
+.matchup-subheader {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.team-names {
+  font-size: var(--size3);
+  font-weight: bold;
+  color: var(--text-color);
+  display: flex;
+  width: 100%;
+  gap: var(--size1);
+}
+
+.away-team,
+.home-team {
+  text-align: center;
+}
+
+.at-symbol {
+  margin: 0 var(--size1);
+  color: var(--text-color-muted);
+  font-weight: normal;
+}
+
+.total-players {
+  font-size: var(--size1_5);
+  color: var(--text-color-secondary);
+}
+
+.no-players-content {
+  justify-content: center;
+  align-items: center;
+}
+
+.team-players {
+  display: flex;
+  flex-direction: column;
+}
+
+.players-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.starters-row,
+.bench-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--size2);
+}
+
+.channel {
+  color: var(--text-color-muted);
+}
+
+.starters,
+.bench {
+  width: 100%;
+}
+
+.team-players h4 {
+  margin-top: 0;
+  margin-bottom: var(--size1);
+  font-size: var(--size2);
+  color: var(--text-color-muted);
+}
+
+.player-count {
+  text-align: center;
+  font-size: var(--size2);
+  color: var(--text-color-secondary);
+}
+
+.divider {
+  margin: var(--size2) 0;
+  border: none;
+  border-top: 1px solid var(--background-color-offset-2);
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .starters-row,
+  .bench-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.bench-button {
+  width: 100%;
+  text-align: left;
+  margin-bottom: var(--size2);
+}
+
+.bench-button-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--size1);
+}
+
+.self-starters {
+  color: var(--color-green);
+  font-size: var(--size3);
+  font-weight: bold;
+}
+
+.opponent-starters {
+  color: var(--color-red);
+  font-size: var(--size3);
+
+  font-weight: bold;
+}
+
+.starters-none {
+  color: var(--text-color-muted);
+}
+
+.no-teams {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+}
