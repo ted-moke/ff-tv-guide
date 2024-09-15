@@ -4,6 +4,7 @@ import Alert from "../../components/ui/Alert";
 import { useMatchupPlayers } from "../players/useMatchupPlayers";
 import GameMatchup from "./GameMatchup";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
+import { useNavigate } from "react-router-dom";
 
 interface MatchupGuideProps {
   selectedWeek: number;
@@ -12,7 +13,10 @@ interface MatchupGuideProps {
 }
 
 const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
-  const { matchupPlayers, isLoading, error } = useMatchupPlayers(selectedWeek);
+  const navigate = useNavigate();
+
+  const { hasPlayers, matchupPlayers, isLoading, error } =
+    useMatchupPlayers(selectedWeek);
 
   if (isLoading) return <LoadingSpinner />;
   if (error) {
@@ -24,27 +28,27 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
     return <div>No games scheduled for this week.</div>;
   }
 
+  if (!hasPlayers) {
+    return (
+      <div className={styles["no-teams"]}>
+        <Alert
+          message="It looks like you haven't connected any leagues yet. Connect a league to view your matchups."
+          buttonText="Connect a League"
+          onButtonClick={() => navigate("/connect-team")}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className={styles["matchup-guide"]}>
       <h2>Week {matchupPlayers.weekNumber} Matchups</h2>
-      {matchupPlayers.games.upcoming.length === 0 &&
-       matchupPlayers.games.inProgress.length === 0 &&
-       matchupPlayers.games.completed.length === 0 && (
-        <Alert
-          message="No fantasy teams connected."
-          buttonText="Connect a Team"
-          onButtonClick={() => (window.location.href = "/connect-team")}
-        />
-      )}
       {Object.entries(matchupPlayers.games).map(([status, games]) => (
         <div key={status} className={styles["game-group"]}>
           <h3>{status.charAt(0).toUpperCase() + status.slice(1)} Games</h3>
           <div className={styles["game-group-content"]}>
             {games.map((game, gameIndex) => (
-              <GameMatchup 
-                key={`${status}-${gameIndex}`}
-                game={game}
-              />
+              <GameMatchup key={`${status}-${gameIndex}`} game={game} />
             ))}
           </div>
         </div>

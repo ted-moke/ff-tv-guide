@@ -73,6 +73,13 @@ li {
   align-items: center;
 }
 
+.connectTeamFormContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: center;
+}
+
 .externalLeagueSelect h2,
 .externalLeagueSelect ul {
   margin-top: 0;

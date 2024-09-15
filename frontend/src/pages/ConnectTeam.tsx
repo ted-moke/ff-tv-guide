@@ -5,7 +5,7 @@ import useExternalLeagues from "../features/connect/useExternalLeagues";
 import ConnectTeamForm from "../features/connect/ConnectTeamForm";
 import CredentialList from "../features/connect/CredentialList";
 import Button from "../components/ui/Button";
-import LinkButton from "../components/ui/LinkButton"; // Add this import
+import LinkButton, { LinkButtonColor } from "../components/ui/LinkButton"; // Add this import
 import Checkbox from "../components/ui/Checkbox";
 import { PlatformCredential } from "../features/platforms/platformTypes";
 import { useConnectLeague } from "../features/league/useLeague";
@@ -100,22 +100,25 @@ const ConnectTeam: React.FC = () => {
   return (
     <div className={styles.container}>
       <div>
-        <h1 className={styles.title}>Connect Your Fantasy Team</h1>
+        <h1 className={styles.title}>Connect Your Fantasy League</h1>
 
         {!selectedCredential && !showNewCredentialForm && (
-          <>
-            {manuallyFilteredCredentials && manuallyFilteredCredentials.length > 0 && (
-              <div className={styles.connectTeamFormWrapper}>
-                <CredentialList
-                  credentials={manuallyFilteredCredentials as PlatformCredential[]}
-                  onSelectCredential={handleSelectCredential}
-                />
-                <LinkButton onClick={() => setShowNewCredentialForm(true)}>
-                  + Add New Credential
-                </LinkButton>
-              </div>
-            )}
-          </>
+          <div className={styles.connectTeamFormWrapper}>
+            {manuallyFilteredCredentials &&
+              manuallyFilteredCredentials.length > 0 && (
+                <div className={styles.connectTeamFormContainer}>
+                  <CredentialList
+                    credentials={
+                      manuallyFilteredCredentials as PlatformCredential[]
+                    }
+                    onSelectCredential={handleSelectCredential}
+                  />
+                </div>
+              )}
+            <LinkButton color={LinkButtonColor.PRIMARY} onClick={() => setShowNewCredentialForm(true)}>
+              + Add New Credential
+            </LinkButton>
+          </div>
         )}
 
         {showNewCredentialForm && (

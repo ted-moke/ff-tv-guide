@@ -47,7 +47,7 @@ export const useProcessedSchedule = (
             others: [],
             totals: {
               self: { starters: 0, bench: 0, total: 0, bestBall: 0 },
-              opponent: { starters: 0, bench: 0, total: 0, bestBall: 0 }
+              opponent: { starters: 0, bench: 0, total: 0, bestBall: 0 },
             },
             hasPlayers: false,
           };
@@ -61,16 +61,16 @@ export const useProcessedSchedule = (
 
         const totals = {
           self: { starters: 0, bench: 0, total: 0, bestBall: 0 },
-          opponent: { starters: 0, bench: 0, total: 0, bestBall: 0 }
+          opponent: { starters: 0, bench: 0, total: 0, bestBall: 0 },
         };
 
-        [...starters, ...others].forEach(player => {
-          player.copies.forEach(copy => {
-            const team = copy.team === 'self' ? totals.self : totals.opponent;
+        [...starters, ...others].forEach((player) => {
+          player.copies.forEach((copy) => {
+            const team = copy.team === "self" ? totals.self : totals.opponent;
             team.total++;
-            if (copy.rosterSlotType === 'start') team.starters++;
-            else if (copy.rosterSlotType === 'bench') team.bench++;
-            else if (copy.rosterSlotType === 'bestBall') team.bestBall++;
+            if (copy.rosterSlotType === "start") team.starters++;
+            else if (copy.rosterSlotType === "bench") team.bench++;
+            else if (copy.rosterSlotType === "bestBall") team.bestBall++;
           });
         });
 
@@ -91,6 +91,11 @@ export const useProcessedSchedule = (
     const inProgressGames = processGames(weeklySchedule.games.inProgress);
     const completedGames = processGames(weeklySchedule.games.completed);
 
+    const hasPlayers =
+      upcomingGames.some((game) => game.hasPlayers) ||
+      inProgressGames.some((game) => game.hasPlayers) ||
+      completedGames.some((game) => game.hasPlayers);
+
     return {
       weekNumber: weeklySchedule.weekNumber,
       games: {
@@ -98,6 +103,7 @@ export const useProcessedSchedule = (
         inProgress: inProgressGames,
         completed: completedGames,
       },
+      hasPlayers,
     };
   }, [weeklySchedule, players]);
 };

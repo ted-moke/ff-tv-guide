@@ -7,12 +7,19 @@
   display: flex;
   align-items: center;
   margin-bottom: var(--size2);
+  gap: var(--size1);
 }
 
 .alert p {
   margin: 0;
 }
 
-.alert button {
-  margin-left: var(--size2);
+@media (max-width: 768px) {
+  .alert {
+    flex-direction: column;
+  }
+
+  .alert button {
+    margin-top: var(--size1);
+  }
 }

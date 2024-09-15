@@ -11,6 +11,7 @@ export const useMatchupPlayers = (selectedWeek: number) => {
   const processedSchedule = useProcessedSchedule(weeklySchedule, players);
 
   return {
+    hasPlayers: processedSchedule?.hasPlayers,
     matchupPlayers: processedSchedule,
     isLoading,
     error
