@@ -91,6 +91,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game }) => {
                 <PlayerCondensed
                   key={`${player.name}-${player.team}`}
                   player={player}
+                  slotType="start"
                 />
               ))}
             </div>
@@ -117,6 +118,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game }) => {
                     <PlayerCondensed
                       key={`${player.name}-${player.team}`}
                       player={player}
+                      slotType="bench"
                     />
                   ))}
                 </div>

@@ -5,9 +5,10 @@ import styles from "./PlayerCondensed.module.css";
 
 interface PlayerProps {
   player: PlayerType;
+  slotType: "start" | "bench";
 }
 
-const PlayerCondensed: React.FC<PlayerProps> = ({ player }) => {
+const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotType }) => {
   if (!player) return null;
 
   const uniqueUserTeams = [...new Set(player.copies.map(copy => copy.leagueName))];
@@ -27,7 +28,7 @@ const PlayerCondensed: React.FC<PlayerProps> = ({ player }) => {
       <p className={styles["player-name"]}>{player.name}</p>
       <div className={styles["player-user-teams-text"]}>
         {player.copies.map((copy, index) => (
-          <p key={`${player.name}-${copy.leagueId}-${index}`}>{copy.shortLeagueName}</p>
+          copy.rosterSlotType === slotType && <p key={`${player.name}-${copy.leagueId}-${index}`}>{copy.shortLeagueName}</p>
         ))}
       </div>
       {/* // <div className={styles["player-user-teams"]}>

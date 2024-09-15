@@ -61,6 +61,7 @@ export const useProcessedSchedule = (
         ? getPlayersByTeam(homeTeam.code, players)
         : { starters: [], others: [] };
 
+
       const starters = [...awayPlayers.starters, ...homePlayers.starters];
       const others = [...awayPlayers.others, ...homePlayers.others];
 
@@ -69,13 +70,19 @@ export const useProcessedSchedule = (
         opponent: { starters: 0, bench: 0, total: 0, bestBall: 0 },
       };
 
-      [...starters, ...others].forEach((player) => {
+      starters.forEach((player) => {
         player.copies.forEach((copy) => {
           const team = copy.team === "self" ? totals.self : totals.opponent;
           team.total++;
           if (copy.rosterSlotType === "start") team.starters++;
-          else if (copy.rosterSlotType === "bench") team.bench++;
           else if (copy.rosterSlotType === "bestBall") team.bestBall++;
+        });
+      });
+      others.forEach((player) => {
+        player.copies.forEach((copy) => {
+          const team = copy.team === "self" ? totals.self : totals.opponent;
+          team.total++;
+          if (copy.rosterSlotType === "bench") team.bench++;
         });
       });
 

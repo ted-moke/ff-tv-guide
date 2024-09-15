@@ -114,6 +114,7 @@ export const getPlayersByTeam = (
   players: Player[]
 ): { starters: Player[]; others: Player[] } => {
   const teamPlayers = players.filter((player) => player.team === teamCode);
+
   return {
     starters: teamPlayers
       .filter((player) =>
@@ -123,7 +124,7 @@ export const getPlayersByTeam = (
     others: teamPlayers
       .filter(
         (player) =>
-          !player.copies.some((copy) => copy.rosterSlotType === "start")
+          player.copies.some((copy) => copy.rosterSlotType !== "start")
       )
       .sort(sortPlayers),
   };
