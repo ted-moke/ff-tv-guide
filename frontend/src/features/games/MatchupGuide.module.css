@@ -26,6 +26,7 @@
 .game-bucket h4 {
   color: var(--text-color-secondary);
   margin-bottom: var(--size1);
+  text-align: center;
 }
 
 .game-group-content {

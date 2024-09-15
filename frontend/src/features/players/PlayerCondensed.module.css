@@ -40,6 +40,7 @@
   white-space: normal; /* Allow wrapping */
   overflow-wrap: break-word; /* Allow long words to break */
   font-size: var(--font-size-medium);
+  line-height: 1.2;
 }
 
 .player-position.QB {
