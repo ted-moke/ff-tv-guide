@@ -8,19 +8,20 @@ import { AuthData } from "./authTypes";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-// // Set up auth state listener
-// onAuthStateChanged(auth, async (user) => {
-//   if (user) {
-//     console.log("User is signed in, grabbing new token and setting");
-//     const token = await user.getIdToken();  // Force token refresh
-//     localStorage.setItem("authToken", token);
-//   }
-// });
+// Set up auth state listener
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    console.log("User is signed in, grabbing new token and setting");
+    const token = await user.getIdToken();
+    localStorage.setItem("authToken", token);
+  }
+});
 
 export const verifyToken = async (): Promise<AuthData> => {
   const token = localStorage.getItem("authToken");
 
   if (!token) {
+    console.log("No token found");
     return { authenticated: false };
   }
 
@@ -67,10 +68,8 @@ export const registerUser = async (userData: {
   });
   if (!response.ok) throw new Error("Failed to register user");
   const data = await response.json();
-  
-  if (data.authenticated) {
-    localStorage.setItem("authToken", idToken);
-  } else {
+
+  if (!data.authenticated) {
     throw new Error("Failed to login");
   }
 
@@ -98,9 +97,7 @@ export const loginUser = async (credentials: {
   if (!response.ok) throw new Error("Failed to login");
 
   const data = await response.json();
-  if (data.authenticated) {
-    localStorage.setItem("authToken", idToken);
-  } else {
+  if (!data.authenticated) {
     throw new Error("Failed to login");
   }
 

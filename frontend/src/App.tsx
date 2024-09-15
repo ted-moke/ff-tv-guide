@@ -3,7 +3,6 @@ import {
   BrowserRouter as Router,
   Route,
   Routes,
-  Navigate,
 } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useAuth } from "./features/auth/useAuth";
@@ -27,9 +26,12 @@ const AuthenticatedRoute: React.FC<{ element: React.ReactElement }> = ({
     return <LoadingSpinner />;
   }
 
-  console.log('user', user)
+  if (!user) {
+    console.log('no user, navigating to splash');
+    return <SplashPage />;
+  }
 
-  return user ? <Layout>{element}</Layout> : <Navigate to="/splash" />;
+  return <Layout>{element}</Layout>;
 };
 
 const AppRoutes: React.FC = () => {

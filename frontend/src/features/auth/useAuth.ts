@@ -1,14 +1,28 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { verifyToken, loginUser, registerUser } from "./authAPI";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { AuthData } from "./authTypes";
+import { auth } from "../../firebaseConfig";
 
 export const useAuth = ({ enabled = true }: { enabled?: boolean } = {}) => {
   const queryClient = useQueryClient();
   const location = useLocation();
   const navigate = useNavigate();
   const [isAuthEnabled, setIsAuthEnabled] = useState(enabled);
+
+  const _clearAuthData = useCallback(() => {
+    setIsAuthEnabled(false);
+    localStorage.removeItem("authToken");
+    queryClient.setQueryData(["auth"], null);
+    auth.signOut();
+  }, [queryClient]);
+
+  const logout = () => {
+    _clearAuthData();
+
+    navigate("/auth");
+  };
 
   const { data, isLoading, isError, isSuccess, error, refetch } = useQuery<
     AuthData | null,
@@ -32,19 +46,23 @@ export const useAuth = ({ enabled = true }: { enabled?: boolean } = {}) => {
   }, [isError, error, location.pathname, navigate]);
 
   useEffect(() => {
-    if (isSuccess && data && !data.authenticated) {
-      console.log("User is not authenticated, clearing auth data");
-      _clearAuthData();
-
-      if (location.pathname !== "/auth") {
-        navigate("/");
+    if (isSuccess && isAuthEnabled && data) {
+      if (!data.authenticated) {
+        console.log("User is not authenticated, clearing auth data");
+        _clearAuthData();
+        if (location.pathname !== "/") {
+          navigate("/");
+        }
       }
-    } else if (isSuccess && data && data.authenticated) {
-      console.log("User is authenticated, setting auth data");
-      // queryClient.setQueryData(["auth"], data);
-      // setIsAuthEnabled(true);
     }
-  }, [isSuccess, data, location.pathname, navigate, queryClient]);
+  }, [
+    isSuccess,
+    isAuthEnabled,
+    data,
+    location.pathname,
+    _clearAuthData,
+    navigate,
+  ]);
 
   const user = data?.authenticated ? data : null;
 
@@ -75,18 +93,6 @@ export const useAuth = ({ enabled = true }: { enabled?: boolean } = {}) => {
       throw error;
     },
   });
-
-  const logout = () => {
-    _clearAuthData();
-    navigate("/auth");
-  };
-
-  const _clearAuthData = () => {
-    console.log("Clearing auth data");
-    localStorage.removeItem("authToken");
-    setIsAuthEnabled(false);
-    queryClient.setQueryData(["auth"], null);
-  };
 
   return {
     user,
