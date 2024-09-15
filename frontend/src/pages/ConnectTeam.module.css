@@ -1,6 +1,6 @@
 @import '../styles/variables.css';
 
-.container {
+.connectTeamPageContainer {
   display: flex;
   flex-direction: column;
   align-items: center;

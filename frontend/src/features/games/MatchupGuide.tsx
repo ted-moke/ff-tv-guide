@@ -41,7 +41,7 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
   }
 
   return (
-    <div className={styles["matchup-guide"]}>
+    <div className={`${styles["matchup-guide"]} page-container`}>
       <h2>Week {matchupPlayers.weekNumber} Matchups</h2>
       {Object.entries(matchupPlayers.games).map(([status, games]) => (
         <div key={status} className={styles["game-group"]}>

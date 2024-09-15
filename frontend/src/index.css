@@ -115,6 +115,11 @@
     padding: var(--size2);
   }
 
+  /* TODO look into above, its doing a bunch of BS, this one simples */
+  .page-container {
+    padding: var(--size2);
+  }
+
   .logo {
     width: var(--size10);
     height: auto;

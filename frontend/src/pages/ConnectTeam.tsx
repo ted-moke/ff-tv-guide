@@ -98,7 +98,7 @@ const ConnectTeam: React.FC = () => {
     return <div>Error loading credentials: {(error as Error).message}</div>;
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.connectTeamPageContainer} page-container`}>
       <div>
         <h1 className={styles.title}>Connect Your Fantasy League</h1>
 
