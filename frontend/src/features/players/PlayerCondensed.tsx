@@ -1,7 +1,7 @@
 import React from "react";
 import { Player as PlayerType } from "../nfl/nflTypes";
 import styles from "./PlayerCondensed.module.css";
-import Pip from "../../components/ui/Pip";
+// import Pip from "../../components/ui/Pip";
 
 interface PlayerProps {
   player: PlayerType;

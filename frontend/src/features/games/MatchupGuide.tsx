@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./MatchupGuide.module.css";
 import Alert from "../../components/ui/Alert";
 import { useMatchupPlayers } from "../players/useMatchupPlayers";
-import GameMatchup from "./GameMatchup";
+import GameBucketGroup from "./GameBucketGroup";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
 
@@ -43,15 +43,12 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
   return (
     <div className={`${styles["matchup-guide"]} page-container`}>
       <h2>Week {matchupPlayers.weekNumber} Matchups</h2>
-      {Object.entries(matchupPlayers.games).map(([status, games]) => (
-        <div key={status} className={styles["game-group"]}>
-          <h3>{status.charAt(0).toUpperCase() + status.slice(1)} Games</h3>
-          <div className={styles["game-group-content"]}>
-            {games.map((game, gameIndex) => (
-              <GameMatchup key={`${status}-${gameIndex}`} game={game} />
-            ))}
-          </div>
-        </div>
+      {Object.entries(matchupPlayers.games).map(([status, gameBuckets]) => (
+        <GameBucketGroup
+          key={status}
+          status={status}
+          gameBuckets={gameBuckets}
+        />
       ))}
     </div>
   );

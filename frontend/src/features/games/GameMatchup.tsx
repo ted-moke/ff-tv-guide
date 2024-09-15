@@ -7,6 +7,7 @@ import LinkButton, { LinkButtonColor } from "../../components/ui/LinkButton";
 import {
   LuChevronDown as ChevronDown,
   LuChevronRight as ChevronRight,
+  LuFlame as Flame,
 } from "react-icons/lu";
 
 interface GameMatchupProps {
@@ -32,29 +33,37 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game }) => {
           <div className={styles.channel}>{game.channel}</div>
         </div>
         <div className={styles["matchup-subheader"]}>
-          <div className={styles["player-count"]}>
-            {game.hasPlayers ? (
-              <>
-                <span
-                  className={`${styles["self-starters"]} ${
-                    game.starters.length === 0 ? styles["starters-none"] : ""
-                  }`}
-                >
-                  {game.totals.self.starters}
-                </span>
-                {"  Player"}
-                {game.starters.length !== 1 ? "s " : " "}
-                {"Starting"}
-                {/* {" vs "}
+          {game.hasPlayers ? (
+            <div
+              className={`${styles["player-count"]} ${
+                game.isTopGame ? styles["top-game"] : ""
+              }`}
+            >
+              <div
+                className={`${styles["self-starters"]} ${
+                  game.starters.length === 0 ? styles["starters-none"] : ""
+                }`}
+              >
+                {game.totals.self.starters}
+              </div>
+              <div>
+                {"  Starter"}
+                {game.totals.self.starters !== 1 ? "s " : " "}
+              </div>
+              {/* {" vs "}
                 <span className={styles["opponent-starters"]}>
                   {game.totals.opponent.starters}
                 </span>
                 {` (${game.totals.self.total + game.totals.opponent.total} total)`} */}
-              </>
-            ) : (
-              "No Players"
-            )}
-          </div>
+              {game.isTopGame && (
+                <div className={styles["top-game-badge"]}>
+                  <Flame size={20} />
+                </div>
+              )}
+            </div>
+          ) : (
+            <div>"No Players"</div>
+          )}
         </div>
       </div>
       <hr className={styles["divider"]} />
@@ -81,8 +90,8 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game }) => {
                 underline={false}
               >
                 <div className={styles["bench-button-content"]}>
-                  {game.others.length} Bench Player
-                  {game.others.length !== 1 ? "s" : ""}
+                  {game.totals.self.bench} Bench Player
+                  {game.totals.self.bench !== 1 ? "s" : ""}
                   {isBenchExpanded ? <ChevronDown /> : <ChevronRight />}
                 </div>
               </LinkButton>

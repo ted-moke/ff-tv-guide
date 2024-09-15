@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo } from "react";
 import { NFLGame } from "../features/nfl/nflTypes";
 import nflSchedule from "../assets/nfl-schedule-2024.json";
 
@@ -12,12 +12,19 @@ interface NFLSchedule {
   weeks: NflWeekSchedule[];
 }
 
+export interface GameBucket {
+  day: string;
+  startingHour: string;
+  games: NFLGame[];
+  fullDate: Date; // Added fullDate property
+}
+
 export interface BucketedGames {
   weekNumber: number;
   games: {
-    upcoming: NFLGame[];
-    inProgress: NFLGame[];
-    completed: NFLGame[];
+    upcoming: GameBucket[];
+    inProgress: GameBucket[];
+    completed: GameBucket[];
   };
 }
 
@@ -39,22 +46,57 @@ export const useWeeklySchedule = (selectedWeek: number) => {
       games: {
         upcoming: [],
         inProgress: [],
-        completed: []
-      }
+        completed: [],
+      },
     };
 
-    selectedWeekSchedule.games.forEach(game => {
-      const gameStartTime = new Date(`${game.date} ${game.time}`);
-      const gameEndTime = new Date(gameStartTime.getTime() + 4 * 60 * 60 * 1000); // Assuming 4 hours game duration
+    const addGameToBucket = (game: NFLGame, bucket: GameBucket[]) => {
+      const gameStartTime = new Date(`${game.date} ${game.time} EDT`);
+      const day = gameStartTime.toLocaleString("en-US", {
+        weekday: "long",
+        month: "numeric",
+        day: "numeric",
+      });
+      const startingHour = gameStartTime.toLocaleString("en-US", {
+        hour: "numeric",
+        hour12: true,
+      });
+
+      let existingBucket = bucket.find(
+        (b) => b.day === day && b.startingHour === startingHour
+      );
+      if (!existingBucket) {
+        existingBucket = { day, startingHour, games: [], fullDate: gameStartTime };
+        bucket.push(existingBucket);
+      }
+      existingBucket.games.push(game);
+    };
+
+    selectedWeekSchedule.games.forEach((game) => {
+      const gameStartTime = new Date(`${game.date} ${game.time} EDT`);
+      const gameEndTime = new Date(
+        gameStartTime.getTime() + 4 * 60 * 60 * 1000
+      ); // Assuming 4 hours game duration
 
       if (now < gameStartTime) {
-        bucketedGames.games.upcoming.push(game);
+        addGameToBucket(game, bucketedGames.games.upcoming);
       } else if (now >= gameStartTime && now <= gameEndTime) {
-        bucketedGames.games.inProgress.push(game);
+        addGameToBucket(game, bucketedGames.games.inProgress);
       } else {
-        bucketedGames.games.completed.push(game);
+        addGameToBucket(game, bucketedGames.games.completed);
       }
     });
+
+    // Sort buckets by fullDate
+    const sortBuckets = (buckets: GameBucket[]) => {
+      return buckets.sort((a, b) => a.fullDate.getTime() - b.fullDate.getTime());
+    };
+
+    bucketedGames.games.upcoming = sortBuckets(bucketedGames.games.upcoming);
+    bucketedGames.games.inProgress = sortBuckets(
+      bucketedGames.games.inProgress
+    );
+    bucketedGames.games.completed = sortBuckets(bucketedGames.games.completed);
 
     return bucketedGames;
   }, [selectedWeek]);

@@ -1,3 +1,14 @@
+.divider {
+  margin: var(--size2) 0;
+  border: none;
+  border-top: 1px solid var(--background-color-offset-2);
+  width: 100%;
+}
+
+.divider-light {
+  border-color: var(--text-color-muted);
+}
+
 .flex {
   display: flex;
 }
