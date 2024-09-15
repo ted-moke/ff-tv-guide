@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import styles from "./GameMatchup.module.css";
 import PlayerCondensed from "../players/PlayerCondensed";
-import { ProcessedGame } from "../../hooks/useProcessedSchedule";
+import {
+  ProcessedGame,
+} from "../../hooks/useProcessedSchedule";
 import { Player } from "../nfl/nflTypes";
 import LinkButton, { LinkButtonColor } from "../../components/ui/LinkButton";
 import {
@@ -21,6 +23,17 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game }) => {
     setIsBenchExpanded(!isBenchExpanded);
   };
 
+  // take date and time from bucket, assume the listed time is in EDT, and format it in the users time zone like "12:00 PM"
+  const formattedDate = new Date(`${game.date}T${game.time}`).toLocaleString(
+    "en-US",
+    {
+      timeZone: "America/New_York",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    }
+  );
+
   return (
     <div className={styles.matchup}>
       <div className={styles["matchup-header-container"]}>
@@ -30,7 +43,10 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game }) => {
             <span className={styles["at-symbol"]}>@</span>
             <span className={styles["home-team"]}>{game.homeTeam?.code}</span>
           </div>
-          <div className={styles.channel}>{game.channel}</div>
+          <div className={styles["matchup-header-right"]}>
+            <p className={styles.channel}>{game.channel}</p>
+            <p className={styles.date}>{formattedDate}</p>
+          </div>
         </div>
         <div className={styles["matchup-subheader"]}>
           {game.hasPlayers ? (

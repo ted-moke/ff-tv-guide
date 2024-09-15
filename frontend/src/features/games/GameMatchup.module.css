@@ -83,11 +83,19 @@
 .bench-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--size2);
+  gap: var(--size0_5);
 }
 
-.channel {
+.matchup-header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0;
+}
+
+.matchup-header-right p {
   color: var(--text-color-muted);
+  margin: 0;
 }
 
 .starters,
@@ -132,7 +140,7 @@
   gap: var(--size1);
 }
 
-.top-game  {
+.top-game {
   color: var(--color-yellow);
 }
 

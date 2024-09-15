@@ -34,6 +34,7 @@
 }
 
 .player-user-teams-text p {
+  font-family: monospace;
   color: var(--text-color-muted);
   margin-bottom: 0;
   white-space: normal; /* Allow wrapping */
