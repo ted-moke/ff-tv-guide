@@ -5,7 +5,6 @@ import { errorHandler } from "./middleware/errorMiddleware";
 import { seedDatabase } from "./seed";
 import platformRoutes from "./routes/platformRoutes";
 import leagueRoutes from "./routes/leagueRoutes";
-import teamRoutes from "./routes/teamRoutes";
 import teamPlayerRoutes from "./routes/teamPlayerRoutes";
 import userRoutes from "./routes/userRoutes";
 import platformCredentialRoutes from "./routes/platformCredentialRoutes";
@@ -47,7 +46,6 @@ app.use((req, res, next) => {
 app.use("/platforms", platformRoutes);
 app.use("/platform-credentials", platformCredentialRoutes);
 app.use("/leagues", leagueRoutes);
-app.use("/teams", teamRoutes);
 app.use("/team-players", teamPlayerRoutes);
 app.use("/users", userRoutes);
 app.use("/external-leagues", externalLeagueRoutes);
