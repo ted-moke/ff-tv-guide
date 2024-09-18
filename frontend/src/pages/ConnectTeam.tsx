@@ -133,10 +133,12 @@ const ConnectTeam: React.FC = () => {
       )}
 
       {showNewCredentialForm && (
-        <ConnectTeamForm
-          onSuccess={() => setShowNewCredentialForm(false)}
-          onCancel={handleCancelNewCredential}
-        />
+        <div className={styles.connectTeamFormWrapper}>
+          <ConnectTeamForm
+            onSuccess={() => setShowNewCredentialForm(false)}
+            onCancel={handleCancelNewCredential}
+          />
+        </div>
       )}
 
       {selectedCredential && (

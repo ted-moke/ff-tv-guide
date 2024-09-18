@@ -15,6 +15,7 @@ const positionOrder = [
   "CB",
   "DL",
   "DE",
+  "EDR",
   "LB",
 ];
 
