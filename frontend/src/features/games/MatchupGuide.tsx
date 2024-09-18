@@ -43,13 +43,16 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
   return (
     <div className={`${styles["matchup-guide"]} page-container`}>
       <h2>NFL Week {matchupPlayers.weekNumber}</h2>
-      {Object.entries(matchupPlayers.games).map(([status, gameBuckets]) => (
-        <GameBucketGroup
-          key={status}
-          status={status}
-          gameBuckets={gameBuckets}
-        />
-      ))}
+
+      {Object.entries(matchupPlayers.games)
+        .filter(([_, gameBuckets]) => gameBuckets.length > 0)
+        .map(([status, gameBuckets]) => (
+          <GameBucketGroup
+            key={status}
+            status={status}
+            gameBuckets={gameBuckets}
+          />
+        ))}
     </div>
   );
 };

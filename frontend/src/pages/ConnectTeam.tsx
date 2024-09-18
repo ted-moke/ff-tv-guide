@@ -103,87 +103,85 @@ const ConnectTeam: React.FC = () => {
 
   return (
     <div className={`${styles.connectTeamPageContainer} page-container`}>
-      <div>
+      <div className={styles.pageHeader}>
         <h1 className={styles.title}>Connect Your Fantasy League</h1>
         <p>
           To connect your league, you need to provide a credential (e.g. email
           OR username) for the platform you are using.
         </p>
-        {!selectedCredential && !showNewCredentialForm && (
-          <div className={styles.connectTeamFormWrapper}>
-            {manuallyFilteredCredentials &&
-              manuallyFilteredCredentials.length > 0 && (
-                <div className={styles.connectTeamFormContainer}>
-                  <CredentialList
-                    credentials={
-                      manuallyFilteredCredentials as PlatformCredential[]
-                    }
-                    onSelectCredential={handleSelectCredential}
-                  />
-                </div>
-              )}
-            <LinkButton
-              color={LinkButtonColor.PRIMARY}
-              onClick={() => setShowNewCredentialForm(true)}
-            >
-              + Add New Credential
-            </LinkButton>
-          </div>
-        )}
-
-        {showNewCredentialForm && (
-          <ConnectTeamForm
-            onSuccess={() => setShowNewCredentialForm(false)}
-            onCancel={handleCancelNewCredential}
-          />
-        )}
-
-        {selectedCredential && (
-          <div
-            className={`${styles.connectTeamFormWrapper} ${styles.externalLeagueSelect}`}
-          >
-            {isLoadingLeagues && <div>Loading leagues...</div>}
-            {leaguesError && (
-              <div>
-                Error loading leagues: {(leaguesError as Error).message}
+      </div>
+      {!selectedCredential && !showNewCredentialForm && (
+        <div className={styles.connectTeamFormWrapper}>
+          {manuallyFilteredCredentials &&
+            manuallyFilteredCredentials.length > 0 && (
+              <div className={styles.connectTeamFormContainer}>
+                <CredentialList
+                  credentials={
+                    manuallyFilteredCredentials as PlatformCredential[]
+                  }
+                  onSelectCredential={handleSelectCredential}
+                />
               </div>
             )}
-            {externalLeagues && (
-              <>
-                <div className={styles.selectButtons}>
-                  <LinkButton onClick={handleDeselectAll}>
-                    Deselect All
-                  </LinkButton>
-                  <LinkButton onClick={handleSelectAll}>Select All</LinkButton>
-                </div>
-                <ul>
-                  {externalLeagues.map((league) => (
-                    <li key={league.id}>
-                      <Checkbox
-                        id={league.id}
-                        checked={selectedLeagues.includes(league.id)}
-                        onChange={() => handleLeagueToggle(league.id)}
-                        label={league.name}
-                      />
-                    </li>
-                  ))}
-                </ul>
-              </>
-            )}
-            <div className={styles.buttonGroup}>
-              <LinkButton onClick={() => setSelectedCredential(null)}>
-                Back
-              </LinkButton>
-              <Button
-                onClick={handleSubmit}
-                disabled={selectedLeagues.length === 0 || isConnecting}
-              >
-                {isConnecting ? "Connecting..." : "Connect Selected Leagues"}
-              </Button>
-            </div>
+          <LinkButton
+            color={LinkButtonColor.PRIMARY}
+            onClick={() => setShowNewCredentialForm(true)}
+          >
+            + Add New Credential
+          </LinkButton>
+        </div>
+      )}
+
+      {showNewCredentialForm && (
+        <ConnectTeamForm
+          onSuccess={() => setShowNewCredentialForm(false)}
+          onCancel={handleCancelNewCredential}
+        />
+      )}
+
+      {selectedCredential && (
+        <div
+          className={`${styles.connectTeamFormWrapper} ${styles.externalLeagueSelect}`}
+        >
+          {isLoadingLeagues && <div>Loading leagues...</div>}
+          {leaguesError && (
+            <div>Error loading leagues: {(leaguesError as Error).message}</div>
+          )}
+          {externalLeagues && (
+            <>
+              <div className={styles.selectButtons}>
+                <LinkButton onClick={handleDeselectAll}>
+                  Deselect All
+                </LinkButton>
+                <LinkButton onClick={handleSelectAll}>Select All</LinkButton>
+              </div>
+              <ul>
+                {externalLeagues.map((league) => (
+                  <li key={league.id}>
+                    <Checkbox
+                      id={league.id}
+                      checked={selectedLeagues.includes(league.id)}
+                      onChange={() => handleLeagueToggle(league.id)}
+                      label={league.name}
+                    />
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
+          <div className={styles.buttonGroup}>
+            <LinkButton onClick={() => setSelectedCredential(null)}>
+              Back
+            </LinkButton>
+            <Button
+              onClick={handleSubmit}
+              disabled={selectedLeagues.length === 0 || isConnecting}
+            >
+              {isConnecting ? "Connecting..." : "Connect Selected Leagues"}
+            </Button>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
