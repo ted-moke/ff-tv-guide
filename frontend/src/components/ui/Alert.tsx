@@ -3,15 +3,17 @@ import styles from './Alert.module.css';
 import Button from './Button';
 
 interface AlertProps {
-  message: string;
+  message?: string;
   buttonText: string;
   onButtonClick: () => void;
+  children?: React.ReactNode;
 }
 
-const Alert: React.FC<AlertProps> = ({ message, buttonText, onButtonClick }) => {
+const Alert: React.FC<AlertProps> = ({ message, buttonText, onButtonClick, children }) => {
   return (
     <div className={styles.alert}>
-      <p>{message}</p>
+      { message && <p>{message}</p> }
+      { children }
       <Button onClick={onButtonClick}>{buttonText}</Button>
     </div>
   );
