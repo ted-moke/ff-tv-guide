@@ -7,6 +7,7 @@ import {
   FleaflickerTeam,
   Owner,
 } from "../../types/fleaflickerTypes";
+import { getCurrentWeek } from "../../utils/getCurrentWeek";
 
 export class FleaflickerService {
   async upsertLeague({
@@ -26,16 +27,22 @@ export class FleaflickerService {
       platform: { name: "fleaflicker", id: platformCredentialId },
       externalLeagueId,
     };
+
+    console.log("External league ID", externalLeagueId);
     const existingLeagueQuery = await leaguesCollection
       .where("externalLeagueId", "==", externalLeagueId)
       .limit(1)
       .get();
 
+    console.log("Existing league query", existingLeagueQuery.empty);
+
     if (!existingLeagueQuery.empty) {
+      console.log("League already exists");
       const existingLeagueDoc = existingLeagueQuery.docs[0];
       await existingLeagueDoc.ref.update({ ...leagueData });
       return { id: existingLeagueDoc.id, ...leagueData };
     } else {
+      console.log("League does not exist");
       const newLeagueRef = await leaguesCollection.add(leagueData);
       return { id: newLeagueRef.id, ...leagueData };
     }
@@ -45,7 +52,7 @@ export class FleaflickerService {
     try {
       console.log("FF Upserting teams");
       const db = await getDb();
-      const week = this.getCurrentWeek();
+      const week = getCurrentWeek();
       const season = this.getCurrentSeason();
       const matchups = await this.fetchMatchups(
         league.externalLeagueId,
@@ -88,9 +95,22 @@ export class FleaflickerService {
           playerData: this.processPlayerData(rosterData.groups),
         };
 
-        // Create new team with auto-generated ID
-        const newTeamRef = await teamsCollection.add(team);
-        await newTeamRef.update({ id: newTeamRef.id });
+        // Instead of using externalTeamId as the document ID, let's query for an existing team
+        const existingTeamQuery = await teamsCollection
+          .where("externalTeamId", "==", teamData.id.toString())
+          .where("leagueId", "==", league.id)
+          .limit(1)
+          .get();
+
+        if (!existingTeamQuery.empty) {
+          // Update existing team
+          const existingTeamDoc = existingTeamQuery.docs[0];
+          await existingTeamDoc.ref.update({ ...team, id: existingTeamDoc.id });
+        } else {
+          // Create new team with auto-generated ID
+          const newTeamRef = await teamsCollection.add(team);
+          await newTeamRef.update({ id: newTeamRef.id });
+        }
       };
 
       for (const matchup of matchups) {
@@ -114,6 +134,13 @@ export class FleaflickerService {
     userId: string;
     externalTeamId: string;
   }) {
+    console.log(
+      "Upserting user teams",
+      league.id,
+      externalUserId,
+      externalTeamId,
+      userId,
+    );
     const db = await getDb();
     const teamsCollection = db.collection("teams");
     const userTeamsCollection = db.collection("userTeams");
@@ -128,9 +155,8 @@ export class FleaflickerService {
       const team = teamDoc.data() as Team;
       if (
         team.externalUserId === externalUserId ||
-        team.externalTeamId === externalTeamIdString
+        team.externalTeamId.toString() === externalTeamIdString
       ) {
-        console.log("Found User team", team);
         await userTeamsCollection.add({
           userId: userId,
           teamId: teamDoc.id, // Use the internal team document ID
@@ -216,11 +242,6 @@ export class FleaflickerService {
         )
         .on("error", reject);
     });
-  }
-
-  private getCurrentWeek(): number {
-    // Implement logic to determine current NFL week
-    return 1; // Placeholder
   }
 
   private getCurrentSeason(): number {
