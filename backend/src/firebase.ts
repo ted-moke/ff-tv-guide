@@ -11,24 +11,28 @@ let dbInstance: admin.firestore.Firestore | null = null;
 let adminInstance: typeof admin | null = null;
 
 const initializeFirebase = async () => {
-  if (adminInstance) return; // Already initialized
-  console.log("Initializing Firebase. Production: ", isProduction);
+  try {
+    if (adminInstance) return; // Already initialized
+    console.log("Initializing Firebase. Production: ", isProduction);
 
-  const serviceAccount = isProduction
-    ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY || "")
-    : await getSecret("firestore_service_acc");
+    const serviceAccount = isProduction
+      ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY || "")
+      : await getSecret("firestore_service_acc");
 
-  admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount),
-    projectId: process.env.FB_PROJECT_ID,
-    storageBucket: process.env.FB_STORAGE_BUCKET,
-  });
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount),
+      projectId: process.env.FB_PROJECT_ID,
+      storageBucket: process.env.FB_STORAGE_BUCKET,
+    });
 
-  adminInstance = admin;
-  dbInstance = admin.firestore();
+    adminInstance = admin;
+    dbInstance = admin.firestore();
 
-  // Initialize Firestore collections
-  await initializeFirestore();
+    // Initialize Firestore collections
+    await initializeFirestore();
+  } catch (error) {
+    console.error("Error initializing Firebase:", error);
+  }
 };
 
 const initializeFirestore = async () => {

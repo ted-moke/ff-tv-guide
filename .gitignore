@@ -14,7 +14,7 @@ dist-ssr
 .env
 .env.*
 *.local
-functions/keys
+backend/keys
 lib/
 keys
 emulator-data/

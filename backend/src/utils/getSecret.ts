@@ -29,6 +29,6 @@ export async function getSecret(secretName: string, secretVersion = 1) {
 
     return JSON.parse(secretValue);
   } catch (error) {
-    console.error(error);
+    console.error(`Error getting secret: ${error}`);
   }
 }
