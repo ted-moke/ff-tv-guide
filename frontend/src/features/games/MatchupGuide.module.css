@@ -34,3 +34,10 @@
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: var(--size2);
 }
+
+.no-teams {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 60vh;
+}

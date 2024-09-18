@@ -22,9 +22,10 @@ const ConnectTeam: React.FC = () => {
   const { data: credentials, isLoading, error } = useCredentials();
   const { mutateAsync: connectLeague } = useConnectLeague();
 
-  const manuallyFilteredCredentials = credentials?.filter(
-    (credential) => credential.platformId !== "fleaflicker"
-  );
+  const manuallyFilteredCredentials = credentials;
+  // const manuallyFilteredCredentials = credentials?.filter(
+  //   (credential) => credential.platformId !== "fleaflicker"
+  // );
 
   const handleSelectCredential = (credential: PlatformCredential) => {
     setSelectedCredential(credential);
@@ -70,12 +71,15 @@ const ConnectTeam: React.FC = () => {
       try {
         const connectPromises = selectedLeagues.map((leagueId) => {
           const league = externalLeagues.find((l) => l.id === leagueId);
+          console.log("league", league);
+
           if (league) {
             return connectLeague({
               leagueName: league.name,
               externalLeagueId: league.id,
               platformCredentialId: selectedCredential.id,
               platformId: selectedCredential.platformId,
+              externalTeamId: league.ownedTeam?.id,
             });
           }
           return Promise.resolve();
@@ -101,7 +105,10 @@ const ConnectTeam: React.FC = () => {
     <div className={`${styles.connectTeamPageContainer} page-container`}>
       <div>
         <h1 className={styles.title}>Connect Your Fantasy League</h1>
-
+        <p>
+          To connect your league, you need to provide a credential (e.g. email
+          OR username) for the platform you are using.
+        </p>
         {!selectedCredential && !showNewCredentialForm && (
           <div className={styles.connectTeamFormWrapper}>
             {manuallyFilteredCredentials &&
@@ -115,7 +122,10 @@ const ConnectTeam: React.FC = () => {
                   />
                 </div>
               )}
-            <LinkButton color={LinkButtonColor.PRIMARY} onClick={() => setShowNewCredentialForm(true)}>
+            <LinkButton
+              color={LinkButtonColor.PRIMARY}
+              onClick={() => setShowNewCredentialForm(true)}
+            >
               + Add New Credential
             </LinkButton>
           </div>
@@ -129,7 +139,9 @@ const ConnectTeam: React.FC = () => {
         )}
 
         {selectedCredential && (
-          <div className={`${styles.connectTeamFormWrapper} ${styles.externalLeagueSelect}`}>
+          <div
+            className={`${styles.connectTeamFormWrapper} ${styles.externalLeagueSelect}`}
+          >
             {isLoadingLeagues && <div>Loading leagues...</div>}
             {leaguesError && (
               <div>

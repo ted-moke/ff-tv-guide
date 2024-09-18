@@ -5,6 +5,8 @@ import { Team } from "../models/team";
 export const getUserTeams = async (req: Request, res: Response) => {
   const userId = req.params.uid; // This should match the route parameter
 
+  console.log("Getting user teams for user:", userId);
+
   try {
     const db = await getDb();
     // Get user teams
@@ -20,6 +22,8 @@ export const getUserTeams = async (req: Request, res: Response) => {
       console.log("No teams found for user:", userId);
       return res.status(200).json({ teams: [] });
     }
+
+    console.log("Team IDs:", teamIds);
 
     // Fetch full team data
     const teamsSnapshot = await db

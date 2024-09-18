@@ -23,9 +23,10 @@ const ConnectTeamForm: React.FC<ConnectTeamFormProps> = ({ onSuccess, onCancel }
   const { user } = useAuth();
   const queryClient = useQueryClient();
 
-  const manuallyFilteredPlatforms = platforms?.filter(
-    (platform) => platform.id !== "fleaflicker"
-  );
+  const manuallyFilteredPlatforms = platforms;
+  // const manuallyFilteredPlatforms = platforms?.filter(
+  //   (platform) => platform.id !== "fleaflicker2"
+  // );
 
   const mutation = useMutation({
     mutationFn: createPlatformCredential,
@@ -48,7 +49,7 @@ const ConnectTeamForm: React.FC<ConnectTeamFormProps> = ({ onSuccess, onCancel }
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     if (selectedPlatform && user?.uid) {
-      mutation.mutate({
+      mutation.mutateAsync({
         platformId: selectedPlatform.id,
         userId: user.uid,
         credential: credential,

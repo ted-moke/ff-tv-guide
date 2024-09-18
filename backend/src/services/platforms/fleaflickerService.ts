@@ -2,6 +2,11 @@ import { getDb } from "../../firebase";
 import { League } from "../../models/league";
 import { Team, Player } from "../../models/team";
 import https from "https";
+import {
+  FleaflickerLeagueStandings,
+  FleaflickerTeam,
+  Owner,
+} from "../../types/fleaflickerTypes";
 
 export class FleaflickerService {
   async upsertLeague({
@@ -49,34 +54,46 @@ export class FleaflickerService {
       );
       const teamsCollection = db.collection("teams");
 
-      const addAndUpdateTeam = async (teamData: any, opponentId: string) => {
-        // console.log("FF Upserting team", teamData.id);
+      // Fetch league standings to get owner IDs
+      const leagueStandings = await this.fetchLeagueStandings(
+        league.externalLeagueId,
+      );
+      const teamOwners = new Map<string, Owner>(
+        leagueStandings.divisions.flatMap((division) =>
+          division.teams.map((team) => [team.id.toString(), team.owners[0]]),
+        ),
+      );
+
+      const addAndUpdateTeam = async (
+        teamData: FleaflickerTeam,
+        opponentId: string,
+      ) => {
         const rosterData = await this.fetchRoster(
           league.externalLeagueId,
-          teamData.id,
+          teamData.id.toString(),
           season,
           week,
         );
-        // console.log("FF Roster data", rosterData);
+        const owner = teamOwners.get(teamData.id.toString());
         const team: Team = {
-          externalTeamId: teamData.id,
+          externalTeamId: teamData.id.toString(),
           leagueId: league.id!,
           leagueName: league.name,
           name: teamData.name,
-          externalUsername: rosterData.ownerName,
-          externalUserId: rosterData.ownerId.toString(), // Store the Fleaflicker owner ID
+          externalUsername: owner ? owner.displayName : rosterData.ownerName,
+          externalUserId: owner
+            ? owner.id.toString()
+            : rosterData.ownerId.toString(),
           opponentId: opponentId,
           playerData: this.processPlayerData(rosterData.groups),
         };
 
-        await teamsCollection
-          .doc(team.externalTeamId)
-          .set(team, { merge: true });
+        // Create new team with auto-generated ID
+        const newTeamRef = await teamsCollection.add(team);
+        await newTeamRef.update({ id: newTeamRef.id });
       };
 
       for (const matchup of matchups) {
-        console.log("FF Matchup", matchups);
-
         await addAndUpdateTeam(matchup.away, matchup.home.id);
         await addAndUpdateTeam(matchup.home, matchup.away.id);
       }
@@ -89,27 +106,37 @@ export class FleaflickerService {
   async upsertUserTeams({
     league,
     externalUserId,
+    externalTeamId,
     userId,
   }: {
     league: League;
     externalUserId: string;
     userId: string;
+    externalTeamId: string;
   }) {
-    console.log("Upserting userTeams");
     const db = await getDb();
     const teamsCollection = db.collection("teams");
     const userTeamsCollection = db.collection("userTeams");
 
+    const externalTeamIdString = externalTeamId.toString();
+
     const teamsQuery = await teamsCollection
       .where("leagueId", "==", league.id)
       .get();
+
     for (const teamDoc of teamsQuery.docs) {
       const team = teamDoc.data() as Team;
-      if (team.externalUserId === externalUserId) {
+      if (
+        team.externalUserId === externalUserId ||
+        team.externalTeamId === externalTeamIdString
+      ) {
+        console.log("Found User team", team);
         await userTeamsCollection.add({
           userId: userId,
           teamId: teamDoc.id, // Use the internal team document ID
+          leagueId: league.id,
         });
+
         break; // We've found the user's team, no need to continue
       }
     }
@@ -155,17 +182,40 @@ export class FleaflickerService {
   }
 
   private processPlayerData(groups: any[]): Player[] {
-    return groups.flatMap((group: any) =>
-      group.slots.map((slot: any) => ({
-        name: slot.player.proPlayer.nameFull,
-        logicalName: slot.player.proPlayer.nameFull
-          .toLowerCase()
-          .replace(/\s/g, ""),
-        team: slot.player.proPlayer.nflTeam,
-        position: slot.player.proPlayer.position,
-        rosterSlotType: group.group === "START" ? "start" : "bench",
-      })),
-    );
+    const players: Player[] = [];
+    groups.forEach((group) => {
+      group.slots
+        .filter((slot: any) => slot.leaguePlayer)
+        .forEach((slot: any) => {
+          players.push({
+            name: slot.leaguePlayer.proPlayer.nameFull,
+            logicalName: slot.leaguePlayer.proPlayer.nameFull
+              .toLowerCase()
+              .replace(/\s/g, ""),
+            team: slot.leaguePlayer.proPlayer.proTeam.abbreviation,
+            position: slot.leaguePlayer.proPlayer.position,
+            rosterSlotType: group.group === "START" ? "start" : "bench",
+          });
+        });
+    });
+    return players;
+  }
+
+  private async fetchLeagueStandings(
+    externalLeagueId: string,
+  ): Promise<FleaflickerLeagueStandings> {
+    return new Promise((resolve, reject) => {
+      https
+        .get(
+          `https://www.fleaflicker.com/api/FetchLeagueStandings?sport=NFL&league_id=${externalLeagueId}`,
+          (res) => {
+            let data = "";
+            res.on("data", (chunk) => (data += chunk));
+            res.on("end", () => resolve(JSON.parse(data)));
+          },
+        )
+        .on("error", reject);
+    });
   }
 
   private getCurrentWeek(): number {

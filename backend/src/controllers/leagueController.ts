@@ -3,8 +3,13 @@ import { PlatformServiceFactory } from "../services/platforms/platformServiceFac
 import { getDb } from "../firebase";
 
 export const upsertLeague = async (req: Request, res: Response) => {
-  const { leagueName, externalLeagueId, platformCredentialId, platformId } =
-    req.body;
+  const {
+    leagueName,
+    externalLeagueId,
+    platformCredentialId,
+    platformId,
+    externalTeamId,
+  } = req.body;
 
   if (
     !leagueName ||
@@ -36,7 +41,13 @@ export const upsertLeague = async (req: Request, res: Response) => {
       platformCredentialId,
     });
     await platformService.upsertTeams(league);
-    await platformService.upsertUserTeams({ league, userId, externalUserId });
+
+    await platformService.upsertUserTeams({
+      league,
+      userId,
+      externalUserId,
+      externalTeamId,
+    });
     res.status(200).json({ message: "League connected successfully", league });
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });
