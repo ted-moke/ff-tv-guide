@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { Player, OwnedPlayer } from "../nfl/nflTypes";
 import { useUserTeams, useOpponentTeams } from "../teams/useUserTeams";
+import { FantasyTeam } from "../teams/teamTypes";
 
 // Define the order of positions
 const positionOrder = [
@@ -80,7 +81,7 @@ export const usePlayers = () => {
 
     const playerMap = new Map<string, Player>();
 
-    const processTeams = (teams: any[], teamType: "self" | "opponent") => {
+    const processTeams = (teams: FantasyTeam[], teamType: "self" | "opponent") => {
       teams.forEach((team) => {
         team.playerData.forEach((player) => {
           const key = `${player.name}-${player.team}`;

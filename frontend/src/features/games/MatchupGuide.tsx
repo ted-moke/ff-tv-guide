@@ -59,8 +59,8 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
           <Alert buttonText="Dismiss" onButtonClick={handleDismissAlert}>
             <div>
               <h4 style={{ marginBottom: "8px" }}>New features for Week 3</h4>
-              <ul style={{ margin: "0" }}>
-                <li>
+              <ul style={{ margin: "0", listStyle: "disc", padding: "var(--size1)" }}>
+                <li style={{ marginBottom: "0.5rem", listStyle: "disc" }}>
                   <div
                     style={{
                       display: "flex",
@@ -69,9 +69,20 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
                     }}
                   >
                     <img src={logoFF} width={20} />
-                    <p>Fleaflicker integration!! <LinkButton to="/connect-team">Connect a league now</LinkButton></p>
-                    
+                    <p>
+                      Fleaflicker integration!!{" "}
+                      <LinkButton to="/connect-team">
+                        Connect a league now
+                      </LinkButton>
+                    </p>
                   </div>
+                </li>
+                <li style={{ marginBottom: "0.5rem", listStyle: "disc" }}>
+                  <p>
+                    See your opponents' owned players in{" "}
+                    <span style={{ color: "var(--color-red)" }}>red</span> and yours in{" "}
+                    <span style={{ color: "var(--color-green)" }}>green</span>
+                  </p>
                 </li>
               </ul>
             </div>

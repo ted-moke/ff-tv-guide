@@ -32,9 +32,9 @@ export const useUserTeams = () => {
 export const useOpponentTeams = () => {
   const { user } = useAuth();
 
-  return useQuery({
+  return useQuery<FantasyTeam[]>({
     queryKey: ['opponentTeams', user?.uid],
-    queryFn: async () => {
+    queryFn: async (): Promise<FantasyTeam[]> => {
       if (!user) throw new Error('User not authenticated');
       const response = await fetch(`${API_URL}/users/${user.uid}/opponents`, {
         method: 'GET',
