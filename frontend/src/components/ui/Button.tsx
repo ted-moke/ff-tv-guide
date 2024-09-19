@@ -14,6 +14,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const Button: React.FC<ButtonProps> = ({ link, onClick, color = ButtonColor.PRIMARY, children, ...props }) => {
+  console.log('color',color)
   const className = styles[color];
 
   if (link) {

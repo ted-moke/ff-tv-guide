@@ -123,12 +123,21 @@ const ConnectTeam: React.FC = () => {
                 />
               </div>
             )}
-          <LinkButton
-            color={LinkButtonColor.PRIMARY}
-            onClick={() => setShowNewCredentialForm(true)}
-          >
-            + Add New Credential
-          </LinkButton>
+          {credentials && credentials.length > 0 ? (
+            <LinkButton
+              color={LinkButtonColor.PRIMARY}
+              onClick={() => setShowNewCredentialForm(true)}
+            >
+              + Add New Credential
+            </LinkButton>
+          ) : (
+            <>
+            <p>No credentials found</p>
+            <Button onClick={() => setShowNewCredentialForm(true)}>
+              + Add New Credential
+            </Button>
+            </>
+          )}
         </div>
       )}
 

@@ -29,8 +29,61 @@ export const connectLeague = async ({
   });
 
   if (!response.ok) {
-    throw new Error("Failed to connect league");
+    throw new Error('Failed to connect league');
   }
 
   return response.json();
 };
+
+export const updateAllLeagues = async () => {
+  const response = await fetch(`${API_URL}/leagues/update-all`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to update leagues');
+  }
+
+  return response.json();
+};
+
+export const getLeaguesPaginated = async (page: number, limit: number, startAfter?: string) => {
+  const url = new URL(`${API_URL}/leagues`);
+  url.searchParams.append('page', page.toString());
+  url.searchParams.append('limit', limit.toString());
+  if (startAfter) {
+    url.searchParams.append('startAfter', startAfter);
+  }
+
+  const response = await fetch(url.toString(), {
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to fetch leagues');
+  }
+
+  return response.json();
+};
+
+export const syncLeague = async (leagueId: string) => {
+  const response = await fetch(`${API_URL}/leagues/${leagueId}/sync`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to sync league');
+  }
+
+  return response.json();
+};
+

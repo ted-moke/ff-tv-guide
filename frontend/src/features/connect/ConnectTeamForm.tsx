@@ -85,7 +85,7 @@ const ConnectTeamForm: React.FC<ConnectTeamFormProps> = ({ onSuccess, onCancel }
       )}
 
       <div className={styles.buttonGroup}>
-        <LinkButton onClick={onCancel}>Cancel</LinkButton>
+        <LinkButton type="button" onClick={onCancel}>Cancel</LinkButton>
         <Button type="submit" disabled={!selectedPlatform || mutation.isPending}>
           {mutation.isPending ? 'Connecting...' : 'Connect'}
         </Button>

@@ -1,0 +1,33 @@
+@import "../../styles/variables.css";
+
+.leagueList {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--size2);
+}
+
+.leagueCards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size2);
+}
+
+.leagueCard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid var(--background-color-offset-2);
+  border-radius: var(--border-radius-medium);
+  padding: var(--size2);
+  background-color: var(--background-color-offset);
+  color: var(--text-color);
+}
+
+.leagueInfo {
+  flex-grow: 1;
+}
+
+.loadMoreButton {
+  margin-top: var(--size2);
+  align-self: center;
+}

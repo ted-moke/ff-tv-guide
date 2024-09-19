@@ -29,10 +29,12 @@ export class SleeperService {
     leagueName,
     externalLeagueId,
     platformCredentialId,
+    lastModified,
   }: {
     leagueName: string;
     externalLeagueId: string;
     platformCredentialId: string;
+    lastModified: Date;
   }): Promise<League> {
     console.log(
       "Starting upsert league: ",
@@ -45,6 +47,7 @@ export class SleeperService {
       name: leagueName,
       platform: { name: "sleeper", id: platformCredentialId },
       externalLeagueId,
+      lastModified,
     };
     const existingLeagueQuery = await leaguesCollection
       .where("externalLeagueId", "==", externalLeagueId)
@@ -165,14 +168,21 @@ export class SleeperService {
     }
   }
 
-  private async fetchMatchups(externalLeagueId: string, week: number): Promise<any> {
-    await ApiTrackingService.trackApiCall('sleeper', 'GET leagues/matchups');
-    return fetchFromUrl(`https://api.sleeper.app/v1/league/${externalLeagueId}/matchups/${week}`);
+  private async fetchMatchups(
+    externalLeagueId: string,
+    week: number,
+  ): Promise<any> {
+    await ApiTrackingService.trackApiCall("sleeper", "GET leagues/matchups");
+    return fetchFromUrl(
+      `https://api.sleeper.app/v1/league/${externalLeagueId}/matchups/${week}`,
+    );
   }
 
   private async fetchRosters(externalLeagueId: string): Promise<any> {
-    await ApiTrackingService.trackApiCall('sleeper', 'GET leagues/rosters');
-    return fetchFromUrl(`https://api.sleeper.app/v1/league/${externalLeagueId}/rosters`);
+    await ApiTrackingService.trackApiCall("sleeper", "GET leagues/rosters");
+    return fetchFromUrl(
+      `https://api.sleeper.app/v1/league/${externalLeagueId}/rosters`,
+    );
   }
 
   private processPlayerData(players: string[], starters: string[]): Player[] {
@@ -184,9 +194,19 @@ export class SleeperService {
             console.warn(`Player info not found for ID: ${playerId}`);
             return null;
           }
+
+          let fullName = playerInfo.full_name;
+          let logicalName = playerInfo.full_name
+            ?.toLowerCase()
+            .replace(/\s/g, "");
+          if (!fullName && playerInfo.position === "DEF") {
+            fullName = playerInfo.player_id;
+            logicalName = playerInfo.player_id.toLowerCase().replace(/\s/g, "");
+          }
+
           return {
-            name: playerInfo.full_name,
-            logicalName: playerInfo.full_name.toLowerCase().replace(/\s/g, ""),
+            name: fullName,
+            logicalName: logicalName,
             team: playerInfo.team,
             position: playerInfo.position,
             rosterSlotType: starters.includes(playerId) ? "start" : "bench",

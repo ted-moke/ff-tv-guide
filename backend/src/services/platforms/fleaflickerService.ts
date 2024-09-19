@@ -15,10 +15,12 @@ export class FleaflickerService {
     leagueName,
     externalLeagueId,
     platformCredentialId,
+    lastModified,
   }: {
     leagueName: string;
     externalLeagueId: string;
     platformCredentialId: string;
+    lastModified: Date;
   }): Promise<League> {
     console.log("FF Upserting league");
     const db = await getDb();
@@ -27,6 +29,7 @@ export class FleaflickerService {
       name: leagueName,
       platform: { name: "fleaflicker", id: platformCredentialId },
       externalLeagueId,
+      lastModified,
     };
 
     const existingLeagueQuery = await leaguesCollection
@@ -94,7 +97,7 @@ export class FleaflickerService {
           externalUserId: owner
             ? owner.id.toString()
             : rosterData.ownerId.toString(),
-          opponentId: opponentId,
+          opponentId: opponentId.toString(),
           playerData: this.processPlayerData(rosterData.groups),
         };
 
@@ -169,7 +172,10 @@ export class FleaflickerService {
     week: number,
     season: number,
   ): Promise<any> {
-    await ApiTrackingService.trackApiCall('fleaflicker', 'GET leagues/scoreboard');
+    await ApiTrackingService.trackApiCall(
+      "fleaflicker",
+      "GET leagues/scoreboard",
+    );
     const url = `https://www.fleaflicker.com/api/FetchLeagueScoreboard?league_id=${externalLeagueId}&season=${season}&scoring_period=${week}`;
     const data = await fetchFromUrl(url);
     return data.games;
@@ -181,7 +187,7 @@ export class FleaflickerService {
     season: number,
     week: number,
   ): Promise<any> {
-    await ApiTrackingService.trackApiCall('fleaflicker', 'GET teams/roster');
+    await ApiTrackingService.trackApiCall("fleaflicker", "GET teams/roster");
     const url = `https://www.fleaflicker.com/api/FetchRoster?sport=NFL&league_id=${externalLeagueId}&team_id=${externalTeamId}&season=${season}&scoring_period=${week}`;
     return fetchFromUrl(url);
   }
@@ -209,7 +215,10 @@ export class FleaflickerService {
   private async fetchLeagueStandings(
     externalLeagueId: string,
   ): Promise<FleaflickerLeagueStandings> {
-    await ApiTrackingService.trackApiCall('fleaflicker', 'GET leagues/standings');
+    await ApiTrackingService.trackApiCall(
+      "fleaflicker",
+      "GET leagues/standings",
+    );
     const url = `https://www.fleaflicker.com/api/FetchLeagueStandings?sport=NFL&league_id=${externalLeagueId}`;
     return fetchFromUrl(url);
   }

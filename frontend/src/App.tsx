@@ -3,6 +3,7 @@ import {
   BrowserRouter as Router,
   Route,
   Routes,
+  Navigate,
 } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useAuth } from "./features/auth/useAuth";
@@ -11,6 +12,7 @@ import HomePage from "./pages/HomePage";
 import SplashPage from "./pages/SplashPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ConnectTeam from "./pages/ConnectTeam"; // Add this import
+import AdminDashboard from "./pages/AdminDashboard"; // Add this import
 import LoadingSpinner from "./components/ui/LoadingSpinner";
 import Layout from "./components/ui/Layout";
 import { ViewProvider } from "./features/view/ViewContext";
@@ -34,6 +36,22 @@ const AuthenticatedRoute: React.FC<{ element: React.ReactElement }> = ({
   return <Layout>{element}</Layout>;
 };
 
+const AdminRoute: React.FC<{ element: React.ReactElement }> = ({
+  element,
+}) => {
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (!user || user.email !== "theodore.moke@gmail.com") {
+    return <Navigate to="/" replace />;
+  }
+
+  return <Layout>{element}</Layout>;
+};
+
 const AppRoutes: React.FC = () => {
   return (
     <Routes>
@@ -45,6 +63,10 @@ const AppRoutes: React.FC = () => {
       <Route
         path="/connect-team"
         element={<AuthenticatedRoute element={<ConnectTeam />} />}
+      />
+      <Route
+        path="/admin"
+        element={<AdminRoute element={<AdminDashboard />} />}
       />
       <Route path="/splash" element={<SplashPage />} />
       {/* catch 404 errors */}
