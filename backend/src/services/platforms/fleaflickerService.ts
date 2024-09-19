@@ -28,7 +28,6 @@ export class FleaflickerService {
       externalLeagueId,
     };
 
-    console.log("External league ID", externalLeagueId);
     const existingLeagueQuery = await leaguesCollection
       .where("externalLeagueId", "==", externalLeagueId)
       .limit(1)
@@ -39,18 +38,21 @@ export class FleaflickerService {
     if (!existingLeagueQuery.empty) {
       console.log("League already exists");
       const existingLeagueDoc = existingLeagueQuery.docs[0];
-      await existingLeagueDoc.ref.update({ ...leagueData });
+      await existingLeagueDoc.ref.update({
+        ...leagueData,
+        id: existingLeagueDoc.id,
+      });
       return { id: existingLeagueDoc.id, ...leagueData };
     } else {
       console.log("League does not exist");
       const newLeagueRef = await leaguesCollection.add(leagueData);
+      await newLeagueRef.update({ id: newLeagueRef.id });
       return { id: newLeagueRef.id, ...leagueData };
     }
   }
 
   async upsertTeams(league: League) {
     try {
-      console.log("FF Upserting teams");
       const db = await getDb();
       const week = getCurrentWeek();
       const season = this.getCurrentSeason();
@@ -134,13 +136,6 @@ export class FleaflickerService {
     userId: string;
     externalTeamId: string;
   }) {
-    console.log(
-      "Upserting user teams",
-      league.id,
-      externalUserId,
-      externalTeamId,
-      userId,
-    );
     const db = await getDb();
     const teamsCollection = db.collection("teams");
     const userTeamsCollection = db.collection("userTeams");
