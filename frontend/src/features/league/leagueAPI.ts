@@ -29,7 +29,7 @@ export const connectLeague = async ({
   });
 
   if (!response.ok) {
-    throw new Error('Failed to connect league');
+    throw new Error("Failed to connect league");
   }
 
   return response.json();
@@ -37,36 +37,40 @@ export const connectLeague = async ({
 
 export const updateAllLeagues = async () => {
   const response = await fetch(`${API_URL}/leagues/update-all`, {
-    method: 'PUT',
+    method: "PUT",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("authToken")}`,
     },
   });
 
   if (!response.ok) {
-    throw new Error('Failed to update leagues');
+    throw new Error("Failed to update leagues");
   }
 
   return response.json();
 };
 
-export const getLeaguesPaginated = async (page: number, limit: number, startAfter?: string) => {
+export const getLeaguesPaginated = async (
+  page: number,
+  limit: number,
+  startAfter?: string
+) => {
   const url = new URL(`${API_URL}/leagues`);
-  url.searchParams.append('page', page.toString());
-  url.searchParams.append('limit', limit.toString());
+  url.searchParams.append("page", page.toString());
+  url.searchParams.append("limit", limit.toString());
   if (startAfter) {
-    url.searchParams.append('startAfter', startAfter);
+    url.searchParams.append("startAfter", startAfter);
   }
 
   const response = await fetch(url.toString(), {
     headers: {
-      'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+      Authorization: `Bearer ${localStorage.getItem("authToken")}`,
     },
   });
 
   if (!response.ok) {
-    throw new Error('Failed to fetch leagues');
+    throw new Error("Failed to fetch leagues");
   }
 
   return response.json();
@@ -74,16 +78,35 @@ export const getLeaguesPaginated = async (page: number, limit: number, startAfte
 
 export const syncLeague = async (leagueId: string) => {
   const response = await fetch(`${API_URL}/leagues/${leagueId}/sync`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Authorization': `Bearer ${localStorage.getItem('authToken')}`,
+      Authorization: `Bearer ${localStorage.getItem("authToken")}`,
     },
   });
 
   if (!response.ok) {
-    throw new Error('Failed to sync league');
+    throw new Error("Failed to sync league");
   }
 
   return response.json();
 };
 
+export interface LeagueStats {
+  totalLeagues: number;
+  platformCounts: { [key: string]: number };
+}
+
+export const getLeagueStats = async (): Promise<LeagueStats> => {
+  const response = await fetch(`${API_URL}/leagues/stats`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to fetch league stats");
+  }
+
+  return response.json();
+};

@@ -28,6 +28,7 @@ interface LinkButtonProps {
   children: React.ReactNode;
   underline?: boolean;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  type?: 'button' | 'submit' | 'reset';
 }
 
 const LinkButton: React.FC<LinkButtonProps> = ({
@@ -36,6 +37,7 @@ const LinkButton: React.FC<LinkButtonProps> = ({
   children,
   onClick,
   underline = true,
+  type = 'button'
 }) => {
   const linkButtonClass = getLinkButtonClass(color);
 
@@ -43,6 +45,7 @@ const LinkButton: React.FC<LinkButtonProps> = ({
     <button
       className={`${styles.linkButton} ${linkButtonClass} ${underline ? styles.underline : ""}`}
       onClick={onClick}
+      type={type}
     >
       {children}
     </button>

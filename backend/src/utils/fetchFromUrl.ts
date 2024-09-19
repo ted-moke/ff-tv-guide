@@ -1,6 +1,7 @@
 import https from "https";
 
 const fetchFromUrl = (url: string): Promise<any> => {
+  console.log('Fetching from URL:', url);
   return new Promise((resolve, reject) => {
     https
       .get(url, (res) => {

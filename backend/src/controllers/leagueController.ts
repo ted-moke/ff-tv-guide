@@ -125,10 +125,15 @@ export const getLeaguesPaginated = async (req: Request, res: Response) => {
     }
 
     const snapshot = await query.limit(limit + 1).get();
-    const leagues = snapshot.docs.slice(0, limit).map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
+    const leagues = snapshot.docs.slice(0, limit).map(doc => {
+      const data = doc.data();
+
+      return {
+        id: doc.id,
+        ...data,
+        lastModified: data.lastModified != null ? data.lastModified.toDate() : undefined // Convert Firestore Timestamp to JavaScript Date
+      };
+    });
 
     const hasNextPage = snapshot.docs.length > limit;
     const nextStartAfter = hasNextPage ? snapshot.docs[limit - 1].id : null;
@@ -139,6 +144,7 @@ export const getLeaguesPaginated = async (req: Request, res: Response) => {
       nextStartAfter
     });
   } catch (error) {
+    console.log('Error in getLeaguesPaginated',error);
     res.status(500).json({ error: (error as Error).message });
   }
 };
@@ -162,6 +168,38 @@ export const syncLeague = async (req: Request, res: Response) => {
     await leagueRef.update({ lastModified: new Date() });
 
     res.status(200).json({ message: "League synced successfully" });
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+};
+
+export interface LeagueStats {
+  totalLeagues: number;
+  platformCounts: { [key: string]: number };
+}
+
+export const getLeagueStats = async (req: Request, res: Response) => {
+  try {
+    const db = await getDb();
+    const leaguesSnapshot = await db.collection("leagues").get();
+    const totalLeagues = leaguesSnapshot.size;
+
+    const platformCounts: { [key: string]: number } = {};
+    leaguesSnapshot.forEach(doc => {
+      const leagueData = doc.data() as League;
+      const platformName = leagueData.platform.name;
+      if (!platformCounts[platformName]) {
+        platformCounts[platformName] = 0;
+      }
+      platformCounts[platformName]++;
+    });
+
+    const stats: LeagueStats = {
+      totalLeagues,
+      platformCounts,
+    };
+
+    res.status(200).json(stats);
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });
   }

@@ -1,0 +1,44 @@
+.adminDashboard {
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.header h1 {
+  margin-bottom: 10px;
+}
+
+.header button {
+  margin-bottom: 20px;
+}
+
+.stats {
+  margin-bottom: 20px;
+}
+
+.platformCounts {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+@media (min-width: 768px) {
+  .header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .header h1 {
+    margin-bottom: 0;
+  }
+
+  .header button {
+    margin-bottom: 0;
+  }
+}

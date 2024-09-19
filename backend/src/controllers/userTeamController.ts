@@ -23,8 +23,6 @@ export const getUserTeams = async (req: Request, res: Response) => {
       return res.status(200).json({ teams: [] });
     }
 
-    console.log("Team IDs:", teamIds);
-
     // Fetch full team data
     const teamsSnapshot = await db
       .collection("teams")
