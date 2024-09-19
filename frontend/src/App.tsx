@@ -10,6 +10,7 @@ import { useAuth } from "./features/auth/useAuth";
 import AuthPage from "./pages/AuthPage";
 import HomePage from "./pages/HomePage";
 import SplashPage from "./pages/SplashPage";
+import TeamListPage from "./pages/TeamListPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ConnectTeam from "./pages/ConnectTeam"; // Add this import
 import AdminDashboard from "./pages/AdminDashboard"; // Add this import
@@ -72,6 +73,10 @@ const AppRoutes: React.FC = () => {
         <Route path="leagues" element={<AdminLeagues />} />
         <Route path="userTeams" element={<AdminUserTeamsPage />} />
       </Route>
+      <Route
+        path="/teams"
+        element={<AuthenticatedRoute element={<TeamListPage />} />}
+      />
       <Route path="/splash" element={<SplashPage />} />
       {/* catch 404 errors */}
       <Route path="*" element={<NotFoundPage />} />

@@ -113,3 +113,64 @@ export const getUserTeamsDuplicates = async (req: Request, res: Response) => {
     res.status(500).json({ error: errorMessage });
   }
 };
+
+// New function to get opponent teams
+export const getOpponentTeams = async (req: Request, res: Response) => {
+  const userId = req.params.uid;
+
+  try {
+    const db = await getDb();
+    // Get user teams
+    const userTeamsSnapshot = await db
+      .collection("userTeams")
+      .where("userId", "==", userId)
+      .get();
+
+    const teamIds = userTeamsSnapshot.docs.map((doc) => doc.data().teamId);
+
+    if (teamIds.length === 0) {
+      return res.status(200).json({ teams: [], opponents: [] });
+    }
+
+    // Fetch user teams
+    const teamsSnapshot = await db
+      .collection("teams")
+      .where("id", "in", teamIds)
+      .get();
+
+    const teams = teamsSnapshot.docs.map((doc) => {
+      const team = doc.data() as Team;
+      return {
+        ...team,
+        id: doc.id,
+      };
+    });
+
+    // Fetch opponent teams
+    const opponentQueries = teams.map((team) => {
+      return db
+        .collection("teams")
+        .where("externalTeamId", "==", team.opponentId)
+        .where("leagueId", "==", team.leagueId)
+        .get();
+    });
+
+    const opponentTeamsSnapshots = await Promise.all(opponentQueries);
+
+    const opponents = opponentTeamsSnapshots.flatMap((snapshot) =>
+      snapshot.docs.map((doc) => {
+        const team = doc.data() as Team;
+        return {
+          ...team,
+          id: doc.id,
+        };
+      })
+    );
+
+    res.status(200).json({ opponents });
+  } catch (error) {
+    console.error("Error fetching opponent teams:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+

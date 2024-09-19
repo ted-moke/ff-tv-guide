@@ -23,8 +23,6 @@ const Button: React.FC<ButtonProps> = ({
   children,
   ...props
 }) => {
-  console.log("color", color);
-  console.log('styles.button', styles.button)
   if (link) {
     return (
       <Link

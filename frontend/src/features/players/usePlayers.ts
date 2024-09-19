@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { Player, OwnedPlayer } from "../nfl/nflTypes";
-import useUserTeams from "../teams/useUserTeams";
+import { useUserTeams, useOpponentTeams } from "../teams/useUserTeams";
 
 // Define the order of positions
 const positionOrder = [
@@ -59,44 +59,55 @@ const sortCopies = (a: OwnedPlayer, b: OwnedPlayer): number => {
 
 export const usePlayers = () => {
   const { data: userTeams, isLoading, error } = useUserTeams();
+  const { data: opponentTeams, isLoading: opponentTeamsLoading, error: opponentTeamsError } = useOpponentTeams();
 
   const players: Player[] = useMemo(() => {
-    if (!userTeams) return [];
+    if (!userTeams && !opponentTeams) return [];
 
     const playerMap = new Map<string, Player>();
 
-    userTeams.forEach((team) => {
-      team.playerData.forEach((player) => {
-        const key = `${player.name}-${player.team}`;
-        if (!playerMap.has(key)) {
-          playerMap.set(key, {
-            name: player.name,
-            team: player.team,
-            position: player.position,
-            copies: [],
-          });
-        }
+    const processTeams = (teams: any[], teamType: "self" | "opponent") => {
+      teams.forEach((team) => {
+        team.playerData.forEach((player) => {
+          const key = `${player.name}-${player.team}`;
+          if (!playerMap.has(key)) {
+            playerMap.set(key, {
+              name: player.name,
+              team: player.team,
+              position: player.position,
+              copies: [],
+            });
+          }
 
-        // make short league name, 4 char max, strip out leading "the", spaces, etc
-        const shortLeagueName = team.leagueName
+          // make short league name, 4 char max, strip out leading "the", spaces, etc
+          const shortLeagueName = team.leagueName
             .replace(/\b(the|dynasty|league|afl|nfl)\b/gi, "") // Remove 'the' and 'dynasty' (case insensitive)
             .replace(/[^a-zA-Z]/g, "") // Remove non-letter characters
             .toUpperCase() // Convert to lowercase
             .slice(0, 5); // Limit to 4 characters
 
-        const ownedPlayer: OwnedPlayer = {
-          leagueName: team.leagueName,
-          shortLeagueName: shortLeagueName,
-          leagueId: team.leagueId,
-          rosterSlotType: player.rosterSlotType as
-            | "start"
-            | "bench"
-            | "bestBall",
-          team: "self",
-        };
-        playerMap.get(key)!.copies.push(ownedPlayer);
+          const ownedPlayer: OwnedPlayer = {
+            leagueName: team.leagueName,
+            shortLeagueName: shortLeagueName,
+            leagueId: team.leagueId,
+            rosterSlotType: player.rosterSlotType as
+              | "start"
+              | "bench"
+              | "bestBall",
+            team: teamType,
+          };
+          playerMap.get(key)!.copies.push(ownedPlayer);
+        });
       });
-    });
+    };
+
+    if (userTeams) {
+      processTeams(userTeams, "self");
+    }
+
+    if (opponentTeams) {
+      processTeams(opponentTeams, "opponent");
+    }
 
     // Sort copies for each player
     playerMap.forEach((player) => {
@@ -104,9 +115,9 @@ export const usePlayers = () => {
     });
 
     return Array.from(playerMap.values());
-  }, [userTeams]);
+  }, [userTeams, opponentTeams]);
 
-  return { players, isLoading, error };
+  return { players, isLoading: isLoading || opponentTeamsLoading, error: error || opponentTeamsError };
 };
 
 // Update getPlayersByTeam function to use the new Player type
@@ -123,9 +134,8 @@ export const getPlayersByTeam = (
       )
       .sort(sortPlayers),
     others: teamPlayers
-      .filter(
-        (player) =>
-          player.copies.some((copy) => copy.rosterSlotType !== "start")
+      .filter((player) =>
+        player.copies.some((copy) => copy.rosterSlotType !== "start")
       )
       .sort(sortPlayers),
   };

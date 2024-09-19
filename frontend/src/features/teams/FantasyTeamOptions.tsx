@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import styles from "./FantasyTeamOptions.module.css";
 import LinkButton, { LinkButtonColor } from "../../components/ui/LinkButton";
 // import Checkbox from "../../components/ui/Checkbox";
-import useUserTeams from "./useUserTeams";
+import { useUserTeams } from "./useUserTeams";
 import { useView } from "../view/ViewContext";
 import { useNavigate } from "react-router-dom";
 
