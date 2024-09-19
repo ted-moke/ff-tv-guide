@@ -1,8 +1,9 @@
 import { getDb } from "../../firebase";
 import { League } from "../../models/league";
 import { Team, Player } from "../../models/team";
+import { ApiTrackingService } from "../apiTrackingService";
+import fetchFromUrl from "../../utils/fetchFromUrl";
 import { getCurrentWeek } from "../../utils/getCurrentWeek";
-import https from "https";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -164,32 +165,14 @@ export class SleeperService {
     }
   }
 
-  private fetchMatchups(externalLeagueId: string, week: number): Promise<any> {
-    const url = `https://api.sleeper.app/v1/league/${externalLeagueId}/matchups/${week}`;
-    console.log("Fetching matchups from Sleeper", url);
-    return new Promise((resolve, reject) => {
-      https
-        .get(url, (res) => {
-          let data = "";
-          res.on("data", (chunk) => (data += chunk));
-          res.on("end", () => resolve(JSON.parse(data)));
-        })
-        .on("error", reject);
-    });
+  private async fetchMatchups(externalLeagueId: string, week: number): Promise<any> {
+    await ApiTrackingService.trackApiCall('sleeper', 'GET leagues/matchups');
+    return fetchFromUrl(`https://api.sleeper.app/v1/league/${externalLeagueId}/matchups/${week}`);
   }
 
-  private fetchRosters(externalLeagueId: string): Promise<any> {
-    const url = `https://api.sleeper.app/v1/league/${externalLeagueId}/rosters`;
-    console.log("Fetching rosters from Sleeper", url);
-    return new Promise((resolve, reject) => {
-      https
-        .get(url, (res) => {
-          let data = "";
-          res.on("data", (chunk) => (data += chunk));
-          res.on("end", () => resolve(JSON.parse(data)));
-        })
-        .on("error", reject);
-    });
+  private async fetchRosters(externalLeagueId: string): Promise<any> {
+    await ApiTrackingService.trackApiCall('sleeper', 'GET leagues/rosters');
+    return fetchFromUrl(`https://api.sleeper.app/v1/league/${externalLeagueId}/rosters`);
   }
 
   private processPlayerData(players: string[], starters: string[]): Player[] {

@@ -1,13 +1,14 @@
 import { getDb } from "../../firebase";
 import { League } from "../../models/league";
 import { Team, Player } from "../../models/team";
-import https from "https";
 import {
   FleaflickerLeagueStandings,
   FleaflickerTeam,
   Owner,
 } from "../../types/fleaflickerTypes";
 import { getCurrentWeek } from "../../utils/getCurrentWeek";
+import { ApiTrackingService } from "../apiTrackingService";
+import fetchFromUrl from "../../utils/fetchFromUrl";
 
 export class FleaflickerService {
   async upsertLeague({
@@ -168,18 +169,10 @@ export class FleaflickerService {
     week: number,
     season: number,
   ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      https
-        .get(
-          `https://www.fleaflicker.com/api/FetchLeagueScoreboard?league_id=${externalLeagueId}&season=${season}&scoring_period=${week}`,
-          (res) => {
-            let data = "";
-            res.on("data", (chunk) => (data += chunk));
-            res.on("end", () => resolve(JSON.parse(data).games));
-          },
-        )
-        .on("error", reject);
-    });
+    await ApiTrackingService.trackApiCall('fleaflicker', 'GET leagues/scoreboard');
+    const url = `https://www.fleaflicker.com/api/FetchLeagueScoreboard?league_id=${externalLeagueId}&season=${season}&scoring_period=${week}`;
+    const data = await fetchFromUrl(url);
+    return data.games;
   }
 
   private async fetchRoster(
@@ -188,18 +181,9 @@ export class FleaflickerService {
     season: number,
     week: number,
   ): Promise<any> {
-    return new Promise((resolve, reject) => {
-      https
-        .get(
-          `https://www.fleaflicker.com/api/FetchRoster?sport=NFL&league_id=${externalLeagueId}&team_id=${externalTeamId}&season=${season}&scoring_period=${week}`,
-          (res) => {
-            let data = "";
-            res.on("data", (chunk) => (data += chunk));
-            res.on("end", () => resolve(JSON.parse(data)));
-          },
-        )
-        .on("error", reject);
-    });
+    await ApiTrackingService.trackApiCall('fleaflicker', 'GET teams/roster');
+    const url = `https://www.fleaflicker.com/api/FetchRoster?sport=NFL&league_id=${externalLeagueId}&team_id=${externalTeamId}&season=${season}&scoring_period=${week}`;
+    return fetchFromUrl(url);
   }
 
   private processPlayerData(groups: any[]): Player[] {
@@ -225,18 +209,9 @@ export class FleaflickerService {
   private async fetchLeagueStandings(
     externalLeagueId: string,
   ): Promise<FleaflickerLeagueStandings> {
-    return new Promise((resolve, reject) => {
-      https
-        .get(
-          `https://www.fleaflicker.com/api/FetchLeagueStandings?sport=NFL&league_id=${externalLeagueId}`,
-          (res) => {
-            let data = "";
-            res.on("data", (chunk) => (data += chunk));
-            res.on("end", () => resolve(JSON.parse(data)));
-          },
-        )
-        .on("error", reject);
-    });
+    await ApiTrackingService.trackApiCall('fleaflicker', 'GET leagues/standings');
+    const url = `https://www.fleaflicker.com/api/FetchLeagueStandings?sport=NFL&league_id=${externalLeagueId}`;
+    return fetchFromUrl(url);
   }
 
   private getCurrentSeason(): number {
