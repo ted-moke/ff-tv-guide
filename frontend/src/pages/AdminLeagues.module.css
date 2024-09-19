@@ -1,0 +1,19 @@
+.adminLeagues {
+  /* Add your styles here */
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stats {
+  margin-top: 20px;
+}
+
+.platformCounts {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

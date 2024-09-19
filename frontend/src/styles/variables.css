@@ -1,6 +1,8 @@
 :root {
 
   --color-red: #CD4631;
+  --color-red-hover: #A43828;
+  --color-red-active: #A43828;
   --color-blue: #357DED;
   --color-green: #95C623;
   --color-yellow: #FCA311;
@@ -14,6 +16,7 @@
   --text-color-muted: #a0a0a0;
   --text-color-light: #121212;
   --text-color-light-muted: #6e6e6e;
+
   --primary-color: var(--color-yellow);
   --primary-hover-color: #DE8A02; 
   --primary-active-color: #DE8A02;

@@ -1,71 +1,21 @@
 import React from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { getLeagueStats, updateAllLeagues } from "../features/league/leagueAPI";
-import LoadingSpinner from "../components/ui/LoadingSpinner";
-import LeagueList from "../features/league/LeagueList"; // Ensure this is imported
+import { Outlet } from "react-router-dom"; // Import Outlet and Link
+import LinkButton from "../components/ui/LinkButton";
 import styles from "./AdminDashboard.module.css";
-import Button from "../components/ui/Button";
-
-const callsPerPlatformSync = {
-  sleeper: 2,
-  fleaflicker: 14,
-};
 
 const AdminDashboard: React.FC = () => {
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["leagueStats"],
-    queryFn: getLeagueStats,
-  });
-
-  if (isLoading) return <LoadingSpinner />;
-  if (error) return <div>Error: {(error as Error).message}</div>;
-
-  if (!data) return <div>No data available</div>;
-
-  const mutation = useMutation({
-    mutationFn: updateAllLeagues,
-    onSuccess: () => {
-      alert("All leagues updated successfully");
-    },
-    onError: (error) => {
-      console.error("Failed to update leagues:", error);
-      alert("Failed to update leagues");
-    },
-  });
-
-  const handleUpdateAllLeagues = () => {
-    mutation.mutate();
-  };
-
   return (
     <div className={styles.adminDashboard}>
       <div className={styles.header}>
         <h1>Admin Dashboard</h1>
-        <Button onClick={handleUpdateAllLeagues} disabled={mutation.isPending}>
-          {mutation.isPending ? "Updating..." : "Update All Leagues"}
-        </Button>
       </div>
-      <div className={styles.stats}>
-      <h2>League Statistics</h2>
-        <p>Total Leagues: {data.totalLeagues}</p>
-        <div className={styles.platformCounts}>
-          {Object.entries(data.platformCounts).map(([platform, count]) => (
-            <div key={platform}>
-              <p>
-                {platform}: {count}
-              </p>
-              <p>
-                Syncing all would result in{" "}
-                {callsPerPlatformSync[
-                  platform as keyof typeof callsPerPlatformSync
-                ] * count}{" "}
-                API calls.
-              </p>
-            </div>
-          ))}
-        </div>
+      <div className={styles.nav}>
+        <LinkButton to="leagues">Leagues</LinkButton>
+        <LinkButton to="userTeams">User Teams</LinkButton>
       </div>
-      <LeagueList />
+      <div className={styles.content}>
+        <Outlet /> {/* This is where nested routes will be rendered */}
+      </div>
     </div>
   );
 };

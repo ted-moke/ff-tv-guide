@@ -156,12 +156,27 @@ export class FleaflickerService {
         team.externalUserId === externalUserId ||
         team.externalTeamId.toString() === externalTeamIdString
       ) {
-        await userTeamsCollection.add({
-          userId: userId,
-          teamId: teamDoc.id, // Use the internal team document ID
-          leagueId: league.id,
-        });
+        // Check if the userTeam already exists
+        const userTeamQuery = await userTeamsCollection
+          .where("userId", "==", userId)
+          .where("teamId", "==", teamDoc.id)
+          .get();
 
+        if (userTeamQuery.empty) {
+          await userTeamsCollection.add({
+            userId: userId,
+            teamId: teamDoc.id,
+            leagueId: league.id,
+          });
+        } else {
+          // Update existing userTeam
+          const existingUserTeamDoc = userTeamQuery.docs[0];
+          await existingUserTeamDoc.ref.update({
+            userId: userId,
+            teamId: teamDoc.id,
+            leagueId: league.id,
+          });
+        }
         break; // We've found the user's team, no need to continue
       }
     }

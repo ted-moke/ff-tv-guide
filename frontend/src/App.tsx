@@ -13,6 +13,8 @@ import SplashPage from "./pages/SplashPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ConnectTeam from "./pages/ConnectTeam"; // Add this import
 import AdminDashboard from "./pages/AdminDashboard"; // Add this import
+import AdminLeagues from "./pages/AdminLeagues"; // Import AdminLeagues
+import AdminUserTeamsPage from "./pages/AdminUserTeamsPage"; // Import AdminUserTeamsPage
 import LoadingSpinner from "./components/ui/LoadingSpinner";
 import Layout from "./components/ui/Layout";
 import { ViewProvider } from "./features/view/ViewContext";
@@ -66,8 +68,10 @@ const AppRoutes: React.FC = () => {
       />
       <Route
         path="/admin"
-        element={<AdminRoute element={<AdminDashboard />} />}
-      />
+        element={<AdminRoute element={<AdminDashboard />} />}>
+        <Route path="leagues" element={<AdminLeagues />} />
+        <Route path="userTeams" element={<AdminUserTeamsPage />} />
+      </Route>
       <Route path="/splash" element={<SplashPage />} />
       {/* catch 404 errors */}
       <Route path="*" element={<NotFoundPage />} />

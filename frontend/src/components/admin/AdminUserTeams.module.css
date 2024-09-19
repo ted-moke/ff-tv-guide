@@ -1,0 +1,24 @@
+@import '../../styles/variables.css';
+
+.adminUserTeams {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--size2)
+}
+
+.dangerButton {
+  background-color: red;
+  color: white;
+}
+
+.error {
+  color: red;
+  margin-top: 10px;
+}
+
+.success {
+  color: green;
+  margin-top: 10px;
+}
