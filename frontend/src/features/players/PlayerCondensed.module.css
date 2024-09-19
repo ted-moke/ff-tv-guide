@@ -1,12 +1,13 @@
 .player {
   padding: var(--size0_5);
   display: grid;
-  grid-template-columns: 40px 35px 170px 50px;
+  grid-template-columns: 40px 35px 170px 50px 50px;
   align-items: center;
   column-gap: var(--size1_5);
   overflow-wrap: break-word; /* Allow long words to break */
   overflow: hidden; /* Hide overflow content */
   text-overflow: ellipsis; /* Optional: add ellipsis for overflowed text */
+  border-bottom: 1px solid var(--background-color-offset-2);
 }
 
 .player p {
@@ -35,12 +36,16 @@
 
 .player-user-teams-text p {
   font-family: monospace;
-  color: var(--text-color-muted);
+  color: var(--color-green);
   margin-bottom: 0;
   white-space: normal; /* Allow wrapping */
   overflow-wrap: break-word; /* Allow long words to break */
   font-size: var(--font-size-medium);
   line-height: 1.2;
+}
+
+.opponent-teams p {
+  color: var(--color-red);
 }
 
 .player-position.QB {

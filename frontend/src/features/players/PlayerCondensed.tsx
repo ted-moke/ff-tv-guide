@@ -11,7 +11,14 @@ interface PlayerProps {
 const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotType }) => {
   if (!player) return null;
 
-  const uniqueUserTeams = [...new Set(player.copies.map(copy => copy.leagueName))];
+  const uniqueUserTeams = [
+    ...new Set(player.copies.map((copy) => copy.leagueName)),
+  ];
+
+  const userCopies = player.copies.filter((copy) => copy.team === "self");
+  const opponentCopies = player.copies.filter(
+    (copy) => copy.team === "opponent"
+  );
 
   return (
     <div
@@ -27,9 +34,24 @@ const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotType }) => {
       </p>
       <p className={styles["player-name"]}>{player.name}</p>
       <div className={styles["player-user-teams-text"]}>
-        {player.copies.map((copy, index) => (
-          copy.rosterSlotType === slotType && <p key={`${player.name}-${copy.leagueId}-${index}`}>{copy.shortLeagueName}</p>
-        ))}
+        {userCopies.map(
+          (copy, index) =>
+            copy.rosterSlotType === slotType && (
+              <p key={`${player.name}-${copy.leagueId}-${index}`}>
+                {copy.shortLeagueName}
+              </p>
+            )
+        )}
+      </div>
+      <div className={`${styles["player-user-teams-text"]} ${styles["opponent-teams"]}`}>
+        {opponentCopies.map(
+          (copy, index) =>
+            copy.rosterSlotType === slotType && (
+              <p key={`${player.name}-${copy.leagueId}-${index}`}>
+                {copy.shortLeagueName}
+              </p>
+            )
+        )}
       </div>
       {/* // <div className={styles["player-user-teams"]}>
       //   {player.copies.map((copy, index) => (

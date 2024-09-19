@@ -13,14 +13,24 @@ const positionOrder = [
   "DB",
   "S",
   "CB",
-  "DL",
   "DE",
   "EDR",
+  "DL",
+  "IL",
   "LB",
 ];
 
 // Custom sorting function
 const sortPlayers = (a: Player, b: Player) => {
+  const aHasSelfCopy = a.copies.some((copy) => copy.team === "self");
+  const bHasSelfCopy = b.copies.some((copy) => copy.team === "self");
+
+  if (aHasSelfCopy && !bHasSelfCopy) {
+    return -1; // a comes before b
+  } else if (!aHasSelfCopy && bHasSelfCopy) {
+    return 1; // b comes before a
+  }
+
   const aIndex = positionOrder.indexOf(a.position);
   const bIndex = positionOrder.indexOf(b.position);
 
@@ -59,7 +69,11 @@ const sortCopies = (a: OwnedPlayer, b: OwnedPlayer): number => {
 
 export const usePlayers = () => {
   const { data: userTeams, isLoading, error } = useUserTeams();
-  const { data: opponentTeams, isLoading: opponentTeamsLoading, error: opponentTeamsError } = useOpponentTeams();
+  const {
+    data: opponentTeams,
+    isLoading: opponentTeamsLoading,
+    error: opponentTeamsError,
+  } = useOpponentTeams();
 
   const players: Player[] = useMemo(() => {
     if (!userTeams && !opponentTeams) return [];
@@ -114,10 +128,14 @@ export const usePlayers = () => {
       player.copies.sort(sortCopies);
     });
 
-    return Array.from(playerMap.values());
+    return Array.from(playerMap.values()).sort(sortPlayers);
   }, [userTeams, opponentTeams]);
 
-  return { players, isLoading: isLoading || opponentTeamsLoading, error: error || opponentTeamsError };
+  return {
+    players,
+    isLoading: isLoading || opponentTeamsLoading,
+    error: error || opponentTeamsError,
+  };
 };
 
 // Update getPlayersByTeam function to use the new Player type
@@ -127,16 +145,47 @@ export const getPlayersByTeam = (
 ): { starters: Player[]; others: Player[] } => {
   const teamPlayers = players.filter((player) => player.team === teamCode);
 
+  const filteredStarters = teamPlayers
+    .filter((player) => player.copies.some((copy) => copy.rosterSlotType === "start"))
+    .map((player) => ({
+      ...player,
+      copies: player.copies.filter((copy) => copy.rosterSlotType === "start")
+    }));
+
+  const filteredOthers = teamPlayers
+    .filter((player) => player.copies.some((copy) => copy.rosterSlotType !== "start"))
+    .map((player) => ({
+      ...player,
+      copies: player.copies.filter((copy) => copy.rosterSlotType !== "start")
+    }));
+
+  const sortPlayers = (a: Player, b: Player) => {
+    const aHasSelfCopy = a.copies.some((copy) => copy.team === "self");
+    const bHasSelfCopy = b.copies.some((copy) => copy.team === "self");
+
+    if (aHasSelfCopy && !bHasSelfCopy) {
+      return -1; // a comes before b
+    } else if (!aHasSelfCopy && bHasSelfCopy) {
+      return 1; // b comes before a
+    }
+
+    const aIndex = positionOrder.indexOf(a.position);
+    const bIndex = positionOrder.indexOf(b.position);
+
+    if (aIndex !== bIndex) {
+      // If positions are different, sort by position order
+      return aIndex - bIndex;
+    } else if (aIndex === -1) {
+      // If both positions are not in the positionOrder array, sort alphabetically by position
+      return a.position.localeCompare(b.position);
+    } else {
+      // If positions are the same, sort alphabetically by name
+      return a.name.localeCompare(b.name);
+    }
+  };
+
   return {
-    starters: teamPlayers
-      .filter((player) =>
-        player.copies.some((copy) => copy.rosterSlotType === "start")
-      )
-      .sort(sortPlayers),
-    others: teamPlayers
-      .filter((player) =>
-        player.copies.some((copy) => copy.rosterSlotType !== "start")
-      )
-      .sort(sortPlayers),
+    starters: filteredStarters.sort(sortPlayers),
+    others: filteredOthers.sort(sortPlayers),
   };
 };

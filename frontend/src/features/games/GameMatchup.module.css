@@ -76,6 +76,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: var(--size0_5);
 }
 
 .starters-row,
@@ -144,7 +145,6 @@
 }
 
 .self-starters {
-  /* color: var(--color-green); */
   font-size: var(--size3);
   font-weight: bold;
 }
@@ -158,4 +158,22 @@
 
 .starters-none {
   color: var(--text-color-muted);
+}
+
+.team-players-header {
+  display: grid;
+  grid-template-columns: 40px 35px 170px 50px 50px;
+  align-items: center;
+  column-gap: var(--size1_5);
+  padding: var(--size1);
+}
+
+.team-players-header h5 {
+  margin: 0;
+}
+
+.team-players-header-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

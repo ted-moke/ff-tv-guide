@@ -1,9 +1,7 @@
 import React, { useState } from "react";
 import styles from "./GameMatchup.module.css";
 import PlayerCondensed from "../players/PlayerCondensed";
-import {
-  ProcessedGame,
-} from "../../hooks/useProcessedSchedule";
+import { ProcessedGame } from "../../hooks/useProcessedSchedule";
 import { Player } from "../nfl/nflTypes";
 import LinkButton, { LinkButtonColor } from "../../components/ui/LinkButton";
 import {
@@ -85,6 +83,15 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game }) => {
       <hr className={styles["divider"]} />
       {game.hasPlayers ? (
         <div className={styles["team-players"]}>
+          <div className={styles["team-players-header-container"]}>
+            <div className={styles["team-players-header"]}>
+              <h5>Team</h5>
+              <h5>Pos</h5>
+              <h5>Name</h5>
+              <h5>Mine</h5>
+              <h5>Opponent</h5>
+            </div>
+          </div>
           {game.starters.length > 0 && (
             <div className={styles["players-wrapper"]}>
               {game.starters.map((player: Player) => (
