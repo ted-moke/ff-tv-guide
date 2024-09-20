@@ -17,6 +17,10 @@
   gap: var(--size1);
 }
 
+.matchup-header-container {
+  padding: var(--size0_5);
+}
+
 .matchup-subheader {
   display: flex;
   justify-content: space-between;
@@ -125,6 +129,10 @@
   .bench-row {
     grid-template-columns: 1fr;
   }
+
+  .matchup {
+    padding: var(--size1);
+  }
 }
 
 .bench-button {
@@ -176,4 +184,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+@media (max-width: 768px) {
+  .team-players-header {
+    grid-template-columns: 40px 35px 100px 50px 50px;
+  }
 }

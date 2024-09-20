@@ -34,7 +34,7 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  padding: 20px;
+  padding: var(--size2);
   box-sizing: border-box;
 }
 
@@ -76,7 +76,6 @@
   align-items: center;
   max-width: 100%;
   text-align: center;
-  padding: 2rem;
   background-color: var(--background-color); 
   border-radius: var(--border-radius-large);
 }
@@ -120,11 +119,9 @@
 }
 
 .previewContainer {
-  margin-top: 20px;
+  margin-top: var(--size2);
   border: 3px solid var(--color-primary);
-  border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  background-color: var(--background-color-offset);
   padding: var(--size1);
 }
 
@@ -139,10 +136,6 @@
 @media (max-width: 768px) {
   .contentOverlay {
     background: none;
-  }
-
-  .contentWrapper {
-    padding: 1rem;
   }
 
   .buttonContainer {

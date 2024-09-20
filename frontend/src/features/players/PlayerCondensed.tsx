@@ -32,7 +32,13 @@ const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotType }) => {
       <p className={`${styles["player-position"]} ${styles[player.position]}`}>
         {player.position}
       </p>
-      <p className={styles["player-name"]}>{player.name}</p>
+      <p
+        className={`${styles["player-name"]} ${
+          userCopies.length <= 0 && styles["player-name-opponent-only"]
+        }`}
+      >
+        {player.name}
+      </p>
       <div className={styles["player-user-teams-text"]}>
         {userCopies.map(
           (copy, index) =>
@@ -43,7 +49,9 @@ const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotType }) => {
             )
         )}
       </div>
-      <div className={`${styles["player-user-teams-text"]} ${styles["opponent-teams"]}`}>
+      <div
+        className={`${styles["player-user-teams-text"]} ${styles["opponent-teams"]}`}
+      >
         {opponentCopies.map(
           (copy, index) =>
             copy.rosterSlotType === slotType && (

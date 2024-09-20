@@ -1,5 +1,5 @@
 .player {
-  padding: var(--size0_5);
+  padding: var(--size0_5) var(--size0_5) var(--size1);
   display: grid;
   grid-template-columns: 40px 35px 170px 50px 50px;
   align-items: center;
@@ -36,7 +36,7 @@
 
 .player-user-teams-text p {
   font-family: monospace;
-  color: var(--color-green);
+  color: var(--text-color);
   margin-bottom: 0;
   white-space: normal; /* Allow wrapping */
   overflow-wrap: break-word; /* Allow long words to break */
@@ -44,8 +44,12 @@
   line-height: 1.2;
 }
 
+.player-name-opponent-only {
+  color: var(--text-color-muted);
+}
+
 .opponent-teams p {
-  color: var(--color-red);
+  color: var(--text-color-muted);
 }
 
 .player-position.QB {
@@ -66,4 +70,10 @@
 
 .player-position.K {
   color: var(--color-purple);
+}
+
+@media (max-width: 768px) {
+  .player {
+    grid-template-columns: 40px 35px 100px 50px 50px;
+  }
 }

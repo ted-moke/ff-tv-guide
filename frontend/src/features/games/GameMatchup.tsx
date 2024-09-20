@@ -89,7 +89,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game }) => {
               <h5>Pos</h5>
               <h5>Name</h5>
               <h5>Mine</h5>
-              <h5>Opponent</h5>
+              <h5>Against</h5>
             </div>
           </div>
           {game.starters.length > 0 && (
@@ -102,9 +102,6 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game }) => {
                 />
               ))}
             </div>
-          )}
-          {game.starters.length > 0 && game.others.length > 0 && (
-            <hr className={styles["divider"]} />
           )}
           {game.others.length > 0 && (
             <>

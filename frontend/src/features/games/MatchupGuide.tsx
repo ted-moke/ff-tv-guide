@@ -79,9 +79,10 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
                 </li>
                 <li style={{ marginBottom: "0.5rem", listStyle: "disc" }}>
                   <p>
-                    See your opponents' owned players in{" "}
-                    <span style={{ color: "var(--color-red)" }}>red</span> and yours in{" "}
-                    <span style={{ color: "var(--color-green)" }}>green</span>
+                    See your owned players in{" "}
+                    <span style={{ color: "var(--text-color)" }}>white</span> and
+                    your opponents' in{" "}
+                    <span style={{ color: "var(--text-color-muted)" }}>gray</span>
                   </p>
                 </li>
               </ul>

@@ -26,11 +26,11 @@ const SplashPage: React.FC = () => {
             <h3>Key Features:</h3>
             <ul>
               <li>
-                Connect your fantas leagues from: Sleeper (more intergrations to
-                come)
+                Connect your fantasy leagues from Sleeper and Fleaflicker (more
+                to come)
               </li>
               <li>See which NFL games you have the most players in</li>
-              <li>Double check you bench players</li>
+              <li>Double check your bench players</li>
             </ul>
           </div>
           <div className={styles.previewContainer}>
