@@ -3,6 +3,8 @@ import { PlatformServiceFactory } from "../services/platforms/platformServiceFac
 import { getDb } from "../firebase";
 import { League } from "../models/league";
 
+const BATCH_SIZE = 10; // Adjust the batch size as needed
+
 export const upsertLeague = async (req: Request, res: Response) => {
   const {
     leagueName,
@@ -90,19 +92,28 @@ export const updateLeagueTeam = async (req: Request, res: Response) => {
 
 export const updateAllLeagues = async (req: Request, res: Response) => {
   try {
+    console.log("Updating all leagues");
     const db = await getDb();
     const leaguesSnapshot = await db.collection("leagues").get();
-    
-    const updatePromises = leaguesSnapshot.docs.map(async (doc) => {
-      const leagueData = doc.data() as League;
-      const platformService = PlatformServiceFactory.getService(leagueData.platform.name);
-      await platformService.upsertTeams(leagueData);
-      
-      // Update lastModified
-      await doc.ref.update({ lastModified: new Date() });
-    });
+    const leagues = leaguesSnapshot.docs;
 
-    await Promise.all(updatePromises);
+    for (let i = 0; i < leagues.length; i += BATCH_SIZE) {
+      console.log(`Processing batch ${i / BATCH_SIZE + 1}`);
+      const batch = leagues.slice(i, i + BATCH_SIZE);
+      const updatePromises = batch.map(async (doc) => {
+        const leagueData = doc.data() as League;
+        const platformService = PlatformServiceFactory.getService(
+          leagueData.platform.name,
+        );
+        await platformService.upsertTeams(leagueData);
+
+        // Update lastModified
+        await doc.ref.update({ lastModified: new Date() });
+      });
+
+      await Promise.all(updatePromises);
+      console.log(`Batch ${i / BATCH_SIZE + 1} completed`);
+    }
 
     res.status(200).json({ message: "All leagues updated successfully" });
   } catch (error) {
@@ -120,18 +131,22 @@ export const getLeaguesPaginated = async (req: Request, res: Response) => {
     let query = db.collection("leagues").orderBy("name");
 
     if (startAfter) {
-      const startAfterDoc = await db.collection("leagues").doc(startAfter).get();
+      const startAfterDoc = await db
+        .collection("leagues")
+        .doc(startAfter)
+        .get();
       query = query.startAfter(startAfterDoc);
     }
 
     const snapshot = await query.limit(limit + 1).get();
-    const leagues = snapshot.docs.slice(0, limit).map(doc => {
+    const leagues = snapshot.docs.slice(0, limit).map((doc) => {
       const data = doc.data();
 
       return {
         id: doc.id,
         ...data,
-        lastModified: data.lastModified != null ? data.lastModified.toDate() : undefined // Convert Firestore Timestamp to JavaScript Date
+        lastModified:
+          data.lastModified != null ? data.lastModified.toDate() : undefined, // Convert Firestore Timestamp to JavaScript Date
       };
     });
 
@@ -141,10 +156,10 @@ export const getLeaguesPaginated = async (req: Request, res: Response) => {
     res.json({
       leagues,
       hasNextPage,
-      nextStartAfter
+      nextStartAfter,
     });
   } catch (error) {
-    console.log('Error in getLeaguesPaginated',error);
+    console.log("Error in getLeaguesPaginated", error);
     res.status(500).json({ error: (error as Error).message });
   }
 };
@@ -162,7 +177,9 @@ export const syncLeague = async (req: Request, res: Response) => {
     }
 
     const leagueData = leagueDoc.data() as League;
-    const platformService = PlatformServiceFactory.getService(leagueData.platform.name);
+    const platformService = PlatformServiceFactory.getService(
+      leagueData.platform.name,
+    );
     await platformService.upsertTeams(leagueData);
 
     await leagueRef.update({ lastModified: new Date() });
@@ -185,7 +202,7 @@ export const getLeagueStats = async (req: Request, res: Response) => {
     const totalLeagues = leaguesSnapshot.size;
 
     const platformCounts: { [key: string]: number } = {};
-    leaguesSnapshot.forEach(doc => {
+    leaguesSnapshot.forEach((doc) => {
       const leagueData = doc.data() as League;
       const platformName = leagueData.platform.name;
       if (!platformCounts[platformName]) {
@@ -204,5 +221,3 @@ export const getLeagueStats = async (req: Request, res: Response) => {
     res.status(500).json({ error: (error as Error).message });
   }
 };
-
-
