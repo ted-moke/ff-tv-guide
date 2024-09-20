@@ -95,6 +95,7 @@
   padding: 15px;
   background-color: var(--background-color-offset);
   border-bottom: 1px solid var(--color-border);
+  border-radius: var(--border-radius-medium);
 }
 
 .keyFeatures h3 {
@@ -119,7 +120,7 @@
 }
 
 .previewContainer {
-  margin-top: var(--size2);
+  margin-top: var(--size1);
   border: 3px solid var(--color-primary);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: var(--size1);

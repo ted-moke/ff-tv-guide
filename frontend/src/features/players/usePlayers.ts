@@ -81,7 +81,10 @@ export const usePlayers = () => {
 
     const playerMap = new Map<string, Player>();
 
-    const processTeams = (teams: FantasyTeam[], teamType: "self" | "opponent") => {
+    const processTeams = (
+      teams: FantasyTeam[],
+      teamType: "self" | "opponent"
+    ) => {
       teams.forEach((team) => {
         team.playerData.forEach((player) => {
           const key = `${player.name}-${player.team}`;
@@ -147,17 +150,25 @@ export const getPlayersByTeam = (
   const teamPlayers = players.filter((player) => player.team === teamCode);
 
   const filteredStarters = teamPlayers
-    .filter((player) => player.copies.some((copy) => copy.rosterSlotType === "start"))
+    .filter((player) =>
+      player.copies.some((copy) => copy.rosterSlotType === "start")
+    )
     .map((player) => ({
       ...player,
-      copies: player.copies.filter((copy) => copy.rosterSlotType === "start")
+      copies: player.copies.filter((copy) => copy.rosterSlotType === "start"),
     }));
 
   const filteredOthers = teamPlayers
-    .filter((player) => player.copies.some((copy) => copy.rosterSlotType !== "start"))
+    .filter(
+      (player) =>
+        player.copies.some((copy) => copy.rosterSlotType !== "start") &&
+        player.copies.some((copy) => copy.team === "self")
+    )
     .map((player) => ({
       ...player,
-      copies: player.copies.filter((copy) => copy.rosterSlotType !== "start")
+      copies: player.copies.filter(
+        (copy) => copy.rosterSlotType !== "start" && copy.team === "self"
+      ),
     }));
 
   const sortPlayers = (a: Player, b: Player) => {

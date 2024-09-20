@@ -53,6 +53,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game }) => {
                 game.isTopGame ? styles["top-game"] : ""
               }`}
             >
+              <div>You:</div>
               <div
                 className={`${styles["self-starters"]} ${
                   game.starters.length === 0 ? styles["starters-none"] : ""
@@ -60,15 +61,19 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game }) => {
               >
                 {game.totals.self.starters}
               </div>
-              <div>
+              {/* <div>
                 {"  Starter"}
                 {game.totals.self.starters !== 1 ? "s " : " "}
+              </div> */}
+              <div>vs</div>
+              <div
+                className={`${styles["self-starters"]} ${
+                  game.starters.length === 0 ? styles["starters-none"] : ""
+                }`}
+              >
+                {game.totals.opponent.starters}
               </div>
-              {/* {" vs "}
-                <span className={styles["opponent-starters"]}>
-                  {game.totals.opponent.starters}
-                </span>
-                {` (${game.totals.self.total + game.totals.opponent.total} total)`} */}
+              <div>Opponent</div>
               {game.isTopGame && (
                 <div className={styles["top-game-badge"]}>
                   <Flame size={20} />
@@ -83,18 +88,38 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game }) => {
       <hr className={styles["divider"]} />
       {game.hasPlayers ? (
         <div className={styles["team-players"]}>
-          <div className={styles["team-players-header-container"]}>
-            <div className={styles["team-players-header"]}>
-              <h5>Team</h5>
-              <h5>Pos</h5>
-              <h5>Name</h5>
-              <h5>Mine</h5>
-              <h5>Against</h5>
-            </div>
-          </div>
-          {game.starters.length > 0 && (
+          {game.awayPlayers.starters.length > 0 && (
             <div className={styles["players-wrapper"]}>
-              {game.starters.map((player: Player) => (
+              <h4>{game.awayTeam?.name}</h4>
+              <div className={styles["team-players-header-container"]}>
+                <div className={styles["team-players-header"]}>
+                  <h5>Pos</h5>
+                  <h5>Name</h5>
+                  <h5>Mine</h5>
+                  <h5>Against</h5>
+                </div>
+              </div>
+              {game.awayPlayers.starters.map((player: Player) => (
+                <PlayerCondensed
+                  key={`${player.name}-${player.team}`}
+                  player={player}
+                  slotType="start"
+                />
+              ))}
+            </div>
+          )}
+          {game.homePlayers.starters.length > 0 && (
+            <div className={styles["players-wrapper"]}>
+              <h4>{game.homeTeam?.name}</h4>
+              <div className={styles["team-players-header-container"]}>
+                <div className={styles["team-players-header"]}>
+                  <h5>Pos</h5>
+                  <h5>Name</h5>
+                  <h5>Mine</h5>
+                  <h5>Against</h5>
+                </div>
+              </div>
+              {game.homePlayers.starters.map((player: Player) => (
                 <PlayerCondensed
                   key={`${player.name}-${player.team}`}
                   player={player}
@@ -117,15 +142,47 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game }) => {
                 </div>
               </LinkButton>
               {isBenchExpanded && (
-                <div className={styles["players-wrapper"]}>
-                  {game.others.map((player: Player) => (
-                    <PlayerCondensed
-                      key={`${player.name}-${player.team}`}
-                      player={player}
-                      slotType="bench"
-                    />
-                  ))}
-                </div>
+                <>
+                  {game.awayPlayers.others.length > 0 && (
+                    <div className={styles["players-wrapper"]}>
+                      <h4>{game.awayTeam?.name}</h4>
+                      <div className={styles["team-players-header-container"]}>
+                        <div className={styles["team-players-header"]}>
+                          <h5>Pos</h5>
+                          <h5>Name</h5>
+                          <h5>Mine</h5>
+                          <h5>Against</h5>
+                        </div>
+                      </div>
+                      {game.awayPlayers.others.map((player: Player) => (
+                        <PlayerCondensed
+                          key={`${player.name}-${player.team}`}
+                          player={player}
+                          slotType="bench"
+                        />
+                      ))}
+                    </div>
+                  )}
+                  {game.homePlayers.others.length > 0 && (
+                    <div className={styles["players-wrapper"]}>
+                      <h4>{game.homeTeam?.name}</h4>
+                      <div className={styles["team-players-header-container"]}>
+                        <div className={styles["team-players-header"]}>
+                          <h5>Pos</h5>
+                          <h5>Name</h5>
+                          <h5>Mine</h5>
+                        </div>
+                      </div>
+                      {game.homePlayers.others.map((player: Player) => (
+                        <PlayerCondensed
+                          key={`${player.name}-${player.team}`}
+                          player={player}
+                          slotType="bench"
+                        />
+                      ))}
+                    </div>
+                  )}
+                </>
               )}
             </>
           )}

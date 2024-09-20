@@ -26,9 +26,6 @@ const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotType }) => {
       className={styles.player}
       title={`${uniqueUserTeams.join("\n")}`}
     >
-      <p className={`${styles["player-team"]} ${styles[player.team]}`}>
-        {player.team}
-      </p>
       <p className={`${styles["player-position"]} ${styles[player.position]}`}>
         {player.position}
       </p>

@@ -7,19 +7,25 @@ import { BucketedGames, GameBucket } from "../hooks/useWeeklySchedule";
 export interface ProcessedGame extends Omit<NFLGame, "awayTeam" | "homeTeam"> {
   awayTeam: ReturnType<typeof getTeamByName>;
   homeTeam: ReturnType<typeof getTeamByName>;
+  awayPlayers: { starters: Player[]; others: Player[] };
+  homePlayers: { starters: Player[]; others: Player[] };
   starters: Player[];
   others: Player[];
   totals: {
     self: {
       starters: number;
+      startersWithCopies: number;
       bench: number;
       total: number;
+      totalWithCopies: number;
       bestBall: number;
     };
     opponent: {
       starters: number;
+      startersWithCopies: number;
       bench: number;
       total: number;
+      totalWithCopies: number;
       bestBall: number;
     };
   };
@@ -61,27 +67,57 @@ export const useProcessedSchedule = (
         ? getPlayersByTeam(homeTeam.code, players)
         : { starters: [], others: [] };
 
-
       const starters = [...awayPlayers.starters, ...homePlayers.starters];
       const others = [...awayPlayers.others, ...homePlayers.others];
 
       const totals = {
-        self: { starters: 0, bench: 0, total: 0, bestBall: 0 },
-        opponent: { starters: 0, bench: 0, total: 0, bestBall: 0 },
+        self: {
+          starters: 0,
+          startersWithCopies: 0,
+          bench: 0,
+          total: 0,
+          totalWithCopies: 0,
+          bestBall: 0,
+        },
+        opponent: {
+          starters: 0,
+          startersWithCopies: 0,
+          bench: 0,
+          total: 0,
+          totalWithCopies: 0,
+          bestBall: 0,
+        },
       };
 
       starters.forEach((player) => {
+        if (
+          player.copies.length > 0 &&
+          player.copies.some((copy) => copy.team === "self")
+        ) {
+          totals.self.total++;
+          totals.self.starters++;
+        }
+
+        if (
+          player.copies.length > 0 &&
+          player.copies.some((copy) => copy.team === "opponent")
+        ) {
+          totals.opponent.total++;
+          totals.opponent.starters++;
+        }
+
         player.copies.forEach((copy) => {
           const team = copy.team === "self" ? totals.self : totals.opponent;
-          team.total++;
-          if (copy.rosterSlotType === "start") team.starters++;
-          else if (copy.rosterSlotType === "bestBall") team.bestBall++;
+          team.totalWithCopies++;
+          if (copy.rosterSlotType === "start") {
+            team.startersWithCopies++;
+          } else if (copy.rosterSlotType === "bestBall") team.bestBall++;
         });
       });
       others.forEach((player) => {
         player.copies.forEach((copy) => {
           const team = copy.team === "self" ? totals.self : totals.opponent;
-          team.total++;
+          team.totalWithCopies++;
           if (copy.rosterSlotType === "bench") team.bench++;
         });
       });
@@ -94,6 +130,8 @@ export const useProcessedSchedule = (
         homeTeam,
         starters,
         others,
+        awayPlayers,
+        homePlayers,
         totals,
         hasPlayers,
         isTopGame: false,
