@@ -6,7 +6,6 @@ import GameBucketGroup from "./GameBucketGroup";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
 import { useNavigate } from "react-router-dom";
 import logoFF from "../../assets/logo-ff.png";
-import LinkButton from "../../components/ui/LinkButton";
 
 interface MatchupGuideProps {
   selectedWeek: number;
