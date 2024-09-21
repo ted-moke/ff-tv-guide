@@ -58,10 +58,12 @@
 
   --font-size-small: var(--size1);
   --font-size-medium: var(--size1_5);
-  --font-size-large: var(--size2);
-  --font-size-xl: var(--size2_5);
-  --font-size-xxl: var(--size3);
-  --font-size-xxxl: var(--size4);
+  --font-size-large: var(--size2_5);
+  --font-size-xl: var(--size3_5);
+
+
+  --font-size-xxl: var(--size4);
+  --font-size-xxxl: var(--size5);
 
   --border-radius-small: var(--size0_5);
   --border-radius-medium: var(--size1);
@@ -70,3 +72,22 @@
 }
  
 /* https://coolors.co/fca311-a14da0-357ded-95c623-cd4631 */
+
+
+  /* Import the new font files */
+  @font-face {
+    font-family: 'altehaasgrotesk';
+    src: url('./assets/fonts/altehaasgroteskregular-webfont.woff2') format('woff2'),
+         url('./assets/fonts/altehaasgroteskregular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'altehaasgrotesk';
+    src: url('./assets/fonts/altehaasgroteskbold-webfont.woff2') format('woff2'),
+         url('./assets/fonts/altehaasgroteskbold-webfont.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+}
+

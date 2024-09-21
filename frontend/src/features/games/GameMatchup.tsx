@@ -37,9 +37,9 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game }) => {
       <div className={styles["matchup-header-container"]}>
         <div className={styles["matchup-header"]}>
           <div className={styles["team-names"]}>
-            <span className={styles["away-team"]}>{game.awayTeam?.code}</span>
-            <span className={styles["at-symbol"]}>@</span>
-            <span className={styles["home-team"]}>{game.homeTeam?.code}</span>
+            <h3 className={styles["away-team"]}>{game.awayTeam?.code}</h3>
+            <h3 className={styles["at-symbol"]}>@</h3>
+            <h3 className={styles["home-team"]}>{game.homeTeam?.code}</h3>
           </div>
           <div className={styles["matchup-header-right"]}>
             <p className={styles.channel}>{game.channel}</p>

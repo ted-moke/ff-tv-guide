@@ -42,11 +42,13 @@
 }
 
 .team-names {
-  font-size: var(--size3);
-  font-weight: bold;
   color: var(--text-color);
   display: flex;
   gap: var(--size1);
+}
+
+.team-names h3 {
+  text-decoration: none;
 }
 
 .team-names span {

@@ -11,9 +11,6 @@
 
 .game-group h3 {
   color: var(--text-color);
-  border-bottom: 1px solid var(--text-color-muted);
-  padding-bottom: var(--size0_5);
-  margin-bottom: var(--size2);
 }
 
 .game-bucket {

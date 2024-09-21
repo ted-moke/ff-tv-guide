@@ -15,10 +15,14 @@ import ConnectTeam from "./pages/ConnectTeam"; // Add this import
 import AdminDashboard from "./pages/AdminDashboard"; // Add this import
 import AdminLeagues from "./pages/AdminLeagues"; // Import AdminLeagues
 import AdminUserTeamsPage from "./pages/AdminUserTeamsPage"; // Import AdminUserTeamsPage
-import ButtonShow from "./pages/ButtonShow"; // Add this import
 import LoadingSpinner from "./components/ui/LoadingSpinner";
 import Layout from "./components/ui/Layout";
 import { ViewProvider } from "./features/view/ViewContext";
+
+
+import "./assets/fonts/altehaasgroteskbold-webfont.woff2";
+import "./assets/fonts/altehaasgroteskregular-webfont.woff2";
+import UIShowcase from "./pages/UIShowcase";
 
 const queryClient = new QueryClient();
 
@@ -73,8 +77,8 @@ const App: React.FC = () => {
               <Route path="leagues" element={<AdminLeagues />} />
               <Route path="userTeams" element={<AdminUserTeamsPage />} />
             </Route>
-            <Route path="/ui" element={<ButtonShow />} /> {/* Add this route */}
             <Route path="/splash" element={<SplashPage />} />
+            <Route path="/ui/*" element={<UIShowcase />} />
             {/* catch 404 errors */}
             <Route path="*" element={<NotFoundPage />} />
           </Routes>

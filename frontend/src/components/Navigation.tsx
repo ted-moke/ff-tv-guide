@@ -8,6 +8,7 @@ import { useView } from "../features/view/ViewContext";
 import FFTVGLogo from "../assets/FFTVGLogo";
 
 const Navigation: React.FC = () => {
+
   const { logout } = useAuth();
   const { isMenuOpen, setIsMenuOpen } = useView();
 
