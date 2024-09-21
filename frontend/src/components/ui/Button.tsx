@@ -21,8 +21,11 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   color = ButtonColor.PRIMARY,
   children,
+  disabled,
   ...props
 }) => {
+  const buttonClass = `${styles[color]} ${styles.button} ${disabled ? styles.disabled : ""}`;
+
   if (link) {
     return (
       <Link
@@ -34,8 +37,9 @@ const Button: React.FC<ButtonProps> = ({
         }}
       >
         <button
-          className={`${styles[color]} ${styles.button}`}
+          className={buttonClass}
           onClick={onClick}
+          disabled={disabled}
           {...props}
         >
           {children}
@@ -47,7 +51,8 @@ const Button: React.FC<ButtonProps> = ({
   return (
     <button
       onClick={onClick}
-      className={`${styles[color]} ${styles.button}`}
+      className={buttonClass}
+      disabled={disabled}
       {...props}
     >
       {children}

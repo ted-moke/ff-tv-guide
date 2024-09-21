@@ -1,0 +1,13 @@
+@import '../styles/variables.css';
+
+.container {
+  padding: var(--size4);
+  text-align: center;
+}
+
+.buttonGroup {
+  margin-bottom: var(--size4);
+  display: flex;
+  gap: var(--size2);
+  justify-content: center;
+}

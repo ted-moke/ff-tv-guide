@@ -188,7 +188,7 @@ const ConnectTeam: React.FC = () => {
               onClick={handleSubmit}
               disabled={selectedLeagues.length === 0 || isConnecting}
             >
-              {isConnecting ? "Connecting..." : "Connect Selected Leagues"}
+              {isConnecting ? "Connecting..." : "Connect"}
             </Button>
           </div>
         </div>

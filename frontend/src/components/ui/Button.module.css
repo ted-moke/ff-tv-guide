@@ -8,7 +8,7 @@
     font-weight: 500;
     font-family: inherit;
     background-color: var(--primary-color);
-    transition: background-color 0.25s, border-color 0.25s;
+    transition: background-color 0.25s, border-color 0.25s, color 0.25s;
     cursor: pointer;
     text-decoration: none;
     display: inline-block;
@@ -63,4 +63,30 @@
 
 .danger:hover {
     background-color: var(--color-red-hover);
+}
+
+/* Disabled styles */
+.disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.primary.disabled {
+    background-color: var(--primary-disabled-bg);
+    color: var(--primary-disabled-color);
+}
+
+.secondary.disabled {
+    background-color: var(--secondary-disabled-bg);
+    color: var(--secondary-disabled-color);
+}
+
+.clear.disabled {
+    background-color: var(--clear-disabled-bg);
+    color: var(--clear-disabled-color);
+}
+
+.danger.disabled {
+    background-color: var(--danger-disabled-bg);
+    color: var(--danger-disabled-color);
 }

@@ -24,6 +24,14 @@
   --secondary-hover-color: #769C1C;
   --secondary-active-color: #769C1C;
 
+  --primary-disabled-bg: #FCDFA6;
+  --primary-disabled-color: #A67C00;
+  --secondary-disabled-bg: #CDE8A6;
+  --secondary-disabled-color: #6E8C1C;
+  --clear-disabled-bg: #2A2A2A;
+  --clear-disabled-color: #A0A0A0;
+  --danger-disabled-bg: #E6A6A6;
+  --danger-disabled-color: #A43828;
 
   /* 8-based sizing system */
   --size0_5: 4px;
