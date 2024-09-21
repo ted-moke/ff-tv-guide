@@ -80,7 +80,11 @@
   flex-direction: column;
   align-items: center;
   gap: var(--size0_5);
-  margin-bottom: var(--size2);
+  margin-bottom: var(--size3);
+}
+
+.players-wrapper:last-of-type {
+  margin-bottom: var(--size1);
 }
 
 .starters-row,
