@@ -75,8 +75,8 @@ export const useWeeklySchedule = (selectedWeek: number) => {
     selectedWeekSchedule.games.forEach((game) => {
       const gameStartTime = new Date(`${game.date} ${game.time} EDT`);
       const gameEndTime = new Date(
-        gameStartTime.getTime() + 4 * 60 * 60 * 1000
-      ); // Assuming 4 hours game duration
+        gameStartTime.getTime() + 3 * 60 * 60 * 1000 // Changed to 3 hours game duration
+      );
 
       if (now < gameStartTime) {
         addGameToBucket(game, bucketedGames.games.upcoming);

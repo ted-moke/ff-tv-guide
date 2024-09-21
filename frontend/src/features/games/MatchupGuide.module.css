@@ -31,7 +31,7 @@
 
 .game-group-content {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: var(--size2);
 }
 
@@ -45,5 +45,24 @@
 @media (max-width: 768px) {
   .game-group-content {
     grid-template-columns: 1fr; /* Stack items vertically on smaller screens */
+    display: flex;
+    flex-direction: column;
+    gap: var(--size2);
   }
+}
+
+.bucket-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.collapse-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
 }

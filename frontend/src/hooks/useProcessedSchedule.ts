@@ -153,7 +153,9 @@ export const useProcessedSchedule = (
           if (game.totals.self.starters > 0) {
             // Ensure at least one starter
             game.isTopGame =
-              index < topCount && game.totals.self.starters >= threshold; // Allow ties
+              index < topCount && 
+              (game.totals.self.starters > threshold || 
+              (game.totals.self.starters === threshold && game.totals.opponent.starters >= processedGames[topCount - 1]?.totals.opponent.starters)); // Tiebreaker on opponent starters
             if (game.isTopGame) hasTopGame = true; // Set flag if a top game is found
           } else {
             game.isTopGame = false; // No starters means not a top game

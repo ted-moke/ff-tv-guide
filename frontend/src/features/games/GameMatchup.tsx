@@ -90,7 +90,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game }) => {
         <div className={styles["team-players"]}>
           {game.awayPlayers.starters.length > 0 && (
             <div className={styles["players-wrapper"]}>
-              <h4>{game.awayTeam?.name}</h4>
+              <h4>{game.awayTeam?.code}</h4>
               <div className={styles["team-players-header-container"]}>
                 <div className={styles["team-players-header"]}>
                   <h5>Pos</h5>
@@ -110,7 +110,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game }) => {
           )}
           {game.homePlayers.starters.length > 0 && (
             <div className={styles["players-wrapper"]}>
-              <h4>{game.homeTeam?.name}</h4>
+              <h4>{game.homeTeam?.code}</h4>
               <div className={styles["team-players-header-container"]}>
                 <div className={styles["team-players-header"]}>
                   <h5>Pos</h5>
@@ -145,7 +145,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game }) => {
                 <>
                   {game.awayPlayers.others.length > 0 && (
                     <div className={styles["players-wrapper"]}>
-                      <h4>{game.awayTeam?.name}</h4>
+                      <h4>{game.awayTeam?.code}</h4>
                       <div className={styles["team-players-header-container"]}>
                         <div className={styles["team-players-header"]}>
                           <h5>Pos</h5>
@@ -165,7 +165,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game }) => {
                   )}
                   {game.homePlayers.others.length > 0 && (
                     <div className={styles["players-wrapper"]}>
-                      <h4>{game.homeTeam?.name}</h4>
+                      <h4>{game.homeTeam?.code}</h4>
                       <div className={styles["team-players-header-container"]}>
                         <div className={styles["team-players-header"]}>
                           <h5>Pos</h5>

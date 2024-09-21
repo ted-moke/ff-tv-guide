@@ -27,6 +27,13 @@
 .descriptionContainer {
   text-align: center;
   color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  gap: var(--size3);
+}
+
+.descriptionContainer h4, .descriptionContainer p {
+  margin: 0;
 }
 
 .splashContainer {
@@ -78,6 +85,7 @@
   text-align: center;
   background-color: var(--background-color); 
   border-radius: var(--border-radius-large);
+  gap: var(--size4);
 }
 
 .imageContainer {
@@ -107,7 +115,6 @@
   list-style-type: disc;
   padding: 0; 
   padding-left: var(--size2);
-  margin: 0;
   text-align: left;
 }
 

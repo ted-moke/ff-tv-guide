@@ -15,7 +15,7 @@ const SplashPage: React.FC = () => {
             Having trouble keeping track of which players you have in the games
             on TV?
           </p>
-          <h4>We've got you covered.</h4>
+          <h4>Let us guide your Sunday.</h4>
         </div>
         <div className={styles.buttonContainer}>
           <LinkButton to="/auth">Sign In</LinkButton>
