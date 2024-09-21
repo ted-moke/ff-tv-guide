@@ -30,7 +30,7 @@
 }
 
 .fantasy-team-basic-list p {
-  font-size: var(--size-2);
+  font-size: var(--size1_5);
   color: var(--text-color-muted);
   margin: 0;
 }

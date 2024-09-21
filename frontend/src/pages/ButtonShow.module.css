@@ -10,4 +10,12 @@
   display: flex;
   gap: var(--size2);
   justify-content: center;
+  flex-wrap: wrap; /* Ensure buttons wrap on smaller screens */
+}
+
+@media (max-width: 768px) {
+  .buttonGroup {
+    flex-direction: column; /* Stack buttons vertically on smaller screens */
+    gap: var(--size1);
+  }
 }
