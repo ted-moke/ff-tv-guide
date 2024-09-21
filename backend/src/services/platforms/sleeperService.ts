@@ -43,12 +43,21 @@ export class SleeperService {
     );
     const db = await getDb();
     const leaguesCollection = db.collection("leagues");
+
+    // Fetch external league data
+    const externalLeagueData = await this.fetchLeagueData(externalLeagueId);
+
     const leagueData: League = {
       name: leagueName,
       platform: { name: "sleeper", id: platformCredentialId },
       externalLeagueId,
       lastModified,
+      settings: {
+        bestBall: externalLeagueData.settings.best_ball === 1,
+        // Add other settings you want to track here
+      },
     };
+
     const existingLeagueQuery = await leaguesCollection
       .where("externalLeagueId", "==", externalLeagueId)
       .limit(1)
@@ -203,6 +212,13 @@ export class SleeperService {
     );
   }
 
+  private async fetchLeagueData(externalLeagueId: string): Promise<any> {
+    await ApiTrackingService.trackApiCall("sleeper", "GET league");
+    return fetchFromUrl(
+      `https://api.sleeper.app/v1/league/${externalLeagueId}`,
+    );
+  }
+
   private processPlayerData(players: string[], starters: string[]): Player[] {
     return players
       .map((playerId) => {
@@ -237,3 +253,5 @@ export class SleeperService {
       .filter((player) => player !== null) as Player[];
   }
 }
+
+

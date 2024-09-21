@@ -90,9 +90,9 @@ export const updateLeagueTeam = async (req: Request, res: Response) => {
   }
 };
 
-export const updateAllLeagues = async (req: Request, res: Response) => {
+export const updateRosters = async (req: Request, res: Response) => {
   try {
-    console.log("Updating all leagues");
+    console.log("Updating all rosters");
     const db = await getDb();
     const leaguesSnapshot = await db.collection("leagues").get();
     const leagues = leaguesSnapshot.docs;
@@ -115,7 +115,43 @@ export const updateAllLeagues = async (req: Request, res: Response) => {
       console.log(`Batch ${i / BATCH_SIZE + 1} completed`);
     }
 
-    res.status(200).json({ message: "All leagues updated successfully" });
+    res.status(200).json({ message: "All rosters updated successfully" });
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+};
+
+export const updateExternalInfo = async (req: Request, res: Response) => {
+  try {
+    console.log("Upserting all leagues");
+    const db = await getDb();
+    const leaguesSnapshot = await db.collection("leagues").get();
+    const leagues = leaguesSnapshot.docs;
+
+    for (let i = 0; i < leagues.length; i += BATCH_SIZE) {
+      console.log(`Processing batch ${i / BATCH_SIZE + 1}`);
+      const batch = leagues.slice(i, i + BATCH_SIZE);
+      const upsertPromises = batch.map(async (doc) => {
+        const leagueData = doc.data() as League;
+        const platformService = PlatformServiceFactory.getService(
+          leagueData.platform.name,
+        );
+        await platformService.upsertLeague({
+          leagueName: leagueData.name,
+          externalLeagueId: leagueData.externalLeagueId,
+          platformCredentialId: leagueData.platform.id,
+          lastModified: new Date(),
+        });
+
+        // Update lastModified
+        await doc.ref.update({ lastModified: new Date() });
+      });
+
+      await Promise.all(upsertPromises);
+      console.log(`Batch ${i / BATCH_SIZE + 1} completed`);
+    }
+
+    res.status(200).json({ message: "All leagues upserted successfully" });
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });
   }
