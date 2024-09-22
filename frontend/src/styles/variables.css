@@ -24,10 +24,10 @@
   --secondary-hover-color: #769C1C;
   --secondary-active-color: #769C1C;
 
-  --primary-disabled-bg: #FCDFA6;
-  --primary-disabled-color: #A67C00;
-  --secondary-disabled-bg: #CDE8A6;
-  --secondary-disabled-color: #6E8C1C;
+  --primary-disabled-bg: #f7d088; /* Lighter yellow for better contrast */
+  --primary-disabled-color: #5f3d00; /* Darker yellow for better contrast */
+  --secondary-disabled-bg: #A8D46A; /* Lighter green for better contrast */
+  --secondary-disabled-color: #4A6C1C; /* Darker green for better contrast */
   --clear-disabled-bg: #2A2A2A;
   --clear-disabled-color: #A0A0A0;
   --danger-disabled-bg: #E6A6A6;

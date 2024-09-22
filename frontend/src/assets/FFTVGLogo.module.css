@@ -15,11 +15,11 @@
   top: 54%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: var(--size3);
+  font-size: var(--size4);
 }
 
 .logoWrapper h1 {
-  font-size: var(--size2);
+  font-size: var(--size2_5);
   margin: 0; 
 }
 

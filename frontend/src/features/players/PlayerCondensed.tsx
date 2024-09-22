@@ -1,8 +1,7 @@
-import React, { ReactNode, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { OwnedPlayer, Player as PlayerType } from "../nfl/nflTypes";
 import styles from "./PlayerCondensed.module.css";
 import Popup from "../../components/ui/Popup";
-import LinkButton, { LinkButtonColor } from "../../components/ui/LinkButton";
 import Button from "../../components/ui/Button";
 
 interface PlayerProps {

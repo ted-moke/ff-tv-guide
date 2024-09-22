@@ -4,11 +4,11 @@ import { Link } from "react-router-dom";
 
 const sizeMap = {
   small: {
-    fontSize: 44,
+    logoFontSize: 46,
     className: styles.small,
   },
   large: {
-    fontSize: 72,
+    logoFontSize: 72,
     className: styles.large,
   },
 };
@@ -20,14 +20,14 @@ const FFTVGLogo = ({
   size?: "small" | "large";
   withText?: boolean;
 }) => {
-  const fontSize = sizeMap[size].fontSize;
+  const logoFontSize = sizeMap[size].logoFontSize;
   const className = sizeMap[size].className;
 
   return (
     <Link to="/">
       <div className={`${styles.logoWrapper} ${className}`}>
         <div className={styles.logoContainer}>
-          <LuTv fontSize={fontSize} color="var(--primary-color)" />
+          <LuTv fontSize={logoFontSize} color="var(--primary-color)" />
           <h1 className={styles.logoText}>FF</h1>
         </div>
         {withText && <h1 className={styles.text}>TV Guide</h1>}
