@@ -1,11 +1,14 @@
 export interface Team {
-  id?: string; // Add this line
+  id?: string;
   externalTeamId: string;
   leagueId: string;
+  // TODO abstract leagueId and externalLeagueId to a league model, so team.league.id
+  externalLeagueId: string;
   leagueName: string;
   name?: string;
   externalUsername?: string;
   externalUserId?: string;
+  platformId: string;
   opponentId: string;
   playerData: Player[];
 }

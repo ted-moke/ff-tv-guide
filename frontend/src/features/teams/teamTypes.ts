@@ -5,6 +5,8 @@ export interface FantasyTeam {
   opponentId: string;
   externalUserId: string;
   leagueId: string;
+  externalLeagueId: string;
+  platformId: string;
   name: string;
   externalTeamId: string;
   externalUsername: string,

@@ -1,47 +1,45 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Player as PlayerType } from "../nfl/nflTypes";
+import React, { ReactNode, useMemo, useState } from "react";
+import { OwnedPlayer, Player as PlayerType } from "../nfl/nflTypes";
 import styles from "./PlayerCondensed.module.css";
-import IconButton from "../../components/IconButton";
-import { LuX as CloseIcon } from "react-icons/lu" // Example icon import
+import Popup from "../../components/ui/Popup";
+import LinkButton, { LinkButtonColor } from "../../components/ui/LinkButton";
+import Button from "../../components/ui/Button";
 
 interface PlayerProps {
   player: PlayerType;
   slotType: "start" | "bench";
 }
 
-const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotType }) => {
-  const [popupContent, setPopupContent] = useState<string | null>(null);
-  const [popupPosition, setPopupPosition] = useState<{ x: number; y: number } | null>(null);
-  const popupRef = useRef<HTMLDivElement | null>(null);
+const generateLeagueUrl = (leagueId: string, platformId: string) => {
+  console.log("leagueId", leagueId);
+  console.log("platformId", platformId);
+  switch (platformId) {
+    case "sleeper":
+      return `https://sleeper.com/leagues/${leagueId}`;
+    case "fleaflicker":
+      return `https://www.fleaflicker.com/nfl/leagues/${leagueId}/scores`;
+    default:
+      return "";
+  }
+};
 
-  const handlePopup = (leagueName: string, event: React.MouseEvent) => {
+const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotType }) => {
+  const [selectedCopy, setselectedCopy] = useState<OwnedPlayer | null>(null);
+  const [popupPosition, setPopupPosition] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
+
+  const handlePopup = (copy: OwnedPlayer, event: React.MouseEvent) => {
     const rect = (event.target as HTMLElement).getBoundingClientRect();
-    setPopupContent(leagueName);
+    setselectedCopy(copy);
     setPopupPosition({ x: rect.left, y: rect.bottom });
   };
 
   const closePopup = () => {
-    setPopupContent(null);
+    setselectedCopy(null);
     setPopupPosition(null);
   };
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
-        closePopup();
-      }
-    };
-
-    if (popupContent) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [popupContent]);
 
   if (!player) return null;
 
@@ -53,6 +51,15 @@ const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotType }) => {
   const opponentCopies = player.copies.filter(
     (copy) => copy.team === "opponent"
   );
+
+  const externalLeagueUrl = useMemo(() => {
+    if (!selectedCopy) return "";
+    return generateLeagueUrl(
+      selectedCopy?.externalLeagueId!,
+      selectedCopy?.platformId!
+    );
+  }, [selectedCopy]);
+  console.log("leagueurl", externalLeagueUrl);
 
   return (
     <div
@@ -74,9 +81,12 @@ const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotType }) => {
         {userCopies.map(
           (copy, index) =>
             copy.rosterSlotType === slotType && (
-              <p key={`${player.name}-${copy.leagueId}-${index}`} onClick={(event) => handlePopup(copy.leagueName, event)}>
-              {copy.shortLeagueName}
-            </p>
+              <p
+                key={`${player.name}-${copy.leagueId}-${index}`}
+                onClick={(event) => handlePopup(copy, event)}
+              >
+                {copy.shortLeagueName}
+              </p>
             )
         )}
       </div>
@@ -86,23 +96,32 @@ const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotType }) => {
         {opponentCopies.map(
           (copy, index) =>
             copy.rosterSlotType === slotType && (
-              <p key={`${player.name}-${copy.leagueId}-${index}`} onClick={(event) => handlePopup(copy.leagueName, event)}>
-              {copy.shortLeagueName}
-            </p>
+              <p
+                key={`${player.name}-${copy.leagueId}-${index}`}
+                onClick={(event) => handlePopup(copy, event)}
+              >
+                {copy.shortLeagueName}
+              </p>
             )
         )}
       </div>
-      {popupContent && popupPosition && (
-        <div
-          ref={popupRef}
-          className={styles["popup"]}
-          style={{ top: popupPosition.y + window.scrollY, left: popupPosition.x + window.scrollX }}
-        >
-          <div className={styles["popup-content"]}>
-            <p>{popupContent}</p>
-            <IconButton icon={<CloseIcon color="var(--text-color)" />} onClick={closePopup} className={styles["close"]} />
-          </div>
-        </div>
+      {selectedCopy && popupPosition && (
+        <Popup
+          content={
+            <div className={styles.leaguePopup}>
+                <h5>{selectedCopy.leagueName}</h5>
+              <div className={styles.leaguePopupContent}>
+                <p>Code: {selectedCopy.shortLeagueName}</p>
+                <p className={styles.platformId}>Platform: {selectedCopy.platformId}</p>
+              </div>
+              <Button onClick={() => window.open(externalLeagueUrl, "_blank")}>
+                View League
+              </Button>
+            </div>
+          }
+          position={popupPosition}
+          onClose={closePopup}
+        />
       )}
     </div>
   );

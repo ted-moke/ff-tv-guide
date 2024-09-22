@@ -103,7 +103,9 @@ export class SleeperService {
           (t: any) => t.roster_id !== teamData.roster_id,
         );
         const team: Team = {
+          externalLeagueId: league.externalLeagueId,
           externalTeamId: teamData.roster_id.toString(),
+          platformId: league.platform.name,
           leagueId: league.id || "",
           leagueName: league.name,
           name: `Team ${teamData.roster_id}`, // You might want to fetch actual team names separately

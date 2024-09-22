@@ -89,7 +89,9 @@ export class FleaflickerService {
         );
         const owner = teamOwners.get(teamData.id.toString());
         const team: Team = {
+          externalLeagueId: league.externalLeagueId,
           externalTeamId: teamData.id.toString(),
+          platformId: league.platform.name,
           leagueId: league.id!,
           leagueName: league.name,
           name: teamData.name,

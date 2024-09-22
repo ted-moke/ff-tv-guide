@@ -84,15 +84,18 @@ h4 {
 }
 
 h5 {
-  font-size: var(--font-size-medium);
-  line-height: 1.1;
-  margin-bottom: var(--size2);
+  font-size: var(--font-size-m_l);
+  line-height: 1.2;
 }
 
 h6 {
-  font-size: var(--font-size-small);
-  line-height: 1.1;
-  margin-bottom: var(--size2);
+  font-size: var(--font-size-medium);
+  line-height: 1.2;
+}
+
+p {
+  font-size: var(--font-size-medium);
+  line-height: 1.2;
 }
 
 button {

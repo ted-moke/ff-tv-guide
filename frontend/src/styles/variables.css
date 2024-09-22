@@ -58,6 +58,7 @@
 
   --font-size-small: var(--size1);
   --font-size-medium: var(--size1_5);
+  --font-size-m_l: var(--size2);
   --font-size-large: var(--size2_5);
   --font-size-xl: var(--size3_5);
 

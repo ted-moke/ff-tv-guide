@@ -15,9 +15,11 @@ export interface NFLGame {
 // }
 
 export interface OwnedPlayer {
+  platformId: string;
   leagueName: string;
   shortLeagueName: string;
   leagueId: string;
+  externalLeagueId: string;
   rosterSlotType: 'start' | 'bench' | 'bestBall';
   team: 'self' | 'opponent';
 }

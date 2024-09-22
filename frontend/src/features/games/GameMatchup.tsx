@@ -93,10 +93,10 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game }) => {
               <h4>{game.awayTeam?.code}</h4>
               <div className={styles["team-players-header-container"]}>
                 <div className={styles["team-players-header"]}>
-                  <h5>Pos</h5>
-                  <h5>Name</h5>
-                  <h5>Mine</h5>
-                  <h5>Against</h5>
+                  <h6>Pos</h6>
+                  <h6>Name</h6>
+                  <h6>Own</h6>
+                  <h6>Against</h6>
                 </div>
               </div>
               {game.awayPlayers.starters.map((player: Player) => (
@@ -113,10 +113,10 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game }) => {
               <h4>{game.homeTeam?.code}</h4>
               <div className={styles["team-players-header-container"]}>
                 <div className={styles["team-players-header"]}>
-                  <h5>Pos</h5>
-                  <h5>Name</h5>
-                  <h5>Mine</h5>
-                  <h5>Against</h5>
+                  <h6>Pos</h6>
+                  <h6>Name</h6>
+                  <h6>Own</h6>
+                  <h6>Against</h6>
                 </div>
               </div>
               {game.homePlayers.starters.map((player: Player) => (
@@ -148,10 +148,10 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game }) => {
                       <h4>{game.awayTeam?.code}</h4>
                       <div className={styles["team-players-header-container"]}>
                         <div className={styles["team-players-header"]}>
-                          <h5>Pos</h5>
-                          <h5>Name</h5>
-                          <h5>Mine</h5>
-                          <h5>Against</h5>
+                          <h6>Pos</h6>
+                          <h6>Name</h6>
+                          <h6>Own</h6>
+                          <h6>Against</h6>
                         </div>
                       </div>
                       {game.awayPlayers.others.map((player: Player) => (
@@ -168,9 +168,9 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game }) => {
                       <h4>{game.homeTeam?.code}</h4>
                       <div className={styles["team-players-header-container"]}>
                         <div className={styles["team-players-header"]}>
-                          <h5>Pos</h5>
-                          <h5>Name</h5>
-                          <h5>Mine</h5>
+                          <h6>Pos</h6>
+                          <h6>Name</h6>
+                          <h6>Own</h6>
                         </div>
                       </div>
                       {game.homePlayers.others.map((player: Player) => (

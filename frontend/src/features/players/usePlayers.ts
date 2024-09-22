@@ -109,6 +109,8 @@ export const usePlayers = () => {
             leagueName: team.leagueName,
             shortLeagueName: shortLeagueName,
             leagueId: team.leagueId,
+            externalLeagueId: team.externalLeagueId,
+            platformId: team.platformId,
             rosterSlotType: player.rosterSlotType as
               | "start"
               | "bench"
