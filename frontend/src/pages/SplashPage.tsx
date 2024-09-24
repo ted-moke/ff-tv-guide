@@ -12,10 +12,9 @@ const SplashPage: React.FC = () => {
         <FFTVGLogo size="large" withText />
         <div className={styles.descriptionContainer}>
           <p>
-            Having trouble keeping track of which players you have in the games
-            on TV?
+            Drowning in apps while trying to watch the games? See all your fantasy players at a glance, organized by NFL game.
           </p>
-          <h4>Let us guide your Sunday.</h4>
+          <h4>Let us guide your Gameday.</h4>
         </div>
         <div className={styles.buttonContainer}>
           <LinkButton to="/auth">Sign In</LinkButton>

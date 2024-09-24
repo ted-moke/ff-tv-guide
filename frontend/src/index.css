@@ -48,14 +48,13 @@ h5,
 h6 {
   margin-top: 0;
   margin-bottom: 0;
-  font-family: "altehaasgrotesk", Inter, system-ui, Avenir;
+  font-family: "altehaasgrotesk", sans-serif;
 }
 
 h1,
 h2,
 h3 {
-  font-family: "altehaasgrotesk", Inter, system-ui, Avenir;
-
+  font-family: "altehaasgrotesk", sans-serif;
   font-weight: bold;
 }
 

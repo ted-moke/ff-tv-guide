@@ -36,6 +36,12 @@
   margin: 0;
 }
 
+.descriptionContainer p {
+  font-size: var(--size2);
+  line-height: 1.5;
+  max-width: 600px;
+}
+
 .splashContainer {
   display: flex;
   justify-content: center;
