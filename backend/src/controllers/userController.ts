@@ -1,32 +1,65 @@
 import { Request, Response } from "express";
 import { getAdmin, getDb, verifyIdToken } from "../firebase";
+import { generateTempUserId } from "../utils/tempUser";
 
 export const registerUser = async (req: Request, res: Response) => {
-  const { email, username } = req.body;
+  const { email, username, isTemporary } = req.body;
   const idToken = req.headers.authorization?.split("Bearer ")[1];
 
-  if (!idToken) {
-    return res.status(401).send({ error: "No token provided" });
+  let uid: string;
+  let derivedEmail = email;
+  if (isTemporary) {
+    uid = generateTempUserId();
+    derivedEmail = `temp-${uid}@example.com`;
+  } else {
+    if (!idToken) {
+      return res.status(401).send({ error: "No token provided" });
+    }
+
+    const decodedToken = await verifyIdToken(idToken);
+    uid = decodedToken.uid;
   }
 
   try {
-    const decodedToken = await verifyIdToken(idToken);
-    const uid = decodedToken.uid;
-
     const db = await getDb();
+
+    // Check if a user with the same username already exists
+    const usernameQuery = await db
+      .collection("users")
+      .where("username", "==", username)
+      .get();
+
+    if (!usernameQuery.empty) {
+      return res
+        .status(400)
+        .send({ error: "User with the same username already exists" });
+    }
+
+    // If an email is provided, check if a user with the same email already exists
+    const emailQuery = await db
+      .collection("users")
+      .where("email", "==", derivedEmail)
+      .get();
+    if (!emailQuery.empty) {
+      return res
+        .status(400)
+        .send({ error: "User with the same email already exists" });
+    }
+
     console.log("Attempting to create user document in Firestore", { uid });
     await db.collection("users").doc(uid).set({
-      email,
+      email: derivedEmail,
       username,
       createdAt: new Date(),
       preferences: {},
+      isTemporary,
     });
     console.log("User document created in Firestore", { uid });
 
     res.status(201).send({
       authenticated: true,
       uid,
-      email,
+      email: derivedEmail,
       username,
     });
   } catch (error) {

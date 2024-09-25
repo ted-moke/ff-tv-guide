@@ -71,10 +71,10 @@ export const deletePlatformCredential = async (req: Request, res: Response) => {
 };
 
 export const listPlatformCredentials = async (
-  req: AuthenticatedRequest,
+  req: Request,
   res: Response,
 ) => {
-  const userId = req.user?.uid;
+  const userId = req.params.uid;
   const db = await getDb();
 
   if (!userId) {

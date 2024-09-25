@@ -11,6 +11,7 @@ import { PlatformCredential } from "../features/platforms/platformTypes";
 import { useConnectLeague } from "../features/league/useLeague";
 import styles from "./ConnectTeam.module.css";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
+import { useAuth } from "../features/auth/useAuth";
 
 const ConnectTeam: React.FC = () => {
   const navigate = useNavigate(); // Add this line
@@ -19,13 +20,14 @@ const ConnectTeam: React.FC = () => {
     useState<PlatformCredential | null>(null);
   const [selectedLeagues, setSelectedLeagues] = useState<string[]>([]);
   const [isConnecting, setIsConnecting] = useState(false);
-  const { data: credentials, isLoading, error } = useCredentials();
+  const { user } = useAuth();
+  const {
+    data: credentials,
+    isLoading,
+    error,
+    refetch: refetchCredentials,
+  } = useCredentials({ user: user ?? undefined });
   const { mutateAsync: connectLeague } = useConnectLeague();
-
-  const manuallyFilteredCredentials = credentials;
-  // const manuallyFilteredCredentials = credentials?.filter(
-  //   (credential) => credential.platformId !== "fleaflicker"
-  // );
 
   const handleSelectCredential = (credential: PlatformCredential) => {
     setSelectedCredential(credential);
@@ -101,6 +103,13 @@ const ConnectTeam: React.FC = () => {
   if (error)
     return <div>Error loading credentials: {(error as Error).message}</div>;
 
+  console.log("user", user);
+
+  let derivedShowCredentialForm = showNewCredentialForm;
+  if (!user) {
+    derivedShowCredentialForm = true;
+  }
+
   return (
     <div className={`${styles.connectTeamPageContainer} page-container`}>
       <div className={styles.pageHeader}>
@@ -110,19 +119,16 @@ const ConnectTeam: React.FC = () => {
           OR username) for the platform you are using.
         </p>
       </div>
-      {!selectedCredential && !showNewCredentialForm && (
+      {!selectedCredential && !derivedShowCredentialForm && (
         <div className={styles.connectTeamFormWrapper}>
-          {manuallyFilteredCredentials &&
-            manuallyFilteredCredentials.length > 0 && (
-              <div className={styles.connectTeamFormContainer}>
-                <CredentialList
-                  credentials={
-                    manuallyFilteredCredentials as PlatformCredential[]
-                  }
-                  onSelectCredential={handleSelectCredential}
-                />
-              </div>
-            )}
+          {credentials && credentials.length > 0 && (
+            <div className={styles.connectTeamFormContainer}>
+              <CredentialList
+                credentials={credentials as PlatformCredential[]}
+                onSelectCredential={handleSelectCredential}
+              />
+            </div>
+          )}
           {credentials && credentials.length > 0 ? (
             <LinkButton
               color={LinkButtonColor.PRIMARY}
@@ -132,19 +138,22 @@ const ConnectTeam: React.FC = () => {
             </LinkButton>
           ) : (
             <>
-            <p>No credentials found</p>
-            <Button onClick={() => setShowNewCredentialForm(true)}>
-              + Add New Credential
-            </Button>
+              <p>No credentials found</p>
+              <Button onClick={() => setShowNewCredentialForm(true)}>
+                + Add New Credential
+              </Button>
             </>
           )}
         </div>
       )}
 
-      {showNewCredentialForm && (
+      {derivedShowCredentialForm && (
         <div className={styles.connectTeamFormWrapper}>
           <ConnectTeamForm
-            onSuccess={() => setShowNewCredentialForm(false)}
+            onSuccess={async () => {
+              await refetchCredentials();
+              setShowNewCredentialForm(false);
+            }}
             onCancel={handleCancelNewCredential}
           />
         </div>

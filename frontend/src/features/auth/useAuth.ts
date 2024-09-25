@@ -1,11 +1,21 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { verifyToken, loginUser, registerUser } from "./authAPI";
+import {
+  verifyToken,
+  loginUser,
+  registerUser,
+  registerTemporaryUser,
+} from "./authAPI";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect, useCallback } from "react";
 import { AuthData } from "./authTypes";
 import { auth } from "../../firebaseConfig";
 
+const tempUserData = localStorage.getItem("tempUserData");
+
 export const useAuth = ({ enabled = true }: { enabled?: boolean } = {}) => {
+  const [tempUser, setTempUser] = useState<AuthData | null>(
+    tempUserData ? JSON.parse(tempUserData) : null
+  );
   const queryClient = useQueryClient();
   const location = useLocation();
   const navigate = useNavigate();
@@ -24,7 +34,7 @@ export const useAuth = ({ enabled = true }: { enabled?: boolean } = {}) => {
     navigate("/auth");
   };
 
-  const { data, isLoading, isError, isSuccess, error, refetch } = useQuery<
+  const { data, isLoading, isError, error, refetch } = useQuery<
     AuthData | null,
     Error,
     AuthData
@@ -45,26 +55,29 @@ export const useAuth = ({ enabled = true }: { enabled?: boolean } = {}) => {
     }
   }, [isError, error, location.pathname, navigate]);
 
-  useEffect(() => {
-    if (isSuccess && isAuthEnabled && data) {
-      if (!data.authenticated) {
-        console.log("User is not authenticated, clearing auth data");
-        _clearAuthData();
-        if (location.pathname !== "/") {
-          navigate("/");
-        }
-      }
-    }
-  }, [
-    isSuccess,
-    isAuthEnabled,
-    data,
-    location.pathname,
-    _clearAuthData,
-    navigate,
-  ]);
+  // Freed up app to non-users
+  // useEffect(() => {
+  //   if (isSuccess && isAuthEnabled && data) {
+  //     if (!data.authenticated) {
+  //       console.log("User is not authenticated, clearing auth data");
+  //       _clearAuthData();
+  //       if (location.pathname !== "/") {
+  //         // navigate("/");
+  //       }
+  //     }
+  //   }
+  // }, [
+  //   isSuccess,
+  //   isAuthEnabled,
+  //   data,
+  //   location.pathname,
+  //   _clearAuthData,
+  //   navigate,
+  // ]);
 
-  const user = data?.authenticated ? data : null;
+  const user = data?.authenticated ? data : tempUser ? tempUser : null;
+
+  console.log("user", user);
 
   const loginMutation = useMutation({
     mutationFn: loginUser,
@@ -94,12 +107,27 @@ export const useAuth = ({ enabled = true }: { enabled?: boolean } = {}) => {
     },
   });
 
+  const registerTemporaryUserMutation = useMutation({
+    mutationFn: registerTemporaryUser,
+    onSuccess: (data: AuthData) => {
+      queryClient.setQueryData(["auth"], data);
+      localStorage.setItem("tempUserData", JSON.stringify(data));
+      setTempUser(data);
+      return data;
+    },
+    onError: (error: Error) => {
+      setIsAuthEnabled(false);
+      throw error;
+    },
+  });
+
   return {
     user,
     isLoading,
     error,
     login: loginMutation.mutateAsync,
     register: registerMutation.mutateAsync,
+    registerTemporaryUser: registerTemporaryUserMutation.mutateAsync,
     logout,
   };
 };

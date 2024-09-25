@@ -4,7 +4,7 @@ import Alert from "../../components/ui/Alert";
 import { useMatchupPlayers } from "../players/useMatchupPlayers";
 import GameBucketGroup from "./GameBucketGroup";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
-import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import logoFF from "../../assets/logo-ff.png";
 
 interface MatchupGuideProps {
@@ -16,7 +16,6 @@ interface MatchupGuideProps {
 const alertDismissed = localStorage.getItem("newFeatureAlertDismissed");
 
 const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
-  const navigate = useNavigate();
   const [showNewFeatureAlert, setShowNewFeatureAlert] = useState(
     alertDismissed === "true" ? false : true
   );
@@ -40,15 +39,7 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
   }
 
   if (!hasPlayers) {
-    return (
-      <div className={styles["no-teams"]}>
-        <Alert
-          message="It looks like you haven't connected any leagues yet. Connect a league to view your matchups."
-          buttonText="Connect a League"
-          onButtonClick={() => navigate("/connect-team")}
-        />
-      </div>
-    );
+    return <Navigate to="/connect-team" />;
   }
 
   return (

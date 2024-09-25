@@ -6,7 +6,6 @@ import {
   Navigate,
 } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useAuth } from "./features/auth/useAuth";
 import AuthPage from "./pages/AuthPage";
 import HomePage from "./pages/HomePage";
 import SplashPage from "./pages/SplashPage";
@@ -15,37 +14,18 @@ import ConnectTeam from "./pages/ConnectTeam"; // Add this import
 import AdminDashboard from "./pages/AdminDashboard"; // Add this import
 import AdminLeagues from "./pages/AdminLeagues"; // Import AdminLeagues
 import AdminUserTeamsPage from "./pages/AdminUserTeamsPage"; // Import AdminUserTeamsPage
-import LoadingSpinner from "./components/ui/LoadingSpinner";
 import Layout from "./components/ui/Layout";
 import { ViewProvider } from "./features/view/ViewContext";
-
 
 import "./assets/fonts/altehaasgroteskbold-webfont.woff2";
 import "./assets/fonts/altehaasgroteskregular-webfont.woff2";
 import UIShowcase from "./pages/UIShowcase";
+import LoadingSpinner from "./components/ui/LoadingSpinner";
+import { useAuth } from "./features/auth/useAuth";
 
 const queryClient = new QueryClient();
 
-const AuthenticatedRoute: React.FC<{ element: React.ReactElement }> = ({
-  element,
-}) => {
-  const { user, isLoading } = useAuth();
-
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
-
-  if (!user) {
-    console.log('no user, navigating to splash');
-    return <SplashPage />;
-  }
-
-  return <Layout>{element}</Layout>;
-};
-
-const AdminRoute: React.FC<{ element: React.ReactElement }> = ({
-  element,
-}) => {
+const AdminRoute: React.FC<{ element: React.ReactElement }> = ({ element }) => {
   const { user, isLoading } = useAuth();
 
   if (isLoading) {
@@ -65,15 +45,27 @@ const App: React.FC = () => {
       <Router>
         <ViewProvider>
           <Routes>
-            <Route path="/" element={<AuthenticatedRoute element={<HomePage />} />} />
+            <Route
+              path="/"
+              element={
+                <Layout>
+                  <HomePage />
+                </Layout>
+              }
+            />
             <Route path="/auth" element={<AuthPage />} />
             <Route
               path="/connect-team"
-              element={<AuthenticatedRoute element={<ConnectTeam />} />}>
-            </Route>
+              element={
+                <Layout>
+                  <ConnectTeam />
+                </Layout>
+              }
+            />
             <Route
               path="/admin"
-              element={<AdminRoute element={<AdminDashboard />} />}>
+              element={<AdminRoute element={<AdminDashboard />} />}
+            >
               <Route path="leagues" element={<AdminLeagues />} />
               <Route path="userTeams" element={<AdminUserTeamsPage />} />
             </Route>

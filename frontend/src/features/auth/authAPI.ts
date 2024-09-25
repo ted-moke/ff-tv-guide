@@ -42,10 +42,33 @@ export const verifyToken = async (): Promise<AuthData> => {
   }
 };
 
+export const registerTemporaryUser = async () => {
+  const response = await fetch(`${API_URL}/users/register`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      username: `temp-${Math.random().toString(36).substring(2, 15)}`,
+      isTemporary: true,
+    }),
+    credentials: "include",
+  });
+  if (!response.ok) throw new Error("Failed to register user");
+  const data = await response.json();
+
+  if (!data.authenticated) {
+    throw new Error("Failed to login");
+  }
+
+  return data;
+};
+
 export const registerUser = async (userData: {
   username: string;
   email: string;
   password: string;
+  isTemporary: boolean;
 }) => {
   const userCredential = await createUserWithEmailAndPassword(
     auth,
@@ -63,6 +86,7 @@ export const registerUser = async (userData: {
     body: JSON.stringify({
       username: userData.username,
       email: userData.email,
+      isTemporary: userData.isTemporary,
     }),
     credentials: "include",
   });
