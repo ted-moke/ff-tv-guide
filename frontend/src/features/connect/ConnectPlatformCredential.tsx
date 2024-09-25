@@ -4,17 +4,30 @@ import { usePlatforms } from "../platforms/usePlatforms";
 import { Platform, PlatformCredential } from "../platforms/platformTypes";
 import { createPlatformCredential } from "./connectTeamAPI";
 import { useAuth } from "../auth/useAuth";
-import Dropdown from "../../components/ui/Dropdown";
+import RadioButton from "../../components/ui/RadioButton";
 import TextInput from "../../components/ui/TextInput";
 import Button from "../../components/ui/Button";
 import LinkButton from "../../components/ui/LinkButton";
 import styles from "./ConnectPlatformCredential.module.css";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
+import logoFF from "../../assets/logo-ff.png";
+import logoSleeper from "../../assets/logo-sleeper.png";
 
 interface ConnectPlatformCredentialProps {
   onSuccess: (newCredential: PlatformCredential) => void;
   onCancel: () => void;
 }
+
+const platformLogo = (platformId: string) => {
+  switch (platformId) {
+    case "fleaflicker":
+      return logoFF;
+    case "sleeper":
+      return logoSleeper;
+    default:
+      return undefined;
+  }
+};
 
 const ConnectPlatformCredential: React.FC<ConnectPlatformCredentialProps> = ({
   onSuccess,
@@ -44,20 +57,15 @@ const ConnectPlatformCredential: React.FC<ConnectPlatformCredentialProps> = ({
     },
   });
 
-  const handlePlatformChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    const platform =
-      platforms?.find((p) => p.id === event.target.value) || null;
-    setSelectedPlatform(platform);
+  const handlePlatformChange = (platformId: string) => {
+    const platform = platforms?.find((p) => p.id === platformId);
+    setSelectedPlatform(platform || null);
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
-    console.log("handleSubmit called");
+    event.preventDefault();
     setIsWorking(true);
     try {
-      event.preventDefault();
-
       let currentUser = user;
 
       if (!user) {
@@ -65,8 +73,7 @@ const ConnectPlatformCredential: React.FC<ConnectPlatformCredentialProps> = ({
       }
 
       if (selectedPlatform && currentUser?.uid) {
-        console.log("selectedPlatform", selectedPlatform);
-        mutation.mutateAsync({
+        await mutation.mutateAsync({
           platformId: selectedPlatform.id,
           userId: currentUser.uid,
           credential: credential,
@@ -84,24 +91,32 @@ const ConnectPlatformCredential: React.FC<ConnectPlatformCredentialProps> = ({
     return <div>Error fetching platforms: {(error as Error).message}</div>;
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
-      <Dropdown
-        id="platform"
-        label="Select Platform:"
-        value={selectedPlatform?.id || ""}
-        onChange={handlePlatformChange}
-        options={
-          platforms
-            ? platforms.map((platform) => ({
-                value: platform.id,
-                label: platform.name,
-              }))
-            : []
-        }
-        placeholder="--Select a platform--"
-        required
-      />
-
+    <form onSubmit={handleSubmit}>
+      <h4>Choose a Platform</h4>
+      <div className={styles.platformOptions}>
+        {platforms?.map((platform) => (
+          <div key={platform.id} className={styles.platformOption}>
+            <RadioButton
+              id={`platform-${platform.id}`}
+              name="platform"
+              value={platform.id}
+              checked={selectedPlatform?.id === platform.id}
+              onChange={() => handlePlatformChange(platform.id)}
+              labelContent={
+                <div className={styles.platformLabel}>
+                  <img
+                    src={platformLogo(platform.id)}
+                    alt={platform.name}
+                    width={20}
+                    height={20}
+                  />
+                  <span>{platform.name}</span>
+                </div>
+              }
+            />
+          </div>
+        ))}
+      </div>
       {selectedPlatform && (
         <TextInput
           type={selectedPlatform.credentialType === "email" ? "email" : "text"}

@@ -166,7 +166,7 @@ const ConnectTeam: React.FC = () => {
         <div
           className={`${styles.connectTeamFormWrapper} ${styles.externalLeagueSelect}`}
         >
-          {isLoadingLeagues && <div>Loading leagues...</div>}
+          {isLoadingLeagues && <LoadingSpinner />}
           {leaguesError && (
             <div>Error loading leagues: {(leaguesError as Error).message}</div>
           )}
@@ -178,7 +178,7 @@ const ConnectTeam: React.FC = () => {
                 </LinkButton>
                 <LinkButton onClick={handleSelectAll}>Select All</LinkButton>
               </div>
-              <ul>
+              <ul className={styles.externalLeagueList}>
                 {externalLeagues.map((league) => (
                   <li key={league.id}>
                     <Checkbox

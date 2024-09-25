@@ -9,6 +9,7 @@ import FantasyTeamOptions from "../features/teams/FantasyTeamOptions";
 import { useAuth } from "../features/auth/useAuth";
 import Button, { ButtonColor } from "./ui/Button";
 import { useLocation } from "react-router-dom";
+import FFTVGLogo from "../assets/FFTVGLogo";
 
 const Sidebar: React.FC = () => {
   const {
@@ -29,6 +30,9 @@ const Sidebar: React.FC = () => {
   return (
     <aside className={`${styles.sidebar} ${isMenuOpen ? styles.open : ""}`}>
       <div className={styles["sidebar-wrapper"]}>
+        <div className={styles["sidebar-header"]}>
+          <FFTVGLogo withText />
+        </div>
         <div className={styles["control-group"]}>
           <MenuItem
             text="TV Guide"
