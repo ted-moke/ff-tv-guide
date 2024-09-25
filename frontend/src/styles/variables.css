@@ -64,7 +64,7 @@
 
 
   --font-size-xxl: var(--size4);
-  --font-size-xxxl: var(--size5);
+  --font-size-xxxl: var(--size4_5);
 
   --border-radius-small: var(--size0_5);
   --border-radius-medium: var(--size1);

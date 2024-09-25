@@ -135,3 +135,9 @@ button:focus-visible {
   height: auto;
   margin-bottom: var(--size2);
 }
+
+@media (max-width: 768px) {
+  .page-container {
+    padding: var(--size10) var(--size1_5) var(--size2);
+  }
+}

@@ -5,6 +5,7 @@
   flex-direction: column;
   align-items: center;
   height: 100%;
+  gap: var(--size2);
 }
 
 .pageHeader {
@@ -12,7 +13,6 @@
   flex-direction: column;
   align-items: center;
   gap: var(--size2);
-  padding-top: var(--size2);
   margin-bottom: var(--size2);
 }
 
@@ -82,7 +82,6 @@ li {
   gap: 1rem;
   align-items: center;
   justify-content: center;
-  min-height: 50%;
 }
 
 .connectTeamFormContainer {
@@ -106,3 +105,10 @@ li {
   justify-content: flex-start;
   gap: var(--size2);
 }
+
+@media (min-width: 768px) {
+  .connectTeamPageContainer {
+    gap: var(--size4);
+  }
+}
+

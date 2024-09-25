@@ -13,6 +13,9 @@
 
 .header {
   grid-area: header;
+  z-index: 1050;
+  position: fixed;
+  width: 100%;
 }
 
 .sidebar-container {
@@ -32,10 +35,13 @@
 @media (min-width: 768px) {
   .app-container {
     grid-template-areas:
-      "header header"
       "sidebar content"
       "footer footer";
     grid-template-columns: 250px 1fr;
+  }
+  
+  .header {
+    display: none;
   }
 
   .sidebar-container {

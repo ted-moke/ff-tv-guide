@@ -22,6 +22,7 @@ const AuthPage: React.FC = () => {
   const [isRegistering, setIsRegistering] = useState(false);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (searchParams.get("register")) {
@@ -31,6 +32,7 @@ const AuthPage: React.FC = () => {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       await login({ email, password });
     } catch (error) {
@@ -40,12 +42,15 @@ const AuthPage: React.FC = () => {
         setError("An unknown error occurred");
       }
       console.error("Login failed:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      setIsLoading(true);
       if (user?.isTemporary && user.uid) {
         await convertTempUser({ id: user.uid, email, username, password });
         localStorage.removeItem("tempUserData");
@@ -61,6 +66,8 @@ const AuthPage: React.FC = () => {
         setError("An unknown error occurred");
       }
       console.error("Registration failed:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -80,6 +87,7 @@ const AuthPage: React.FC = () => {
           setPassword={setPassword}
           onSubmit={handleRegister}
           error={error || (authError as Error)?.message}
+          isWorking={isLoading}
         />
       ) : (
         <LoginForm
@@ -89,10 +97,15 @@ const AuthPage: React.FC = () => {
           setPassword={setPassword}
           onSubmit={handleLogin}
           error={error || (authError as Error)?.message}
+          isWorking={isLoading}
         />
       )}
       <LinkButton onClick={() => setIsRegistering(!isRegistering)}>
-        <p>{isRegistering ? "Already have an account? Sign In" : "Don't have an account? Sign Up"}</p>
+        <p>
+          {isRegistering
+            ? "Already have an account? Sign In"
+            : "Don't have an account? Sign Up"}
+        </p>
       </LinkButton>
     </div>
   );

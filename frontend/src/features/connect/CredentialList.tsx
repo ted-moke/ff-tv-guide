@@ -27,7 +27,6 @@ const CredentialList: React.FC<CredentialListProps> = ({
 }) => {
   return (
     <div className={styles.credentialList}>
-      <h3>Your Connected Accounts</h3>
       {credentials.map((credential) => (
         <div key={credential.credential} className={styles.credentialItem}>
           <div className={styles.credentialContainer}>
@@ -46,7 +45,7 @@ const CredentialList: React.FC<CredentialListProps> = ({
             onClick={() => onSelectCredential(credential)}
             color={ButtonColor.CLEAR}
           >
-            Use This Account
+            Select
           </Button>
         </div>
       ))}

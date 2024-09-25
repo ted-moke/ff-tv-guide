@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, ReactNode } from 'react';
+import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { Conference } from '../nfl/nflTypes';
 
 export type ViewMode = 'overview' | 'matchup';
@@ -27,6 +27,8 @@ interface ViewContextType {
   setHideEmptyTeams: (hide: boolean) => void;
   selectedWeek: number;
   setSelectedWeek: (week: number) => void;
+  isMobile: boolean;
+  setIsMobile: (isMobile: boolean) => void;
 }
 
 const ViewContext = createContext<ViewContextType | undefined>(undefined);
@@ -58,6 +60,22 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
   const [sortBy, setSortBy] = useState<SortOption>('name');
   const [hideEmptyTeams, setHideEmptyTeams] = useState(false);
   const [selectedWeek, setSelectedWeek] = useState(getCurrentWeek());
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    // Check on initial render
+    checkScreenSize();
+
+    // Add event listener for window resize
+    window.addEventListener('resize', checkScreenSize);
+
+    // Cleanup the event listener on component unmount
+    return () => window.removeEventListener('resize', checkScreenSize);
+  }, []);
 
   const value = {
     isMenuOpen,
@@ -76,6 +94,8 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     setHideEmptyTeams,
     selectedWeek,
     setSelectedWeek,
+    isMobile,
+    setIsMobile,
   };
 
   return <ViewContext.Provider value={value}>{children}</ViewContext.Provider>;

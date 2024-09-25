@@ -10,9 +10,10 @@ interface LoginFormProps {
   setPassword: (password: string) => void;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   error: string | null;
+  isWorking: boolean;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ email, setEmail, password, setPassword, onSubmit, error }) => {
+const LoginForm: React.FC<LoginFormProps> = ({ email, setEmail, password, setPassword, onSubmit, error, isWorking }) => {
   return (
     <form className={styles.form} onSubmit={onSubmit}>
       <div className={styles.formGroup}>
@@ -40,7 +41,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ email, setEmail, password, setPas
         />
       </div>
       {error && <p className={styles.error}>{error}</p>}
-      <Button type="submit">Sign In</Button>
+      <Button type="submit" disabled={isWorking}>
+        {isWorking ? "Working..." : "Sign In"}
+      </Button>
     </form>
   );
 };

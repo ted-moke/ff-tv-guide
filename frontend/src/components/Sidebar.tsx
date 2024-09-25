@@ -6,15 +6,13 @@ import Checkbox from "./ui/Checkbox";
 import Dropdown from "./ui/Dropdown";
 import { SortOption, useView } from "../features/view/ViewContext";
 import FantasyTeamOptions from "../features/teams/FantasyTeamOptions";
-// import LinkButton from "./LinkButton";
 import { useAuth } from "../features/auth/useAuth";
 import Button, { ButtonColor } from "./ui/Button";
-import { useLocation, Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const Sidebar: React.FC = () => {
   const {
     viewMode,
-    // setViewMode,
     activeConference,
     setActiveConference,
     sortBy,
@@ -26,7 +24,6 @@ const Sidebar: React.FC = () => {
   } = useView();
 
   const location = useLocation();
-
   const { logout, user } = useAuth();
 
   return (
@@ -41,14 +38,6 @@ const Sidebar: React.FC = () => {
               setIsMenuOpen(false);
             }}
           />
-          {/* <MenuItem
-          text="NFL Teams"
-          to="/nfl"
-          isActive={location.pathname === "/nfl"}
-          onClick={() => {
-            setIsMenuOpen(false);
-          }}
-        /> */}
           <MenuItem
             text="Connect a League"
             to="/connect-team"
@@ -97,7 +86,9 @@ const Sidebar: React.FC = () => {
           </>
         )}
         <FantasyTeamOptions />
-        <div className={`${styles["divider"]} ${styles["divider-no-margin"]}`} />
+        <div
+          className={`${styles["divider"]} ${styles["divider-no-margin"]}`}
+        />
         <div className={styles["mobile-menu-items"]}>
           {user && !user.isTemporary ? (
             <Button

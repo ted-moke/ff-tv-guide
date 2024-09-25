@@ -13,6 +13,7 @@ import styles from "./ConnectTeam.module.css";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 import { useAuth } from "../features/auth/useAuth";
 import { useQueryClient } from "@tanstack/react-query";
+import Alert from "../components/ui/Alert";
 
 const ConnectTeam: React.FC = () => {
   const navigate = useNavigate(); // Add this line
@@ -116,10 +117,9 @@ const ConnectTeam: React.FC = () => {
     <div className={`${styles.connectTeamPageContainer} page-container`}>
       <div className={styles.pageHeader}>
         <h1 className={styles.title}>Connect Your Fantasy League</h1>
-        <p>
-          To connect your league, you need to provide a credential (e.g. email
-          OR username) for the platform you are using.
-        </p>
+        {!credentials || credentials.length < 1 ? (
+          <Alert message="To start viewing your personalized TV Guide, you need to first connect with a fantasy platform." />
+        ) : null}
       </div>
       {!selectedCredential && !derivedShowCredentialForm && (
         <div className={styles.connectTeamFormWrapper}>
@@ -136,13 +136,13 @@ const ConnectTeam: React.FC = () => {
               color={LinkButtonColor.PRIMARY}
               onClick={() => setShowNewCredentialForm(true)}
             >
-              + Add New Credential
+              + Add New Account
             </LinkButton>
           ) : (
             <>
-              <p>No credentials found</p>
+              <p>No accounts found</p>
               <Button onClick={() => setShowNewCredentialForm(true)}>
-                + Add New Credential
+                + Add New Account
               </Button>
             </>
           )}

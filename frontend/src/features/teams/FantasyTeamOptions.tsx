@@ -4,13 +4,14 @@ import LinkButton, { LinkButtonColor } from "../../components/ui/LinkButton";
 // import Checkbox from "../../components/ui/Checkbox";
 import { useUserTeams } from "./useUserTeams";
 import { useView } from "../view/ViewContext";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const FantasyTeamOptions: React.FC = () => {
   // const { activeFantasyTeams, setActiveFantasyTeams, setIsMenuOpen } = useView();
   const { setIsMenuOpen } = useView();
   const navigate = useNavigate();
   const { data: userTeams, isLoading, error } = useUserTeams();
+  const location = useLocation();
 
   const fantasyTeams = useMemo(() => {
     if (!userTeams) return [];
@@ -34,11 +35,15 @@ const FantasyTeamOptions: React.FC = () => {
 
   return (
     <div className={styles["fantasy-team-list-wrapper"]}>
-      <h4>Fantasy Leagues</h4>
+      <h5>Your Leagues</h5>
       {isLoading ? (
         <p>Loading leagues...</p>
       ) : error ? (
         <p>Error loading leagues: {(error as Error).message}</p>
+      ) : fantasyTeams.length < 1 ? (
+        <div className={styles["fantasy-team-basic-list"]}>
+          <p>No leagues found</p>
+        </div>
       ) : (
         <div className={styles["fantasy-team-basic-list"]}>
           {fantasyTeams.map((team) => {
@@ -64,6 +69,7 @@ const FantasyTeamOptions: React.FC = () => {
           ))} */}
         </div>
       )}
+      {location.pathname !== "/connect-team" && (
       <div className={styles["connect-team-container"]}>
         <LinkButton
           color={LinkButtonColor.PRIMARY}
@@ -73,8 +79,9 @@ const FantasyTeamOptions: React.FC = () => {
           }}
         >
           + Connect a League
-        </LinkButton>
-      </div>
+          </LinkButton>
+        </div>
+      )}
     </div>
   );
 };

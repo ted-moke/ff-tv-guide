@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 import styles from "./AuthForms.module.css";
 import Button from "../ui/Button";
 import TextInput from "../ui/TextInput";
@@ -12,10 +12,19 @@ interface RegisterFormProps {
   setPassword: (password: string) => void;
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   error: string | null;
+  isWorking: boolean;
 }
 
-const RegisterForm: React.FC<RegisterFormProps> = ({ 
-  username, setUsername, email, setEmail, password, setPassword, onSubmit, error 
+const RegisterForm: React.FC<RegisterFormProps> = ({
+  username,
+  setUsername,
+  email,
+  setEmail,
+  password,
+  setPassword,
+  onSubmit,
+  error,
+  isWorking,
 }) => {
   return (
     <form className={styles.form} onSubmit={onSubmit}>
@@ -59,7 +68,9 @@ const RegisterForm: React.FC<RegisterFormProps> = ({
         />
       </div>
       {error && <p className={styles.error}>{error}</p>}
-      <Button type="submit">Register</Button>
+      <Button type="submit" disabled={isWorking}>
+        {isWorking ? "Working..." : "Register"}
+      </Button>
     </form>
   );
 };
