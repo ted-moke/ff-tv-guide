@@ -6,6 +6,7 @@ import GameBucketGroup from "./GameBucketGroup";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
 import { Navigate } from "react-router-dom";
 import logoFF from "../../assets/logo-ff.png";
+import { useAuth } from "../auth/useAuth";
 
 interface MatchupGuideProps {
   selectedWeek: number;
@@ -19,8 +20,9 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
   const [showNewFeatureAlert, setShowNewFeatureAlert] = useState(
     alertDismissed === "true" ? false : true
   );
+  const { user, isLoading: isAuthLoading } = useAuth();
 
-  const { hasPlayers, matchupPlayers, isLoading, error } =
+  const { hasPlayers, matchupPlayers, isLoading, initialized, error } =
     useMatchupPlayers(selectedWeek);
 
   const handleDismissAlert = () => {
@@ -28,13 +30,19 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
     localStorage.setItem("newFeatureAlertDismissed", "true");
   };
 
+  if (isAuthLoading) return <LoadingSpinner />;
+  if (!user) {
+    console.log("no user");
+    return <Navigate to="/connect-team" />;
+  }
+
   if (isLoading) return <LoadingSpinner />;
   if (error) {
     console.error("Error in MatchupGuide:", error);
     return <div>Error loading user teams: {(error as Error).message}</div>;
   }
 
-  if (!matchupPlayers) {
+  if (!matchupPlayers && initialized) {
     return <div>No games scheduled for this week.</div>;
   }
 
@@ -48,7 +56,9 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
         <div style={{ maxWidth: "600px", margin: "8px auto" }}>
           <Alert buttonText="Dismiss" onButtonClick={handleDismissAlert}>
             <div>
-              <h4 style={{ marginBottom: "8px" }}>New features for NFL Week 3</h4>
+              <h4 style={{ marginBottom: "8px" }}>
+                New features for NFL Week 3
+              </h4>
               <ul
                 style={{
                   listStyle: "disc",

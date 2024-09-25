@@ -23,7 +23,7 @@ export const createPlatformCredential = async (req: Request, res: Response) => {
     }
 
     const newDoc = await collection.add(data);
-    res.status(201).json({ id: newDoc.id });
+    res.status(201).json({ id: newDoc.id, ...data });
   } catch (error) {
     res.status(500).send(error);
   }

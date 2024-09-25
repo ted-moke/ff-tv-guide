@@ -76,8 +76,10 @@ export const usePlayers = () => {
     error: opponentTeamsError,
   } = useOpponentTeams();
 
-  const players: Player[] = useMemo(() => {
-    if (!userTeams && !opponentTeams) return [];
+  const players: Player[] | null = useMemo(() => {
+    if (!userTeams || !opponentTeams) {
+      return null
+    };
 
     const playerMap = new Map<string, Player>();
 

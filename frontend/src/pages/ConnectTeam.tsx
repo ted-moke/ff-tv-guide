@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom"; // Add this import
 import useCredentials from "../features/connect/useCredentials";
 import useExternalLeagues from "../features/connect/useExternalLeagues";
-import ConnectTeamForm from "../features/connect/ConnectTeamForm";
+import ConnectPlatformCredential from "../features/connect/ConnectPlatformCredential";
 import CredentialList from "../features/connect/CredentialList";
 import Button from "../components/ui/Button";
 import LinkButton, { LinkButtonColor } from "../components/ui/LinkButton"; // Add this import
@@ -12,6 +12,7 @@ import { useConnectLeague } from "../features/league/useLeague";
 import styles from "./ConnectTeam.module.css";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 import { useAuth } from "../features/auth/useAuth";
+import { useQueryClient } from "@tanstack/react-query";
 
 const ConnectTeam: React.FC = () => {
   const navigate = useNavigate(); // Add this line
@@ -20,7 +21,8 @@ const ConnectTeam: React.FC = () => {
     useState<PlatformCredential | null>(null);
   const [selectedLeagues, setSelectedLeagues] = useState<string[]>([]);
   const [isConnecting, setIsConnecting] = useState(false);
-  const { user } = useAuth();
+  const queryClient = useQueryClient();
+  const { user, isLoading: isAuthLoading } = useAuth();
   const {
     data: credentials,
     isLoading,
@@ -88,6 +90,8 @@ const ConnectTeam: React.FC = () => {
         });
 
         await Promise.all(connectPromises);
+        queryClient.invalidateQueries({ queryKey: ["userTeams"] });
+        queryClient.invalidateQueries({ queryKey: ["opponentTeams"] });
         console.log("All leagues connected successfully");
         navigate("/");
       } catch (error) {
@@ -99,11 +103,9 @@ const ConnectTeam: React.FC = () => {
     }
   };
 
-  if (isLoading) return <LoadingSpinner />;
+  if (isLoading || isAuthLoading) return <LoadingSpinner />;
   if (error)
     return <div>Error loading credentials: {(error as Error).message}</div>;
-
-  console.log("user", user);
 
   let derivedShowCredentialForm = showNewCredentialForm;
   if (!user) {
@@ -149,10 +151,11 @@ const ConnectTeam: React.FC = () => {
 
       {derivedShowCredentialForm && (
         <div className={styles.connectTeamFormWrapper}>
-          <ConnectTeamForm
-            onSuccess={async () => {
-              await refetchCredentials();
+          <ConnectPlatformCredential
+            onSuccess={async (newCredential) => {
+              setSelectedCredential(newCredential);
               setShowNewCredentialForm(false);
+              await refetchCredentials();
             }}
             onCancel={handleCancelNewCredential}
           />

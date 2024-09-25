@@ -21,7 +21,6 @@ export const verifyToken = async (): Promise<AuthData> => {
   const token = localStorage.getItem("authToken");
 
   if (!token) {
-    console.log("No token found");
     return { authenticated: false };
   }
 
