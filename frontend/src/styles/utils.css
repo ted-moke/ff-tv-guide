@@ -9,6 +9,10 @@
   border-color: var(--text-color-muted);
 }
 
+.divider-no-margin {
+  margin: 0;
+}
+
 .flex {
   display: flex;
 }

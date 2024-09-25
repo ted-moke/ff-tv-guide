@@ -4,13 +4,12 @@ import {
   loginUser,
   registerUser,
   registerTemporaryUser,
+  convertTempUser,
 } from "./authAPI";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect, useCallback } from "react";
 import { AuthData } from "./authTypes";
 import { auth } from "../../firebaseConfig";
-
-const tempUserData = localStorage.getItem("tempUserData");
 
 export const useAuth = ({ enabled = true }: { enabled?: boolean } = {}) => {
   const [tempUser, setTempUser] = useState<AuthData | null>(
@@ -58,26 +57,6 @@ export const useAuth = ({ enabled = true }: { enabled?: boolean } = {}) => {
     }
   }, [isError, error, location.pathname, navigate]);
 
-  // Freed up app to non-users
-  // useEffect(() => {
-  //   if (isSuccess && isAuthEnabled && data) {
-  //     if (!data.authenticated) {
-  //       console.log("User is not authenticated, clearing auth data");
-  //       _clearAuthData();
-  //       if (location.pathname !== "/") {
-  //         // navigate("/");
-  //       }
-  //     }
-  //   }
-  // }, [
-  //   isSuccess,
-  //   isAuthEnabled,
-  //   data,
-  //   location.pathname,
-  //   _clearAuthData,
-  //   navigate,
-  // ]);
-
   const user = data?.authenticated ? data : tempUser ? tempUser : null;
 
   const loginMutation = useMutation({
@@ -122,6 +101,24 @@ export const useAuth = ({ enabled = true }: { enabled?: boolean } = {}) => {
     },
   });
 
+  const convertTempUserMutation = useMutation({
+    mutationFn: (
+      userData: { id: string; email: string; username: string; password: string }
+    ) => convertTempUser(userData),
+    onSuccess: (data: AuthData) => {
+      setTempUser(null);
+      localStorage.removeItem("tempUserData");
+      queryClient.setQueryData(["auth"], data);
+      setIsAuthEnabled(true);
+      refetch();
+      navigate("/");
+    },
+    onError: (error: Error) => {
+      setIsAuthEnabled(false);
+      throw error;
+    },
+  });
+
   return {
     user,
     isLoading,
@@ -129,6 +126,7 @@ export const useAuth = ({ enabled = true }: { enabled?: boolean } = {}) => {
     login: loginMutation.mutateAsync,
     register: registerMutation.mutateAsync,
     registerTemporaryUser: registerTemporaryUserMutation.mutateAsync,
+    convertTempUser: convertTempUserMutation.mutateAsync,
     logout,
   };
 };

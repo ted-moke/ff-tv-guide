@@ -37,7 +37,7 @@ const Button: React.FC<ButtonProps> = ({
         }}
       >
         <button
-          className={buttonClass}
+          className={`${buttonClass} ${styles.buttonInLink}`}
           onClick={onClick}
           disabled={disabled}
           {...props}

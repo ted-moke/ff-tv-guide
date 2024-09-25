@@ -1,65 +1,76 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../features/auth/useAuth";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import FFTVGLogo from "../assets/FFTVGLogo";
+import RegisterForm from "../components/forms/RegisterForm";
+import LoginForm from "../components/forms/LoginForm";
 import styles from "./AuthPage.module.css";
 import LinkButton from "../components/ui/LinkButton";
-import LoginForm from "../components/forms/LoginForm";
-import RegisterForm from "../components/forms/RegisterForm";
-import LoadingSpinner from "../components/ui/LoadingSpinner";
-import FFTVGLogo from "../assets/FFTVGLogo";
 
 const AuthPage: React.FC = () => {
-  const [isRegister, setIsRegister] = useState(false);
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-
   const {
     login,
     register,
-    isLoading: authLoading,
+    convertTempUser,
+    user,
     error: authError,
-  } = useAuth({ enabled: false });
-  const location = useLocation();
+  } = useAuth();
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [isRegistering, setIsRegistering] = useState(false);
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
-    setIsRegister(searchParams.get("register") === "true");
-  }, [location]);
+    if (searchParams.get("register")) {
+      setIsRegistering(true);
+    }
+  }, [searchParams]);
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-    setIsLoading(true);
     try {
-      if (isRegister) {
-        await register({ username, email, password });
+      await login({ email, password });
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message);
       } else {
-        await login({ email, password });
+        setError("An unknown error occurred");
+      }
+      console.error("Login failed:", error);
+    }
+  };
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      if (user?.isTemporary && user.uid) {
+        await convertTempUser({ id: user.uid, email, username, password });
+        localStorage.removeItem("tempUserData");
+      } else {
+        await register({ email, username, password, isTemporary: false });
       }
 
       navigate("/");
     } catch (error) {
-      setError((error as Error).message);
-    } finally {
-      setIsLoading(false);
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError("An unknown error occurred");
+      }
+      console.error("Registration failed:", error);
     }
   };
-
-  if (isLoading || authLoading) {
-    return <LoadingSpinner />;
-  }
 
   return (
     <div className="container">
       <div className={styles.logoContainer}>
         <FFTVGLogo size="large" withText />
       </div>
-      <h1>{isRegister ? "Create Your Account" : "Sign In"}</h1>
-      {isRegister ? (
+      <h1>{isRegistering ? "Create Your Account" : "Sign In"}</h1>
+      {isRegistering ? (
         <RegisterForm
           username={username}
           setUsername={setUsername}
@@ -67,7 +78,7 @@ const AuthPage: React.FC = () => {
           setEmail={setEmail}
           password={password}
           setPassword={setPassword}
-          onSubmit={handleSubmit}
+          onSubmit={handleRegister}
           error={error || (authError as Error)?.message}
         />
       ) : (
@@ -76,19 +87,13 @@ const AuthPage: React.FC = () => {
           setEmail={setEmail}
           password={password}
           setPassword={setPassword}
-          onSubmit={handleSubmit}
+          onSubmit={handleLogin}
           error={error || (authError as Error)?.message}
         />
       )}
-      <div className={styles.linkContainer}>
-        <LinkButton
-          to={isRegister ? "/auth?register=false" : "/auth?register=true"}
-        >
-          {isRegister
-            ? "Already have an account? Sign In"
-            : "Don't have an account? Sign Up"}
-        </LinkButton>
-      </div>
+      <LinkButton onClick={() => setIsRegistering(!isRegistering)}>
+        <p>{isRegistering ? "Already have an account? Sign In" : "Don't have an account? Sign Up"}</p>
+      </LinkButton>
     </div>
   );
 };

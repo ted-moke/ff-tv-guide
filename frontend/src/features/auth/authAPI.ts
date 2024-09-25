@@ -126,3 +126,42 @@ export const loginUser = async (credentials: {
 
   return data;
 };
+
+export const convertTempUser = async (userData: {
+  id: string;
+  email: string;
+  username: string;
+  password: string;
+}) => {
+  if (!userData.id) throw new Error("No temporary user ID provided");
+
+  const userCredential = await createUserWithEmailAndPassword(
+    auth,
+    userData.email,
+    userData.password
+  );
+  const idToken = await userCredential.user.getIdToken();
+
+  const response = await fetch(`${API_URL}/users/convert-temp-user`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${idToken}`,
+    },
+    body: JSON.stringify({
+      id: userData.id,
+      email: userData.email,
+      username: userData.username,
+      password: userData.password,
+    }),
+    credentials: "include",
+  });
+  if (!response.ok) throw new Error("Failed to convert user");
+  const data = await response.json();
+
+  if (!data.authenticated) {
+    throw new Error("Failed to convert user");
+  }
+
+  return data;
+};

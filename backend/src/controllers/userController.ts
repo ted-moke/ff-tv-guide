@@ -47,20 +47,20 @@ export const registerUser = async (req: Request, res: Response) => {
     }
 
     console.log("Attempting to create user document in Firestore", { uid });
-    await db.collection("users").doc(uid).set({
+    const newUser = {
+      uid,
       email: derivedEmail,
       username,
       createdAt: new Date(),
       preferences: {},
       isTemporary,
-    });
+    };
+    await db.collection("users").doc(uid).set(newUser);
     console.log("User document created in Firestore", { uid });
 
     res.status(201).send({
+      ...newUser,
       authenticated: true,
-      uid,
-      email: derivedEmail,
-      username,
     });
   } catch (error) {
     console.error("Error in registerUser", error);
@@ -182,5 +182,100 @@ export const verifyToken = async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error verifying token:", error);
     res.status(200).json({ authenticated: false, error: "Invalid token" });
+  }
+};
+
+export const convertTempUser = async (req: Request, res: Response) => {
+  const { id: tempUserId, email, username, password } = req.body;
+  const idToken = req.headers.authorization?.split("Bearer ")[1];
+
+  if (!idToken) {
+    return res.status(401).send({ error: "No token provided" });
+  }
+
+  try {
+    const decodedToken = await verifyIdToken(idToken);
+    const newUserId = decodedToken.uid;
+
+    const db = await getDb();
+
+    // Check if a user with the same username already exists
+    const usernameQuery = await db
+      .collection("users")
+      .where("username", "==", username)
+      .get();
+
+    if (!usernameQuery.empty) {
+      return res
+        .status(400)
+        .send({ error: "User with the same username already exists" });
+    }
+
+    // Check if a user with the same email already exists
+    const emailQuery = await db
+      .collection("users")
+      .where("email", "==", email)
+      .get();
+
+    if (!emailQuery.empty) {
+      return res
+        .status(400)
+        .send({ error: "User with the same email already exists" });
+    }
+
+    // Copy user data from temp user to new user
+    const tempUserDoc = await db.collection("users").doc(tempUserId).get();
+    if (!tempUserDoc.exists) {
+      return res.status(404).send({ error: "Temporary user not found" });
+    }
+
+    const tempUserData = tempUserDoc.data();
+    const newUserData = {
+      id: newUserId,
+      email,
+      username,
+      createdAt: tempUserData?.createdAt,
+      preferences: tempUserData?.preferences,
+      isTemporary: false,
+    };
+    const newUserDoc = await db
+      .collection("users")
+      .doc(newUserId)
+      .set(newUserData);
+
+    // Copy platform credentials
+    const platformCredentialsSnapshot = await db
+      .collection("platformCredentials")
+      .where("userId", "==", tempUserId)
+      .get();
+
+    const batch = db.batch();
+    platformCredentialsSnapshot.forEach((doc) => {
+      const data = doc.data();
+      const newDocRef = db.collection("platformCredentials").doc();
+      batch.set(newDocRef, { ...data, userId: newUserId });
+    });
+
+    // Copy user teams
+    const userTeamsSnapshot = await db
+      .collection("userTeams")
+      .where("userId", "==", tempUserId)
+      .get();
+
+    userTeamsSnapshot.forEach((doc) => {
+      const data = doc.data();
+      const newDocRef = db.collection("userTeams").doc();
+      batch.set(newDocRef, { ...data, userId: newUserId });
+    });
+
+    await batch.commit();
+
+    // Delete temp user
+    await db.collection("users").doc(tempUserId).delete();
+
+    res.status(201).send({ ...newUserData, authenticated: true });
+  } catch (error) {
+    console.error("Error in convertTempUser", error);
+    res.status(500).send({ error: (error as Error).message });
   }
 };

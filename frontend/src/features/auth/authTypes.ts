@@ -3,4 +3,5 @@ export interface AuthData {
   uid?: string;
   email?: string;
   username?: string;
+  isTemporary?: boolean;
 }

@@ -1,4 +1,4 @@
-import { Router } from "express";
+import express from "express";
 import {
   registerUser,
   loginUser,
@@ -6,26 +6,27 @@ import {
   getUserProfile,
   updateUserProfile,
   verifyToken,
+  convertTempUser,
 } from "../controllers/userController";
-import { getUserTeams, getOpponentTeams } from "../controllers/userTeamController";
-import { authenticate } from "../middleware/authMiddleware";
+import {
+  getOpponentTeams,
+  getUserTeams,
+} from "../controllers/userTeamController";
 import { listPlatformCredentials } from "../controllers/platformCredentialController";
 
-const router = Router();
+const router = express.Router();
 
-// Public routes (no authentication required)
 router.post("/register", registerUser);
+router.post("/convert-temp-user", convertTempUser);
 router.post("/login", loginUser);
+router.get("/verify-token", verifyToken);
 
-// Protected routes (authentication required)
-router.post("/change-password", authenticate, changePassword);
-router.get("/profile/:uid", authenticate, getUserProfile);
-router.put("/profile/:uid", authenticate, updateUserProfile);
+router.post("/change-password", changePassword);
+router.get("/profile/:uid", getUserProfile);
+router.put("/profile/:uid", updateUserProfile);
 
 router.get("/:uid/teams", getUserTeams);
-router.get("/:uid/opponents", getOpponentTeams); // Ensure this route is protected
+router.get("/:uid/opponents", getOpponentTeams);
 router.get("/:uid/platform-credentials", listPlatformCredentials);
-// New route to verify token
-router.get("/verify-token", verifyToken);
 
 export default router;

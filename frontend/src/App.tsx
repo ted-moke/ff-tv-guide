@@ -20,8 +20,6 @@ import { ViewProvider } from "./features/view/ViewContext";
 import "./assets/fonts/altehaasgroteskbold-webfont.woff2";
 import "./assets/fonts/altehaasgroteskregular-webfont.woff2";
 import UIShowcase from "./pages/UIShowcase";
-import LoadingSpinner from "./components/ui/LoadingSpinner";
-import { useAuth } from "./features/auth/useAuth";
 
 const queryClient = new QueryClient();
 

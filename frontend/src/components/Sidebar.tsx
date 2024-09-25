@@ -9,7 +9,7 @@ import FantasyTeamOptions from "../features/teams/FantasyTeamOptions";
 // import LinkButton from "./LinkButton";
 import { useAuth } from "../features/auth/useAuth";
 import Button, { ButtonColor } from "./ui/Button";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 
 const Sidebar: React.FC = () => {
   const {
@@ -27,7 +27,7 @@ const Sidebar: React.FC = () => {
 
   const location = useLocation();
 
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
 
   return (
     <aside className={`${styles.sidebar} ${isMenuOpen ? styles.open : ""}`}>
@@ -97,16 +97,42 @@ const Sidebar: React.FC = () => {
           </>
         )}
         <FantasyTeamOptions />
+        <div className={`${styles["divider"]} ${styles["divider-no-margin"]}`} />
         <div className={styles["mobile-menu-items"]}>
-          <Button
-            color={ButtonColor.CLEAR}
-            onClick={() => {
-              setIsMenuOpen(false);
-              logout();
-            }}
-          >
-            Logout
-          </Button>
+          {user && !user.isTemporary ? (
+            <Button
+              color={ButtonColor.CLEAR}
+              onClick={() => {
+                setIsMenuOpen(false);
+                logout();
+              }}
+            >
+              Logout
+            </Button>
+          ) : (
+            <>
+              <p className={styles["temp-user-message"]}>
+                Create a free account to sync your leagues cross device and reap
+                the full benefits of FF TV Guide
+              </p>
+              <Button
+                color={ButtonColor.PRIMARY}
+                link="/auth?register=true"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Create Account
+              </Button>
+              <Button
+                color={ButtonColor.CLEAR}
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  logout();
+                }}
+              >
+                Clear data
+              </Button>
+            </>
+          )}
         </div>
       </div>
     </aside>
