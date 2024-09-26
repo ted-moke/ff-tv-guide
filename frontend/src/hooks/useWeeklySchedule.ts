@@ -53,9 +53,7 @@ export const useWeeklySchedule = (selectedWeek: number) => {
     const addGameToBucket = (game: NFLGame, bucket: GameBucket[]) => {
       const gameStartTime = new Date(`${game.date} ${game.time} EDT`);
       const day = gameStartTime.toLocaleString("en-US", {
-        weekday: "long",
-        month: "numeric",
-        day: "numeric",
+        weekday: "short",
       });
       const startingHour = gameStartTime.toLocaleString("en-US", {
         hour: "numeric",

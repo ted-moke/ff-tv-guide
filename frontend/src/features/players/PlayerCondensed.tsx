@@ -10,8 +10,6 @@ interface PlayerProps {
 }
 
 const generateLeagueUrl = (leagueId: string, platformId: string) => {
-  console.log("leagueId", leagueId);
-  console.log("platformId", platformId);
   switch (platformId) {
     case "sleeper":
       return `https://sleeper.com/leagues/${leagueId}`;
@@ -58,7 +56,6 @@ const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotType }) => {
       selectedCopy?.platformId!
     );
   }, [selectedCopy]);
-  console.log("leagueurl", externalLeagueUrl);
 
   return (
     <div

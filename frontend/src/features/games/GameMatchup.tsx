@@ -53,7 +53,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game }) => {
                 game.isTopGame ? styles["top-game"] : ""
               }`}
             >
-              <div>You:</div>
+              <h4>You:</h4>
               <div
                 className={`${styles["self-starters"]} ${
                   game.starters.length === 0 ? styles["starters-none"] : ""
@@ -61,11 +61,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game }) => {
               >
                 {game.totals.self.starters}
               </div>
-              {/* <div>
-                {"  Starter"}
-                {game.totals.self.starters !== 1 ? "s " : " "}
-              </div> */}
-              <div>vs</div>
+              <h4>vs</h4>
               <div
                 className={`${styles["self-starters"]} ${
                   game.starters.length === 0 ? styles["starters-none"] : ""
@@ -73,7 +69,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game }) => {
               >
                 {game.totals.opponent.starters}
               </div>
-              <div>Opponent</div>
+              <h4>Opponent</h4>
               {game.isTopGame && (
                 <div className={styles["top-game-badge"]}>
                   <Flame size={20} />

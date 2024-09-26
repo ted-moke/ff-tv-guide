@@ -67,19 +67,19 @@ h1 {
 h2 {
   font-size: var(--font-size-xxl);
   line-height: 1.1;
-  margin-bottom: var(--size2);
+  margin-bottom: var(--size1);
 }
 
 h3 {
   font-size: var(--font-size-xl);
   line-height: 1.1;
-  margin-bottom: var(--size2);
+  margin-bottom: var(--size1);
 }
 
 h4 {
   font-size: var(--font-size-large);
   line-height: 1.1;
-  margin-bottom: var(--size2);
+  margin-bottom: var(--size1);
 }
 
 h5 {
@@ -93,7 +93,7 @@ h6 {
 }
 
 p {
-  font-size: var(--font-size-medium);
+  font-size: var(--font-size-m_l);
   line-height: 1.2;
 }
 

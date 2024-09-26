@@ -1,12 +1,11 @@
 :root {
-
-  --color-red: #CD4631;
-  --color-red-hover: #A43828;
-  --color-red-active: #A43828;
-  --color-blue: #357DED;
-  --color-green: #95C623;
-  --color-yellow: #FCA311;
-  --color-purple: #A14DA0;
+  --color-red: #cd4631;
+  --color-red-hover: #a43828;
+  --color-red-active: #a43828;
+  --color-blue: #357ded;
+  --color-green: #95c623;
+  --color-yellow: #fca311;
+  --color-purple: #a14da0;
 
   --background-color: #121212;
   --background-color-offset: #1a1a1a;
@@ -18,25 +17,26 @@
   --text-color-light-muted: #6e6e6e;
 
   --primary-color: var(--color-yellow);
-  --primary-hover-color: #DE8A02; 
-  --primary-active-color: #DE8A02;
+  --primary-hover-color: #de8a02;
+  --primary-active-color: #de8a02;
   --secondary-color: var(--color-green);
-  --secondary-hover-color: #769C1C;
-  --secondary-active-color: #769C1C;
+  --secondary-hover-color: #769c1c;
+  --secondary-active-color: #769c1c;
 
   --primary-disabled-bg: #f7d088; /* Lighter yellow for better contrast */
   --primary-disabled-color: #5f3d00; /* Darker yellow for better contrast */
-  --secondary-disabled-bg: #A8D46A; /* Lighter green for better contrast */
-  --secondary-disabled-color: #4A6C1C; /* Darker green for better contrast */
-  --clear-disabled-bg: #2A2A2A;
-  --clear-disabled-color: #A0A0A0;
-  --danger-disabled-bg: #E6A6A6;
-  --danger-disabled-color: #A43828;
+  --secondary-disabled-bg: #a8d46a; /* Lighter green for better contrast */
+  --secondary-disabled-color: #4a6c1c; /* Darker green for better contrast */
+  --clear-disabled-bg: #2a2a2a;
+  --clear-disabled-color: #a0a0a0;
+  --danger-disabled-bg: #e6a6a6;
+  --danger-disabled-color: #a43828;
 
   /* 8-based sizing system */
   --size0_5: 4px;
   --size1: 8px;
   --size1_5: 12px;
+  --size1_75: 14px;
   --size2: 16px;
   --size2_5: 20px;
   --size3: 24px;
@@ -56,12 +56,11 @@
   --size10: 80px;
   --size10_5: 84px;
 
-  --font-size-small: var(--size1);
-  --font-size-medium: var(--size1_5);
+  --font-size-small: var(--size1_5);
+  --font-size-medium: var(--size1_75);
   --font-size-m_l: var(--size2);
   --font-size-large: var(--size2_5);
   --font-size-xl: var(--size3_5);
-
 
   --font-size-xxl: var(--size4);
   --font-size-xxxl: var(--size4_5);
@@ -71,24 +70,34 @@
   --border-radius-large: var(--size2);
   --border-radius-full: 50%;
 }
- 
+
+@media (max-width: 375px) {
+  :root {
+    --font-size-small: var(--size1);
+    --font-size-medium: var(--size1_5);
+    --font-size-m_l: var(--size1_75);
+    --font-size-large: var(--size2);
+    --font-size-xl: var(--size2_5);
+    --font-size-xxl: var(--size3);
+    --font-size-xxxl: var(--size3_5);
+  }
+}
 /* https://coolors.co/fca311-a14da0-357ded-95c623-cd4631 */
 
-
-  /* Import the new font files */
-  @font-face {
-    font-family: 'altehaasgrotesk';
-    src: url('./assets/fonts/altehaasgroteskregular-webfont.woff2') format('woff2'),
-         url('./assets/fonts/altehaasgroteskregular-webfont.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
+/* Import the new font files */
+@font-face {
+  font-family: "altehaasgrotesk";
+  src: url("./assets/fonts/altehaasgroteskregular-webfont.woff2")
+      format("woff2"),
+    url("./assets/fonts/altehaasgroteskregular-webfont.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
 }
 
 @font-face {
-    font-family: 'altehaasgrotesk';
-    src: url('./assets/fonts/altehaasgroteskbold-webfont.woff2') format('woff2'),
-         url('./assets/fonts/altehaasgroteskbold-webfont.woff') format('woff');
-    font-weight: bold;
-    font-style: normal;
+  font-family: "altehaasgrotesk";
+  src: url("./assets/fonts/altehaasgroteskbold-webfont.woff2") format("woff2"),
+    url("./assets/fonts/altehaasgroteskbold-webfont.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
 }
-

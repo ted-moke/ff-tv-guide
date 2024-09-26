@@ -14,14 +14,13 @@
 }
 
 .game-bucket {
-  margin-bottom: var(--size3);
   display: flex;
   flex-direction: column;
   gap: var(--size0_5);
 }
 
 .game-bucket h4 {
-  color: var(--text-color-secondary);
+  color: var(--text-color-muted);
   margin-bottom: var(--size1);
   text-align: center;
 }
@@ -52,14 +51,19 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  cursor: pointer;
 }
 
-.collapse-button {
-  background: none;
-  border: none;
+.collapse-icon {
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0;
+  transition: transform 0.125s ease-in-out;
+  transform: rotate(0deg);
+}
+
+.collapsed {
+  transform: rotate(-90deg);
 }

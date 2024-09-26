@@ -2,20 +2,23 @@
 
 ## big stuff
 
-1. collapse game card
-2. show leagues & last updated
-3. signed out after 1 hr
-4. report an issue/submit feedback
-5. notifications for create league, 
-6. vet/1st appearance players, newly acquired players
+1. no user version?
+2. test out no user flow both mobile and desktop
+3. investigate update all leagues failure
+4. notifications
+5. show leagues
+   1. last updated
+   2. team record
+6. report an issue/submit feedback
+8. best ball
+10. vet/1st appearance players, newly acquired players
    1. store each week final roster
    2. abstract roster and teams
-7. no user version?
-8. slate summary up top
-9. league sync on schedule
-10. report an issue/submit feedback
-11. toggle show opponents, teams, etc
-12. delete credential
+11. signed out after 1 hr
+12. slate summary up top
+13. league sync on schedule
+14. toggle show opponents, teams, etc
+15. delete credential
 
 - filter by team
 - connect league error handling UI

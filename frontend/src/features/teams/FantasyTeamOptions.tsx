@@ -7,7 +7,6 @@ import { useView } from "../view/ViewContext";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const FantasyTeamOptions: React.FC = () => {
-  // const { activeFantasyTeams, setActiveFantasyTeams, setIsMenuOpen } = useView();
   const { setIsMenuOpen } = useView();
   const navigate = useNavigate();
   const { data: userTeams, isLoading, error } = useUserTeams();
@@ -20,18 +19,6 @@ const FantasyTeamOptions: React.FC = () => {
       league: team.leagueName,
     }));
   }, [userTeams]);
-
-  // const handleFantasyTeamToggle = (teamName: string) => {
-  //   setActiveFantasyTeams([...activeFantasyTeams, teamName]);
-  // };
-
-  // const handleSelectAllFantasyTeams = () => {
-  //   setActiveFantasyTeams(fantasyTeams.map((team) => team.name));
-  // };
-
-  // const handleClearAllFantasyTeams = () => {
-  //   setActiveFantasyTeams([]);
-  // };
 
   return (
     <div className={styles["fantasy-team-list-wrapper"]}>
