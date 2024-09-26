@@ -6,6 +6,7 @@ import RegisterForm from "../components/forms/RegisterForm";
 import LoginForm from "../components/forms/LoginForm";
 import styles from "./AuthPage.module.css";
 import LinkButton from "../components/ui/LinkButton";
+import toast from "react-hot-toast";
 
 const AuthPage: React.FC = () => {
   const {
@@ -57,6 +58,8 @@ const AuthPage: React.FC = () => {
       } else {
         await register({ email, username, password, isTemporary: false });
       }
+
+      toast.success("Registration successful!");
 
       navigate("/");
     } catch (error) {

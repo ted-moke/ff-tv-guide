@@ -14,6 +14,7 @@ import LoadingSpinner from "../components/ui/LoadingSpinner";
 import { useAuth } from "../features/auth/useAuth";
 import { useQueryClient } from "@tanstack/react-query";
 import Alert from "../components/ui/Alert";
+import toast from "react-hot-toast";
 
 const ConnectTeam: React.FC = () => {
   const navigate = useNavigate(); // Add this line
@@ -76,7 +77,6 @@ const ConnectTeam: React.FC = () => {
       try {
         const connectPromises = selectedLeagues.map((leagueId) => {
           const league = externalLeagues.find((l) => l.id === leagueId);
-          console.log("league", league);
 
           if (league) {
             return connectLeague({
@@ -93,11 +93,15 @@ const ConnectTeam: React.FC = () => {
         await Promise.all(connectPromises);
         queryClient.invalidateQueries({ queryKey: ["userTeams"] });
         queryClient.invalidateQueries({ queryKey: ["opponentTeams"] });
-        console.log("All leagues connected successfully");
+        toast.success(
+          `League${
+            selectedLeagues.length > 1 ? "s" : ""
+          } connected successfully!`
+        );
         navigate("/");
       } catch (error) {
         console.error("Error connecting leagues:", error);
-        // Handle error (e.g., show an error message to the user)
+        toast.error("Error connecting leagues. Please try again.");
       } finally {
         setIsConnecting(false);
       }

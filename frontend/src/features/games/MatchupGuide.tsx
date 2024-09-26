@@ -1,11 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "./MatchupGuide.module.css";
-import Alert from "../../components/ui/Alert";
 import { useMatchupPlayers } from "../players/useMatchupPlayers";
 import GameBucketGroup from "./GameBucketGroup";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
 import { Navigate } from "react-router-dom";
-import logoFF from "../../assets/logo-ff.png";
 import { useAuth } from "../auth/useAuth";
 
 interface MatchupGuideProps {
@@ -14,25 +12,15 @@ interface MatchupGuideProps {
   activeFantasyTeams: string[];
 }
 
-const alertDismissed = localStorage.getItem("newFeatureAlertDismissed");
-
 const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
-  const [showNewFeatureAlert, setShowNewFeatureAlert] = useState(
-    alertDismissed === "true" ? false : true
-  );
   const { user, isLoading: isAuthLoading } = useAuth();
 
   const { hasPlayers, matchupPlayers, isLoading, initialized, error } =
     useMatchupPlayers(selectedWeek);
 
-  const handleDismissAlert = () => {
-    setShowNewFeatureAlert(false);
-    localStorage.setItem("newFeatureAlertDismissed", "true");
-  };
 
   if (isAuthLoading) return <LoadingSpinner />;
   if (!user) {
-    console.log("no user");
     return <Navigate to="/connect-team" />;
   }
 

@@ -16,6 +16,9 @@ import AdminLeagues from "./pages/AdminLeagues"; // Import AdminLeagues
 import AdminUserTeamsPage from "./pages/AdminUserTeamsPage"; // Import AdminUserTeamsPage
 import Layout from "./components/ui/Layout";
 import { ViewProvider } from "./features/view/ViewContext";
+import { Toaster } from "react-hot-toast";
+import { useAuth } from "./features/auth/useAuth";
+import LoadingSpinner from "./components/ui/LoadingSpinner";
 
 import "./assets/fonts/altehaasgroteskbold-webfont.woff2";
 import "./assets/fonts/altehaasgroteskregular-webfont.woff2";
@@ -42,6 +45,18 @@ const App: React.FC = () => {
     <QueryClientProvider client={queryClient}>
       <Router>
         <ViewProvider>
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              duration: 3000,
+              style: {
+                background: "#1a1a1a",
+                color: "#e0e0e0",
+                fontSize: "16px",
+                padding: "8px 16px",
+              },
+            }}
+          />
           <Routes>
             <Route
               path="/"
