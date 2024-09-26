@@ -136,17 +136,6 @@
   line-height: 1;
 }
 
-@media (max-width: 768px) {
-  .starters-row,
-  .bench-row {
-    grid-template-columns: 1fr;
-  }
-
-  .matchup {
-    padding: var(--size1);
-  }
-}
-
 .bench-button {
   width: 100%;
   text-align: left;
@@ -184,11 +173,14 @@
 
 .team-players-header {
   display: grid;
-  grid-template-columns: 35px 170px 50px 50px;
+  grid-template-columns: 35px 1fr 50px 50px;
   column-gap: var(--size3);
   align-items: center;
-  padding: var(--size1);
+  padding: var(--size0_5) var(--size0_5) var(--size1);
   color: var(--text-color-muted);
+  width: 100%;
+  max-width: 450px;
+  justify-items: flex-start;
 }
 
 .team-players-header h5 {
@@ -199,6 +191,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 }
 
 .no-players {
@@ -209,8 +202,18 @@
 
 @media (max-width: 768px) {
   .team-players-header {
-    grid-template-columns: 35px 130px 50px 50px;
+    grid-template-columns: 1fr 3fr 1fr 1fr;
     column-gap: var(--size1);
     padding: var(--size0_5);
+    max-width: none;
+  }
+
+  .starters-row,
+  .bench-row {
+    grid-template-columns: 1fr;
+  }
+
+  .matchup {
+    padding: var(--size1);
   }
 }
