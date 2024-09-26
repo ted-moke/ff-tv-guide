@@ -52,7 +52,8 @@ const App: React.FC = () => {
               toastOptions={{
                 duration: 3000,
                 style: {
-                  background: "#1a1a1a",
+                  background: "#2a2a2a",
+                  border: "1px solid #121212",
                   color: "#e0e0e0",
                   fontSize: "16px",
                   padding: "8px 16px",

@@ -34,7 +34,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: var(--size0_25);
+  gap: var(--size0_5);
 }
 
 .player-user-teams-text p {
@@ -76,7 +76,7 @@
 .leaguePopup {
   display: flex;
   flex-direction: column;
-  gap: var(--size1);
+  gap: var(--size1_5);
 }
 
 .leaguePopup h5 {
