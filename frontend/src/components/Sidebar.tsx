@@ -5,7 +5,6 @@ import MenuItem from "./ui/MenuItem";
 import Checkbox from "./ui/Checkbox";
 import Dropdown from "./ui/Dropdown";
 import { SortOption, useView } from "../features/view/ViewContext";
-import FantasyTeamOptions from "../features/teams/FantasyTeamOptions";
 import { useAuth } from "../features/auth/useAuth";
 import Button, { ButtonColor } from "./ui/Button";
 import { useLocation } from "react-router-dom";
@@ -89,7 +88,6 @@ const Sidebar: React.FC = () => {
             </div>
           </>
         )}
-        <FantasyTeamOptions />
         <div
           className={`${styles["divider"]} ${styles["divider-no-margin"]}`}
         />
