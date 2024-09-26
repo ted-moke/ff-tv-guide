@@ -7,6 +7,7 @@ interface AlertProps {
   buttonText?: string;
   onButtonClick?: () => void;
   children?: React.ReactNode;
+  variant?: "default" | "info";
 }
 
 const Alert: React.FC<AlertProps> = ({
@@ -14,9 +15,10 @@ const Alert: React.FC<AlertProps> = ({
   buttonText = "Close",
   onButtonClick,
   children,
+  variant = "default",
 }) => {
   return (
-    <div className={styles.alert}>
+    <div className={`${styles.alert} ${styles[variant]}`}>
       {message && <p>{message}</p>}
       {children}
       {onButtonClick && <Button onClick={onButtonClick}>{buttonText}</Button>}

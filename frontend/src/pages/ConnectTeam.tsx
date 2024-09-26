@@ -4,7 +4,7 @@ import useCredentials from "../features/connect/useCredentials";
 import useExternalLeagues from "../features/connect/useExternalLeagues";
 import ConnectPlatformCredential from "../features/connect/ConnectPlatformCredential";
 import CredentialList from "../features/connect/CredentialList";
-import Button from "../components/ui/Button";
+import Button, { ButtonColor } from "../components/ui/Button";
 import LinkButton, { LinkButtonColor } from "../components/ui/LinkButton"; // Add this import
 import Checkbox from "../components/ui/Checkbox";
 import { PlatformCredential } from "../features/platforms/platformTypes";
@@ -14,7 +14,6 @@ import LoadingSpinner from "../components/ui/LoadingSpinner";
 import { useAuthContext } from "../features/auth/AuthProvider";
 
 import { useQueryClient } from "@tanstack/react-query";
-import Alert from "../components/ui/Alert";
 import toast from "react-hot-toast";
 
 const ConnectTeam: React.FC = () => {
@@ -94,14 +93,14 @@ const ConnectTeam: React.FC = () => {
         await Promise.all(connectPromises);
         queryClient.invalidateQueries({ queryKey: ["userTeams"] });
         queryClient.invalidateQueries({ queryKey: ["opponentTeams"] });
-        
+
         await new Promise((resolve) => setTimeout(resolve, 1000));
         toast.success(
           `League${
             selectedLeagues.length > 1 ? "s" : ""
           } connected successfully!`
         );
-        
+
         navigate("/");
       } catch (error) {
         console.error("Error connecting leagues:", error);
@@ -125,10 +124,17 @@ const ConnectTeam: React.FC = () => {
     <div className={`${styles.connectTeamPageContainer} page-container`}>
       <div className={styles.pageHeader}>
         <h1 className={styles.title}>Connect Your Fantasy League</h1>
-        {!credentials || credentials.length < 1 ? (
-          <Alert message="To start viewing your personalized TV Guide, you need to first connect with a fantasy platform." />
-        ) : null}
       </div>
+      <div className={styles.signInContainer}>
+        <p>Already a member?</p>
+        <Button color={ButtonColor.CLEAR} link="/auth">Sign In</Button>
+      </div>
+      {!credentials || credentials.length < 1 ? (
+        <p>
+          To start viewing your personalized TV Guide, connect with a fantasy
+          platform.
+        </p>
+      ) : null}
       {!selectedCredential && !derivedShowCredentialForm && (
         <div className={styles.connectTeamFormWrapper}>
           {credentials && credentials.length > 0 && (

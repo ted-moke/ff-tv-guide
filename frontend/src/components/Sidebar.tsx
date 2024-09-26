@@ -105,7 +105,7 @@ const Sidebar: React.FC = () => {
             >
               Logout
             </Button>
-          ) : (
+          ) : location.pathname !== "/connect-team" ? (
             <>
               <p className={styles["temp-user-message"]}>
                 To sync your leagues cross device and reap the full benefits of
@@ -120,15 +120,20 @@ const Sidebar: React.FC = () => {
               </Button>
               <Button
                 color={ButtonColor.CLEAR}
-                onClick={() => {
-                  setIsMenuOpen(false);
-                  logout();
-                  window.location.reload();
-                }}
+                link="/auth"
+                onClick={() => setIsMenuOpen(false)}
               >
-                Clear data
+                Login
               </Button>
             </>
+          ) : (
+            <Button
+              color={ButtonColor.CLEAR}
+              link="/auth"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Login
+            </Button>
           )}
         </div>
       </div>

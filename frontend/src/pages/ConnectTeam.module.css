@@ -77,6 +77,13 @@ li {
   list-style: none;
 }
 
+.signInContainer {
+  display: flex;
+  gap: var(--size1);
+  align-items: center;
+  justify-content: center;
+}
+
 .connectTeamFormWrapper {
   display: flex;
   flex-direction: column;
