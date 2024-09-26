@@ -6,7 +6,7 @@ import Button from "../../components/ui/Button";
 
 interface PlayerProps {
   player: PlayerType;
-  slotType: "start" | "bench";
+  slotType: "start" | "bench" | "both";
 }
 
 const generateLeagueUrl = (leagueId: string, platformId: string) => {
@@ -76,7 +76,7 @@ const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotType }) => {
       <div className={styles["player-user-teams-text"]}>
         {userCopies.map(
           (copy, index) =>
-            copy.rosterSlotType === slotType && (
+            (slotType === "both" || copy.rosterSlotType === slotType) && (
               <p
                 key={`${player.name}-${copy.leagueId}-${index}`}
                 onClick={(event) => handlePopup(copy, event)}
@@ -91,7 +91,7 @@ const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotType }) => {
       >
         {opponentCopies.map(
           (copy, index) =>
-            copy.rosterSlotType === slotType && (
+            (slotType === "both" || copy.rosterSlotType === slotType) && (
               <p
                 key={`${player.name}-${copy.leagueId}-${index}`}
                 onClick={(event) => handlePopup(copy, event)}

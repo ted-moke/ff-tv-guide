@@ -10,14 +10,15 @@ import AuthPage from "./pages/AuthPage";
 import HomePage from "./pages/HomePage";
 import SplashPage from "./pages/SplashPage";
 import NotFoundPage from "./pages/NotFoundPage";
-import ConnectTeam from "./pages/ConnectTeam"; // Add this import
-import AdminDashboard from "./pages/AdminDashboard"; // Add this import
-import AdminLeagues from "./pages/AdminLeagues"; // Import AdminLeagues
-import AdminUserTeamsPage from "./pages/AdminUserTeamsPage"; // Import AdminUserTeamsPage
+import ConnectTeam from "./pages/ConnectTeam";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminLeagues from "./pages/AdminLeagues";
+import AdminUserTeamsPage from "./pages/AdminUserTeamsPage";
+import Overview from "./pages/Overview";
 import Layout from "./components/ui/Layout";
 import { ViewProvider } from "./features/view/ViewContext";
 import { Toaster } from "react-hot-toast";
-import { useAuthContext } from "./features/auth/AuthProvider"; // Updated import
+import { useAuthContext } from "./features/auth/AuthProvider";
 import LoadingSpinner from "./components/ui/LoadingSpinner";
 import { AuthProvider } from "./features/auth/AuthProvider";
 
@@ -80,11 +81,29 @@ const App: React.FC = () => {
               />
               <Route
                 path="/admin"
-                element={<AdminRoute element={<AdminDashboard />} />}
+                element={
+                  <AdminRoute element={<AdminDashboard />} />
+                }
               >
-                <Route path="leagues" element={<AdminLeagues />} />
-                <Route path="userTeams" element={<AdminUserTeamsPage />} />
+                <Route
+                  path="leagues"
+                  element={<AdminRoute element={<AdminLeagues />} />}
+                />
+                <Route
+                  path="userTeams"
+                  element={
+                    <AdminRoute element={<AdminUserTeamsPage />} />
+                  }
+                />
               </Route>
+              <Route
+                path="/nfl-teams"
+                element={
+                  <Layout>
+                    <Overview />
+                  </Layout>
+                }
+              />
               <Route path="/splash" element={<SplashPage />} />
               <Route path="/ui/*" element={<UIShowcase />} />
               {/* catch 404 errors */}

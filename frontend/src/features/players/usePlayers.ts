@@ -68,18 +68,22 @@ const sortCopies = (a: OwnedPlayer, b: OwnedPlayer): number => {
   return a.leagueName.localeCompare(b.leagueName);
 };
 
-export const usePlayers = () => {
+export const usePlayers = ({
+  includeOpponents = true,
+}: {
+  includeOpponents?: boolean;
+} = {}) => {
   const { data: userTeams, isLoading, error } = useUserTeams();
   const {
     data: opponentTeams,
     isLoading: opponentTeamsLoading,
     error: opponentTeamsError,
-  } = useOpponentTeams();
+  } = useOpponentTeams({ enabled: includeOpponents });
 
   const players: Player[] | null = useMemo(() => {
-    if (!userTeams || !opponentTeams) {
-      return null
-    };
+    if (!userTeams || (includeOpponents && !opponentTeams)) {
+      return null;
+    }
 
     const playerMap = new Map<string, Player>();
 
@@ -128,7 +132,7 @@ export const usePlayers = () => {
       processTeams(userTeams, "self");
     }
 
-    if (opponentTeams) {
+    if (includeOpponents && opponentTeams) {
       processTeams(opponentTeams, "opponent");
     }
 
@@ -148,11 +152,16 @@ export const usePlayers = () => {
 };
 
 // Update getPlayersByTeam function to use the new Player type
-export const getPlayersByTeam = (
-  teamCode: string,
-  players: Player[]
-): { starters: Player[]; others: Player[] } => {
+export const getPlayersByTeam = (teamCode: string, players: Player[]) => {
   const teamPlayers = players.filter((player) => player.team === teamCode);
+
+  const selfPlayers = teamPlayers.filter((player) =>
+    player.copies.some((copy) => copy.team === "self")
+  );
+
+  const opponentPlayers = teamPlayers.filter((player) =>
+    player.copies.some((copy) => copy.team === "opponent")
+  );
 
   const filteredStarters = teamPlayers
     .filter((player) =>
@@ -204,5 +213,8 @@ export const getPlayersByTeam = (
   return {
     starters: filteredStarters.sort(sortPlayers),
     others: filteredOthers.sort(sortPlayers),
+    allSelf: selfPlayers.sort(sortPlayers),
+    allOpponent: opponentPlayers.sort(sortPlayers),
+    all: teamPlayers.sort(sortPlayers),
   };
 };

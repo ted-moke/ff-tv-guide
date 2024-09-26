@@ -1,10 +1,7 @@
 import React from "react";
 import styles from "./Sidebar.module.css";
-import { Conference } from "../features/nfl/nflTypes";
 import MenuItem from "./ui/MenuItem";
-import Checkbox from "./ui/Checkbox";
-import Dropdown from "./ui/Dropdown";
-import { SortOption, useView } from "../features/view/ViewContext";
+import { useView } from "../features/view/ViewContext";
 import FantasyTeamOptions from "../features/teams/FantasyTeamOptions";
 import { useAuthContext } from "../features/auth/AuthProvider";
 
@@ -13,17 +10,7 @@ import { useLocation } from "react-router-dom";
 import FFTVGLogo from "../assets/FFTVGLogo";
 
 const Sidebar: React.FC = () => {
-  const {
-    viewMode,
-    activeConference,
-    setActiveConference,
-    sortBy,
-    setSortBy,
-    hideEmptyTeams,
-    setHideEmptyTeams,
-    isMenuOpen,
-    setIsMenuOpen,
-  } = useView();
+  const { isMenuOpen, setIsMenuOpen } = useView();
 
   const location = useLocation();
   const { logout, user } = useAuthContext();
@@ -44,52 +31,20 @@ const Sidebar: React.FC = () => {
             }}
           />
           <MenuItem
+            text="NFL Teams"
+            to="/nfl-teams"
+            isActive={location.pathname === "/nfl-teams"}
+            onClick={() => {
+              setIsMenuOpen(false);
+            }}
+          />
+          <MenuItem
             text="Connect a League"
             to="/connect-team"
             isActive={location.pathname === "/connect-team"}
             onClick={() => setIsMenuOpen(false)}
           />
         </div>
-        {viewMode === "overview" && (
-          <>
-            <div className={styles["control-group"]}>
-              <h3>Conference</h3>
-              <div className={styles["conference-tabs"]}>
-                {(["AFC", "NFC", "Both"] as Conference[]).map((conf) => (
-                  <MenuItem
-                    key={conf}
-                    text={conf}
-                    to="#"
-                    isActive={activeConference === conf}
-                    onClick={() => setActiveConference(conf)}
-                  />
-                ))}
-              </div>
-            </div>
-            <div className={styles["control-group"]}>
-              <h3>Sort By</h3>
-              <Dropdown
-                id="sortBy"
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as SortOption)}
-                options={[
-                  { value: "name", label: "Team Name" },
-                  { value: "division", label: "Division" },
-                  { value: "players", label: "Number of Players" },
-                ]}
-              />
-            </div>
-            <div className={styles["control-group"]}>
-              <h3>Display Options</h3>
-              <Checkbox
-                id="hideEmptyTeams"
-                checked={hideEmptyTeams}
-                onChange={() => setHideEmptyTeams(!hideEmptyTeams)}
-                label="Hide teams with no players"
-              />
-            </div>
-          </>
-        )}
         {user && <FantasyTeamOptions />}
         <div
           className={`${styles["divider"]} ${styles["divider-no-margin"]}`}

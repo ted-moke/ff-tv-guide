@@ -1,70 +1,88 @@
-.teams-grid {
+@import "../styles/variables.css";
+@import "../styles/utils.css";
+
+.overview {
+  padding: var(--size3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--size2);
+}
+
+.teamsGrid {
   display: grid;
-  gap: 20px;
-  width: 100%;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--size2);
 }
 
-.team-card {
-  border: 1px solid #4c4c4c;
+.teamCard {
+  background-color: var(--background-color-offset);
+  border: 1px solid var(--background-color-offset-2);
   border-radius: var(--border-radius-medium);
-  padding: 15px;
-  background-color: #2c2c2c;
+  padding: var(--size2);
 }
 
-.team-card h2 {
-  margin: 0 0 10px 0;
-  color: #ffffff;
-  background-color: #1e1e1e;
-  padding: 8px;
-  border-radius: var(--border-radius-small);
-  font-size: 16px;
+.headerWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size0_5);
+}
+
+.headerWrapper p {
+  margin: 0;
+}
+
+.teamHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.team-card h2 .player-count {
-  font-size: 14px;
-  color: #888;
+.teamHeader h3 {
+  color: var(--text-color);
 }
 
-.team-card .division {
-  font-size: 12px;
-  color: #888;
-  margin: 0 0 8px 0;
+.subheader {
+  margin-bottom: var(--size1);
 }
 
-.team-card ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-  background-color: #1e1e1e;
-  border-radius: var(--border-radius-small);
-  padding: 8px;
+.teamInfo {
+  display: flex;
+  align-items: center;
+  gap: var(--size1);
 }
 
-.team-card li {
-  margin-bottom: 4px;
-  padding: 4px;
-  border-bottom: 1px solid #3c3c3c;
-  font-size: 14px;
+.division {
+  color: var(--text-color-muted);
 }
 
-.team-card li:last-child {
-  border-bottom: none;
-  margin-bottom: 0;
+.playerCount {
+  color: var(--primary-color);
 }
 
-.no-players {
-  color: #888;
-  background-color: #1e1e1e;
-  padding: 8px;
-  border-radius: var(--border-radius-small);
-  font-size: 14px;
+.playersList {
+  margin-top: var(--size2);
 }
 
-.multi-team {
-  font-size: 0.8em;
-  color: #888;
-  margin-left: 5px;
+.playersHeader {
+  display: grid;
+  grid-template-columns: 35px 1fr 50px 50px;
+  gap: var(--size3);
+  font-weight: bold;
+  color: var(--text-color-muted);
+  margin-bottom: var(--size1);
+  padding: var(--size0_5) var(--size0_5) var(--size1);
+  width: 100%;
+  max-width: 450px;
+}
+
+.noPlayers {
+  color: var(--text-color-muted);
+  font-style: italic;
+  margin-top: var(--size2);
+}
+
+@media (max-width: 768px) {
+  .playersHeader {
+    grid-template-columns: 1fr 3fr 1fr 1fr;
+  }
 }
