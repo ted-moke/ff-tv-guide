@@ -108,10 +108,9 @@ const ConnectPlatformCredential: React.FC<ConnectPlatformCredentialProps> = ({
                   <img
                     src={platformLogo(platform.id)}
                     alt={platform.name}
-                    width={20}
-                    height={20}
+                    width={32}
                   />
-                  <span>{platform.name}</span>
+                  <p>{platform.name}</p>
                 </div>
               }
             />

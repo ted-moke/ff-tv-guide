@@ -16,7 +16,7 @@ interface TextInputProps {
 const TextInput: React.FC<TextInputProps> = ({ 
   type, 
   id, 
-  name, 
+  name,
   value, 
   placeholder, 
   onChange, 
