@@ -11,7 +11,8 @@ import { PlatformCredential } from "../features/platforms/platformTypes";
 import { useConnectLeague } from "../features/league/useLeague";
 import styles from "./ConnectTeam.module.css";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
-import { useAuth } from "../features/auth/useAuth";
+import { useAuthContext } from "../features/auth/AuthProvider";
+
 import { useQueryClient } from "@tanstack/react-query";
 import Alert from "../components/ui/Alert";
 import toast from "react-hot-toast";
@@ -24,7 +25,7 @@ const ConnectTeam: React.FC = () => {
   const [selectedLeagues, setSelectedLeagues] = useState<string[]>([]);
   const [isConnecting, setIsConnecting] = useState(false);
   const queryClient = useQueryClient();
-  const { user, isLoading: isAuthLoading } = useAuth();
+  const { user, isLoading: isAuthLoading } = useAuthContext();
   const {
     data: credentials,
     isLoading,
@@ -93,11 +94,14 @@ const ConnectTeam: React.FC = () => {
         await Promise.all(connectPromises);
         queryClient.invalidateQueries({ queryKey: ["userTeams"] });
         queryClient.invalidateQueries({ queryKey: ["opponentTeams"] });
+        
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         toast.success(
           `League${
             selectedLeagues.length > 1 ? "s" : ""
           } connected successfully!`
         );
+        
         navigate("/");
       } catch (error) {
         console.error("Error connecting leagues:", error);

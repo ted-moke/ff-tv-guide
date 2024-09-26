@@ -76,9 +76,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game }) => {
                 </div>
               )}
             </div>
-          ) : (
-            <div>"No Players"</div>
-          )}
+          ) : null}
         </div>
       </div>
       <hr className={styles["divider"]} />

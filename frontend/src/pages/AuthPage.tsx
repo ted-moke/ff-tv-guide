@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useAuth } from "../features/auth/useAuth";
+import { useAuthContext } from "../features/auth/AuthProvider";
+
 import { useSearchParams, useNavigate } from "react-router-dom";
 import FFTVGLogo from "../assets/FFTVGLogo";
 import RegisterForm from "../components/forms/RegisterForm";
@@ -15,7 +16,7 @@ const AuthPage: React.FC = () => {
     convertTempUser,
     user,
     error: authError,
-  } = useAuth();
+  } = useAuthContext();
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [username, setUsername] = useState("");
@@ -36,6 +37,7 @@ const AuthPage: React.FC = () => {
     setIsLoading(true);
     try {
       await login({ email, password });
+      navigate("/");
     } catch (error) {
       if (error instanceof Error) {
         setError(error.message);

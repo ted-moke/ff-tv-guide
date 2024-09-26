@@ -5,7 +5,9 @@ import MenuItem from "./ui/MenuItem";
 import Checkbox from "./ui/Checkbox";
 import Dropdown from "./ui/Dropdown";
 import { SortOption, useView } from "../features/view/ViewContext";
-import { useAuth } from "../features/auth/useAuth";
+import FantasyTeamOptions from "../features/teams/FantasyTeamOptions";
+import { useAuthContext } from "../features/auth/AuthProvider";
+
 import Button, { ButtonColor } from "./ui/Button";
 import { useLocation } from "react-router-dom";
 import FFTVGLogo from "../assets/FFTVGLogo";
@@ -24,7 +26,7 @@ const Sidebar: React.FC = () => {
   } = useView();
 
   const location = useLocation();
-  const { logout, user } = useAuth();
+  const { logout, user } = useAuthContext();
 
   return (
     <aside className={`${styles.sidebar} ${isMenuOpen ? styles.open : ""}`}>
@@ -88,6 +90,7 @@ const Sidebar: React.FC = () => {
             </div>
           </>
         )}
+        {user && <FantasyTeamOptions />}
         <div
           className={`${styles["divider"]} ${styles["divider-no-margin"]}`}
         />
@@ -105,8 +108,8 @@ const Sidebar: React.FC = () => {
           ) : (
             <>
               <p className={styles["temp-user-message"]}>
-                Create a free account to sync your leagues cross device and reap
-                the full benefits of FF TV Guide
+                To sync your leagues cross device and reap the full benefits of
+                FF TV Guide, create a free account.
               </p>
               <Button
                 color={ButtonColor.PRIMARY}
@@ -120,6 +123,7 @@ const Sidebar: React.FC = () => {
                 onClick={() => {
                   setIsMenuOpen(false);
                   logout();
+                  window.location.reload();
                 }}
               >
                 Clear data

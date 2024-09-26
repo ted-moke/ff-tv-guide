@@ -6,7 +6,6 @@ import {
   registerTemporaryUser,
   convertTempUser,
 } from "./authAPI";
-import { useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect, useCallback } from "react";
 import { AuthData } from "./authTypes";
 import { auth } from "../../firebaseConfig";
@@ -18,8 +17,6 @@ export const useAuth = ({ enabled = true }: { enabled?: boolean } = {}) => {
       : null
   );
   const queryClient = useQueryClient();
-  const location = useLocation();
-  const navigate = useNavigate();
   const [isAuthEnabled, setIsAuthEnabled] = useState(enabled);
 
   const _clearAuthData = useCallback(() => {
@@ -32,8 +29,7 @@ export const useAuth = ({ enabled = true }: { enabled?: boolean } = {}) => {
 
   const logout = () => {
     _clearAuthData();
-    navigate("/");
-    window.location.reload();
+    // Remove navigation logic from here
   };
 
   const { data, isLoading, isError, error, refetch } = useQuery<
@@ -51,11 +47,9 @@ export const useAuth = ({ enabled = true }: { enabled?: boolean } = {}) => {
     if (isError) {
       console.error("Auth query error:", error);
       setIsAuthEnabled(false);
-      if (location.pathname !== "/auth") {
-        navigate("/auth");
-      }
+      
     }
-  }, [isError, error, location.pathname, navigate]);
+  }, [isError, error, location.pathname]);
 
   const user = data?.authenticated ? data : tempUser ? tempUser : null;
 
@@ -65,7 +59,7 @@ export const useAuth = ({ enabled = true }: { enabled?: boolean } = {}) => {
       queryClient.setQueryData(["auth"], data);
       setIsAuthEnabled(true);
       refetch();
-      navigate("/");
+      // Remove navigation logic from here
     },
     onError: (error: Error) => {
       setIsAuthEnabled(false);
@@ -79,7 +73,7 @@ export const useAuth = ({ enabled = true }: { enabled?: boolean } = {}) => {
       queryClient.setQueryData(["auth"], data);
       setIsAuthEnabled(true);
       refetch();
-      navigate("/");
+      // Remove navigation logic from here
     },
     onError: (error: Error) => {
       setIsAuthEnabled(false);
@@ -111,7 +105,7 @@ export const useAuth = ({ enabled = true }: { enabled?: boolean } = {}) => {
       queryClient.setQueryData(["auth"], data);
       setIsAuthEnabled(true);
       refetch();
-      navigate("/");
+      // Remove navigation logic from here
     },
     onError: (error: Error) => {
       setIsAuthEnabled(false);

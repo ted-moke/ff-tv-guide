@@ -4,7 +4,8 @@ import { useMatchupPlayers } from "../players/useMatchupPlayers";
 import GameBucketGroup from "./GameBucketGroup";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../auth/useAuth";
+import { useAuthContext } from "../auth/AuthProvider";
+
 
 interface MatchupGuideProps {
   selectedWeek: number;
@@ -13,7 +14,7 @@ interface MatchupGuideProps {
 }
 
 const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
-  const { user, isLoading: isAuthLoading } = useAuth();
+  const { user, isLoading: isAuthLoading } = useAuthContext();
 
   const { hasPlayers, matchupPlayers, isLoading, initialized, error } =
     useMatchupPlayers(selectedWeek);

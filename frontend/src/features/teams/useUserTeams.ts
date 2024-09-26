@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import { useAuth } from '../auth/useAuth'; // Assuming you have an auth context
+import { useAuthContext } from '../auth/AuthProvider'; // Assuming you have an auth context
 import { FantasyTeam } from './teamTypes';
 const API_URL = import.meta.env.VITE_API_URL;
 
 export const useUserTeams = () => {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
 
   return useQuery<FantasyTeam[]>({
     queryKey: ['userTeams', user?.uid],
@@ -30,7 +30,7 @@ export const useUserTeams = () => {
 };
 
 export const useOpponentTeams = () => {
-  const { user } = useAuth();
+  const { user } = useAuthContext();
 
   return useQuery<FantasyTeam[]>({
     queryKey: ['opponentTeams', user?.uid],

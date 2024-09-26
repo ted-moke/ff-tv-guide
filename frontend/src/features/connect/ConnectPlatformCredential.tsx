@@ -3,7 +3,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { usePlatforms } from "../platforms/usePlatforms";
 import { Platform, PlatformCredential } from "../platforms/platformTypes";
 import { createPlatformCredential } from "./connectTeamAPI";
-import { useAuth } from "../auth/useAuth";
+import { useAuthContext } from "../auth/AuthProvider";
+
 import RadioButton from "../../components/ui/RadioButton";
 import TextInput from "../../components/ui/TextInput";
 import Button from "../../components/ui/Button";
@@ -39,7 +40,7 @@ const ConnectPlatformCredential: React.FC<ConnectPlatformCredentialProps> = ({
   );
   const [credential, setCredential] = useState("");
   const { data: platforms, isLoading, error } = usePlatforms();
-  const { user, registerTemporaryUser } = useAuth();
+  const { user, registerTemporaryUser } = useAuthContext();
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
