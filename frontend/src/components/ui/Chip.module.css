@@ -1,0 +1,59 @@
+.chip {
+  display: inline-block;
+  padding: 1.5px var(--size1) 2.5px;
+  border-radius: var(--border-radius-large);
+  font-size: var(--font-size-small);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.chip:hover {
+  opacity: 0.8;
+}
+
+.chip p {
+  margin: 0;
+  font-size: var(--font-size-medium);
+  font-family: monospace, sans-serif;
+}
+
+.chip.default {
+  border: 1px solid var(--text-color-muted);
+}
+
+.chip.primary {
+  background-color: var(--primary-color);
+  color: var(--primary-color-text);
+}
+
+.chip.muted {
+  background-color: var(--background-color);
+  color: var(--text-color-muted);
+  border: 1px solid var(--background-color-offset-2);
+}
+
+.chip.danger {
+  background-color: var(--color-red);
+  color: var(--color-red-text);
+}
+
+.chip.info {
+  background-color: var(--color-blue);
+  color: var(--color-blue-text);
+}
+
+.chip.warning {
+  background-color: var(--color-yellow);
+  color: var(--color-yellow-text);
+}
+
+.chip.success {
+  background-color: var(--color-green);
+  color: var(--color-green-text);
+}
+
+.chip.clear {
+  background-color: transparent;
+  color: var(--text-color-muted);
+  border: none;
+}

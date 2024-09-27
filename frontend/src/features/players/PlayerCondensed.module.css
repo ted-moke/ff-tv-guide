@@ -1,5 +1,5 @@
 .player {
-  padding: var(--size0_5) var(--size0_5) var(--size1);
+  padding: var(--size1) var(--size0_5);
   display: grid;
   align-items: center;
   justify-items: flex-start;
@@ -99,7 +99,17 @@
   .player {
     grid-template-columns: 1fr 3fr 1fr 1fr;
     column-gap: var(--size1);
-    padding: var(--size0_5);
+    padding: var(--size1);
     max-width: none;
   }
+}
+
+.player-user-teams-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--size0_75);
+}
+
+.opponent-teams {
+  /* margin-top: var(--size0_5); */
 }

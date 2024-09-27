@@ -2,10 +2,23 @@
   --color-red: #cd4631;
   --color-red-hover: #a43828;
   --color-red-active: #a43828;
+  --color-red-text: #2e100b;
   --color-blue: #357ded;
+  --color-blue-hover: #2a63b7;
+  --color-blue-active: #2a63b7;
+  --color-blue-text: #101d30;
   --color-green: #95c623;
+  --color-green-hover: #769c1c; 
+  --color-green-active: #769c1c;
+  --color-green-text: #192106;
   --color-yellow: #fca311;
+  --color-yellow-hover: #e08e0d;
+  --color-yellow-active: #e08e0d;
+  --color-yellow-text: #2d1d03;
   --color-purple: #a14da0;
+  --color-purple-hover: #813d80;
+  --color-purple-active: #813d80;
+  --color-purple-text: #2e1020;
 
   --background-color: #121212;
   --background-color-offset: #1a1a1a;
@@ -17,11 +30,12 @@
   --text-color-light-muted: #6e6e6e;
 
   --primary-color: var(--color-yellow);
-  --primary-hover-color: #de8a02;
-  --primary-active-color: #de8a02;
+  --primary-hover-color: var(--color-yellow-hover);
+  --primary-active-color: var(--color-yellow-active);
   --secondary-color: var(--color-green);
-  --secondary-hover-color: #769c1c;
-  --secondary-active-color: #769c1c;
+  --secondary-hover-color: var(--color-green-hover);
+  --secondary-active-color: var(--color-green-active);
+
 
   --primary-disabled-bg: #f7d088; /* Lighter yellow for better contrast */
   --primary-disabled-color: #5f3d00; /* Darker yellow for better contrast */
@@ -33,7 +47,10 @@
   --danger-disabled-color: #a43828;
 
   /* 8-based sizing system */
+  
+  --size0_25: 2px;
   --size0_5: 4px;
+  --size0_75: 6px;
   --size1: 8px;
   --size1_5: 12px;
   --size1_75: 14px;

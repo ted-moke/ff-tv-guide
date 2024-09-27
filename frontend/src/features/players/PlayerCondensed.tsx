@@ -3,6 +3,7 @@ import { OwnedPlayer, Player as PlayerType } from "../nfl/nflTypes";
 import styles from "./PlayerCondensed.module.css";
 import Popup from "../../components/ui/Popup";
 import Button from "../../components/ui/Button";
+import Chip from "../../components/ui/Chip"; // Assuming you have a Chip component
 
 interface PlayerProps {
   player: PlayerType;
@@ -73,31 +74,28 @@ const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotType }) => {
       >
         {player.name}
       </p>
-      <div className={styles["player-user-teams-text"]}>
+      <div className={styles["player-user-teams-chips"]}>
         {userCopies.map(
           (copy, index) =>
             (slotType === "both" || copy.rosterSlotType === slotType) && (
-              <p
+              <Chip
                 key={`${player.name}-${copy.leagueId}-${index}`}
-                onClick={(event) => handlePopup(copy, event)}
-              >
-                {copy.shortLeagueName}
-              </p>
+                label={copy.shortLeagueName}
+                onClick={(event: React.MouseEvent<HTMLElement>) => handlePopup(copy, event)}
+              />
             )
         )}
       </div>
-      <div
-        className={`${styles["player-user-teams-text"]} ${styles["opponent-teams"]}`}
-      >
+      <div className={`${styles["player-user-teams-chips"]} ${styles["opponent-teams"]}`}>
         {opponentCopies.map(
           (copy, index) =>
             (slotType === "both" || copy.rosterSlotType === slotType) && (
-              <p
+              <Chip
                 key={`${player.name}-${copy.leagueId}-${index}`}
-                onClick={(event) => handlePopup(copy, event)}
-              >
-                {copy.shortLeagueName}
-              </p>
+                label={copy.shortLeagueName}
+                onClick={(event: React.MouseEvent<HTMLElement>) => handlePopup(copy, event)}
+                variant="muted"
+              />
             )
         )}
       </div>
