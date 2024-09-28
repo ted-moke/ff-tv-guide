@@ -1,0 +1,37 @@
+@import "../../styles/variables.css";
+
+.box {
+  border: 1px solid var(--background-color-offset-2);
+  padding: var(--size1);
+  margin: var(--size0_5);
+  text-align: center;
+  min-width: 135px;
+  background-color: var(--background-color-offset);
+  color: var(--text-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--size0_5);
+}
+
+.awayCode, .homeCode {
+  font-weight: bold;
+  font-size: var(--font-size-medium);
+}
+
+.starters, .time {
+  font-size: var(--font-size-small);
+}
+
+.topGame .starters {
+  color: var(--primary-color);
+}
+
+.channel {
+  font-size: var(--font-size-small);
+}

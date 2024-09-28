@@ -5,8 +5,7 @@ import useExternalLeagues from "../features/connect/useExternalLeagues";
 import ConnectPlatformCredential from "../features/connect/ConnectPlatformCredential";
 import CredentialManager from "../components/CredentialManager"; // Add this import
 import TeamSyncer from "../components/TeamSyncer"; // Add this import
-import Button, { ButtonColor } from "../components/ui/Button";
-import LinkButton, { LinkButtonColor } from "../components/ui/LinkButton"; // Add this import
+import Button from "../components/ui/Button";
 import { PlatformCredential } from "../features/platforms/platformTypes";
 import { useConnectLeague } from "../features/league/useLeague";
 import styles from "./ConnectTeam.module.css";
@@ -130,7 +129,6 @@ const ConnectTeam: React.FC = () => {
         </p>
       </div>
 
-        
       {!selectedCredential && !derivedShowCredentialForm && (
         <CredentialManager
           credentials={credentials as PlatformCredential[]}
@@ -168,12 +166,12 @@ const ConnectTeam: React.FC = () => {
         />
       )}
 
-<div className={styles.signInContainer}>
-          <p>Already a member?</p>
-          <Button outline link="/auth">
-            Sign In
-          </Button>
-        </div>
+      <div className={styles.signInContainer}>
+        <p>Already a member?</p>
+        <Button outline link="/auth">
+          Sign In
+        </Button>
+      </div>
     </div>
   );
 };

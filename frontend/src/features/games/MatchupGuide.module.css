@@ -1,8 +1,14 @@
 @import "../../styles/variables.css";
 @import "../../styles/utils.css";
 
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--size2);
+}
+
 .matchup-guide h2 {
-  margin-bottom: 0
+  margin-bottom: 0;
 }
 
 .game-group {
@@ -66,4 +72,52 @@
 
 .collapsed {
   transform: rotate(-90deg);
+}
+
+.carouselContainer {
+  display: flex;
+  align-items: center;
+  overflow: hidden; /* Ensure the container does not overflow */
+  width: 100%; /* Ensure the container takes the full width of the parent */
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  max-width: calc(100vw - 280px);
+  justify-content: space-between;
+}
+
+.carousel {
+  display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
+  scroll-behavior: smooth;
+  width: 100%;
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+}
+
+.carousel > div {
+  display: inline-block;
+}
+
+.carouselButton {
+  background-color: var(--background-color);
+  border: none;
+  padding: var(--size1);
+  cursor: pointer;
+  color: var(--text-color);
+  font-size: var(--font-size-medium);
+  flex-shrink: 0; /* Prevent buttons from shrinking */
+}
+
+.slick-slider {
+  margin-bottom: 20px;
+}
+
+.slick-slide {
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 768px) {
+  .carouselContainer {
+    max-width: 100%;
+  }
 }
