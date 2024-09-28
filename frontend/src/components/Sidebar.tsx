@@ -87,7 +87,7 @@ const Sidebar: React.FC = () => {
               link="/auth"
               onClick={() => setIsMenuOpen(false)}
             >
-              Login
+              Sign In
             </Button>
           )}
         </div>

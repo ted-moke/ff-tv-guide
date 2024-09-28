@@ -25,7 +25,7 @@ interface TeamSyncerProps {
 
 const platformIcons = {
   sleeper: SleeperLogo,
-  ff: FFLogo,
+  fleaflicker: FFLogo,
 };
 
 const TeamSyncer: React.FC<TeamSyncerProps> = ({

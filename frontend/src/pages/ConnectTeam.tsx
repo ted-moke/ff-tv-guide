@@ -166,12 +166,14 @@ const ConnectTeam: React.FC = () => {
         />
       )}
 
-      <div className={styles.signInContainer}>
-        <p>Already a member?</p>
-        <Button outline link="/auth">
-          Sign In
-        </Button>
-      </div>
+      {!selectedCredential && (
+        <div className={styles.signInContainer}>
+          <p>Already a member?</p>
+          <Button outline link="/auth">
+            Sign In
+          </Button>
+        </div>
+      )}
     </div>
   );
 };
