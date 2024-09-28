@@ -153,14 +153,11 @@
   color: var(--color-yellow);
 }
 
-.self-starters {
-  font-size: var(--font-size-xl);
-  font-weight: bold;
-  line-height: 1;
-  margin-bottom: 1px;
+.top-game .vs {
+  color: var(--color-yellow);
 }
 
-.opponent-starters {
+.starters {
   font-size: var(--font-size-xl);
   font-weight: bold;
   line-height: 1;

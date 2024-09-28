@@ -55,15 +55,15 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game }) => {
             >
               <h4>You:</h4>
               <div
-                className={`${styles["self-starters"]} ${
+                className={`${styles["starters"]} ${
                   game.starters.length === 0 ? styles["starters-none"] : ""
                 }`}
               >
                 {game.totals.self.starters}
               </div>
-              <h4>vs</h4>
+              <h4 className={styles["vs"]}>vs</h4>
               <div
-                className={`${styles["self-starters"]} ${
+                className={`${styles["starters"]} ${
                   game.starters.length === 0 ? styles["starters-none"] : ""
                 }`}
               >

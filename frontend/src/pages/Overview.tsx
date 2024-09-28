@@ -67,6 +67,7 @@ const Overview: React.FC = () => {
 
   if (isAuthLoading) return <LoadingSpinner />;
   if (!user) {
+    console.log("user", user);
     return <Navigate to="/connect-team" />;
   }
 

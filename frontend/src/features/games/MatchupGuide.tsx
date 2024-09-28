@@ -9,6 +9,7 @@ import GameInfoBox from "./GameInfoBox";
 import { format24HourTo12Hour } from "../../utils/timeUtils";
 import { formatDateToDay } from "../../utils/dateUtils";
 import { LuArrowBigLeft, LuArrowBigRight } from "react-icons/lu";
+import MatchupCarousel from "./MatchupCarousel";
 
 interface MatchupGuideProps {
   selectedWeek: number;
@@ -63,32 +64,9 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
       )}
 
       {matchupPlayers && (
-        <div className={styles.carouselContainer}>
-          <button onClick={scrollLeft} className={styles.carouselButton}>
-            <LuArrowBigLeft />
-          </button>
-          <div className={styles.carousel} ref={carouselRef}>
-            {Object.values(matchupPlayers.games)
-              .flat()
-              .map((bucket) =>
-                bucket.games.map((game) => (
-                  <GameInfoBox
-                    key={`${game.awayTeam?.code}-${game.homeTeam?.code}`}
-                    awayCode={game.awayTeam?.code || ""}
-                    homeCode={game.homeTeam?.code || ""}
-                    time={format24HourTo12Hour(game.time)}
-                    day={formatDateToDay(game.date)}
-                    starters={game.totals.self.starters}
-                    opponentStarters={game.totals.opponent.starters}
-                    isTopGame={game.isTopGame}
-                  />
-                ))
-              )}
-          </div>
-          <button onClick={scrollRight} className={styles.carouselButton}>
-            <LuArrowBigRight />
-          </button>
-        </div>
+        <MatchupCarousel
+          games={Object.values(matchupPlayers.games).flat().flatMap(bucket => bucket.games)}
+        />
       )}
 
       {matchupPlayers &&
