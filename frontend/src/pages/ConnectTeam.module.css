@@ -13,7 +13,6 @@
   flex-direction: column;
   align-items: center;
   gap: var(--size2);
-  margin-bottom: var(--size2);
 }
 
 .pageHeader p,
@@ -45,17 +44,6 @@
   width: 100%;
 }
 
-.button {
-  margin-top: var(--);
-}
-
-.buttonGroup {
-  width: 100%;
-  display: flex;
-  justify-content: flex-end;
-  gap: var(--);
-}
-
 .backButton {
   justify-content: flex-start;
 }
@@ -84,41 +72,8 @@ li {
   justify-content: center;
 }
 
-.connectTeamFormWrapper {
-  display: flex;
-  flex-direction: column;
-  gap: var(--size2);
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-}
-
-.connectTeamFormContainer {
-  display: flex;
-  flex-direction: column;
-  gap: var(--);
-  align-items: center;
-}
-
-.externalLeagueSelect h2,
-.externalLeagueSelect ul {
-  margin-top: 0;
-}
-
-.externalLeagueSelect h2 {
-  margin-bottom: 0;
-}
-
-.selectButtons {
-  display: flex;
-  justify-content: flex-start;
-  gap: var(--size2);
-}
-
-.externalLeagueList {
-  display: flex;
-  flex-direction: column;
-  gap: var(--size1_5);
+.shortPitch {
+  text-align: center;
 }
 
 @media (min-width: 768px) {
@@ -128,5 +83,9 @@ li {
 
   .connectTeamFormWrapper {
     width: 350px;
+  }
+
+  .shortPitch {
+    width: 500px;
   }
 }

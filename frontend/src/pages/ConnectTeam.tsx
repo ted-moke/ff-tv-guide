@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom"; // Add this import
 import useCredentials from "../features/connect/useCredentials";
 import useExternalLeagues from "../features/connect/useExternalLeagues";
 import ConnectPlatformCredential from "../features/connect/ConnectPlatformCredential";
-import CredentialList from "../features/connect/CredentialList";
+import CredentialManager from "../components/CredentialManager"; // Add this import
+import TeamSyncer from "../components/TeamSyncer"; // Add this import
 import Button, { ButtonColor } from "../components/ui/Button";
 import LinkButton, { LinkButtonColor } from "../components/ui/LinkButton"; // Add this import
-import Checkbox from "../components/ui/Checkbox";
 import { PlatformCredential } from "../features/platforms/platformTypes";
 import { useConnectLeague } from "../features/league/useLeague";
 import styles from "./ConnectTeam.module.css";
@@ -15,6 +15,7 @@ import { useAuthContext } from "../features/auth/AuthProvider";
 
 import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
+import FFTVGLogo from "../assets/FFTVGLogo";
 
 const ConnectTeam: React.FC = () => {
   const navigate = useNavigate(); // Add this line
@@ -123,44 +124,19 @@ const ConnectTeam: React.FC = () => {
   return (
     <div className={`${styles.connectTeamPageContainer} page-container`}>
       <div className={styles.pageHeader}>
-        <h1 className={styles.title}>Connect Your Fantasy League</h1>
-      </div>
-      <div className={styles.signInContainer}>
-        <p>Already a member?</p>
-        <Button color={ButtonColor.CLEAR} link="/auth">Sign In</Button>
-      </div>
-      {!credentials || credentials.length < 1 ? (
-        <p>
-          To start viewing your personalized TV Guide, connect with a fantasy
-          platform.
+        <FFTVGLogo size="large" withText />
+        <p className={styles.shortPitch}>
+          Streamline your fantasy experience: See only what matters on game day.
         </p>
-      ) : null}
+      </div>
+
+        
       {!selectedCredential && !derivedShowCredentialForm && (
-        <div className={styles.connectTeamFormWrapper}>
-          {credentials && credentials.length > 0 && (
-            <div className={styles.connectTeamFormContainer}>
-              <CredentialList
-                credentials={credentials as PlatformCredential[]}
-                onSelectCredential={handleSelectCredential}
-              />
-            </div>
-          )}
-          {credentials && credentials.length > 0 ? (
-            <LinkButton
-              color={LinkButtonColor.PRIMARY}
-              onClick={() => setShowNewCredentialForm(true)}
-            >
-              + Add New Account
-            </LinkButton>
-          ) : (
-            <>
-              <p>No accounts found</p>
-              <Button onClick={() => setShowNewCredentialForm(true)}>
-                + Add New Account
-              </Button>
-            </>
-          )}
-        </div>
+        <CredentialManager
+          credentials={credentials as PlatformCredential[]}
+          onSelectCredential={handleSelectCredential}
+          setShowNewCredentialForm={setShowNewCredentialForm}
+        />
       )}
 
       {derivedShowCredentialForm && (
@@ -177,48 +153,27 @@ const ConnectTeam: React.FC = () => {
       )}
 
       {selectedCredential && (
-        <div
-          className={`${styles.connectTeamFormWrapper} ${styles.externalLeagueSelect}`}
-        >
-          {isLoadingLeagues && <LoadingSpinner />}
-          {leaguesError && (
-            <div>Error loading leagues: {(leaguesError as Error).message}</div>
-          )}
-          {externalLeagues && (
-            <>
-              <div className={styles.selectButtons}>
-                <LinkButton onClick={handleDeselectAll}>
-                  Deselect All
-                </LinkButton>
-                <LinkButton onClick={handleSelectAll}>Select All</LinkButton>
-              </div>
-              <ul className={styles.externalLeagueList}>
-                {externalLeagues.map((league) => (
-                  <li key={league.id}>
-                    <Checkbox
-                      id={league.id}
-                      checked={selectedLeagues.includes(league.id)}
-                      onChange={() => handleLeagueToggle(league.id)}
-                      label={league.name}
-                    />
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
-          <div className={styles.buttonGroup}>
-            <LinkButton onClick={() => setSelectedCredential(null)}>
-              Back
-            </LinkButton>
-            <Button
-              onClick={handleSubmit}
-              disabled={selectedLeagues.length === 0 || isConnecting}
-            >
-              {isConnecting ? "Connecting..." : "Connect"}
-            </Button>
-          </div>
-        </div>
+        <TeamSyncer
+          selectedCredential={selectedCredential}
+          externalLeagues={externalLeagues}
+          selectedLeagues={selectedLeagues}
+          isLoadingLeagues={isLoadingLeagues}
+          leaguesError={leaguesError}
+          isConnecting={isConnecting}
+          handleLeagueToggle={handleLeagueToggle}
+          handleSelectAll={handleSelectAll}
+          handleDeselectAll={handleDeselectAll}
+          handleSubmit={handleSubmit}
+          setSelectedCredential={setSelectedCredential}
+        />
       )}
+
+<div className={styles.signInContainer}>
+          <p>Already a member?</p>
+          <Button outline link="/auth">
+            Sign In
+          </Button>
+        </div>
     </div>
   );
 };

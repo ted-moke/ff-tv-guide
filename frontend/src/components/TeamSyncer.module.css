@@ -1,0 +1,58 @@
+.connectTeamFormWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size2);
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.externalLeagueSelect h2,
+.externalLeagueSelect ul {
+  margin-top: 0;
+}
+
+.externalLeagueSelect h2 {
+  margin-bottom: 0;
+}
+
+.selectButtons {
+  display: flex;
+  justify-content: flex-start;
+  gap: var(--size2);
+}
+
+.externalLeagueList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size1_5);
+}
+
+.buttonGroup {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--size2);
+}
+
+.platformName {
+  text-transform: capitalize;
+  color: var(--primary-color);
+}
+
+.contentHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--size2);
+}
+
+.contentHeader h4 {
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .connectTeamFormWrapper {
+    width: 350px;
+  }
+}
+

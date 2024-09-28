@@ -27,6 +27,7 @@ const CredentialList: React.FC<CredentialListProps> = ({
 }) => {
   return (
     <div className={styles.credentialList}>
+      <h4>Sync Teams</h4>
       {credentials.map((credential) => (
         <div key={credential.credential} className={styles.credentialItem}>
           <div className={styles.credentialContainer}>

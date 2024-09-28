@@ -22,8 +22,8 @@
 
 .radioLabel::after {
   content: '';
-  width: 16px;
-  height: 16px;
+  width: 12px;
+  height: 12px;
   border: 2px solid var(--text-color-muted);
   border-radius: 50%;
   margin-left: var(--size1);
@@ -39,4 +39,6 @@
 .radioContainer.checked > .radioLabel::after {
   background-color: var(--primary-color);
   border-color: var(--background-color);
+  /* Add outline, space, and inner pip */
+  box-shadow: 0 0 0 1px var(--background-color), 0 0 0 2px var(--primary-color);
 }

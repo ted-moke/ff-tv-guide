@@ -8,6 +8,7 @@
     font-weight: 500;
     font-family: inherit;
     background-color: var(--primary-color);
+    color: var(--text-color-light);
     transition: background-color 0.25s, border-color 0.25s, color 0.25s;
     cursor: pointer;
     text-decoration: none;
@@ -19,10 +20,6 @@
     width: 100%;
 }
 
-.primary {
-    color: var(--text-color-light);
-}
-
 .primary:hover {
     background-color: var(--primary-hover-color);
     border-color: var(--text-color);
@@ -30,6 +27,22 @@
 
 .primary:focus,
 .primary:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
+}
+
+.outline {
+    border-color: var(--primary-color);
+    background-color: var(--background-color);
+    color: var(--primary-color);
+}
+
+.outline:hover {
+    background-color: var(--primary-hover-color);
+    border-color: var(--text-color);
+}
+
+.outline:focus,
+.outline:focus-visible {
     outline: 4px auto -webkit-focus-ring-color;
 }
 
@@ -44,6 +57,22 @@
 
 .secondary:focus,
 .secondary:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
+}
+
+.outline.secondary {
+    border-color: var(--secondary-color);
+    background-color: var(--background-color);
+    color: var(--secondary-color);
+}
+
+.outline.secondary:hover {
+    background-color: var(--secondary-hover-color);
+    border-color: var(--text-color);
+}
+
+.outline.secondary:focus,
+.outline.secondary:focus-visible {
     outline: 4px auto -webkit-focus-ring-color;
 }
 
@@ -67,6 +96,23 @@
 .danger:hover {
     background-color: var(--color-red-hover);
 }
+
+.outline.danger {
+    border-color: var(--color-red);
+    background-color: var(--background-color);
+    color: var(--color-red);
+}
+
+.outline.danger:hover {
+    background-color: var(--color-red-hover);
+    border-color: var(--text-color);
+}
+
+.outline.danger:focus,
+.outline.danger:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
+}
+
 
 /* Disabled styles */
 .disabled {

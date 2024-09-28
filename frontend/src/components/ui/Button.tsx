@@ -14,6 +14,7 @@ type ButtonColorStr = "primary" | "secondary" | "clear" | "danger";
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   link?: string;
   color?: ButtonColorStr;
+  outline?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -21,10 +22,11 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   color = ButtonColor.PRIMARY,
   children,
+  outline = false,
   disabled,
   ...props
 }) => {
-  const buttonClass = `${styles[color]} ${styles.button} ${disabled ? styles.disabled : ""}`;
+  const buttonClass = `${styles[color]} ${styles.button} ${disabled ? styles.disabled : ""} ${outline ? styles.outline : ""}`;
 
   if (link) {
     return (

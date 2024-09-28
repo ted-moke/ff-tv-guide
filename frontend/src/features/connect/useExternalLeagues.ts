@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-interface ExternalLeague {
+export interface ExternalLeague {
   id: string;
   name: string;
   externalUserId: string;
