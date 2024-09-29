@@ -87,13 +87,11 @@ const App: React.FC = () => {
               >
                 <Route
                   path="leagues"
-                  element={<AdminRoute element={<AdminLeagues />} />}
+                  element={<AdminLeagues />}
                 />
                 <Route
                   path="userTeams"
-                  element={
-                    <AdminRoute element={<AdminUserTeamsPage />} />
-                  }
+                  element={<AdminUserTeamsPage />}
                 />
               </Route>
               <Route

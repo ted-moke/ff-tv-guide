@@ -2,7 +2,7 @@
 
 ## big stuff
 
-1. add login button
+1. x- add login button
 2. investigate update all leagues failure
 3. show leagues
    1. last updated
