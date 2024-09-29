@@ -51,27 +51,50 @@ export const useWeeklySchedule = (selectedWeek: number) => {
     };
 
     const addGameToBucket = (game: NFLGame, bucket: GameBucket[]) => {
-      const gameStartTime = new Date(`${game.date} ${game.time} EDT`);
-      const day = gameStartTime.toLocaleString("en-US", {
-        weekday: "short",
-      });
-      const startingHour = gameStartTime.toLocaleString("en-US", {
-        hour: "numeric",
-        hour12: true,
-      });
+      // Parse date and time
+      const [year, month, day] = game.date.split("-").map(Number);
+      const [hours, minutes] = game.time.split(":").map(Number);
+
+      // Create date object (months are 0-indexed in JavaScript)
+      const gameStartTime = new Date(year, month - 1, day, hours, minutes);
 
       let existingBucket = bucket.find(
-        (b) => b.day === day && b.startingHour === startingHour
+        (b) =>
+          b.day ===
+            gameStartTime.toLocaleString("en-US", {
+              weekday: "short",
+            }) &&
+          b.startingHour ===
+            gameStartTime.toLocaleString("en-US", {
+              hour: "numeric",
+              hour12: true,
+            })
       );
       if (!existingBucket) {
-        existingBucket = { day, startingHour, games: [], fullDate: gameStartTime };
+        existingBucket = {
+          day: gameStartTime.toLocaleString("en-US", {
+            weekday: "short",
+          }),
+          startingHour: gameStartTime.toLocaleString("en-US", {
+            hour: "numeric",
+            hour12: true,
+          }),
+          games: [],
+          fullDate: gameStartTime,
+        };
         bucket.push(existingBucket);
       }
       existingBucket.games.push(game);
     };
 
     selectedWeekSchedule.games.forEach((game) => {
-      const gameStartTime = new Date(`${game.date} ${game.time} EDT`);
+      // Parse date and time
+      const [year, month, day] = game.date.split("-").map(Number);
+      const [hours, minutes] = game.time.split(":").map(Number);
+
+      // Create date object (months are 0-indexed in JavaScript)
+      const gameStartTime = new Date(year, month - 1, day, hours, minutes);
+
       const gameEndTime = new Date(
         gameStartTime.getTime() + 3 * 60 * 60 * 1000 // Changed to 3 hours game duration
       );
@@ -87,7 +110,9 @@ export const useWeeklySchedule = (selectedWeek: number) => {
 
     // Sort buckets by fullDate
     const sortBuckets = (buckets: GameBucket[]) => {
-      return buckets.sort((a, b) => a.fullDate.getTime() - b.fullDate.getTime());
+      return buckets.sort(
+        (a, b) => a.fullDate.getTime() - b.fullDate.getTime()
+      );
     };
 
     bucketedGames.games.upcoming = sortBuckets(bucketedGames.games.upcoming);

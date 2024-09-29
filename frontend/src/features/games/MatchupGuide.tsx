@@ -52,15 +52,27 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
 
       {matchupPlayers && (
         <div className={`${styles.gameBucketGroups} ${styles.scrollbar}`}>
-          {Object.entries(matchupPlayers.games)
-            .filter(([_, gameBuckets]) => gameBuckets.length > 0)
-            .map(([status, gameBuckets]) => (
-              <GameBucketGroup
-                key={status}
-                status={status}
-                gameBuckets={gameBuckets}
-              />
-            ))}
+          {matchupPlayers.games.inProgress.length > 0 && (
+            <GameBucketGroup
+              key={"inProgress"}
+              status={"inProgress"}
+              gameBuckets={matchupPlayers.games.inProgress}
+            />
+          )}
+          {matchupPlayers.games.upcoming.length > 0 && (
+            <GameBucketGroup
+              key={"upcoming"}
+              status={"upcoming"}
+              gameBuckets={matchupPlayers.games.upcoming}
+            />
+          )}
+          {matchupPlayers.games.completed.length > 0 && (
+            <GameBucketGroup
+              key={"completed"}
+              status={"completed"}
+              gameBuckets={matchupPlayers.games.completed}
+            />
+          )}
         </div>
       )}
     </div>
