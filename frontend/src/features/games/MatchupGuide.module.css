@@ -108,7 +108,7 @@
 
 @media (max-width: 768px) {
   .gameBucketGroups {
-    max-height: calc(100vh - 180px);
+    max-height: calc(100vh - 212px);
   }
 
   .matchup-guide {
