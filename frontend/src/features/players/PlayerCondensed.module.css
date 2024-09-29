@@ -100,13 +100,17 @@
   .player {
     grid-template-columns: 30px 2fr 1fr 1fr;
     column-gap: var(--size1);
-    padding: var(--size1);
+    padding: var(--size1) var(--size0_5);
     max-width: none;
+  }
+
+  .player-user-teams-chips {
+    justify-self: center;
   }
 }
 
 .player-user-teams-chips {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   gap: var(--size0_75);
 }
