@@ -31,13 +31,13 @@ const CredentialManager: React.FC<CredentialManagerProps> = ({
           color={LinkButtonColor.PRIMARY}
           onClick={() => setShowNewCredentialForm(true)}
         >
-          + Add New Account
+          + Add Connection
         </LinkButton>
       ) : (
         <>
           <p>No accounts found</p>
           <Button onClick={() => setShowNewCredentialForm(true)}>
-            + Add New Account
+            + Add Connection
           </Button>
         </>
       )}

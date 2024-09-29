@@ -19,7 +19,6 @@ interface MatchupGuideProps {
 
 const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
   const { user, isLoading: isAuthLoading } = useAuthContext();
-  const carouselRef = useRef<HTMLDivElement>(null);
 
   const { hasPlayers, matchupPlayers, isLoading, initialized, error } =
     useMatchupPlayers(selectedWeek);
@@ -42,18 +41,6 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
   if (!hasPlayers) {
     return <Navigate to="/connect-team" />;
   }
-
-  const scrollLeft = () => {
-    if (carouselRef.current) {
-      carouselRef.current.scrollBy({ left: -200, behavior: "smooth" });
-    }
-  };
-
-  const scrollRight = () => {
-    if (carouselRef.current) {
-      carouselRef.current.scrollBy({ left: 200, behavior: "smooth" });
-    }
-  };
 
   return (
     <div className={`${styles["matchup-guide"]} page-container`}>

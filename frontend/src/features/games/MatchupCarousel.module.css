@@ -5,7 +5,7 @@
   overflow: hidden; /* Ensure the container does not overflow */
   width: 100%; /* Ensure the container takes the full width of the parent */
   box-sizing: border-box; /* Include padding and border in the element's total width and height */
-  max-width: calc(100vw - 280px);
+  max-width: calc(100vw - 300px);
   justify-content: space-between;
 }
 

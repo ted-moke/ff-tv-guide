@@ -139,7 +139,7 @@ const ConnectPlatformCredential: React.FC<ConnectPlatformCredentialProps> = ({
         </LinkButton>
         <Button
           type="submit"
-          disabled={!selectedPlatform || mutation.isPending || isWorking}
+          disabled={!selectedPlatform || !credential || mutation.isPending || isWorking}
         >
           {mutation.isPending || isWorking ? "Connecting..." : "Connect"}
         </Button>

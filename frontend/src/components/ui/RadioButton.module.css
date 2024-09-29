@@ -30,6 +30,10 @@
   transition: all 0.3s ease;
 }
 
+.radioContainer.checked {
+  background-color: var(--background-color-offset);
+}
+
 .radioContainer.checked > .radioLabel {
   /* background-color: var(--primary-color); */
   color: var(--primary-color);

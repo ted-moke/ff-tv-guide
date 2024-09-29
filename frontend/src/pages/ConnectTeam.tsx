@@ -15,6 +15,7 @@ import { useAuthContext } from "../features/auth/AuthProvider";
 import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import FFTVGLogo from "../assets/FFTVGLogo";
+import { useView } from "../features/view/ViewContext";
 
 const ConnectTeam: React.FC = () => {
   const navigate = useNavigate(); // Add this line
@@ -32,6 +33,7 @@ const ConnectTeam: React.FC = () => {
     refetch: refetchCredentials,
   } = useCredentials({ user: user ?? undefined });
   const { mutateAsync: connectLeague } = useConnectLeague();
+  const { isMobile } = useView()
 
   const handleSelectCredential = (credential: PlatformCredential) => {
     setSelectedCredential(credential);
@@ -123,7 +125,7 @@ const ConnectTeam: React.FC = () => {
   return (
     <div className={`${styles.connectTeamPageContainer} page-container`}>
       <div className={styles.pageHeader}>
-        <FFTVGLogo size="large" withText />
+        {!isMobile && <FFTVGLogo size="large" withText />}
         <p className={styles.shortPitch}>
           Streamline your fantasy experience: See only what matters on game day.
         </p>
@@ -166,7 +168,7 @@ const ConnectTeam: React.FC = () => {
         />
       )}
 
-      {!selectedCredential && (
+      {!selectedCredential && !user && (
         <div className={styles.signInContainer}>
           <p>Already a member?</p>
           <Button outline link="/auth">
