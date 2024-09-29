@@ -1,9 +1,10 @@
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { OwnedPlayer, Player as PlayerType } from "../nfl/nflTypes";
 import styles from "./PlayerCondensed.module.css";
 import Popup from "../../components/ui/Popup";
 import Button from "../../components/ui/Button";
 import Chip from "../../components/ui/Chip"; // Assuming you have a Chip component
+import { useView } from "../view/ViewContext"; // Import the useView hook
 
 interface PlayerProps {
   player: PlayerType;
@@ -22,20 +23,27 @@ const generateLeagueUrl = (leagueId: string, platformId: string) => {
 };
 
 const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotType }) => {
-  const [selectedCopy, setselectedCopy] = useState<OwnedPlayer | null>(null);
+  const { isMobile } = useView(); // Get isMobile from the context
+  const [selectedCopy, setSelectedCopy] = useState<OwnedPlayer | null>(null);
   const [popupPosition, setPopupPosition] = useState<{
     x: number;
     y: number;
   } | null>(null);
 
-  const handlePopup = (copy: OwnedPlayer, event: React.MouseEvent) => {
-    const rect = (event.target as HTMLElement).getBoundingClientRect();
-    setselectedCopy(copy);
-    setPopupPosition({ x: rect.left, y: rect.bottom });
-  };
+  const handlePopup = useCallback(
+    (copy: OwnedPlayer, event: React.MouseEvent) => {
+      const rect = (event.target as HTMLElement).getBoundingClientRect();
+      setSelectedCopy(copy);
+      setPopupPosition({
+        x: isMobile ? window.innerWidth - 8 : rect.left,
+        y: rect.bottom + 8,
+      });
+    },
+    [selectedCopy, isMobile]
+  );
 
   const closePopup = () => {
-    setselectedCopy(null);
+    setSelectedCopy(null);
     setPopupPosition(null);
   };
 
@@ -81,19 +89,25 @@ const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotType }) => {
               <Chip
                 key={`${player.name}-${copy.leagueId}-${index}`}
                 label={copy.shortLeagueName}
-                onClick={(event: React.MouseEvent<HTMLElement>) => handlePopup(copy, event)}
+                onClick={(event: React.MouseEvent<HTMLElement>) =>
+                  handlePopup(copy, event)
+                }
               />
             )
         )}
       </div>
-      <div className={`${styles["player-user-teams-chips"]} ${styles["opponent-teams"]}`}>
+      <div
+        className={`${styles["player-user-teams-chips"]} ${styles["opponent-teams"]}`}
+      >
         {opponentCopies.map(
           (copy, index) =>
             (slotType === "both" || copy.rosterSlotType === slotType) && (
               <Chip
                 key={`${player.name}-${copy.leagueId}-${index}`}
                 label={copy.shortLeagueName}
-                onClick={(event: React.MouseEvent<HTMLElement>) => handlePopup(copy, event)}
+                onClick={(event: React.MouseEvent<HTMLElement>) =>
+                  handlePopup(copy, event)
+                }
                 variant="muted"
               />
             )
@@ -101,14 +115,19 @@ const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotType }) => {
       </div>
       {selectedCopy && popupPosition && (
         <Popup
+          header={selectedCopy.leagueName}
           content={
             <div className={styles.leaguePopup}>
-                <h5>{selectedCopy.leagueName}</h5>
               <div className={styles.leaguePopupContent}>
                 <p>Code: {selectedCopy.shortLeagueName}</p>
-                <p className={styles.platformId}>Platform: {selectedCopy.platformId}</p>
+                <p className={styles.platformId}>
+                  Platform: {selectedCopy.platformId}
+                </p>
               </div>
-              <Button onClick={() => window.open(externalLeagueUrl, "_blank")}>
+              <Button
+                outline
+                onClick={() => window.open(externalLeagueUrl, "_blank")}
+              >
                 View League
               </Button>
             </div>

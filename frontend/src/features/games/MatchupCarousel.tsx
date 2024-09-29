@@ -1,16 +1,20 @@
 import React, { useRef } from "react";
 import styles from "./MatchupCarousel.module.css";
-import { LuArrowBigLeft, LuArrowBigRight } from "react-icons/lu";
+import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 import GameInfoBox from "./GameInfoBox";
 import { format24HourTo12Hour } from "../../utils/timeUtils";
 import { formatDateToDay } from "../../utils/dateUtils";
+import { useView } from "../view/ViewContext";
+import { ProcessedGame } from "../../hooks/useProcessedSchedule";
+import IconButton from "../../components/IconButton";
 
 interface MatchupCarouselProps {
-  games: any[]; // Replace 'any' with the correct type for your games
+  games: ProcessedGame[];
 }
 
 const MatchupCarousel: React.FC<MatchupCarouselProps> = ({ games }) => {
   const carouselRef = useRef<HTMLDivElement>(null);
+  const { isMobile, scrollToElement } = useView();
 
   const scrollLeft = () => {
     if (carouselRef.current) {
@@ -24,12 +28,14 @@ const MatchupCarousel: React.FC<MatchupCarouselProps> = ({ games }) => {
     }
   };
 
+  const handleMatchupClick = (game: ProcessedGame) => {
+    scrollToElement(`matchup-${game.awayTeam?.code}-${game.homeTeam?.code}`);
+  };
+
   return (
-    <div className={styles.carouselContainer}>
-      <button onClick={scrollLeft} className={styles.carouselButton}>
-        <LuArrowBigLeft />
-      </button>
-      <div className={styles.carousel} ref={carouselRef}>
+    <div className={`${styles.carouselContainer}`}>
+      {!isMobile && <IconButton icon={<LuChevronLeft />} onClick={scrollLeft} />}
+      <div className={`${styles.carousel} ${styles.scrollbar} ${styles.scrollbarInvisible}`} ref={carouselRef}>
         {games.map((game) => (
           <GameInfoBox
             key={`${game.awayTeam?.code}-${game.homeTeam?.code}`}
@@ -40,12 +46,11 @@ const MatchupCarousel: React.FC<MatchupCarouselProps> = ({ games }) => {
             starters={game.totals.self.starters}
             opponentStarters={game.totals.opponent.starters}
             isTopGame={game.isTopGame}
+            onClick={() => handleMatchupClick(game)}
           />
         ))}
       </div>
-      <button onClick={scrollRight} className={styles.carouselButton}>
-        <LuArrowBigRight />
-      </button>
+      {!isMobile && <IconButton icon={<LuChevronRight />} onClick={scrollRight} />}
     </div>
   );
 };

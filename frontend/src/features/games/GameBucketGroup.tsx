@@ -29,7 +29,6 @@ const GameBucketGroup: React.FC<GameBucketGroupProps> = ({
     <div key={status} className={styles["game-group"]}>
       {gameBuckets.map((bucket: ProcessedGameBucket, bucketIndex: number) => (
         <div key={`${status}-${bucketIndex}`} className={styles["game-bucket"]}>
-          <div className={styles["divider"]} />
           <div
             className={styles["bucket-header"]}
             onClick={() => toggleCollapse(bucketIndex)}
@@ -51,6 +50,7 @@ const GameBucketGroup: React.FC<GameBucketGroupProps> = ({
                 <GameMatchup
                   key={`${status}-${bucketIndex}-${gameIndex}`}
                   game={game}
+                  id={`matchup-${game.awayTeam?.code}-${game.homeTeam?.code}`}
                 />
               ))}
             </div>

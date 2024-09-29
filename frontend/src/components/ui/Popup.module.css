@@ -13,7 +13,7 @@
     -100%
   ); /* Position the popup to the left of the clicked element */
   min-width: 160px;
-  width: 250px;
+  width: 400px;
 }
 
 .popup-content {
@@ -37,4 +37,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+@media (max-width: 768px) {
+  .popup {
+    width: calc(100vw - 16px);
+  }
 }

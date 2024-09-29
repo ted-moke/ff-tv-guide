@@ -9,6 +9,7 @@ interface GameInfoBoxProps {
   starters: number;
   opponentStarters: number;
   isTopGame: boolean;
+  onClick: () => void; // Add onClick prop
 }
 
 const GameInfoBox: React.FC<GameInfoBoxProps> = ({
@@ -19,9 +20,20 @@ const GameInfoBox: React.FC<GameInfoBoxProps> = ({
   starters,
   opponentStarters,
   isTopGame,
+  onClick, // Destructure onClick prop
 }) => {
   return (
-    <div className={`${styles.box} ${isTopGame ? styles.topGame : ""}`}>
+    <div
+      className={`${styles.box} ${isTopGame ? styles.topGame : ""}`}
+      onClick={onClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          onClick();
+        }
+      }}
+    >
       <div className={styles.row}>
         <div className={styles.awayCode}>{awayCode}</div>
         <div className={styles.starters}>

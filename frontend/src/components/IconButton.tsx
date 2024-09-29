@@ -5,11 +5,12 @@ interface IconButtonProps {
   icon: React.ReactNode;
   onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   className?: string;
+  color?: 'default'  | 'secondary' | 'clear';
 }
 
-const IconButton: React.FC<IconButtonProps> = ({ icon, onClick, className }) => {
+const IconButton: React.FC<IconButtonProps> = ({ icon, onClick, className, color = 'default' }) => {
   return (
-    <button className={`${styles.iconButton} ${className}`} onClick={onClick}>
+    <button className={`${styles.iconButton} ${styles[color]} ${className}`} onClick={onClick}>
       {icon}
     </button>
   );

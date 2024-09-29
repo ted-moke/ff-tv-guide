@@ -79,7 +79,7 @@ const Overview: React.FC = () => {
 
   return (
     <div className={`${styles.overview} page-container`}>
-      <h2>NFL Teams Overview</h2>
+      <h1>NFL Teams Overview</h1>
       <div className={styles.teamsGrid}>
         {sortedGroupedPlayers.map(({ team, players, conference, division }) => {
           const playerCount = players.reduce(

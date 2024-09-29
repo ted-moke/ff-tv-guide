@@ -61,6 +61,7 @@ h3 {
 h1 {
   font-size: var(--font-size-xxxl);
   line-height: 1.1;
+  margin-top: var(--size1);
   margin-bottom: var(--size2);
 }
 
@@ -127,7 +128,7 @@ button:focus-visible {
 
 /* TODO look into above, its doing a bunch of BS, this one simples */
 .page-container {
-  padding: var(--size2);
+  padding: var(--size1_5) var(--size2) var(--size2);
 }
 
 .logo {

@@ -12,7 +12,8 @@
 }
 
 .chip p {
-  margin: 0;
+  margin: 1px;
+  line-height: 1;
   font-size: var(--font-size-medium);
   font-family: monospace, sans-serif;
 }

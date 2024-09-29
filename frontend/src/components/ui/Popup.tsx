@@ -44,14 +44,15 @@ const Popup: React.FC<PopupProps> = ({
       }}
     >
       <div className={styles["popup-header"]}>
-        {header && <h3>{header}</h3>}
-        </div>
+        {header && <h5>{header}</h5>}
         <div className={styles["close-container"]}>
           <IconButton
             icon={<CloseIcon color="var(--text-color)" />}
+            color="clear"
             onClick={onClose}
           />
         </div>
+      </div>
       <div className={styles["popup-content"]}>{content}</div>
     </div>
   );

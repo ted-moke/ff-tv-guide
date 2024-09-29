@@ -83,6 +83,6 @@
 
 @media (max-width: 768px) {
   .playersHeader {
-    grid-template-columns: 1fr 3fr 1fr 1fr;
+    grid-template-columns: 30px 2fr 1fr 1fr;
   }
 }

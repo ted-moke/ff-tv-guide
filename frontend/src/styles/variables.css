@@ -72,6 +72,13 @@
   --size9_5: 76px;
   --size10: 80px;
   --size10_5: 84px;
+  --size11: 88px;
+  --size11_5: 92px;
+  --size12: 96px;
+  --size12_5: 100px;
+  --size13: 104px;
+  --size13_5: 108px;
+  --size14: 112px;
 
   --font-size-small: var(--size1_5);
   --font-size-medium: var(--size1_75);

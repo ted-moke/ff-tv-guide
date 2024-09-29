@@ -1,5 +1,7 @@
+@import "../../styles/scrollbar.css"; /* Import the new scrollbar styles */
 
 .carouselContainer {
+  position: relative; /* Ensure the container is positioned relative for pseudo-elements */
   display: flex;
   align-items: center;
   overflow: hidden; /* Ensure the container does not overflow */
@@ -7,6 +9,36 @@
   box-sizing: border-box; /* Include padding and border in the element's total width and height */
   max-width: calc(100vw - 300px);
   justify-content: space-between;
+  padding-bottom: var(--size1);
+}
+
+.carouselContainer::before,
+.carouselContainer::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 32px; /* Adjust the width of the gradient as needed */
+  pointer-events: none; /* Ensure the gradients do not interfere with user interactions */
+  z-index: 1; /* Ensure the gradients are above the carousel content */
+}
+
+.carouselContainer::before {
+  left: -10px;
+  background: linear-gradient(
+    to right,
+    rgba(18, 18, 18, 1),
+    rgba(18, 18, 18, 0)
+  ); /* Adjust colors as needed */
+}
+
+.carouselContainer::after {
+  right: -10px;
+  background: linear-gradient(
+    to left,
+    rgba(18, 18, 18, 1),
+    rgba(18, 18, 18, 0)
+  ); /* Adjust colors as needed */
 }
 
 .carousel {
@@ -32,10 +64,6 @@
   flex-shrink: 0; /* Prevent buttons from shrinking */
 }
 
-.slick-slider {
-  margin-bottom: 20px;
-}
-
 .slick-slide {
   display: flex;
   justify-content: center;
@@ -44,6 +72,7 @@
 @media (max-width: 768px) {
   .carouselContainer {
     max-width: 100%;
+    padding-top: var(--size1_5);
   }
 
   .carouselButton {

@@ -1,14 +1,10 @@
-import React, { useRef } from "react";
+import React from "react";
 import styles from "./MatchupGuide.module.css";
 import { useMatchupPlayers } from "../players/useMatchupPlayers";
 import GameBucketGroup from "./GameBucketGroup";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
 import { Navigate } from "react-router-dom";
 import { useAuthContext } from "../auth/AuthProvider";
-import GameInfoBox from "./GameInfoBox";
-import { format24HourTo12Hour } from "../../utils/timeUtils";
-import { formatDateToDay } from "../../utils/dateUtils";
-import { LuArrowBigLeft, LuArrowBigRight } from "react-icons/lu";
 import MatchupCarousel from "./MatchupCarousel";
 
 interface MatchupGuideProps {
@@ -46,26 +42,27 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
     <div className={`${styles["matchup-guide"]} page-container`}>
       {matchupPlayers && (
         <div className={styles.header}>
-            <h2>NFL Week {matchupPlayers.weekNumber}</h2>
+          <MatchupCarousel
+            games={Object.values(matchupPlayers.games)
+              .flat()
+              .flatMap((bucket) => bucket.games)}
+          />
         </div>
       )}
 
       {matchupPlayers && (
-        <MatchupCarousel
-          games={Object.values(matchupPlayers.games).flat().flatMap(bucket => bucket.games)}
-        />
+        <div className={`${styles.gameBucketGroups} ${styles.scrollbar}`}>
+          {Object.entries(matchupPlayers.games)
+            .filter(([_, gameBuckets]) => gameBuckets.length > 0)
+            .map(([status, gameBuckets]) => (
+              <GameBucketGroup
+                key={status}
+                status={status}
+                gameBuckets={gameBuckets}
+              />
+            ))}
+        </div>
       )}
-
-      {matchupPlayers &&
-        Object.entries(matchupPlayers.games)
-          .filter(([_, gameBuckets]) => gameBuckets.length > 0)
-          .map(([status, gameBuckets]) => (
-            <GameBucketGroup
-              key={status}
-              status={status}
-              gameBuckets={gameBuckets}
-            />
-          ))}
     </div>
   );
 };

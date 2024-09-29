@@ -1,0 +1,49 @@
+/* Scrollbar styling */
+.scrollbar {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(155, 155, 155, 0.7) transparent;
+}
+
+.scrollbar.horizontal {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.scrollbar.horizontal::-webkit-scrollbar {
+  height: 8px;
+  width: 100%;
+}
+
+/* Webkit browsers (Chrome, Safari, newer versions of Edge) */
+.scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(155, 155, 155, 0.7);
+  border-radius: 4px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(155, 155, 155, 0.8);
+}
+
+/* For Firefox */
+@supports (scrollbar-color: auto) {
+  .scrollbar {
+    scrollbar-color: rgba(155, 155, 155, 0.7) transparent;
+    scrollbar-width: thin;
+  }
+}
+
+.scrollbarInvisible {
+  scrollbar-width: none;
+}
+

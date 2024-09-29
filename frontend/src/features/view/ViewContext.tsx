@@ -29,6 +29,7 @@ interface ViewContextType {
   setSelectedWeek: (week: number) => void;
   isMobile: boolean;
   setIsMobile: (isMobile: boolean) => void;
+  scrollToElement: (elementId: string) => void;
 }
 
 const ViewContext = createContext<ViewContextType | undefined>(undefined);
@@ -61,6 +62,16 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
   const [hideEmptyTeams, setHideEmptyTeams] = useState(false);
   const [selectedWeek, setSelectedWeek] = useState(getCurrentWeek());
   const [isMobile, setIsMobile] = useState(false);
+
+  const scrollToElement = (elementId: string) => {
+    const element = document.getElementById(elementId);
+
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      console.error(`Element with id ${elementId} not found`);
+    }
+  };
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -96,6 +107,7 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     setSelectedWeek,
     isMobile,
     setIsMobile,
+    scrollToElement,
   };
 
   return <ViewContext.Provider value={value}>{children}</ViewContext.Provider>;

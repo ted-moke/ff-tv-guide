@@ -199,7 +199,7 @@
 
 @media (max-width: 768px) {
   .team-players-header {
-    grid-template-columns: 1fr 3fr 1fr 1fr;
+    grid-template-columns: 30px 2fr 1fr 1fr;
     column-gap: var(--size1);
     padding: var(--size0_5);
     max-width: none;

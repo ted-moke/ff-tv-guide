@@ -12,9 +12,10 @@ import {
 
 interface GameMatchupProps {
   game: ProcessedGame;
+  id: string;
 }
 
-const GameMatchup: React.FC<GameMatchupProps> = ({ game }) => {
+const GameMatchup: React.FC<GameMatchupProps> = ({ game, id }) => {
   const [isBenchExpanded, setIsBenchExpanded] = useState(false);
 
   const toggleBench = () => {
@@ -33,7 +34,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game }) => {
   );
 
   return (
-    <div className={styles.matchup}>
+    <div className={styles.matchup} id={id}>
       <div className={styles["matchup-header-container"]}>
         <div className={styles["matchup-header"]}>
           <div className={styles["team-names"]}>

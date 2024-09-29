@@ -11,6 +11,19 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  cursor: pointer;
+}
+
+.box:hover {
+  border: 1px solid var(--primary-color);
+}
+
+.box:first-child {
+  margin-left: 0;
+}
+
+.box:last-child {
+  margin-right: 0;
 }
 
 .row {
@@ -32,6 +45,6 @@
   color: var(--primary-color);
 }
 
-.channel {
+.channel {  
   font-size: var(--font-size-small);
 }
