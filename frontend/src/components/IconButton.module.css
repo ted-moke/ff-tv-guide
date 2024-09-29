@@ -8,6 +8,11 @@
   align-items: center;
   justify-content: center;
   padding: var(--size1);
+  border-radius: var(--border-radius-small);
+}
+
+.iconButton:hover {
+  background-color: var(--background-color-offset);
 }
 
 .default {
@@ -15,7 +20,15 @@
   background-color: var(--background-color);
 }
 
+.default:hover {
+  background-color: var(--background-color-offset);
+}
+
 .secondary {
   color: var(--secondary-color);
+}
+
+.secondary:hover {
+  background-color: var(--background-color-offset);
 }
 

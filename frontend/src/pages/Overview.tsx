@@ -80,6 +80,9 @@ const Overview: React.FC = () => {
   return (
     <div className={`${styles.overview} page-container`}>
       <h1>NFL Teams Overview</h1>
+      <p className={styles.sortBy}>
+        Sorted by {sortBy === "players" ? "Player Count" : "division"}
+      </p>
       <div className={styles.teamsGrid}>
         {sortedGroupedPlayers.map(({ team, players, conference, division }) => {
           const playerCount = players.reduce(

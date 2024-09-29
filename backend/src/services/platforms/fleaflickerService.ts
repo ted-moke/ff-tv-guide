@@ -71,6 +71,32 @@ export class FleaflickerService {
       const leagueStandings = await this.fetchLeagueStandings(
         league.externalLeagueId,
       );
+      const leagueStandingsMap = new Map<
+        string,
+        {
+          wins: number;
+          losses: number;
+          ties: number;
+          pointsFor: number;
+          pointsAgainst: number;
+        }
+      >(
+        leagueStandings.divisions.flatMap((division) =>
+          division?.teams
+            ? division.teams.map((team) => [
+                team.id.toString(),
+                {
+                  wins: team.recordOverall?.wins ?? 0,
+                  losses: team.recordOverall?.losses ?? 0,
+                  ties: team.recordOverall?.ties ?? 0,
+                  pointsFor: team?.pointsFor.value ?? 0,
+                  pointsAgainst: team?.pointsAgainst.value ?? 0,
+                },
+              ])
+            : [],
+        ),
+      );
+
       const teamOwners = new Map<string, Owner>(
         leagueStandings.divisions.flatMap((division) =>
           division?.teams
@@ -89,7 +115,11 @@ export class FleaflickerService {
           season,
           week,
         );
+
         const owner = teamOwners.get(teamData.id.toString());
+
+        const currentRoster = leagueStandingsMap.get(teamData.id.toString());
+
         const team: Team = {
           externalLeagueId: league.externalLeagueId,
           externalTeamId: teamData.id.toString(),
@@ -103,6 +133,13 @@ export class FleaflickerService {
             : rosterData.ownerId.toString(),
           opponentId: opponentId.toString(),
           playerData: this.processPlayerData(rosterData.groups),
+          stats: {
+            wins: currentRoster?.wins ?? 0,
+            losses: currentRoster?.losses ?? 0,
+            ties: currentRoster?.ties ?? 0,
+            pointsFor: currentRoster?.pointsFor ?? 0,
+            pointsAgainst: currentRoster?.pointsAgainst ?? 0,
+          },
         };
 
         // Instead of using externalTeamId as the document ID, let's query for an existing team

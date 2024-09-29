@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuthContext } from "../auth/AuthProvider"; // Assuming you have an auth context
 import { FantasyTeam } from "./teamTypes";
@@ -6,7 +7,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 export const useUserTeams = () => {
   const { user } = useAuthContext();
 
-  return useQuery<FantasyTeam[]>({
+  const { data, isLoading, error } = useQuery<FantasyTeam[]>({
     queryKey: ["userTeams", user?.uid],
     queryFn: async (): Promise<FantasyTeam[]> => {
       if (!user) throw new Error("User not authenticated");
@@ -27,6 +28,15 @@ export const useUserTeams = () => {
     },
     enabled: !!user, // Only run the query if there's a user
   });
+
+  const teamMap = useMemo(() => {
+    return data?.reduce((acc, team) => {
+      acc[team.leagueId] = team;
+      return acc;
+    }, {} as Record<string, FantasyTeam>);
+  }, [data]);
+
+  return { data, isLoading, error, teamMap };
 };
 
 export const useOpponentTeams = ({

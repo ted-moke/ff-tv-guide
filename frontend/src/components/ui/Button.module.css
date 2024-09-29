@@ -38,7 +38,8 @@
 
 .outline:hover {
     background-color: var(--primary-hover-color);
-    border-color: var(--text-color);
+    color: var(--text-color-light);
+    border-color: var(--primary-color);
 }
 
 .outline:focus,

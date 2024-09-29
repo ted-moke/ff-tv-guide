@@ -84,6 +84,12 @@ export class SleeperService {
       {},
     );
 
+    const rostersDict: { [key: number]: (typeof rosters)[0] } = {};
+
+    for (const roster of rosters) {
+      rostersDict[roster.roster_id] = roster;
+    }
+
     // Group teams by matchup_id
     const matchupGroups = matchups.reduce(
       (acc: { [key: string]: any[] }, team: any) => {
@@ -102,6 +108,8 @@ export class SleeperService {
         const opponentData = matchup.find(
           (t: any) => t.roster_id !== teamData.roster_id,
         );
+        const currentRoster = rostersDict[teamData.roster_id.toString()];
+
         const team: Team = {
           externalLeagueId: league.externalLeagueId,
           externalTeamId: teamData.roster_id.toString(),
@@ -116,6 +124,21 @@ export class SleeperService {
             teamData.players,
             teamData.starters,
           ),
+          stats: {
+            wins: currentRoster.settings.wins ?? 0,
+            losses: currentRoster.settings.losses ?? 0,
+            ties: currentRoster.settings.ties ?? 0,
+            pointsFor: currentRoster?.settings?.fpts
+              ? parseFloat(
+                  `${currentRoster.settings.fpts}.${currentRoster.settings.fpts_decimal}`,
+                )
+                : 0,
+              pointsAgainst: currentRoster?.settings?.fpts_against
+              ? parseFloat(
+                  `${currentRoster.settings.fpts_against}.${currentRoster.settings.fpts_against_decimal}`,
+                )
+              : 0,
+          },
         };
 
         // Instead of using externalTeamId as the document ID, let's query for an existing team

@@ -16,5 +16,12 @@ export interface FantasyTeam {
     position: string;
     rosterSlotType: string;
   }>;
+  stats: {
+    wins: number;
+    losses: number;
+    ties: number;
+    pointsFor: number;
+    pointsAgainst: number;
+  };
   // Add other properties if needed
 }

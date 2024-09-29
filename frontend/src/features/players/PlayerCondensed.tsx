@@ -5,6 +5,7 @@ import Popup from "../../components/ui/Popup";
 import Button from "../../components/ui/Button";
 import Chip from "../../components/ui/Chip"; // Assuming you have a Chip component
 import { useView } from "../view/ViewContext"; // Import the useView hook
+import { useUserTeams } from "../teams/useUserTeams";
 
 interface PlayerProps {
   player: PlayerType;
@@ -23,12 +24,14 @@ const generateLeagueUrl = (leagueId: string, platformId: string) => {
 };
 
 const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotType }) => {
-  const { isMobile } = useView(); // Get isMobile from the context
+  const { isMobile, selectedWeek } = useView(); // Get isMobile from the context
   const [selectedCopy, setSelectedCopy] = useState<OwnedPlayer | null>(null);
   const [popupPosition, setPopupPosition] = useState<{
     x: number;
     y: number;
   } | null>(null);
+
+  const { teamMap } = useUserTeams();
 
   const handlePopup = useCallback(
     (copy: OwnedPlayer, event: React.MouseEvent) => {
@@ -115,20 +118,47 @@ const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotType }) => {
       </div>
       {selectedCopy && popupPosition && (
         <Popup
-          header={selectedCopy.leagueName}
+          header={`${selectedCopy.leagueName} (${selectedCopy.shortLeagueName})`}
           content={
             <div className={styles.leaguePopup}>
               <div className={styles.leaguePopupContent}>
-                <p>Code: {selectedCopy.shortLeagueName}</p>
-                <p className={styles.platformId}>
-                  Platform: {selectedCopy.platformId}
-                </p>
+                <div className={styles.leaguePopupContentRow}>
+                  <p className={styles.leaguePopupContentLabel}>Record</p>
+                  <p className={styles.leaguePopupContentValue}>
+                    {teamMap?.[selectedCopy.leagueId]?.stats.wins}-
+                    {teamMap?.[selectedCopy.leagueId]?.stats.losses}-
+                    {teamMap?.[selectedCopy.leagueId]?.stats.ties}
+                  </p>
+                  {teamMap?.[selectedCopy.leagueId]?.stats.pointsFor ? (
+                    <p className={styles.leaguePopupContentLabel}>
+                      Avg Points For
+                    </p>
+                  ) : null}
+                  {teamMap?.[selectedCopy.leagueId]?.stats.pointsFor ? (
+                    <p className={styles.leaguePopupContentValue}>
+                      {(
+                        teamMap?.[selectedCopy.leagueId]?.stats.pointsFor /
+                        (selectedWeek - 1)
+                      ).toFixed(1)}
+                    </p>
+                  ) : null}
+                  <p className={styles.leaguePopupContentLabel}>Points For</p>
+                  <p className={styles.leaguePopupContentValue}>
+                    {teamMap?.[selectedCopy.leagueId]?.stats.pointsFor}
+                  </p>
+                  <p className={styles.leaguePopupContentLabel}>
+                    Points Against
+                  </p>
+                  <p className={styles.leaguePopupContentValue}>
+                    {teamMap?.[selectedCopy.leagueId]?.stats.pointsAgainst}
+                  </p>
+                </div>
               </div>
               <Button
                 outline
                 onClick={() => window.open(externalLeagueUrl, "_blank")}
               >
-                View League
+                View <span className={styles.capitalize}>{selectedCopy.platformId}</span> League
               </Button>
             </div>
           }

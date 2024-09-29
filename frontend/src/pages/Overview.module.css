@@ -8,6 +8,11 @@
   gap: var(--size2);
 }
 
+.sortBy {
+  margin: 0;
+  color: var(--text-color-muted);
+}
+
 .teamsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -65,7 +70,7 @@
 
 .playersHeader {
   display: grid;
-  grid-template-columns: 35px 1fr 50px 50px;
+  grid-template-columns: 35px 1fr 60px 60px;
   gap: var(--size3);
   font-weight: bold;
   color: var(--text-color-muted);

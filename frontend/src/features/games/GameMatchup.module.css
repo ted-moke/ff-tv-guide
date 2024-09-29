@@ -170,7 +170,7 @@
 
 .team-players-header {
   display: grid;
-  grid-template-columns: 35px 1fr 50px 50px;
+  grid-template-columns: 35px 1fr 60px 60px;
   column-gap: var(--size3);
   align-items: center;
   padding: var(--size0_5) var(--size0_5) var(--size1);

@@ -93,11 +93,24 @@
   max-height: calc(100vh - 150px);
 }
 
+.userTeams {
+  display: flex;
+  align-items: center;
+  gap: var(--size1);
+}
+
+.userTeams h5,
+.userTeams p {
+  margin: 0;
+  line-height: 1;
+}
+
+
 @media (max-width: 768px) {
   .gameBucketGroups {
     max-height: calc(100vh - 180px);
   }
-  
+
   .matchup-guide {
     flex-direction: column-reverse;
   }

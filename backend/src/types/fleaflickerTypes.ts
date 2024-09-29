@@ -14,6 +14,14 @@ export interface FleaflickerTeam {
   logoUrl: string;
   recordOverall: RecordOverall;
   owners: Owner[];
+  pointsFor: {
+    value: number;
+    formatted: string;
+  };
+  pointsAgainst: {
+    value: number;
+    formatted: string;
+  };
 }
 
 export interface RecordOverall {
@@ -22,8 +30,11 @@ export interface RecordOverall {
     value: number;
     formatted: string;
   };
+  losses: number;
+  ties: number;
   rank: number;
   formatted: string;
+
 }
 
 export interface Owner {

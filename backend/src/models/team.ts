@@ -11,6 +11,13 @@ export interface Team {
   platformId: string;
   opponentId: string;
   playerData: Player[];
+  stats: {
+    wins: number;
+    losses: number;
+    ties: number;
+    pointsFor: number;
+    pointsAgainst: number;
+  };
 }
 
 export interface Player {

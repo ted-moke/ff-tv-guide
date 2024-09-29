@@ -40,16 +40,24 @@ const Sidebar: React.FC = () => {
           />
           <MenuItem
             text="Connect a League"
-            to="/connect-team"
             isActive={location.pathname === "/connect-team"}
+            onClick={() =>
+              window.open("https://forms.gle/pyzeCWTD6J5rWyGc9", "_blank")
+            }
+          />
+          <MenuItem
+            text="Give Feedback"
+            to="https://forms.gle/pyzeCWTD6J5rWyGc9"
+            isActive={location.pathname === "/feedback"}
             onClick={() => setIsMenuOpen(false)}
           />
         </div>
         {user && <FantasyTeamOptions />}
+
         <div
           className={`${styles["divider"]} ${styles["divider-no-margin"]}`}
         />
-        <div className={styles["mobile-menu-items"]}>
+        <div className={styles["menu-items"]}>
           {user && !user.isTemporary ? (
             <Button
               color={ButtonColor.CLEAR}
@@ -60,7 +68,7 @@ const Sidebar: React.FC = () => {
             >
               Logout
             </Button>
-          ) :  (
+          ) : (
             <>
               <p className={styles["temp-user-message"]}>
                 To sync your leagues cross device and reap the full benefits of

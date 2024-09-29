@@ -3,7 +3,7 @@
   display: grid;
   align-items: center;
   justify-items: flex-start;
-  grid-template-columns: 35px 1fr 50px 50px;
+  grid-template-columns: 35px 1fr 60px 60px;
   column-gap: var(--size3);
   overflow-wrap: break-word; /* Allow long words to break */
   overflow: hidden; /* Hide overflow content */
@@ -80,6 +80,27 @@
   width: 100%;
 }
 
+.capitalize {
+  text-transform: capitalize;
+}
+
+.leaguePopupContentRow {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  justify-content: space-between;
+  gap: var(--size1_5);
+}
+
+.leaguePopupContentLabel {
+  justify-self: flex-end;
+  color: var(--text-color-muted);
+}
+
+.leaguePopupContentValue {
+  font-weight: bold;
+  justify-self: flex-start;
+}
+
 .leaguePopup h5 {
   margin: 0;
 }
@@ -93,7 +114,7 @@
   flex-direction: column;
   justify-content: space-between;
   gap: var(--size0_5);
-  margin-bottom: var(--size1_5);
+  margin: var(--size2) auto;
 }
 
 @media (max-width: 768px) {

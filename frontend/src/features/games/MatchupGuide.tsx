@@ -15,7 +15,6 @@ interface MatchupGuideProps {
 
 const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
   const { user, isLoading: isAuthLoading } = useAuthContext();
-
   const { hasPlayers, matchupPlayers, isLoading, initialized, error } =
     useMatchupPlayers(selectedWeek);
 

@@ -58,7 +58,7 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
   const [viewMode, setViewMode] = useState<ViewMode>('matchup');
   const [activeFantasyTeams, setActiveFantasyTeams] = useState<string[]>(FANTASY_TEAMS.map(team => team.name));
   const [activeConference, setActiveConference] = useState<Conference>('Both');
-  const [sortBy, setSortBy] = useState<SortOption>('name');
+  const [sortBy, setSortBy] = useState<SortOption>('players');
   const [hideEmptyTeams, setHideEmptyTeams] = useState(false);
   const [selectedWeek, setSelectedWeek] = useState(getCurrentWeek());
   const [isMobile, setIsMobile] = useState(false);

@@ -63,7 +63,7 @@
   text-align: center;
 }
 
-.mobile-menu-items {
+.menu-items {
   display: flex;
   flex-direction: column;
   gap: var(--size1);
@@ -91,9 +91,7 @@
     left: 0;
   }
 
-  .mobile-menu-items {
-    display: flex;
-    flex-direction: column;
+  .menu-items {
     gap: var(--size2);
   }
 
