@@ -67,6 +67,11 @@ export const updateAllLeagues = async (req: Request, res: Response) => {
 
     for (let i = 0; i < leagues.length; i += BATCH_SIZE) {
       console.log(`Processing batch ${i / BATCH_SIZE + 1}`);
+
+      // Wait for 15 seconds between batches to avoid being rate limited
+      if (i > 0) {
+        await new Promise((resolve) => setTimeout(resolve, 15000));
+      }
       const batch = leagues.slice(i, i + BATCH_SIZE);
       const updatePromises = batch.map(async (doc) => {
         const leagueData = doc.data() as League;

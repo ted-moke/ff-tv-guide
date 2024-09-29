@@ -73,7 +73,9 @@ export class FleaflickerService {
       );
       const teamOwners = new Map<string, Owner>(
         leagueStandings.divisions.flatMap((division) =>
-          division.teams.map((team) => [team.id.toString(), team.owners[0]]),
+          division?.teams
+            ? division.teams.map((team) => [team.id.toString(), team.owners[0]])
+            : [],
         ),
       );
 
@@ -121,6 +123,10 @@ export class FleaflickerService {
         }
       };
 
+      if (!matchups) {
+        console.log("No matchups found");
+        return;
+      }
       for (const matchup of matchups) {
         await addAndUpdateTeam(matchup.away, matchup.home.id);
         await addAndUpdateTeam(matchup.home, matchup.away.id);
