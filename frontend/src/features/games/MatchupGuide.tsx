@@ -19,9 +19,6 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
     useMatchupPlayers(selectedWeek);
 
   if (isAuthLoading) return <LoadingSpinner />;
-  if (!user) {
-    return <Navigate to="/connect-team" />;
-  }
 
   if (isLoading) return <LoadingSpinner />;
   if (error) {
@@ -33,7 +30,10 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
     return <div>No games scheduled for this week.</div>;
   }
 
-  if (!hasPlayers) {
+  if (!hasPlayers || !user) {
+    console.log("redirected")
+    console.log("user", user);
+    console.log("matchupPlayers", matchupPlayers);
     return <Navigate to="/connect-team" />;
   }
 

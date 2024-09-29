@@ -15,10 +15,6 @@
   gap: var(--size1);
 }
 
-.matchup-header-container {
-  padding: var(--size0_5) var(--size1);
-}
-
 .matchup-subheader {
   display: flex;
   justify-content: space-between;
@@ -43,6 +39,17 @@
 .team-names {
   color: var(--text-color);
   display: flex;
+  align-items: flex-start;
+}
+
+.collapsed .team-names h3 {
+  font-size: var(--font-size-large);
+}
+
+
+.team-names-container {
+  display: flex;
+  align-items: center;
   gap: var(--size1);
 }
 
@@ -60,11 +67,6 @@
   margin: 0 var(--size1);
   color: var(--text-color-muted);
   font-weight: normal;
-}
-
-.total-players {
-  font-size: var(--size1_5);
-  color: var(--text-color-secondary);
 }
 
 .no-players-content {
@@ -96,10 +98,14 @@
   gap: var(--size0_5);
 }
 
-.matchup-header-right {
+.matchup-header-left {
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  gap: var(--size0_5);
+}
+
+.matchup-header-right {
+  display: flex;
   gap: var(--size0_5);
 }
 
@@ -107,6 +113,13 @@
   color: var(--text-color-muted);
   font-size: var(--font-size-medium);
   margin: 0;
+}
+
+.schedule-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--size0_5);
 }
 
 .starters,
@@ -216,6 +229,6 @@
   }
 
   .matchup {
-    padding: var(--size1);
+    padding: var(--size1_5);
   }
 }

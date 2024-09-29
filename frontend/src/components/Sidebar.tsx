@@ -40,16 +40,20 @@ const Sidebar: React.FC = () => {
           />
           <MenuItem
             text="Connect a League"
+            to="/connect-team"
             isActive={location.pathname === "/connect-team"}
-            onClick={() =>
-              window.open("https://forms.gle/pyzeCWTD6J5rWyGc9", "_blank")
-            }
+            onClick={() => {
+              setIsMenuOpen(false);
+            }}
           />
           <MenuItem
             text="Give Feedback"
-            to="https://forms.gle/pyzeCWTD6J5rWyGc9"
+            to="#"
             isActive={location.pathname === "/feedback"}
-            onClick={() => setIsMenuOpen(false)}
+            onClick={() => {
+              setIsMenuOpen(false);
+              window.open("https://forms.gle/pyzeCWTD6J5rWyGc9", "_blank");
+            }}
           />
         </div>
         {user && <FantasyTeamOptions />}

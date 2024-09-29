@@ -32,3 +32,11 @@
   background-color: var(--background-color-offset);
 }
 
+.clear {
+  color: var(--text-color);
+  background-color: transparent;
+}
+
+.clear:hover {
+  background-color: var(--background-color-offset);
+}

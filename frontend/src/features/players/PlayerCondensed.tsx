@@ -125,16 +125,16 @@ const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotType }) => {
                 <div className={styles.leaguePopupContentRow}>
                   <p className={styles.leaguePopupContentLabel}>Record</p>
                   <p className={styles.leaguePopupContentValue}>
-                    {teamMap?.[selectedCopy.leagueId]?.stats.wins}-
-                    {teamMap?.[selectedCopy.leagueId]?.stats.losses}-
-                    {teamMap?.[selectedCopy.leagueId]?.stats.ties}
+                    {teamMap?.[selectedCopy.leagueId]?.stats?.wins}-
+                    {teamMap?.[selectedCopy.leagueId]?.stats?.losses}-
+                    {teamMap?.[selectedCopy.leagueId]?.stats?.ties}
                   </p>
-                  {teamMap?.[selectedCopy.leagueId]?.stats.pointsFor ? (
+                  {teamMap?.[selectedCopy.leagueId]?.stats?.pointsFor ? (
                     <p className={styles.leaguePopupContentLabel}>
                       Avg Points For
                     </p>
                   ) : null}
-                  {teamMap?.[selectedCopy.leagueId]?.stats.pointsFor ? (
+                  {teamMap?.[selectedCopy.leagueId]?.stats?.pointsFor ? (
                     <p className={styles.leaguePopupContentValue}>
                       {(
                         teamMap?.[selectedCopy.leagueId]?.stats.pointsFor /
@@ -144,13 +144,13 @@ const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotType }) => {
                   ) : null}
                   <p className={styles.leaguePopupContentLabel}>Points For</p>
                   <p className={styles.leaguePopupContentValue}>
-                    {teamMap?.[selectedCopy.leagueId]?.stats.pointsFor}
+                    {teamMap?.[selectedCopy.leagueId]?.stats?.pointsFor}
                   </p>
                   <p className={styles.leaguePopupContentLabel}>
                     Points Against
                   </p>
                   <p className={styles.leaguePopupContentValue}>
-                    {teamMap?.[selectedCopy.leagueId]?.stats.pointsAgainst}
+                    {teamMap?.[selectedCopy.leagueId]?.stats?.pointsAgainst}
                   </p>
                 </div>
               </div>
