@@ -103,16 +103,11 @@ const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotType }) => {
         className={`${styles["player-user-teams-chips"]} ${styles["opponent-teams"]}`}
       >
         {opponentCopies.map(
-          (copy, index) =>
+          (copy) =>
             (slotType === "both" || copy.rosterSlotType === slotType) && (
-              <Chip
-                key={`${player.name}-${copy.leagueId}-${index}`}
-                label={copy.shortLeagueName}
-                onClick={(event: React.MouseEvent<HTMLElement>) =>
-                  handlePopup(copy, event)
-                }
-                variant="muted"
-              />
+              <p className={styles.leaguePopupOpponentCode}>
+                {copy.shortLeagueName}
+              </p>
             )
         )}
       </div>
@@ -158,7 +153,11 @@ const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotType }) => {
                 outline
                 onClick={() => window.open(externalLeagueUrl, "_blank")}
               >
-                View <span className={styles.capitalize}>{selectedCopy.platformId}</span> League
+                View{" "}
+                <span className={styles.capitalize}>
+                  {selectedCopy.platformId}
+                </span>{" "}
+                League
               </Button>
             </div>
           }

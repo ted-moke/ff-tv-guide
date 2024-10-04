@@ -46,20 +46,16 @@ const AdminLeagues: React.FC = () => {
         </Button>
       </div>
       <div className={styles.stats}>
-        <h2>League Statistics</h2>
         <p>Total Leagues: {data.totalLeagues}</p>
         <div className={styles.platformCounts}>
           {Object.entries(data.platformCounts).map(([platform, count]) => (
             <div key={platform}>
               <p>
-                {platform}: {count}
-              </p>
-              <p>
-                Syncing all would result in{" "}
+                {platform}: {count} (Syncing all would result in{" "}
                 {callsPerPlatformSync[
                   platform as keyof typeof callsPerPlatformSync
                 ] * count}{" "}
-                API calls.
+                API calls.)
               </p>
             </div>
           ))}

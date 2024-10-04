@@ -54,11 +54,15 @@ export const updateAllLeagues = async () => {
 export const getLeaguesPaginated = async (
   page: number,
   limit: number,
-  startAfter?: string
+  startAfter?: string,
+  sortBy: string = "name",
+  sortOrder: "asc" | "desc" = "asc"
 ) => {
   const url = new URL(`${API_URL}/leagues`);
   url.searchParams.append("page", page.toString());
   url.searchParams.append("limit", limit.toString());
+  url.searchParams.append("sortBy", sortBy);
+  url.searchParams.append("sortOrder", sortOrder);
   if (startAfter) {
     url.searchParams.append("startAfter", startAfter);
   }
@@ -103,6 +107,7 @@ export const getLeagueStats = async (): Promise<LeagueStats> => {
       Authorization: `Bearer ${localStorage.getItem("authToken")}`,
     },
   });
+  
 
   if (!response.ok) {
     throw new Error("Failed to fetch league stats");

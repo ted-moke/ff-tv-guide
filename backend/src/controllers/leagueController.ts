@@ -98,10 +98,12 @@ export const getLeaguesPaginated = async (req: Request, res: Response) => {
   const page = parseInt(req.query.page as string) || 1;
   const limit = parseInt(req.query.limit as string) || 10;
   const startAfter = req.query.startAfter as string | undefined;
+  const sortBy = (req.query.sortBy as string) || 'name';
+  const sortOrder = (req.query.sortOrder as 'asc' | 'desc') || 'asc';
 
   try {
     const db = await getDb();
-    let query = db.collection("leagues").orderBy("name");
+    let query = db.collection("leagues").orderBy(sortBy, sortOrder);
 
     if (startAfter) {
       const startAfterDoc = await db

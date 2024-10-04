@@ -1,24 +1,27 @@
-import React, { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getLeaguesPaginated, syncLeague } from './leagueAPI';
-import Button from '../../components/ui/Button';
-import LoadingSpinner from '../../components/ui/LoadingSpinner';
-import styles from './LeagueList.module.css';
+import React, { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getLeaguesPaginated, syncLeague } from "./leagueAPI";
+import Button from "../../components/ui/Button";
+import LoadingSpinner from "../../components/ui/LoadingSpinner";
+import styles from "./LeagueList.module.css";
+import Dropdown from "../../components/ui/Dropdown";
 
 const LeagueList: React.FC = () => {
   const [page, setPage] = useState(1);
+  const [sortBy, setSortBy] = useState("lastModified");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [startAfter, setStartAfter] = useState<string | undefined>(undefined);
   const queryClient = useQueryClient();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ['leagues', page, startAfter],
-    queryFn: () => getLeaguesPaginated(page, 10, startAfter),
+    queryKey: ["leagues", page, startAfter, sortBy, sortOrder],
+    queryFn: () => getLeaguesPaginated(page, 10, startAfter, sortBy, sortOrder),
   });
 
   const syncMutation = useMutation({
     mutationFn: syncLeague,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['leagues'] });
+      queryClient.invalidateQueries({ queryKey: ["leagues"] });
     },
   });
 
@@ -27,7 +30,30 @@ const LeagueList: React.FC = () => {
 
   return (
     <div className={styles.leagueList}>
-      <h2>Leagues</h2>
+      <div className={styles.sortControls}>
+        <Dropdown
+          id="sortBy"
+          options={[
+            { value: "name", label: "Name" },
+            { value: "lastModified", label: "Last Modified" },
+          ]}
+          value={sortBy}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+            setSortBy(e.target.value)
+          }
+        />
+        <Dropdown
+          id="sortOrder"
+          options={[
+            { value: "asc", label: "Ascending" },
+            { value: "desc", label: "Descending" },
+          ]}
+          value={sortOrder}
+          onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+            setSortOrder(e.target.value as "asc" | "desc")
+          }
+        />
+      </div>
       <div className={styles.leagueCards}>
         {data.leagues.map((league: any) => (
           <div key={league.id} className={styles.leagueCard}>
@@ -37,19 +63,19 @@ const LeagueList: React.FC = () => {
                 Last modified: {new Date(league.lastModified).toLocaleString()}
               </p>
             </div>
-            <Button 
+            <Button
               onClick={() => syncMutation.mutate(league.id)}
               disabled={syncMutation.isPending}
             >
-              {syncMutation.isPending ? 'Syncing...' : 'Sync'}
+              {syncMutation.isPending ? "Syncing..." : "Sync"}
             </Button>
           </div>
         ))}
       </div>
       {data.hasNextPage && (
-        <Button 
+        <Button
           onClick={() => {
-            setPage(prev => prev + 1);
+            setPage((prev) => prev + 1);
             setStartAfter(data.nextStartAfter);
           }}
           className={styles.loadMoreButton}

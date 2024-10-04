@@ -16,9 +16,7 @@
 5. toggle show opponents, teams, etc
 6.  delete credential
 
-- filter by team
 - connect league error handling UI
-- nfl team overview
 
 ## Done
 
