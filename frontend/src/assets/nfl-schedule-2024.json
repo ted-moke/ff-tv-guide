@@ -501,6 +501,110 @@
           "channel": "ABC"
         }
       ]
+    },
+    {
+      "weekNumber": 5,
+      "games": [
+        {
+          "date": "2024-10-03",
+          "time": "20:15",
+          "awayTeam": "Tampa Bay Buccaneers",
+          "homeTeam": "Atlanta Falcons",
+          "channel": "Prime Video"
+        },
+        {
+          "date": "2024-10-06",
+          "time": "09:30",
+          "awayTeam": "New York Jets",
+          "homeTeam": "Minnesota Vikings",
+          "channel": "NFLN",
+          "notes": "Tottenham"
+        },
+        {
+          "date": "2024-10-06",
+          "time": "13:00",
+          "awayTeam": "Carolina Panthers",
+          "homeTeam": "Chicago Bears",
+          "channel": "FOX"
+        },
+        {
+          "date": "2024-10-06",
+          "time": "13:00",
+          "awayTeam": "Baltimore Ravens",
+          "homeTeam": "Cincinnati Bengals",
+          "channel": "CBS"
+        },
+        {
+          "date": "2024-10-06",
+          "time": "13:00",
+          "awayTeam": "Buffalo Bills",
+          "homeTeam": "Houston Texans",
+          "channel": "CBS"
+        },
+        {
+          "date": "2024-10-06",
+          "time": "13:00",
+          "awayTeam": "Indianapolis Colts",
+          "homeTeam": "Jacksonville Jaguars",
+          "channel": "CBS"
+        },
+        {
+          "date": "2024-10-06",
+          "time": "13:00",
+          "awayTeam": "Miami Dolphins",
+          "homeTeam": "New England Patriots",
+          "channel": "FOX"
+        },
+        {
+          "date": "2024-10-06",
+          "time": "13:00",
+          "awayTeam": "Cleveland Browns",
+          "homeTeam": "Washington Commanders",
+          "channel": "FOX"
+        },
+        {
+          "date": "2024-10-06",
+          "time": "16:05",
+          "awayTeam": "Las Vegas Raiders",
+          "homeTeam": "Denver Broncos",
+          "channel": "FOX"
+        },
+        {
+          "date": "2024-10-06",
+          "time": "16:05",
+          "awayTeam": "Arizona Cardinals",
+          "homeTeam": "San Francisco 49ers",
+          "channel": "FOX"
+        },
+        {
+          "date": "2024-10-06",
+          "time": "16:25",
+          "awayTeam": "Green Bay Packers",
+          "homeTeam": "Los Angeles Rams",
+          "channel": "CBS"
+        },
+        {
+          "date": "2024-10-06",
+          "time": "16:25",
+          "awayTeam": "New York Giants",
+          "homeTeam": "Seattle Seahawks",
+          "channel": "CBS"
+        },
+        {
+          "date": "2024-10-06",
+          "time": "20:20",
+          "awayTeam": "Dallas Cowboys",
+          "homeTeam": "Pittsburgh Steelers",
+          "channel": "NBC*"
+        },
+        {
+          "date": "2024-10-07",
+          "time": "20:15",
+          "awayTeam": "New Orleans Saints",
+          "homeTeam": "Kansas City Chiefs",
+          "channel": "ESPN"
+        }
+      ]
     }
   ]
 }
