@@ -62,7 +62,11 @@ export const updateAllLeagues = async (req: Request, res: Response) => {
   try {
     console.log("Updating all leagues");
     const db = await getDb();
-    const leaguesSnapshot = await db.collection("leagues").get();
+    const leaguesSnapshot = await db
+      .collection("leagues")
+      .orderBy("lastModified", "asc")
+      .get();
+
     const leagues = leaguesSnapshot.docs;
 
     for (let i = 0; i < leagues.length; i += BATCH_SIZE) {
@@ -86,7 +90,28 @@ export const updateAllLeagues = async (req: Request, res: Response) => {
 
       await Promise.all(updatePromises);
       console.log(`Batch ${i / BATCH_SIZE + 1} completed`);
+
+      // Explicitly clear references
+      batch.length = 0;
+      updatePromises.length = 0;
+
+      // Log memory usage
+      const memoryUsage = process.memoryUsage();
+      console.log('Memory usage after batch:', {
+        rss: `${Math.round(memoryUsage.rss / 1024 / 1024)} MB`,
+        heapTotal: `${Math.round(memoryUsage.heapTotal / 1024 / 1024)} MB`,
+        heapUsed: `${Math.round(memoryUsage.heapUsed / 1024 / 1024)} MB`,
+        external: `${Math.round(memoryUsage.external / 1024 / 1024)} MB`,
+      });
+
+      // Force garbage collection if available
+      if (global.gc) {
+        global.gc();
+        console.log('Garbage collection forced');
+      }
     }
+
+    console.log("All leagues updated successfully");
 
     res.status(200).json({ message: "All leagues updated successfully" });
   } catch (error) {
@@ -98,8 +123,8 @@ export const getLeaguesPaginated = async (req: Request, res: Response) => {
   const page = parseInt(req.query.page as string) || 1;
   const limit = parseInt(req.query.limit as string) || 10;
   const startAfter = req.query.startAfter as string | undefined;
-  const sortBy = (req.query.sortBy as string) || 'name';
-  const sortOrder = (req.query.sortOrder as 'asc' | 'desc') || 'asc';
+  const sortBy = (req.query.sortBy as string) || "name";
+  const sortOrder = (req.query.sortOrder as "asc" | "desc") || "asc";
 
   try {
     const db = await getDb();
@@ -117,12 +142,16 @@ export const getLeaguesPaginated = async (req: Request, res: Response) => {
     const leagues = snapshot.docs.slice(0, limit).map((doc) => {
       const data = doc.data();
 
-      return {
+      const leagueData: any = {
         id: doc.id,
         ...data,
-        lastModified:
-          data.lastModified != null ? data.lastModified.toDate() : undefined, // Convert Firestore Timestamp to JavaScript Date
       };
+
+      if (data.lastModified != null) {
+        leagueData.lastModified = data.lastModified.toDate();
+      }
+
+      return leagueData;
     });
 
     const hasNextPage = snapshot.docs.length > limit;

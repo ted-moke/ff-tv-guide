@@ -168,6 +168,10 @@ export class FleaflickerService {
         await addAndUpdateTeam(matchup.away, matchup.home.id);
         await addAndUpdateTeam(matchup.home, matchup.away.id);
       }
+
+      // Clear large data structures
+      leagueStandingsMap.clear();
+      teamOwners.clear();
     } catch (error) {
       console.error("Error upserting teams", error);
       throw error;

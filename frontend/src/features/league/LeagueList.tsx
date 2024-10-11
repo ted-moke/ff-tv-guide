@@ -9,7 +9,7 @@ import Dropdown from "../../components/ui/Dropdown";
 const LeagueList: React.FC = () => {
   const [page, setPage] = useState(1);
   const [sortBy, setSortBy] = useState("lastModified");
-  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [startAfter, setStartAfter] = useState<string | undefined>(undefined);
   const queryClient = useQueryClient();
 
