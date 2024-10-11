@@ -69,104 +69,111 @@ export class SleeperService {
   }
 
   async upsertTeams(league: League) {
-    const db = await getDb();
-    const week = getCurrentWeek();
-    const matchups = await this.fetchMatchups(league.externalLeagueId, week);
-    const rosters = await this.fetchRosters(league.externalLeagueId);
-    const teamsCollection = db.collection("teams");
+    try {
+      const db = await getDb();
+      const week = getCurrentWeek();
+      const teamsCollection = db.collection("teams");
 
-    // Create a map of roster_id to owner_id
-    const rosterOwnerMap = rosters.reduce(
-      (acc: { [key: string]: string }, roster: any) => {
-        acc[roster.roster_id] = roster.owner_id;
-        return acc;
-      },
-      {},
-    );
+      // Fetch all necessary data upfront
+      const [matchups, rosters] = await Promise.all([
+        this.fetchMatchups(league.externalLeagueId, week),
+        this.fetchRosters(league.externalLeagueId),
+      ]);
 
-    const rostersDict: { [key: number]: (typeof rosters)[0] } = {};
-
-    for (const roster of rosters) {
-      rostersDict[roster.roster_id] = roster;
-    }
-
-    // Group teams by matchup_id
-    const matchupGroups = matchups.reduce(
-      (acc: { [key: string]: any[] }, team: any) => {
-        if (!acc[team.matchup_id]) {
-          acc[team.matchup_id] = [];
-        }
-        acc[team.matchup_id].push(team);
-        return acc;
-      },
-      {},
-    );
-
-    for (const matchupId in matchupGroups) {
-      const matchup = matchupGroups[matchupId];
-      for (const teamData of matchup) {
-        const opponentData = matchup.find(
-          (t: any) => t.roster_id !== teamData.roster_id,
-        );
-        const currentRoster = rostersDict[teamData.roster_id.toString()];
-
-        const team: Team = {
-          externalLeagueId: league.externalLeagueId,
-          externalTeamId: teamData.roster_id.toString(),
-          platformId: league.platform.name,
-          leagueId: league.id || "",
-          leagueName: league.name,
-          name: `Team ${teamData.roster_id}`, // You might want to fetch actual team names separately
-          externalUsername: "", // This information is not available in the matchups data
-          externalUserId: rosterOwnerMap[teamData.roster_id] || "", // Set the externalUserId from the roster data
-          opponentId: opponentData ? opponentData.roster_id.toString() : "",
-          playerData: this.processPlayerData(
-            teamData.players,
-            teamData.starters,
-          ),
-          stats: {
-            wins: currentRoster.settings.wins ?? 0,
-            losses: currentRoster.settings.losses ?? 0,
-            ties: currentRoster.settings.ties ?? 0,
-            pointsFor: currentRoster?.settings?.fpts
-              ? parseFloat(
-                  `${currentRoster.settings.fpts}.${currentRoster.settings.fpts_decimal}`,
-                )
-              : 0,
-            pointsAgainst: currentRoster?.settings?.fpts_against
-              ? parseFloat(
-                  `${currentRoster.settings.fpts_against}.${currentRoster.settings.fpts_against_decimal}`,
-                )
-              : 0,
+      // Create a map of roster_id to owner_id and roster settings
+      const rosterMap = new Map(
+        rosters.map((roster: any) => [
+          roster.roster_id.toString(),
+          {
+            owner_id: roster.owner_id,
+            settings: roster.settings,
           },
-        };
+        ]),
+      );
 
-        if (!team.externalTeamId || !team.leagueId) {
-          console.error("Invalid team data:", {
-            ...team,
-            playerData: "revoked",
-          });
-          continue;
+      // Fetch all existing teams for this league in one query
+      const existingTeamsSnapshot = await teamsCollection
+        .where("leagueId", "==", league.id)
+        .get();
+      const existingTeamsMap = new Map(
+        existingTeamsSnapshot.docs.map((doc) => [
+          doc.data().externalTeamId,
+          doc,
+        ]),
+      );
+
+      // Process matchups in batches
+      const BATCH_SIZE = 16;
+      for (let i = 0; i < matchups.length; i += BATCH_SIZE) {
+        const batch = db.batch();
+        const matchupBatch = matchups.slice(i, i + BATCH_SIZE);
+
+        for (const matchup of matchupBatch) {
+          const team = this.createTeamObject(
+            matchup,
+            rosterMap as Map<string, any>,
+            league,
+          );
+          if (!team) continue;
+
+          const existingTeam = existingTeamsMap.get(team.externalTeamId);
+          if (existingTeam) {
+            batch.update(existingTeam.ref, { ...team, id: existingTeam.id });
+          } else {
+            const newTeamRef = teamsCollection.doc();
+            batch.set(newTeamRef, { ...team, id: newTeamRef.id });
+          }
         }
 
-        // Instead of using externalTeamId as the document ID, let's query for an existing team
-        const existingTeamQuery = await teamsCollection
-          .where("externalTeamId", "==", team.externalTeamId)
-          .where("leagueId", "==", league.id)
-          .limit(1)
-          .get();
-
-        if (!existingTeamQuery.empty) {
-          // Update existing team
-          const existingTeamDoc = existingTeamQuery.docs[0];
-          await existingTeamDoc.ref.update({ ...team, id: existingTeamDoc.id });
-        } else {
-          // Create new team with auto-generated ID
-          const newTeamRef = await teamsCollection.add(team);
-          await newTeamRef.update({ id: newTeamRef.id });
-        }
+        await batch.commit();
       }
+
+      // Clear large data structures
+      rosterMap.clear();
+      existingTeamsMap.clear();
+    } catch (error) {
+      console.error("Error sleeperService upserting teams:", error);
     }
+  }
+
+  private createTeamObject(
+    matchup: any,
+    rosterMap: Map<string, any>,
+    league: League,
+  ): Team | null {
+    const rosterInfo = rosterMap.get(matchup.roster_id.toString());
+    if (!rosterInfo) {
+      console.error("Roster info not found for roster_id:", matchup.roster_id);
+      return null;
+    }
+
+    return {
+      externalLeagueId: league.externalLeagueId,
+      externalTeamId: matchup.roster_id.toString(),
+      platformId: league.platform.name,
+      leagueId: league.id || "",
+      leagueName: league.name,
+      name: `Team ${matchup.roster_id}`,
+      externalUsername: "",
+      externalUserId: rosterInfo.owner_id || "",
+      opponentId: matchup.matchup_id ? matchup.matchup_id.toString() : "",
+      playerData: this.processPlayerData(matchup.players, matchup.starters),
+      stats: {
+        wins: rosterInfo.settings.wins ?? 0,
+        losses: rosterInfo.settings.losses ?? 0,
+        ties: rosterInfo.settings.ties ?? 0,
+        pointsFor: rosterInfo.settings.fpts
+          ? parseFloat(
+              `${rosterInfo.settings.fpts}.${rosterInfo.settings.fpts_decimal}`,
+            )
+          : 0,
+        pointsAgainst: rosterInfo.settings.fpts_against
+          ? parseFloat(
+              `${rosterInfo.settings.fpts_against}.${rosterInfo.settings.fpts_against_decimal}`,
+            )
+          : 0,
+      },
+    };
   }
 
   async upsertUserTeams({

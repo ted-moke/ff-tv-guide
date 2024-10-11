@@ -76,17 +76,23 @@ export const updateAllLeagues = async (req: Request, res: Response) => {
       if (i > 0) {
         await new Promise((resolve) => setTimeout(resolve, 15000));
       }
+
       const batch = leagues.slice(i, i + BATCH_SIZE);
+
+      console.log("Batch size:", batch.length);
       const updatePromises = batch.map(async (doc) => {
         const leagueData = doc.data() as League;
         const platformService = PlatformServiceFactory.getService(
           leagueData.platform.name,
         );
+        console.log("Upserting teams for league:", leagueData.name);
         await platformService.upsertTeams(leagueData);
 
         // Update lastModified
         await doc.ref.update({ lastModified: new Date() });
       });
+
+      console.log("Update promises:", updatePromises.length);
 
       await Promise.all(updatePromises);
       console.log(`Batch ${i / BATCH_SIZE + 1} completed`);
@@ -97,7 +103,7 @@ export const updateAllLeagues = async (req: Request, res: Response) => {
 
       // Log memory usage
       const memoryUsage = process.memoryUsage();
-      console.log('Memory usage after batch:', {
+      console.log("Memory usage after batch:", {
         rss: `${Math.round(memoryUsage.rss / 1024 / 1024)} MB`,
         heapTotal: `${Math.round(memoryUsage.heapTotal / 1024 / 1024)} MB`,
         heapUsed: `${Math.round(memoryUsage.heapUsed / 1024 / 1024)} MB`,
@@ -107,7 +113,7 @@ export const updateAllLeagues = async (req: Request, res: Response) => {
       // Force garbage collection if available
       if (global.gc) {
         global.gc();
-        console.log('Garbage collection forced');
+        console.log("Garbage collection forced");
       }
     }
 
@@ -115,6 +121,7 @@ export const updateAllLeagues = async (req: Request, res: Response) => {
 
     res.status(200).json({ message: "All leagues updated successfully" });
   } catch (error) {
+    console.error("Error updating all leagues:", error);
     res.status(500).json({ error: (error as Error).message });
   }
 };
