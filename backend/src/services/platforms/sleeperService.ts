@@ -132,14 +132,22 @@ export class SleeperService {
               ? parseFloat(
                   `${currentRoster.settings.fpts}.${currentRoster.settings.fpts_decimal}`,
                 )
-                : 0,
-              pointsAgainst: currentRoster?.settings?.fpts_against
+              : 0,
+            pointsAgainst: currentRoster?.settings?.fpts_against
               ? parseFloat(
                   `${currentRoster.settings.fpts_against}.${currentRoster.settings.fpts_against_decimal}`,
                 )
               : 0,
           },
         };
+
+        if (!team.externalTeamId || !team.leagueId) {
+          console.error("Invalid team data:", {
+            ...team,
+            playerData: "revoked",
+          });
+          continue;
+        }
 
         // Instead of using externalTeamId as the document ID, let's query for an existing team
         const existingTeamQuery = await teamsCollection
