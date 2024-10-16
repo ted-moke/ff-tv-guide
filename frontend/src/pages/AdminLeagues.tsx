@@ -20,7 +20,7 @@ const AdminLeagues: React.FC = () => {
   const mutation = useMutation({
     mutationFn: updateAllLeagues,
     onSuccess: () => {
-      alert("All leagues updated successfully");
+      alert("League update started");
     },
     onError: (error) => {
       console.error("Failed to update leagues:", error);
