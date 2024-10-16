@@ -2,8 +2,9 @@ import { Request, Response } from "express";
 import { PlatformServiceFactory } from "../services/platforms/platformServiceFactory";
 import { getDb } from "../firebase";
 import { League } from "../models/league";
+import { startBackgroundJob } from "../utils/backgroundJobs";
 
-const BATCH_SIZE = 10; // Adjust the batch size as needed
+const BATCH_SIZE = 10; // Adjust as needed
 
 export const upsertLeague = async (req: Request, res: Response) => {
   const {
@@ -60,71 +61,85 @@ export const upsertLeague = async (req: Request, res: Response) => {
 
 export const updateAllLeagues = async (req: Request, res: Response) => {
   try {
-    console.log("Updating all leagues");
-    const db = await getDb();
-    const leaguesSnapshot = await db
-      .collection("leagues")
-      .orderBy("lastModified", "asc")
-      .get();
+    console.log("Initiating background job to update all leagues");
 
-    const leagues = leaguesSnapshot.docs;
+    // Start the background job
+    startBackgroundJob(updateAllLeaguesBackground);
 
-    for (let i = 0; i < leagues.length; i += BATCH_SIZE) {
-      console.log(`Processing batch ${i / BATCH_SIZE + 1}`);
-
-      // Wait for 15 seconds between batches to avoid being rate limited
-      if (i > 0) {
-        await new Promise((resolve) => setTimeout(resolve, 15000));
-      }
-
-      const batch = leagues.slice(i, i + BATCH_SIZE);
-
-      console.log("Batch size:", batch.length);
-      const updatePromises = batch.map(async (doc) => {
-        const leagueData = doc.data() as League;
-        const platformService = PlatformServiceFactory.getService(
-          leagueData.platform.name,
-        );
-        console.log("Upserting teams for league:", leagueData.name);
-        await platformService.upsertTeams(leagueData);
-
-        // Update lastModified
-        await doc.ref.update({ lastModified: new Date() });
-      });
-
-      console.log("Update promises:", updatePromises.length);
-
-      await Promise.all(updatePromises);
-      console.log(`Batch ${i / BATCH_SIZE + 1} completed`);
-
-      // Explicitly clear references
-      batch.length = 0;
-      updatePromises.length = 0;
-
-      // Log memory usage
-      const memoryUsage = process.memoryUsage();
-      console.log("Memory usage after batch:", {
-        rss: `${Math.round(memoryUsage.rss / 1024 / 1024)} MB`,
-        heapTotal: `${Math.round(memoryUsage.heapTotal / 1024 / 1024)} MB`,
-        heapUsed: `${Math.round(memoryUsage.heapUsed / 1024 / 1024)} MB`,
-        external: `${Math.round(memoryUsage.external / 1024 / 1024)} MB`,
-      });
-
-      // Force garbage collection if available
-      if (global.gc) {
-        global.gc();
-        console.log("Garbage collection forced");
-      }
-    }
-
-    console.log("All leagues updated successfully");
-
-    res.status(200).json({ message: "All leagues updated successfully" });
+    res
+      .status(202)
+      .json({ message: "League update process initiated in the background" });
   } catch (error) {
-    console.error("Error updating all leagues:", error);
+    console.error("Error initiating league update process:", error);
     res.status(500).json({ error: (error as Error).message });
   }
 };
+
+// New function to handle the background job
+async function updateAllLeaguesBackground() {
+  const db = await getDb();
+  let lastProcessedId: string | null = null;
+  let totalLeaguesProcessed = 0;
+
+  while (true) {
+    let query = db.collection("leagues").orderBy("__name__").limit(BATCH_SIZE);
+
+    if (lastProcessedId) {
+      query = query.startAfter(lastProcessedId);
+    }
+
+    const leaguesSnapshot = await query.get();
+
+    if (leaguesSnapshot.empty) {
+      break; // No more documents to process
+    }
+
+    console.log(
+      `Processing batch of ${leaguesSnapshot.size} leagues. (${totalLeaguesProcessed} so far)`,
+    );
+
+    const updatePromises = leaguesSnapshot.docs.map(async (doc) => {
+      const leagueData = doc.data() as League;
+      console.log("Upserting teams for league:", leagueData.name);
+      const platformService = PlatformServiceFactory.getService(
+        leagueData.platform.name,
+      );
+      await platformService.upsertTeams(leagueData);
+
+      // Update lastModified
+      await doc.ref.update({ lastModified: new Date() });
+    });
+
+    await Promise.all(updatePromises);
+
+    totalLeaguesProcessed += leaguesSnapshot.size;
+
+    lastProcessedId = leaguesSnapshot.docs[leaguesSnapshot.docs.length - 1].id;
+    console.log(`Batch completed. Last processed ID: ${lastProcessedId}`);
+
+    // Wait for one minute between batches to avoid being rate limited
+    await new Promise((resolve) => setTimeout(resolve, 60000));
+
+    // Log memory usage
+    const memoryUsage = process.memoryUsage();
+    console.log("Memory usage after batch:", {
+      rss: `${Math.round(memoryUsage.rss / 1024 / 1024)} MB`,
+      heapTotal: `${Math.round(memoryUsage.heapTotal / 1024 / 1024)} MB`,
+      heapUsed: `${Math.round(memoryUsage.heapUsed / 1024 / 1024)} MB`,
+      external: `${Math.round(memoryUsage.external / 1024 / 1024)} MB`,
+    });
+
+    // Force garbage collection if available
+    if (global.gc) {
+      global.gc();
+      console.log("Garbage collection forced");
+    }
+  }
+
+  console.log(
+    `All leagues updated successfully. Total leagues processed: ${totalLeaguesProcessed}`,
+  );
+}
 
 export const getLeaguesPaginated = async (req: Request, res: Response) => {
   const page = parseInt(req.query.page as string) || 1;

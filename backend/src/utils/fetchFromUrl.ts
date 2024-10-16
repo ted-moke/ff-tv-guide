@@ -13,7 +13,15 @@ const fetchFromUrl = (url: string): Promise<any> => {
 
         res.on("end", () => {
           if (res.statusCode === 200) {
-            resolve(JSON.parse(data));
+            try {
+              const parsedData = JSON.parse(data);
+              resolve(parsedData);
+            } catch (error) {
+              reject(new Error(`Failed to parse JSON from ${url}`));
+            }
+          } else if (res.statusCode === 429) {
+            // Rate limit hit
+            reject(new Error(`Rate limit exceeded for ${url}`));
           } else {
             reject(
               new Error(`Failed to fetch data from ${url}: ${res.statusCode}`),

@@ -6,6 +6,7 @@ import fetchFromUrl from "../../utils/fetchFromUrl";
 import { getCurrentWeek } from "../../utils/getCurrentWeek";
 import * as fs from "fs";
 import * as path from "path";
+import { z } from "zod";
 
 export class SleeperService {
   private nflPlayers: any;
@@ -74,11 +75,13 @@ export class SleeperService {
       const week = getCurrentWeek();
       const teamsCollection = db.collection("teams");
 
+      console.log("Fetching teams collection for league:", league.name);
       // Fetch all necessary data upfront
       const [matchups, rosters] = await Promise.all([
         this.fetchMatchups(league.externalLeagueId, week),
         this.fetchRosters(league.externalLeagueId),
       ]);
+      console.log("Fetched matchups and rosters for league:", league.name);
 
       // Create a map of roster_id to owner_id and roster settings
       const rosterMap = new Map(
@@ -91,6 +94,8 @@ export class SleeperService {
         ]),
       );
 
+      console.log("Created roster map for league:", league.name);
+
       // Fetch all existing teams for this league in one query
       const existingTeamsSnapshot = await teamsCollection
         .where("leagueId", "==", league.id)
@@ -101,6 +106,8 @@ export class SleeperService {
           doc,
         ]),
       );
+
+      console.log("Created existing teams map for league:", league.name);
 
       // Process matchups in batches
       const BATCH_SIZE = 16;
@@ -125,14 +132,22 @@ export class SleeperService {
           }
         }
 
+        console.log("Committing batch for league:", league.name);
+
         await batch.commit();
       }
+      console.log("Committed all matchups for league:", league.name);
 
       // Clear large data structures
       rosterMap.clear();
       existingTeamsMap.clear();
     } catch (error) {
-      console.error("Error sleeperService upserting teams:", error);
+      console.error(`Error upserting teams for league ${league.name}:`, error);
+      if (error instanceof Error) {
+        throw new Error(`Failed to upsert teams: ${error.message}`);
+      } else {
+        throw new Error("Failed to upsert teams: Unknown error");
+      }
     }
   }
 
@@ -231,16 +246,67 @@ export class SleeperService {
     week: number,
   ): Promise<any> {
     await ApiTrackingService.trackApiCall("sleeper", "GET leagues/matchups");
-    return fetchFromUrl(
-      `https://api.sleeper.app/v1/league/${externalLeagueId}/matchups/${week}`,
+    const matchupsSchema = z.array(
+      z.object({
+        roster_id: z.number(),
+        matchup_id: z.number().optional(),
+        players: z.array(z.string()),
+        starters: z.array(z.string()).nullable(),
+      }),
     );
+
+    try {
+      const data = await fetchFromUrl(
+        `https://api.sleeper.app/v1/league/${externalLeagueId}/matchups/${week}`,
+      );
+      return matchupsSchema.parse(data);
+    } catch (error) {
+      console.error(
+        `Error fetching matchups for league ${externalLeagueId}:`,
+        error,
+      );
+      if (error instanceof Error) {
+        throw new Error(`Failed to fetch matchups: ${error.message}`);
+      } else {
+        throw new Error("Failed to fetch matchups: Unknown error");
+      }
+    }
   }
 
   private async fetchRosters(externalLeagueId: string): Promise<any> {
     await ApiTrackingService.trackApiCall("sleeper", "GET leagues/rosters");
-    return fetchFromUrl(
-      `https://api.sleeper.app/v1/league/${externalLeagueId}/rosters`,
+    const rostersSchema = z.array(
+      z.object({
+        roster_id: z.number(),
+        owner_id: z.string().optional(),
+        settings: z.object({
+          wins: z.number().optional(),
+          losses: z.number().optional(),
+          ties: z.number().optional(),
+          fpts: z.number().optional(),
+          fpts_decimal: z.number().optional(),
+          fpts_against: z.number().optional(),
+          fpts_against_decimal: z.number().optional(),
+        }),
+      }),
     );
+
+    try {
+      const data = await fetchFromUrl(
+        `https://api.sleeper.app/v1/league/${externalLeagueId}/rosters`,
+      );
+      return rostersSchema.parse(data);
+    } catch (error) {
+      console.error(
+        `Error fetching rosters for league ${externalLeagueId}:`,
+        error,
+      );
+      if (error instanceof Error) {
+        throw new Error(`Failed to fetch rosters: ${error.message}`);
+      } else {
+        throw new Error("Failed to fetch rosters: Unknown error");
+      }
+    }
   }
 
   private processPlayerData(players: string[], starters: string[]): Player[] {
@@ -267,7 +333,10 @@ export class SleeperService {
             logicalName: logicalName,
             team: playerInfo.team,
             position: playerInfo.position,
-            rosterSlotType: starters.includes(playerId) ? "start" : "bench",
+            rosterSlotType:
+              starters == null || starters.includes(playerId)
+                ? "start"
+                : "bench",
           };
         } catch (error) {
           console.error(`Error processing player with ID ${playerId}:`, error);
