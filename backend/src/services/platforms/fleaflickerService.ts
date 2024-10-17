@@ -11,6 +11,17 @@ import { ApiTrackingService } from "../apiTrackingService";
 import fetchFromUrl from "../../utils/fetchFromUrl";
 
 export class FleaflickerService {
+  private static instance: FleaflickerService;
+
+  private constructor() {}
+
+  public static getInstance(): FleaflickerService {
+    if (!FleaflickerService.instance) {
+      FleaflickerService.instance = new FleaflickerService();
+    }
+    return FleaflickerService.instance;
+  }
+
   async upsertLeague({
     leagueName,
     externalLeagueId,

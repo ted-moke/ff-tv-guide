@@ -9,10 +9,18 @@ import * as path from "path";
 import { z } from "zod";
 
 export class SleeperService {
+  private static instance: SleeperService;
   private nflPlayers: any;
 
-  constructor() {
+  private constructor() {
     this.loadNFLPlayers();
+  }
+
+  public static getInstance(): SleeperService {
+    if (!SleeperService.instance) {
+      SleeperService.instance = new SleeperService();
+    }
+    return SleeperService.instance;
   }
 
   private loadNFLPlayers() {
