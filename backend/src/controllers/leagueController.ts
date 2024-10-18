@@ -4,7 +4,7 @@ import { getDb } from "../firebase";
 import { League } from "../models/league";
 import { startBackgroundJob } from "../utils/backgroundJobs";
 
-const BATCH_SIZE = 10; // Adjust as needed
+const BATCH_SIZE = 7; // Adjust as needed
 
 export const upsertLeague = async (req: Request, res: Response) => {
   const {

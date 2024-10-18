@@ -89,6 +89,7 @@ export class SleeperService {
         this.fetchMatchups(league.externalLeagueId, week),
         this.fetchRosters(league.externalLeagueId),
       ]);
+
       console.log("Fetched matchups and rosters for league:", league.name);
 
       // Create a map of roster_id to owner_id and roster settings
@@ -108,6 +109,11 @@ export class SleeperService {
       const existingTeamsSnapshot = await teamsCollection
         .where("leagueId", "==", league.id)
         .get();
+
+      console.log(
+        `League ${league.name} has ${existingTeamsSnapshot.docs.length} existing teams`,
+      );
+
       const existingTeamsMap = new Map(
         existingTeamsSnapshot.docs.map((doc) => [
           doc.data().externalTeamId,
@@ -118,32 +124,26 @@ export class SleeperService {
       console.log("Created existing teams map for league:", league.name);
 
       // Process matchups in batches
-      const BATCH_SIZE = 16;
-      for (let i = 0; i < matchups.length; i += BATCH_SIZE) {
-        const batch = db.batch();
-        const matchupBatch = matchups.slice(i, i + BATCH_SIZE);
+      const batch = db.batch();
 
-        for (const matchup of matchupBatch) {
-          const team = this.createTeamObject(
-            matchup,
-            rosterMap as Map<string, any>,
-            league,
-          );
-          if (!team) continue;
+      for (const matchup of matchups) {
+        const team = this.createTeamObject(
+          matchup,
+          rosterMap.get(matchup.roster_id.toString()),
+          league,
+        );
+        if (!team) continue;
 
-          const existingTeam = existingTeamsMap.get(team.externalTeamId);
-          if (existingTeam) {
-            batch.update(existingTeam.ref, { ...team, id: existingTeam.id });
-          } else {
-            const newTeamRef = teamsCollection.doc();
-            batch.set(newTeamRef, { ...team, id: newTeamRef.id });
-          }
+        const existingTeam = existingTeamsMap.get(team.externalTeamId);
+        if (existingTeam) {
+          batch.update(existingTeam.ref, { ...team, id: existingTeam.id });
+        } else {
+          const newTeamRef = teamsCollection.doc();
+          batch.set(newTeamRef, { ...team, id: newTeamRef.id });
         }
-
-        console.log("Committing batch for league:", league.name);
-
-        await batch.commit();
       }
+
+      await batch.commit();
       console.log("Committed all matchups for league:", league.name);
 
       // Clear large data structures
@@ -161,10 +161,9 @@ export class SleeperService {
 
   private createTeamObject(
     matchup: any,
-    rosterMap: Map<string, any>,
+    rosterInfo: any,
     league: League,
   ): Team | null {
-    const rosterInfo = rosterMap.get(matchup.roster_id.toString());
     if (!rosterInfo) {
       console.error("Roster info not found for roster_id:", matchup.roster_id);
       return null;
@@ -253,7 +252,7 @@ export class SleeperService {
     externalLeagueId: string,
     week: number,
   ): Promise<any> {
-    await ApiTrackingService.trackApiCall("sleeper", "GET leagues/matchups");
+    // await ApiTrackingService.trackApiCall("sleeper", "GET leagues/matchups");
     const matchupsSchema = z.array(
       z.object({
         roster_id: z.number(),
@@ -282,7 +281,7 @@ export class SleeperService {
   }
 
   private async fetchRosters(externalLeagueId: string): Promise<any> {
-    await ApiTrackingService.trackApiCall("sleeper", "GET leagues/rosters");
+    // await ApiTrackingService.trackApiCall("sleeper", "GET leagues/rosters");
     const rostersSchema = z.array(
       z.object({
         roster_id: z.number(),
