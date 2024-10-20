@@ -151,6 +151,8 @@ export class FleaflickerService {
             pointsFor: currentRoster?.pointsFor ?? 0,
             pointsAgainst: currentRoster?.pointsAgainst ?? 0,
           },
+          lastSynced: new Date(),
+          lastFetched: new Date(),
         };
 
         // Instead of using externalTeamId as the document ID, let's query for an existing team

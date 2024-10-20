@@ -247,3 +247,64 @@ export const getLeagueStats = async (req: Request, res: Response) => {
     res.status(500).json({ error: (error as Error).message });
   }
 };
+
+async function updateLeaguesByIds(
+  ids: string[],
+  idType: "internal" | "external" = "internal"
+) {
+  const db = await getDb();
+  const updatePromises = ids.map(async (id) => {
+    let leagueRef;
+    if (idType === "internal") {
+      leagueRef = db.collection("leagues").doc(id);
+    } else {
+      const querySnapshot = await db
+        .collection("leagues")
+        .where("externalLeagueId", "==", id)
+        .get();
+      if (querySnapshot.empty) {
+        console.log(`League with external ID ${id} not found`);
+        return;
+      }
+      leagueRef = querySnapshot.docs[0].ref;
+    }
+
+    const leagueDoc = await leagueRef.get();
+
+    if (!leagueDoc.exists) {
+      console.log(`League with ID ${id} not found`);
+      return;
+    }
+
+    const leagueData = leagueDoc.data() as League;
+    const platformService = PlatformServiceFactory.getService(
+      leagueData.platform.name
+    );
+    await platformService.upsertTeams(leagueData);
+
+    // Update lastModified
+    await leagueRef.update({ lastModified: new Date() });
+  });
+
+  await Promise.all(updatePromises);
+}
+
+export const updateLeaguesByIdsRoute = async (req: Request, res: Response) => {
+  const { ids, idType } = req.body;
+
+  if (!Array.isArray(ids) || ids.length === 0) {
+    return res.status(400).json({ error: "Invalid or missing IDs" });
+  }
+
+  if (idType !== "internal" && idType !== "external") {
+    return res.status(400).json({ error: "Invalid ID type" });
+  }
+
+  try {
+    await updateLeaguesByIds(ids, idType);
+    res.status(200).json({ message: "Leagues updated successfully" });
+  } catch (error) {
+    console.error("Error updating leagues by IDs:", error);
+    res.status(500).json({ error: (error as Error).message });
+  }
+};

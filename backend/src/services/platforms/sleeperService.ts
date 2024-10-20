@@ -195,6 +195,8 @@ export class SleeperService {
             )
           : 0,
       },
+      lastSynced: new Date(),
+      lastFetched: new Date(),
     };
   }
 

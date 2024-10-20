@@ -16,8 +16,10 @@ export interface Team {
     losses: number;
     ties: number;
     pointsFor: number;
-    pointsAgainst: number;
+    pointsAgainst: number;  
   };
+  lastSynced: Date;
+  lastFetched: Date;
 }
 
 export interface Player {
