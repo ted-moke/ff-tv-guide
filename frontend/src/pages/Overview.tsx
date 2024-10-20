@@ -31,7 +31,7 @@ const Overview: React.FC = () => {
         : getTeamsByConference(activeConference);
 
     const groupedPlayers: GroupedPlayer[] = teams.map((team) => {
-      const teamPlayers = getPlayersByTeam(team.code, allPlayers);
+      const teamPlayers = getPlayersByTeam(team.codes, allPlayers);
       return {
         team: team.name,
         players: teamPlayers.allSelf,

@@ -56,9 +56,9 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game, id }) => {
         <div className={styles["matchup-header-left"]}>
           <div className={styles["team-names"]}>
             <div className={styles["team-names-container"]}>
-              <h3 className={styles["away-team"]}>{game.awayTeam?.code}</h3>
+              <h3 className={styles["away-team"]}>{game.awayTeam?.codes[0]}</h3>
               <h3 className={styles["at-symbol"]}>@</h3>
-              <h3 className={styles["home-team"]}>{game.homeTeam?.code}</h3>
+              <h3 className={styles["home-team"]}>{game.homeTeam?.codes[0]}</h3>
               {game.isTopGame && (
                 <div className={styles["top-game-badge"]}>
                   <Flame size={20} />
@@ -119,7 +119,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game, id }) => {
             <div className={styles["team-players"]}>
               {game.awayPlayers.starters.length > 0 && (
                 <div className={styles["players-wrapper"]}>
-                  <h4>{game.awayTeam?.code}</h4>
+                  <h4>{game.awayTeam?.codes[0]}</h4>
                   <div className={styles["team-players-header-container"]}>
                     <div className={styles["team-players-header"]}>
                       <h6>Pos</h6>
@@ -139,7 +139,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game, id }) => {
               )}
               {game.homePlayers.starters.length > 0 && (
                 <div className={styles["players-wrapper"]}>
-                  <h4>{game.homeTeam?.code}</h4>
+                  <h4>{game.homeTeam?.codes[0]}</h4>
                   <div className={styles["team-players-header-container"]}>
                     <div className={styles["team-players-header"]}>
                       <h6>Pos</h6>
@@ -174,7 +174,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game, id }) => {
                     <>
                       {game.awayPlayers.others.length > 0 && (
                         <div className={styles["players-wrapper"]}>
-                          <h4>{game.awayTeam?.code}</h4>
+                          <h4>{game.awayTeam?.codes[0]}</h4>
                           <div
                             className={styles["team-players-header-container"]}
                           >
@@ -196,7 +196,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game, id }) => {
                       )}
                       {game.homePlayers.others.length > 0 && (
                         <div className={styles["players-wrapper"]}>
-                          <h4>{game.homeTeam?.code}</h4>
+                          <h4>{game.homeTeam?.codes[0]}</h4>
                           <div
                             className={styles["team-players-header-container"]}
                           >

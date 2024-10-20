@@ -29,7 +29,7 @@ const MatchupCarousel: React.FC<MatchupCarouselProps> = ({ games }) => {
   };
 
   const handleMatchupClick = (game: ProcessedGame) => {
-    scrollToElement(`matchup-${game.awayTeam?.code}-${game.homeTeam?.code}`);
+    scrollToElement(`matchup-${game.awayTeam?.codes[0]}-${game.homeTeam?.codes[0]}`);
   };
 
   return (
@@ -38,9 +38,9 @@ const MatchupCarousel: React.FC<MatchupCarouselProps> = ({ games }) => {
       <div className={`${styles.carousel} ${styles.scrollbar} ${styles.scrollbarInvisible}`} ref={carouselRef}>
         {games.map((game) => (
           <GameInfoBox
-            key={`${game.awayTeam?.code}-${game.homeTeam?.code}`}
-            awayCode={game.awayTeam?.code || ""}
-            homeCode={game.homeTeam?.code || ""}
+            key={`${game.awayTeam?.codes[0]}-${game.homeTeam?.codes[0]}`}
+            awayCode={game.awayTeam?.codes[0] || ""}
+            homeCode={game.homeTeam?.codes[0] || ""}
             time={format24HourTo12Hour(game.time)}
             day={formatDateToDay(game.date)}
             starters={game.totals.self.starters}

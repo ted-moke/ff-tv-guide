@@ -61,10 +61,10 @@ export const useProcessedSchedule = (
       const homeTeam = getTeamByName(game.homeTeam);
 
       const awayPlayers = awayTeam
-        ? getPlayersByTeam(awayTeam.code, players)
+        ? getPlayersByTeam(awayTeam.codes, players)
         : { starters: [], others: [] };
       const homePlayers = homeTeam
-        ? getPlayersByTeam(homeTeam.code, players)
+        ? getPlayersByTeam(homeTeam.codes, players)
         : { starters: [], others: [] };
 
       const starters = [...awayPlayers.starters, ...homePlayers.starters];

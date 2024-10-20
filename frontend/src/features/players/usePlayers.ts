@@ -93,7 +93,9 @@ export const usePlayers = ({
     ) => {
       teams.forEach((team) => {
         team.playerData.forEach((player) => {
-          const key = `${player.name}-${player.team}`;
+          // if there's two players with the same name AND position, this could break
+          // but it's unlikely. TODO fix this
+          const key = `${player.name}-${player.position}`;
           if (!playerMap.has(key)) {
             playerMap.set(key, {
               name: player.name,
@@ -152,8 +154,10 @@ export const usePlayers = ({
 };
 
 // Update getPlayersByTeam function to use the new Player type
-export const getPlayersByTeam = (teamCode: string, players: Player[]) => {
-  const teamPlayers = players.filter((player) => player.team === teamCode);
+export const getPlayersByTeam = (teamCodes: string[], players: Player[]) => {
+  const teamPlayers = players.filter((player) =>
+    teamCodes.includes(player.team)
+  );
 
   const selfPlayers = teamPlayers.filter((player) =>
     player.copies.some((copy) => copy.team === "self")

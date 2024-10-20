@@ -50,7 +50,7 @@ const GameBucketGroup: React.FC<GameBucketGroupProps> = ({
                 <GameMatchup
                   key={`${status}-${bucketIndex}-${gameIndex}`}
                   game={game}
-                  id={`matchup-${game.awayTeam?.code}-${game.homeTeam?.code}`}
+                  id={`matchup-${game.awayTeam?.codes[0]}-${game.homeTeam?.codes[0]}`}
                 />
               ))}
             </div>
