@@ -1,16 +1,42 @@
 import { useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuthContext } from "../auth/AuthProvider"; // Assuming you have an auth context
 import { FantasyTeam } from "./teamTypes";
 const API_URL = import.meta.env.VITE_API_URL;
 
+const updateStaleTeams = async (teams: FantasyTeam[], queryClient: any) => {
+  const teamsToUpdate = teams.filter(team => team.needsUpdate);
+  let ids = teamsToUpdate.map(team => team.leagueId);
+
+  if (ids.length > 0) {
+    try {
+      await fetch(`${API_URL}/leagues/update-by-ids`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+        body: JSON.stringify({ ids, idType: "internal" }),
+      });
+
+      // Invalidate queries after update
+      queryClient.invalidateQueries({ queryKey: ["userTeams"] });
+      queryClient.invalidateQueries({ queryKey: ["opponentTeams"] });
+    } catch (error) {
+      console.error("Error updating leagues by IDs:", error);
+    }
+  }
+};
+
 export const useUserTeams = () => {
   const { user } = useAuthContext();
+  const queryClient = useQueryClient();
 
   const { data, isLoading, error } = useQuery<FantasyTeam[]>({
     queryKey: ["userTeams", user?.uid],
     queryFn: async (): Promise<FantasyTeam[]> => {
       if (!user) throw new Error("User not authenticated");
+      
       const response = await fetch(`${API_URL}/users/${user.uid}/teams`, {
         method: "GET",
         headers: {
@@ -23,8 +49,14 @@ export const useUserTeams = () => {
         console.error("Failed to fetch user teams:", errorText);
         throw new Error(`Failed to fetch user teams: ${errorText}`);
       }
+
       const data = await response.json();
-      return data.teams;
+      const teams = data.teams;
+
+      // Call the abstracted updateStaleTeams function
+      await updateStaleTeams(teams, queryClient);
+
+      return teams;
     },
     enabled: !!user, // Only run the query if there's a user
   });

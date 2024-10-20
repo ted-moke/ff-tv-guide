@@ -1,6 +1,15 @@
 import { Request, Response } from "express";
 import { getDb } from "../firebase";
 import { Team } from "../models/team";
+import { z } from "zod";
+import { Timestamp } from "firebase-admin/firestore";
+
+// Define Zod schemas for Date and Timestamp
+const dateSchema = z.instanceof(Date);
+const timestampSchema = z.instanceof(Timestamp);
+
+// Combined schema that accepts either Date or Timestamp
+const dateOrTimestampSchema = z.union([dateSchema, timestampSchema]);
 
 export const getUserTeams = async (req: Request, res: Response) => {
   const { uid } = req.params;
@@ -11,13 +20,22 @@ export const getUserTeams = async (req: Request, res: Response) => {
     const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
 
     // Augment each team with the 'needsUpdate' parameter
-    const augmentedTeams = teams.map((team) => ({
-      ...team,
-      needsUpdate:
-        team.lastFetched == null ||
-        team.lastFetched < mostRecentKeyTime ||
-        team.lastFetched < tenMinutesAgo,
-    }));
+    const augmentedTeams = teams.map((team) => {
+      const lastFetchedDate = team.lastFetched instanceof Timestamp
+        ? team.lastFetched.toDate()
+        : team.lastFetched instanceof Date
+          ? team.lastFetched
+          : null;
+
+      return {
+        ...team,
+        needsUpdate:
+          lastFetchedDate == null ||
+          mostRecentKeyTime == null ||
+          lastFetchedDate < mostRecentKeyTime ||
+          lastFetchedDate < tenMinutesAgo,
+      };
+    });
 
     res.status(200).json({ teams: augmentedTeams });
   } catch (error) {
@@ -173,34 +191,57 @@ async function getTeamsForUser(userId: string): Promise<Team[]> {
     .where("id", "in", teamIds)
     .get();
 
-  const now = new Date();
-  const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+  const now = Date.now();
+  const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
 
   const batch = db.batch();
 
   const teams = teamsSnapshot.docs.map((doc) => {
     const team = doc.data() as Team;
-    if (team.lastFetched < twentyFourHoursAgo) {
+
+    // Use Zod to parse and validate lastFetched
+    const lastFetchedResult = dateOrTimestampSchema.safeParse(team.lastFetched);
+
+    let lastFetchedDate: Date | null = null;
+    if (lastFetchedResult.success) {
+      if (lastFetchedResult.data instanceof Date) {
+        lastFetchedDate = lastFetchedResult.data;
+      } else if (lastFetchedResult.data instanceof Timestamp) {
+        lastFetchedDate = lastFetchedResult.data.toDate();
+      }
+    }
+
+    if (lastFetchedDate == null || lastFetchedDate < tenMinutesAgo) {
       batch.update(doc.ref, { lastFetched: now });
     }
+
     return {
       ...team,
       id: doc.id,
     };
   });
 
-  await batch.commit();
+  // Call the non-blocking batch commit function
+  commitBatchAsync(batch);
 
   return teams;
 }
 
-function getMostRecentKeyTime(): Date {
+function commitBatchAsync(batch: FirebaseFirestore.WriteBatch): void {
+  console.log("Committing batch update for team lastFetched");
+  batch.commit().catch((error) => {
+    console.error("Error committing batch update for team lastFetched:", error);
+  });
+}
+
+function getMostRecentKeyTime(): Date | null {
   const keyTimes = [
     { day: 1, time: "07:00" }, // Monday
     { day: 1, time: "14:00" },
     { day: 1, time: "19:00" },
     { day: 1, time: "23:00" },
     { day: 2, time: "07:00" }, // Tuesday
+    { day: 2, time: "17:00" },
     { day: 3, time: "07:00" }, // Wednesday
     { day: 4, time: "07:00" }, // Thursday
     { day: 4, time: "14:00" },
@@ -213,6 +254,7 @@ function getMostRecentKeyTime(): Date {
     { day: 6, time: "14:00" },
     { day: 6, time: "23:00" },
     { day: 0, time: "07:00" }, // Sunday
+    { day: 0, time: "10:00" },
     { day: 0, time: "13:00" },
     { day: 0, time: "14:00" },
     { day: 0, time: "15:00" },
@@ -232,22 +274,35 @@ function getMostRecentKeyTime(): Date {
 
   let mostRecentKeyTime: Date | null = null;
 
-  for (const { day, time } of keyTimes) {
+  // First, check for key times on the current day
+  for (const { time } of keyTimes.filter((kt) => kt.day === currentDay)) {
     const [hours, minutes] = time.split(":").map(Number);
     const keyTimeInMinutes = hours * 60 + minutes;
 
-    const keyTimeDate = new Date(now);
-    keyTimeDate.setUTCDate(now.getUTCDate() - ((currentDay - day + 7) % 7));
-    keyTimeDate.setUTCHours(hours, minutes, 0, 0);
-
-    if (
-      (day < currentDay ||
-        (day === currentDay && keyTimeInMinutes <= currentTime)) &&
-      (!mostRecentKeyTime || keyTimeDate > mostRecentKeyTime)
-    ) {
-      mostRecentKeyTime = keyTimeDate;
+    if (keyTimeInMinutes <= currentTime) {
+      const keyTimeDate = new Date(now);
+      keyTimeDate.setUTCHours(hours, minutes, 0, 0);
+      if (!mostRecentKeyTime || keyTimeDate > mostRecentKeyTime) {
+        mostRecentKeyTime = keyTimeDate;
+      }
     }
   }
 
-  return mostRecentKeyTime || new Date();
+  // If no key time found today, check previous days
+  if (!mostRecentKeyTime) {
+    for (let i = 1; i <= 7; i++) {
+      const previousDay = (currentDay - i + 7) % 7;
+      const previousDayKeyTimes = keyTimes.filter(kt => kt.day === previousDay);
+      
+      if (previousDayKeyTimes.length > 0) {
+        const lastKeyTime = previousDayKeyTimes[previousDayKeyTimes.length - 1];
+        const [hours, minutes] = lastKeyTime.time.split(":").map(Number);
+        mostRecentKeyTime = new Date(now);
+        mostRecentKeyTime.setUTCDate(now.getUTCDate() - i);
+        mostRecentKeyTime.setUTCHours(hours, minutes, 0, 0);
+      }
+    }
+  }
+
+  return mostRecentKeyTime;
 }

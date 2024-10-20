@@ -1,3 +1,5 @@
+import { Timestamp } from 'firebase-admin/firestore';
+
 export interface Team {
   id?: string;
   externalTeamId: string;
@@ -19,7 +21,7 @@ export interface Team {
     pointsAgainst: number;  
   };
   lastSynced: Date;
-  lastFetched: Date;
+  lastFetched: Timestamp  | Date;
 }
 
 export interface Player {

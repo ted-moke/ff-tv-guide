@@ -83,14 +83,11 @@ export class SleeperService {
       const week = getCurrentWeek();
       const teamsCollection = db.collection("teams");
 
-      console.log("Fetching teams collection for league:", league.name);
       // Fetch all necessary data upfront
       const [matchups, rosters] = await Promise.all([
         this.fetchMatchups(league.externalLeagueId, week),
         this.fetchRosters(league.externalLeagueId),
       ]);
-
-      console.log("Fetched matchups and rosters for league:", league.name);
 
       // Create a map of roster_id to owner_id and roster settings
       const rosterMap = new Map(
@@ -103,16 +100,10 @@ export class SleeperService {
         ]),
       );
 
-      console.log("Created roster map for league:", league.name);
-
       // Fetch all existing teams for this league in one query
       const existingTeamsSnapshot = await teamsCollection
         .where("leagueId", "==", league.id)
         .get();
-
-      console.log(
-        `League ${league.name} has ${existingTeamsSnapshot.docs.length} existing teams`,
-      );
 
       const existingTeamsMap = new Map(
         existingTeamsSnapshot.docs.map((doc) => [
@@ -120,8 +111,6 @@ export class SleeperService {
           doc,
         ]),
       );
-
-      console.log("Created existing teams map for league:", league.name);
 
       // Process matchups in batches
       const batch = db.batch();
@@ -144,7 +133,6 @@ export class SleeperService {
       }
 
       await batch.commit();
-      console.log("Committed all matchups for league:", league.name);
 
       // Clear large data structures
       rosterMap.clear();

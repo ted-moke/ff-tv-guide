@@ -23,5 +23,8 @@ export interface FantasyTeam {
     pointsFor: number;
     pointsAgainst: number;
   };
+  needsUpdate: boolean; // Frontend schema only
+  lastSynced: Date;
+  lastFetched: Date;
   // Add other properties if needed
 }
