@@ -284,6 +284,7 @@ async function updateLeaguesByIds(
 
     // Update lastModified
     await leagueRef.update({ lastModified: new Date() });
+    console.log("League updated successfully", leagueData.name);
   });
 
   await Promise.all(updatePromises);

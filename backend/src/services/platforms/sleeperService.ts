@@ -246,7 +246,7 @@ export class SleeperService {
     const matchupsSchema = z.array(
       z.object({
         roster_id: z.number(),
-        matchup_id: z.number().optional(),
+        matchup_id: z.number().nullable().optional(),
         players: z.array(z.string()),
         starters: z.array(z.string()).nullable(),
       }),

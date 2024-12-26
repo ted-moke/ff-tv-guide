@@ -21,11 +21,12 @@ export const getUserTeams = async (req: Request, res: Response) => {
 
     // Augment each team with the 'needsUpdate' parameter
     const augmentedTeams = teams.map((team) => {
-      const lastFetchedDate = team.lastFetched instanceof Timestamp
-        ? team.lastFetched.toDate()
-        : team.lastFetched instanceof Date
-          ? team.lastFetched
-          : null;
+      const lastFetchedDate =
+        team.lastFetched instanceof Timestamp
+          ? team.lastFetched.toDate()
+          : team.lastFetched instanceof Date
+            ? team.lastFetched
+            : null;
 
       return {
         ...team,
@@ -174,6 +175,7 @@ export const getOpponentTeams = async (req: Request, res: Response) => {
 };
 
 async function getTeamsForUser(userId: string): Promise<Team[]> {
+  console.log("Getting teams for user", userId);
   const db = await getDb();
   const userTeamsSnapshot = await db
     .collection("userTeams")
@@ -221,14 +223,13 @@ async function getTeamsForUser(userId: string): Promise<Team[]> {
     };
   });
 
-  // Call the non-blocking batch commit function
+  // Update lastFetched in the DB, but don't wait for it to finish so we can return the teams immediately
   commitBatchAsync(batch);
 
   return teams;
 }
 
 function commitBatchAsync(batch: FirebaseFirestore.WriteBatch): void {
-  console.log("Committing batch update for team lastFetched");
   batch.commit().catch((error) => {
     console.error("Error committing batch update for team lastFetched:", error);
   });
@@ -292,8 +293,10 @@ function getMostRecentKeyTime(): Date | null {
   if (!mostRecentKeyTime) {
     for (let i = 1; i <= 7; i++) {
       const previousDay = (currentDay - i + 7) % 7;
-      const previousDayKeyTimes = keyTimes.filter(kt => kt.day === previousDay);
-      
+      const previousDayKeyTimes = keyTimes.filter(
+        (kt) => kt.day === previousDay,
+      );
+
       if (previousDayKeyTimes.length > 0) {
         const lastKeyTime = previousDayKeyTimes[previousDayKeyTimes.length - 1];
         const [hours, minutes] = lastKeyTime.time.split(":").map(Number);
