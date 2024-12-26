@@ -1832,42 +1832,42 @@
         },
         {
           "date": "2024-12-28",
-          "time": "TBD",
+          "time": "16:30",
           "awayTeam": "Denver Broncos",
           "homeTeam": "Cincinnati Bengals",
-          "channel": "TBD",
+          "channel": "NFL Network",
           "notes": "Saturday game"
         },
         {
           "date": "2024-12-28",
-          "time": "TBD",
+          "time": "20:10",
           "awayTeam": "Arizona Cardinals",
           "homeTeam": "Los Angeles Rams",
-          "channel": "TBD",
+          "channel": "NFL Network",
           "notes": "Saturday game"
         },
         {
           "date": "2024-12-28",
-          "time": "TBD",
+          "time": "13:00",
           "awayTeam": "Los Angeles Chargers",
           "homeTeam": "New England Patriots",
-          "channel": "TBD",
+          "channel": "NFL Network",
           "notes": "Saturday game"
         },
         {
-          "date": "2024-12-28",
-          "time": "TBD",
+          "date": "2024-12-29",
+          "time": "13:00",
           "awayTeam": "Indianapolis Colts",
           "homeTeam": "New York Giants",
-          "channel": "TBD",
+          "channel": "FOX",
           "notes": "Saturday game"
         },
         {
-          "date": "2024-12-28",
-          "time": "TBD",
+          "date": "2024-12-29",
+          "time": "20:20",
           "awayTeam": "Atlanta Falcons",
           "homeTeam": "Washington Commanders",
-          "channel": "TBD",
+          "channel": "NBC",
           "notes": "Saturday game"
         },
         {
@@ -1886,7 +1886,7 @@
         },
         {
           "date": "2024-12-29",
-          "time": "13:00",
+          "time": "16:25",
           "awayTeam": "Green Bay Packers",
           "homeTeam": "Minnesota Vikings",
           "channel": "FOX"
@@ -1907,14 +1907,14 @@
         },
         {
           "date": "2024-12-29",
-          "time": "16:25",
+          "time": "13:00",
           "awayTeam": "Dallas Cowboys",
           "homeTeam": "Philadelphia Eagles",
           "channel": "FOX"
         },
         {
           "date": "2024-12-29",
-          "time": "20:20",
+          "time": "16:05",
           "awayTeam": "Miami Dolphins",
           "homeTeam": "Cleveland Browns",
           "channel": "NBC*"
@@ -1931,6 +1931,14 @@
     {
       "weekNumber": 18,
       "games": [
+        {
+          "date": "2025-01-05",
+          "time": "13:00",
+          "awayTeam": "Denver Broncos",
+          "homeTeam": "Cincinnati Bengals",
+          "channel": "NFL Network",
+          "notes": "Saturday game"
+        }
       ]
     }
   ]
