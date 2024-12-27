@@ -22,6 +22,12 @@
   color: var(--text-color);
 }
 
+.outlined {
+  border: 1px solid var(--primary-color);
+  background-color: transparent;
+  color: var(--text-color);
+}
+
 @media (max-width: 768px) {
   .alert {
     flex-direction: column;

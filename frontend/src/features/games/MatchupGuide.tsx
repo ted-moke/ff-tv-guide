@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./MatchupGuide.module.css";
 import { useMatchupPlayers } from "../players/useMatchupPlayers";
 import GameBucketGroup from "./GameBucketGroup";
@@ -7,17 +7,24 @@ import { Navigate } from "react-router-dom";
 import { useAuthContext } from "../auth/AuthProvider";
 import MatchupCarousel from "./MatchupCarousel";
 import { useView } from "../view/ViewContext";
+import Alert from "../../components/ui/Alert";
 
 interface MatchupGuideProps {
   selectedWeek: number;
   setSelectedWeek: (week: number) => void;
 }
 
+const hideAlertOnLoad = localStorage.getItem("hideAlertShip24") === "true";
+
 const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
   const { user, isLoading: isAuthLoading } = useAuthContext();
   const { userTeams } = useView();
   const { matchupPlayers, isLoading, initialized, error } =
     useMatchupPlayers(selectedWeek);
+  const [hideAlert, setHideAlert] = useState(hideAlertOnLoad);
+
+  console.log("hideAlertOnLoad", hideAlertOnLoad);
+  console.log("hideAlert", hideAlert);
 
   if (isAuthLoading) return <LoadingSpinner />;
 
@@ -32,7 +39,7 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
   }
 
   if (!userTeams || !user) {
-    console.log("redirected")
+    console.log("redirected");
     console.log("user", user);
     console.log("matchupPlayers", matchupPlayers);
     return <Navigate to="/connect-team" />;
@@ -48,6 +55,18 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
               .flatMap((bucket) => bucket.games)}
           />
         </div>
+      )}
+
+      {!hideAlert && (
+        <Alert
+          message="&#127941; Good luck in your championships! &#127941;"
+          buttonText="Hide"
+          variant="outlined"
+          onButtonClick={() => {
+            setHideAlert(true);
+            localStorage.setItem("hideAlertShip24", "true");
+          }}
+        />
       )}
 
       {matchupPlayers && (

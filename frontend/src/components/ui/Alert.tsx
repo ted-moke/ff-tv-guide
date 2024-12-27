@@ -7,7 +7,7 @@ interface AlertProps {
   buttonText?: string;
   onButtonClick?: () => void;
   children?: React.ReactNode;
-  variant?: "default" | "info";
+  variant?: "default" | "info" | "outlined";
 }
 
 const Alert: React.FC<AlertProps> = ({
