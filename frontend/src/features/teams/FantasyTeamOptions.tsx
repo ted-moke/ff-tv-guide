@@ -28,6 +28,7 @@ const FantasyTeamOptions: React.FC = () => {
 
     updatedTeams.forEach((team) => {
       updateUserTeamVisibility(team);
+      updateOpponentTeamVisibility(team);
     });
   };
 
@@ -39,6 +40,7 @@ const FantasyTeamOptions: React.FC = () => {
 
     updatedTeams.forEach((team) => {
       updateUserTeamVisibility(team);
+      updateOpponentTeamVisibility(team);
     });
   };
 

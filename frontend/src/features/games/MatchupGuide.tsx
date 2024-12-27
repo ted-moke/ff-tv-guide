@@ -6,6 +6,7 @@ import LoadingSpinner from "../../components/ui/LoadingSpinner";
 import { Navigate } from "react-router-dom";
 import { useAuthContext } from "../auth/AuthProvider";
 import MatchupCarousel from "./MatchupCarousel";
+import { useView } from "../view/ViewContext";
 
 interface MatchupGuideProps {
   selectedWeek: number;
@@ -14,7 +15,8 @@ interface MatchupGuideProps {
 
 const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
   const { user, isLoading: isAuthLoading } = useAuthContext();
-  const { hasPlayers, matchupPlayers, isLoading, initialized, error } =
+  const { userTeams } = useView();
+  const { matchupPlayers, isLoading, initialized, error } =
     useMatchupPlayers(selectedWeek);
 
   if (isAuthLoading) return <LoadingSpinner />;
@@ -29,7 +31,7 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
     return <div>No games scheduled for this week.</div>;
   }
 
-  if (!hasPlayers || !user) {
+  if (!userTeams || !user) {
     console.log("redirected")
     console.log("user", user);
     console.log("matchupPlayers", matchupPlayers);

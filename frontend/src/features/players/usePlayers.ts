@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 import { Player, OwnedPlayer } from "../nfl/nflTypes";
-import { useUserTeams, useOpponentTeams } from "../teams/useUserTeams";
 import { FantasyTeam } from "../teams/teamTypes";
 import { useView } from "../view/ViewContext";
 
@@ -97,11 +96,11 @@ export const usePlayers = ({
       userTeamsLocal = userTeamsLocal.filter(
         (team) => team.visibilityType === "show"
       );
-      if (includeOpponents && opponentTeamsLocal) {
-        opponentTeamsLocal = opponentTeamsLocal.filter(
-          (team) => team.visibilityType === "show"
-        );
-      }
+    }
+    if (opponentTeamsLocal) {
+      opponentTeamsLocal = opponentTeamsLocal.filter(
+        (team) => team.visibilityType === "show"
+      );
     }
 
     const playerMap = new Map<string, Player>();

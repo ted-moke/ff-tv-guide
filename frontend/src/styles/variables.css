@@ -93,6 +93,8 @@
   --border-radius-medium: var(--size1);
   --border-radius-large: var(--size2);
   --border-radius-full: 50%;
+
+  --sidebar-width: 350px;
 }
 
 @media (max-width: 375px) {

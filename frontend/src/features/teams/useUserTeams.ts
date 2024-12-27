@@ -1,8 +1,7 @@
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuthContext } from "../auth/AuthProvider"; // Assuming you have an auth context
 import { FantasyTeam } from "./teamTypes";
-import { useView } from "../view/ViewContext";
 const API_URL = import.meta.env.VITE_API_URL;
 
 const updateStaleTeams = async (teams: FantasyTeam[], queryClient: any) => {
