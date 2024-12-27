@@ -105,9 +105,15 @@ const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotType }) => {
         {opponentCopies.map(
           (copy, index) =>
             (slotType === "both" || copy.rosterSlotType === slotType) && (
-              <p className={styles.leaguePopupOpponentCode} key={`${player.name}-${copy.leagueId}-${index}`}>
-                {copy.shortLeagueName}
-              </p>
+              <Chip
+                key={`${player.name}-${copy.leagueId}-${index}`}
+                label={copy.shortLeagueName}
+                variant="muted"
+                onClick={(event: React.MouseEvent<HTMLElement>) =>
+                  handlePopup(copy, event)
+                }
+              />
+
             )
         )}
       </div>

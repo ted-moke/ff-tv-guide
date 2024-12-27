@@ -70,11 +70,11 @@ const FantasyTeamOptions: React.FC = () => {
       ) : (
         <div className={styles["fantasy-team-list"]}>
           <div className={styles["fantasy-team-actions"]}>
-            <LinkButton onClick={handleSelectAllFantasyTeams}>
-              Select All
-            </LinkButton>
             <LinkButton onClick={handleClearAllFantasyTeams}>
-              Clear All
+              Hide All
+            </LinkButton>
+            <LinkButton onClick={handleSelectAllFantasyTeams}>
+              Show All
             </LinkButton>
           </div>
           {userTeams.map((team) => (
