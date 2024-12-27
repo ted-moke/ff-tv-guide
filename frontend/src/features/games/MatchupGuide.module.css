@@ -54,6 +54,10 @@
   min-height: 60vh;
 }
 
+.alertContainer {
+  margin: auto;
+}
+
 @media (max-width: 768px) {
   .game-group-content {
     grid-template-columns: 1fr; /* Stack items vertically on smaller screens */

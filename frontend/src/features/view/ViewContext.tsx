@@ -161,7 +161,6 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
 
   // After fetching user teams, add metadata to teams that aren't on the server
   useEffect(() => {
-    console.log("fetchedUserTeams", fetchedUserTeams);
     if (fetchedUserTeams) {
       const updatedUserTeams = addTeamMetadata(fetchedUserTeams);
       setUserTeams(updatedUserTeams);

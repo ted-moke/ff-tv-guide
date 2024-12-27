@@ -23,9 +23,6 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
     useMatchupPlayers(selectedWeek);
   const [hideAlert, setHideAlert] = useState(hideAlertOnLoad);
 
-  console.log("hideAlertOnLoad", hideAlertOnLoad);
-  console.log("hideAlert", hideAlert);
-
   if (isAuthLoading) return <LoadingSpinner />;
 
   if (isLoading) return <LoadingSpinner />;
@@ -58,15 +55,17 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
       )}
 
       {!hideAlert && (
-        <Alert
-          message="&#127941; Good luck in your championships! &#127941;"
-          buttonText="Hide"
-          variant="outlined"
+        <div className={styles.alertContainer}>
+          <Alert
+            message="&#127941; Good luck in your championships! &#127941;"
+            buttonText="Hide"
+            variant="outlined"
           onButtonClick={() => {
             setHideAlert(true);
-            localStorage.setItem("hideAlertShip24", "true");
-          }}
-        />
+              localStorage.setItem("hideAlertShip24", "true");
+            }}
+          />
+        </div>
       )}
 
       {matchupPlayers && (
