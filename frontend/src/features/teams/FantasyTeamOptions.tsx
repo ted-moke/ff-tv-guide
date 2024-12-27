@@ -2,15 +2,20 @@ import React from "react";
 import styles from "./FantasyTeamOptions.module.css";
 import LinkButton, { LinkButtonColor } from "../../components/ui/LinkButton";
 import Checkbox from "../../components/ui/Checkbox";
-import { useUserTeams } from "./useUserTeams";
 import { useView } from "../view/ViewContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FantasyTeam } from "./teamTypes";
 
 const FantasyTeamOptions: React.FC = () => {
-  const { setIsMenuOpen, setTeamVisibility, teamVisibility } = useView();
+  const {
+    setIsMenuOpen,
+    updateUserTeamVisibility,
+    updateOpponentTeamVisibility,
+    userTeams,
+    userTeamsLoading,
+    userTeamsError,
+  } = useView();
   const navigate = useNavigate();
-  const { data: userTeams, isLoading, error } = useUserTeams();
   const location = useLocation();
 
   const handleSelectAllFantasyTeams = () => {
@@ -21,52 +26,42 @@ const FantasyTeamOptions: React.FC = () => {
       visibilityType: "show",
     }));
 
-    setTeamVisibility(updatedTeams);
-    updateLocalStorage(updatedTeams);
+    updatedTeams.forEach((team) => {
+      updateUserTeamVisibility(team);
+    });
   };
 
   const handleClearAllFantasyTeams = () => {
-    const updatedTeams: FantasyTeam[] = teamVisibility.map((team) => ({
+    const updatedTeams: FantasyTeam[] = userTeams.map((team) => ({
       ...team,
       visibilityType: "hide",
     }));
 
-    setTeamVisibility(updatedTeams);
-    updateLocalStorage(updatedTeams);
-  };
-
-  const handleFantasyTeamToggle = (leagueId: string) => {
-    setTeamVisibility((prev) => {
-      const updatedTeams: FantasyTeam[] = prev.map((team) =>
-        team.leagueId === leagueId
-          ? {
-              ...team,
-              visibilityType: team.visibilityType === "show" ? "hide" : "show",
-            }
-          : team
-      );
-
-      updateLocalStorage(updatedTeams);
-      return updatedTeams;
+    updatedTeams.forEach((team) => {
+      updateUserTeamVisibility(team);
     });
   };
 
-  const updateLocalStorage = (teams: FantasyTeam[]) => {
-    const visibilityMap = teams.reduce((acc, team) => {
-      acc[team.leagueId] = team.visibilityType;
-      return acc;
-    }, {} as Record<string, string>);
-    localStorage.setItem("teamVisibility", JSON.stringify(visibilityMap));
+  const handleFantasyTeamToggle = (leagueId: string) => {
+    const team = userTeams.find((team) => team.leagueId === leagueId);
+    if (!team) return;
+
+    const updatedTeam: FantasyTeam = {
+      ...team,
+      visibilityType: team.visibilityType === "show" ? "hide" : "show",
+    };
+    updateUserTeamVisibility(updatedTeam);
+    updateOpponentTeamVisibility(updatedTeam);
   };
 
   return (
     <div className={styles["fantasy-team-list-wrapper"]}>
       <h5>Your Leagues</h5>
-      {isLoading ? (
+      {userTeamsLoading ? (
         <p>Loading leagues...</p>
-      ) : error ? (
-        <p>Error loading leagues: {(error as Error).message}</p>
-      ) : teamVisibility.length < 1 ? (
+      ) : userTeamsError ? (
+        <p>Error loading leagues: {(userTeamsError as Error).message}</p>
+      ) : userTeams.length < 1 ? (
         <div className={styles["fantasy-team-basic-list"]}>
           <p>No leagues found</p>
         </div>
@@ -80,7 +75,7 @@ const FantasyTeamOptions: React.FC = () => {
               Clear All
             </LinkButton>
           </div>
-          {teamVisibility.map((team) => (
+          {userTeams.map((team) => (
             <Checkbox
               key={team.leagueId}
               id={team.leagueId}

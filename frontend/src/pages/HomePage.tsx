@@ -5,7 +5,6 @@ import { useView } from "../features/view/ViewContext";
 
 const HomePage: React.FC = () => {
   const {
-    activeFantasyTeams,
     selectedWeek,
     setSelectedWeek,
   } = useView();
@@ -16,7 +15,6 @@ const HomePage: React.FC = () => {
         <MatchupGuide
           selectedWeek={selectedWeek}
           setSelectedWeek={setSelectedWeek}
-          activeFantasyTeams={activeFantasyTeams}
         />
       </main>
     </div>

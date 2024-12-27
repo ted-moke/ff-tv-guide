@@ -32,7 +32,6 @@ const updateStaleTeams = async (teams: FantasyTeam[], queryClient: any) => {
 export const useUserTeams = () => {
   const { user } = useAuthContext();
   const queryClient = useQueryClient();
-  const { teamVisibility, setTeamVisibility } = useView();
 
   const { data, isLoading, error } = useQuery<FantasyTeam[]>({
     queryKey: ["userTeams", user?.uid],
@@ -62,17 +61,6 @@ export const useUserTeams = () => {
     },
     enabled: !!user, // Only run the query if there's a user
   });
-
-  useEffect(() => {
-    if (data) {
-      const storedVisibility = JSON.parse(localStorage.getItem('teamVisibility') || '{}');
-      const teamsWithVisibility = data.map(team => ({
-        ...team,
-        visibilityType: storedVisibility[team.leagueId] || 'show',
-      }));
-      setTeamVisibility(teamsWithVisibility);
-    }
-  }, [data, setTeamVisibility]);
 
   const teamMap = useMemo(() => {
     return data?.reduce((acc, team) => {

@@ -4,9 +4,12 @@ import React, {
   useContext,
   ReactNode,
   useEffect,
+  useCallback,
 } from "react";
 import { Conference } from "../nfl/nflTypes";
 import { FantasyTeam } from "../teams/teamTypes";
+import { useOpponentTeams } from "../teams/useUserTeams";
+import { useUserTeams } from "../teams/useUserTeams";
 
 export type ViewMode = "overview" | "matchup";
 export type SortOption = "division" | "players" | "name";
@@ -18,10 +21,14 @@ interface ViewContextType {
   setSelectedConference: (conference: string | null) => void;
   viewMode: ViewMode;
   setViewMode: (mode: ViewMode) => void;
-  teamVisibility: FantasyTeam[];
-  setTeamVisibility: (
-    teams: FantasyTeam[] | ((prev: FantasyTeam[]) => FantasyTeam[])
-  ) => void;
+  userTeamsLoading: boolean;
+  opponentTeamsLoading: boolean;
+  userTeamsError: Error | null;
+  opponentTeamsError: Error | null;
+  userTeams: FantasyTeam[];
+  opponentTeams: FantasyTeam[];
+  updateUserTeamVisibility: (team: FantasyTeam) => void;
+  updateOpponentTeamVisibility: (team: FantasyTeam) => void;
   activeConference: Conference;
   setActiveConference: (conference: Conference) => void;
   sortBy: SortOption;
@@ -71,6 +78,19 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
   const [hideEmptyTeams, setHideEmptyTeams] = useState(false);
   const [selectedWeek, setSelectedWeek] = useState(getCurrentWeek());
   const [isMobile, setIsMobile] = useState(false);
+  const [userTeams, setUserTeams] = useState<FantasyTeam[]>([]);
+  const [opponentTeams, setOpponentTeams] = useState<FantasyTeam[]>([]);
+
+  const {
+    data: fetchedUserTeams,
+    isLoading: userTeamsLoading,
+    error: userTeamsError,
+  } = useUserTeams();
+  const {
+    data: fetchedOpponentTeams,
+    isLoading: opponentTeamsLoading,
+    error: opponentTeamsError,
+  } = useOpponentTeams({ enabled: true });
 
   const scrollToElement = (elementId: string) => {
     const element = document.getElementById(elementId);
@@ -81,6 +101,24 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
       console.error(`Element with id ${elementId} not found`);
     }
   };
+
+  const addTeamMetadata = useCallback((teams: FantasyTeam[]) => {
+    const storedUserTeams = JSON.parse(
+      localStorage.getItem("userTeams") || "{}"
+    );
+    const storedOpponentTeams = JSON.parse(
+      localStorage.getItem("opponentTeams") || "{}"
+    );
+
+    // Add metadata to teams that aren't on the server
+    return teams.map((team) => ({
+      ...team,
+      visibilityType:
+        storedUserTeams[team.leagueId] ||
+        storedOpponentTeams[team.leagueId] ||
+        "show",
+    }));
+  }, []);
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -96,6 +134,55 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     // Cleanup the event listener on component unmount
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
+
+  const updateUserTeamVisibility = (team: FantasyTeam) => {
+    setUserTeams((prev) => {
+      const updatedTeams = prev.map((t) =>
+        t.leagueId === team.leagueId
+          ? { ...t, visibilityType: team.visibilityType }
+          : t
+      );
+      return updatedTeams;
+    });
+  };
+
+  const updateOpponentTeamVisibility = (team: FantasyTeam) => {
+    setOpponentTeams((prev) => {
+      const updatedTeams = prev.map((t) =>
+        t.leagueId === team.leagueId
+          ? { ...t, visibilityType: team.visibilityType }
+          : t
+      );
+      return updatedTeams;
+    });
+  };
+
+  // After fetching user teams, add metadata to teams that aren't on the server
+  useEffect(() => {
+    console.log("fetchedUserTeams", fetchedUserTeams);
+    if (fetchedUserTeams) {
+      const updatedUserTeams = addTeamMetadata(fetchedUserTeams);
+      setUserTeams(updatedUserTeams);
+    }
+  }, [fetchedUserTeams, setUserTeams, addTeamMetadata]);
+
+  // After fetching opponent teams, add metadata to teams that aren't on the server
+  useEffect(() => {
+    if (fetchedOpponentTeams) {
+      const updatedOpponentTeams = addTeamMetadata(fetchedOpponentTeams);
+      setOpponentTeams(updatedOpponentTeams);
+    }
+  }, [fetchedOpponentTeams, setOpponentTeams, addTeamMetadata]);
+
+  // Once teams update, update the local storage
+  useEffect(() => {
+    localStorage.setItem("userTeams", JSON.stringify(userTeams));
+  }, [userTeams]);
+
+  // Once opponent teams update, update the local storage
+  useEffect(() => {
+    localStorage.setItem("opponentTeams", JSON.stringify(opponentTeams));
+  }, [opponentTeams]);
 
   const value = {
     isMenuOpen,
@@ -117,6 +204,14 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     isMobile,
     setIsMobile,
     scrollToElement,
+    userTeams,
+    opponentTeams,
+    userTeamsLoading,
+    opponentTeamsLoading,
+    userTeamsError,
+    opponentTeamsError,
+    updateUserTeamVisibility,
+    updateOpponentTeamVisibility,
   };
 
   return <ViewContext.Provider value={value}>{children}</ViewContext.Provider>;

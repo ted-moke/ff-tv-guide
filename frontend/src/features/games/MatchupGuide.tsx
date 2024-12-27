@@ -10,7 +10,6 @@ import MatchupCarousel from "./MatchupCarousel";
 interface MatchupGuideProps {
   selectedWeek: number;
   setSelectedWeek: (week: number) => void;
-  activeFantasyTeams: string[];
 }
 
 const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {

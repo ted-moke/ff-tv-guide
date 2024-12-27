@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Player, OwnedPlayer } from "../nfl/nflTypes";
 import { useUserTeams, useOpponentTeams } from "../teams/useUserTeams";
 import { FantasyTeam } from "../teams/teamTypes";
+import { useView } from "../view/ViewContext";
 
 // Define the order of positions
 const positionOrder = [
@@ -70,17 +71,19 @@ const sortCopies = (a: OwnedPlayer, b: OwnedPlayer): number => {
 
 export const usePlayers = ({
   includeOpponents = true,
-  hideHiddenTeams = false, 
+  hideHiddenTeams = false,
 }: {
   includeOpponents?: boolean;
   hideHiddenTeams?: boolean;
 } = {}) => {
-  const { data: userTeams, isLoading, error } = useUserTeams();
   const {
-    data: opponentTeams,
-    isLoading: opponentTeamsLoading,
-    error: opponentTeamsError,
-  } = useOpponentTeams({ enabled: includeOpponents });
+    userTeams,
+    userTeamsLoading,
+    userTeamsError,
+    opponentTeams,
+    opponentTeamsLoading,
+    opponentTeamsError,
+  } = useView();
 
   const players: Player[] | null = useMemo(() => {
     if (!userTeams || (includeOpponents && !opponentTeams)) {
@@ -91,9 +94,13 @@ export const usePlayers = ({
     let opponentTeamsLocal = opponentTeams;
 
     if (hideHiddenTeams) {
-      userTeamsLocal = userTeamsLocal.filter((team) => team.visibilityType === "show");
+      userTeamsLocal = userTeamsLocal.filter(
+        (team) => team.visibilityType === "show"
+      );
       if (includeOpponents && opponentTeamsLocal) {
-        opponentTeamsLocal = opponentTeamsLocal.filter((team) => team.visibilityType === "show");
+        opponentTeamsLocal = opponentTeamsLocal.filter(
+          (team) => team.visibilityType === "show"
+        );
       }
     }
 
@@ -142,12 +149,12 @@ export const usePlayers = ({
       });
     };
 
-    if (userTeams) {
-      processTeams(userTeams, "self");
+    if (userTeamsLocal) {
+      processTeams(userTeamsLocal, "self");
     }
 
-    if (includeOpponents && opponentTeams) {
-      processTeams(opponentTeams, "opponent");
+    if (includeOpponents && opponentTeamsLocal) {
+      processTeams(opponentTeamsLocal, "opponent");
     }
 
     // Sort copies for each player
@@ -160,8 +167,8 @@ export const usePlayers = ({
 
   return {
     players,
-    isLoading: isLoading || opponentTeamsLoading,
-    error: error || opponentTeamsError,
+    isLoading: userTeamsLoading || opponentTeamsLoading,
+    error: userTeamsError || opponentTeamsError,
   };
 };
 
