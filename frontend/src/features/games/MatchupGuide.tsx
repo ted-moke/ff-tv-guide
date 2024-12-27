@@ -54,7 +54,11 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
         </div>
       )}
 
-      {!hideAlert && (
+     
+
+      {matchupPlayers && (
+        <div className={`${styles.gameBucketGroups} ${styles.scrollbar}`}>
+           {!hideAlert && (
         <div className={styles.alertContainer}>
           <Alert
             message="&#127941; Good luck in your championships! &#127941;"
@@ -67,9 +71,6 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
           />
         </div>
       )}
-
-      {matchupPlayers && (
-        <div className={`${styles.gameBucketGroups} ${styles.scrollbar}`}>
           {matchupPlayers.games.inProgress.length > 0 && (
             <GameBucketGroup
               key={"inProgress"}

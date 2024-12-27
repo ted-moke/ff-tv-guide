@@ -21,7 +21,7 @@
 .sidebar-container {
   position: fixed;
   top: 0;
-  left: -var(--sidebar-width);
+  left: calc(var(--sidebar-width) * -1);
   width: var(--sidebar-width);
   height: 100vh;
   transition: left 0.3s ease-in-out;
