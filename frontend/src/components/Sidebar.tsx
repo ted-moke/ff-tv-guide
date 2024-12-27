@@ -16,7 +16,7 @@ const Sidebar: React.FC = () => {
   const { logout, user } = useAuthContext();
 
   return (
-    <aside className={`${styles.sidebar} ${isMenuOpen ? styles.open : ""}`}>
+    <aside className={`${styles.sidebar} ${styles.scrollbar} ${isMenuOpen ? styles.open : ""} asdflk`}>
       <div className={styles["sidebar-wrapper"]}>
         <div className={styles["sidebar-header"]}>
           <FFTVGLogo withText />
