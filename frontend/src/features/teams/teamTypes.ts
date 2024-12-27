@@ -26,5 +26,6 @@ export interface FantasyTeam {
   needsUpdate: boolean; // Frontend schema only
   lastSynced: Date;
   lastFetched: Date;
+  visibilityType: "show" | "hide" | "archive";
   // Add other properties if needed
 }

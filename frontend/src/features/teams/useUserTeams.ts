@@ -1,12 +1,13 @@
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuthContext } from "../auth/AuthProvider"; // Assuming you have an auth context
 import { FantasyTeam } from "./teamTypes";
+import { useView } from "../view/ViewContext";
 const API_URL = import.meta.env.VITE_API_URL;
 
 const updateStaleTeams = async (teams: FantasyTeam[], queryClient: any) => {
-  const teamsToUpdate = teams.filter(team => team.needsUpdate);
-  let ids = teamsToUpdate.map(team => team.leagueId);
+  const teamsToUpdate = teams.filter((team) => team.needsUpdate);
+  let ids = teamsToUpdate.map((team) => team.leagueId);
 
   if (ids.length > 0) {
     try {
@@ -31,12 +32,13 @@ const updateStaleTeams = async (teams: FantasyTeam[], queryClient: any) => {
 export const useUserTeams = () => {
   const { user } = useAuthContext();
   const queryClient = useQueryClient();
+  const { teamVisibility, setTeamVisibility } = useView();
 
   const { data, isLoading, error } = useQuery<FantasyTeam[]>({
     queryKey: ["userTeams", user?.uid],
     queryFn: async (): Promise<FantasyTeam[]> => {
       if (!user) throw new Error("User not authenticated");
-      
+
       const response = await fetch(`${API_URL}/users/${user.uid}/teams`, {
         method: "GET",
         headers: {
@@ -50,7 +52,7 @@ export const useUserTeams = () => {
         throw new Error(`Failed to fetch user teams: ${errorText}`);
       }
 
-      const data = await response.json();
+      const data: { teams: FantasyTeam[] } = await response.json();
       const teams = data.teams;
 
       // Call the abstracted updateStaleTeams function
@@ -60,6 +62,17 @@ export const useUserTeams = () => {
     },
     enabled: !!user, // Only run the query if there's a user
   });
+
+  useEffect(() => {
+    if (data) {
+      const storedVisibility = JSON.parse(localStorage.getItem('teamVisibility') || '{}');
+      const teamsWithVisibility = data.map(team => ({
+        ...team,
+        visibilityType: storedVisibility[team.leagueId] || 'show',
+      }));
+      setTeamVisibility(teamsWithVisibility);
+    }
+  }, [data, setTeamVisibility]);
 
   const teamMap = useMemo(() => {
     return data?.reduce((acc, team) => {

@@ -57,43 +57,6 @@
   border-color: #4c4c4c;
 }
 
-.fantasy-team-list {
-  background-color: #2c2c2c;
-  border-radius: var(--border-radius-small);
-  padding: 10px;
-}
-
-.fantasy-team-actions {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
-}
-
-.fantasy-team-actions button {
-  padding: 5px 10px;
-  font-size: 12px;
-  background-color: #3c3c3c;
-  border: 1px solid #4c4c4c;
-  color: #e0e0e0;
-  border-radius: var(--border-radius-small);
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.fantasy-team-actions button:hover {
-  background-color: #4c4c4c;
-}
-
-.fantasy-team-item {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 14px;
-}
-
-.fantasy-team-item input[type="checkbox"] {
-  margin-right: 8px;
-}
-
 .view-toggle {
   display: flex;
   justify-content: space-between;

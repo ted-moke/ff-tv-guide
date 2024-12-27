@@ -70,8 +70,10 @@ const sortCopies = (a: OwnedPlayer, b: OwnedPlayer): number => {
 
 export const usePlayers = ({
   includeOpponents = true,
+  hideHiddenTeams = false, 
 }: {
   includeOpponents?: boolean;
+  hideHiddenTeams?: boolean;
 } = {}) => {
   const { data: userTeams, isLoading, error } = useUserTeams();
   const {
@@ -83,6 +85,16 @@ export const usePlayers = ({
   const players: Player[] | null = useMemo(() => {
     if (!userTeams || (includeOpponents && !opponentTeams)) {
       return null;
+    }
+
+    let userTeamsLocal = userTeams;
+    let opponentTeamsLocal = opponentTeams;
+
+    if (hideHiddenTeams) {
+      userTeamsLocal = userTeamsLocal.filter((team) => team.visibilityType === "show");
+      if (includeOpponents && opponentTeamsLocal) {
+        opponentTeamsLocal = opponentTeamsLocal.filter((team) => team.visibilityType === "show");
+      }
     }
 
     const playerMap = new Map<string, Player>();
@@ -144,7 +156,7 @@ export const usePlayers = ({
     });
 
     return Array.from(playerMap.values()).sort(sortPlayers);
-  }, [userTeams, opponentTeams]);
+  }, [userTeams, opponentTeams, hideHiddenTeams]);
 
   return {
     players,

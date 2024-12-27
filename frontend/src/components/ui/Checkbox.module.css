@@ -6,9 +6,9 @@
 }
 
 .checkbox {
-  width: var(--size2);
-  height: var(--size2);
-  margin-right: var(--size1);
+  min-width: var(--size2);
+  min-height: var(--size2);
+  margin-right: var(--size1_5);
   cursor: pointer;
   accent-color: var(--primary-color);
 }

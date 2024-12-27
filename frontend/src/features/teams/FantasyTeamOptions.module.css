@@ -9,7 +9,6 @@
 .fantasy-team-actions {
   display: flex;
   justify-content: space-between;
-  margin-bottom: var(--size1);
 }
 
 .fantasy-team-item {
@@ -18,19 +17,34 @@
   margin-bottom: var(--size1);
 }
 
+
+.fantasy-team-item input[type="checkbox"] {
+  margin-right: var(--size0_5);
+}
+
 .fantasy-team-list-wrapper h5 {
   margin-bottom: var(--size1);
 }
 
-.fantasy-team-basic-list {
+.fantasy-team-list {
   display: flex;
   flex-direction: column;
-  gap: var(--size1_5);
+  gap: var(--size1);
   padding-left: var(--size1);
 }
 
-.fantasy-team-basic-list p {
-  font-size: var(--size1_5);
-  color: var(--text-color-muted);
-  margin: 0;
+.fantasy-team-list > * {
+  padding-bottom: var(--size1); 
+  border-bottom: 1px solid var(--background-color-offset-2);
+}
+
+.fantasy-team-list {
+  background-color: var(--background-color-offset);
+  border-radius: var(--border-radius-small);
+}
+
+.fantasy-team-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }

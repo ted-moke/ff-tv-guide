@@ -6,6 +6,7 @@ import React, {
   useEffect,
 } from "react";
 import { Conference } from "../nfl/nflTypes";
+import { FantasyTeam } from "../teams/teamTypes";
 
 export type ViewMode = "overview" | "matchup";
 export type SortOption = "division" | "players" | "name";
@@ -17,8 +18,10 @@ interface ViewContextType {
   setSelectedConference: (conference: string | null) => void;
   viewMode: ViewMode;
   setViewMode: (mode: ViewMode) => void;
-  activeFantasyTeams: string[];
-  setActiveFantasyTeams: (teams: string[]) => void;
+  teamVisibility: FantasyTeam[];
+  setTeamVisibility: (
+    teams: FantasyTeam[] | ((prev: FantasyTeam[]) => FantasyTeam[])
+  ) => void;
   activeConference: Conference;
   setActiveConference: (conference: Conference) => void;
   sortBy: SortOption;
@@ -62,7 +65,7 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     null
   );
   const [viewMode, setViewMode] = useState<ViewMode>("matchup");
-  const [activeFantasyTeams, setActiveFantasyTeams] = useState<string[]>([]);
+  const [teamVisibility, setTeamVisibility] = useState<FantasyTeam[]>([]);
   const [activeConference, setActiveConference] = useState<Conference>("Both");
   const [sortBy, setSortBy] = useState<SortOption>("players");
   const [hideEmptyTeams, setHideEmptyTeams] = useState(false);
@@ -101,8 +104,8 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     setSelectedConference,
     viewMode,
     setViewMode,
-    activeFantasyTeams,
-    setActiveFantasyTeams,
+    teamVisibility,
+    setTeamVisibility,
     activeConference,
     setActiveConference,
     sortBy,

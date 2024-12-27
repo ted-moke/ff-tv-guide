@@ -17,7 +17,7 @@ interface GroupedPlayer {
 }
 
 const Overview: React.FC = () => {
-  const { activeFantasyTeams, activeConference, sortBy, hideEmptyTeams } =
+  const { activeConference, sortBy, hideEmptyTeams } =
     useView();
   const { players, isLoading, error } = usePlayers({ includeOpponents: false });
   const { user, isLoading: isAuthLoading } = useAuthContext();
@@ -59,7 +59,6 @@ const Overview: React.FC = () => {
     });
   }, [
     activeConference,
-    activeFantasyTeams,
     sortBy,
     hideEmptyTeams,
     allPlayers,
