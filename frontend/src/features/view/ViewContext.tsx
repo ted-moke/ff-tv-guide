@@ -102,23 +102,25 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     }
   };
 
-  const addTeamMetadata = useCallback((teams: FantasyTeam[]) => {
-    const storedUserTeams = JSON.parse(
-      localStorage.getItem("userTeams") || "{}"
-    );
-    const storedOpponentTeams = JSON.parse(
-      localStorage.getItem("opponentTeams") || "{}"
-    );
+  const addTeamMetadata = useCallback(
+    (teams: FantasyTeam[], isUserTeams = true): FantasyTeam[] => {
+      const storedTeams: FantasyTeam[] = JSON.parse(
+        localStorage.getItem(isUserTeams ? "userTeams" : "opponentTeams") ||
+          "{}"
+      );
 
-    // Add metadata to teams that aren't on the server
-    return teams.map((team) => ({
-      ...team,
-      visibilityType:
-        storedUserTeams[team.leagueId] ||
-        storedOpponentTeams[team.leagueId] ||
-        "show",
-    }));
-  }, []);
+      const teamsWithMetadata: FantasyTeam[] = teams.map((team) => ({
+        ...team,
+        visibilityType:
+          storedTeams.find((t) => t.leagueId === team.leagueId)?.visibilityType || "show",
+      }));
+
+
+      // Add metadata to teams that aren't on the server
+      return teamsWithMetadata;
+    },
+    []
+  );
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -169,18 +171,20 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
   // After fetching opponent teams, add metadata to teams that aren't on the server
   useEffect(() => {
     if (fetchedOpponentTeams) {
-      const updatedOpponentTeams = addTeamMetadata(fetchedOpponentTeams);
+      const updatedOpponentTeams = addTeamMetadata(fetchedOpponentTeams, false);
       setOpponentTeams(updatedOpponentTeams);
     }
   }, [fetchedOpponentTeams, setOpponentTeams, addTeamMetadata]);
 
   // Once teams update, update the local storage
   useEffect(() => {
+    if (!userTeams.length) return;
     localStorage.setItem("userTeams", JSON.stringify(userTeams));
   }, [userTeams]);
 
   // Once opponent teams update, update the local storage
   useEffect(() => {
+    if (!opponentTeams.length) return;
     localStorage.setItem("opponentTeams", JSON.stringify(opponentTeams));
   }, [opponentTeams]);
 
