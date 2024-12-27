@@ -106,13 +106,13 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     (teams: FantasyTeam[], isUserTeams = true): FantasyTeam[] => {
       const storedTeams: FantasyTeam[] = JSON.parse(
         localStorage.getItem(isUserTeams ? "userTeams" : "opponentTeams") ||
-          "{}"
+          "[]"
       );
 
       const teamsWithMetadata: FantasyTeam[] = teams.map((team) => ({
         ...team,
         visibilityType:
-          storedTeams.find((t) => t.leagueId === team.leagueId)?.visibilityType || "show",
+          storedTeams && storedTeams.find((t) => t.leagueId === team.leagueId)?.visibilityType || "show",
       }));
 
 
