@@ -4,6 +4,8 @@ import { Team } from "../models/team";
 import { z } from "zod";
 import { Timestamp } from "firebase-admin/firestore";
 
+const TIME_TO_TEAM_STALE = 20 * 60 * 1000; // 20 minutes
+
 // Define Zod schemas for Date and Timestamp
 const dateSchema = z.instanceof(Date);
 const timestampSchema = z.instanceof(Timestamp);
@@ -17,7 +19,7 @@ export const getUserTeams = async (req: Request, res: Response) => {
   try {
     const teams = await getTeamsForUser(uid);
     const mostRecentKeyTime = getMostRecentKeyTime();
-    const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
+    const staleTime = new Date(Date.now() - TIME_TO_TEAM_STALE);
 
     // Augment each team with the 'needsUpdate' parameter
     const augmentedTeams = teams.map((team) => {
@@ -34,7 +36,7 @@ export const getUserTeams = async (req: Request, res: Response) => {
           lastFetchedDate == null ||
           mostRecentKeyTime == null ||
           lastFetchedDate < mostRecentKeyTime ||
-          lastFetchedDate < tenMinutesAgo,
+          lastFetchedDate < staleTime,
       };
     });
 

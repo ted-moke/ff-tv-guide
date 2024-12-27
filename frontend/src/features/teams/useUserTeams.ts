@@ -14,7 +14,6 @@ const updateStaleTeams = async (teams: FantasyTeam[], queryClient: any) => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
         body: JSON.stringify({ ids, idType: "internal" }),
       });
@@ -35,28 +34,33 @@ export const useUserTeams = () => {
   const { data, isLoading, error } = useQuery<FantasyTeam[]>({
     queryKey: ["userTeams", user?.uid],
     queryFn: async (): Promise<FantasyTeam[]> => {
-      if (!user) throw new Error("User not authenticated");
+      try {
+        if (!user) throw new Error("User not authenticated");
 
-      const response = await fetch(`${API_URL}/users/${user.uid}/teams`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-        },
-      });
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error("Failed to fetch user teams:", errorText);
-        throw new Error(`Failed to fetch user teams: ${errorText}`);
+        const response = await fetch(`${API_URL}/users/${user.uid}/teams`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        });
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error("Failed to fetch user teams:", errorText);
+          throw new Error(`Failed to fetch user teams: ${errorText}`);
+        }
+
+        const data: { teams: FantasyTeam[] } = await response.json();
+        const teams = data.teams;
+
+        // Call the abstracted updateStaleTeams function
+        await updateStaleTeams(teams, queryClient);
+
+        return teams;
+      } catch (error) {
+        console.error("Error fetching user teams:", error);
+        throw error;
       }
-
-      const data: { teams: FantasyTeam[] } = await response.json();
-      const teams = data.teams;
-
-      // Call the abstracted updateStaleTeams function
-      await updateStaleTeams(teams, queryClient);
-
-      return teams;
     },
     enabled: !!user, // Only run the query if there's a user
   });

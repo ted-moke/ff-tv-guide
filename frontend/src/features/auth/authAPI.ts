@@ -124,6 +124,8 @@ export const loginUser = async (credentials: {
     throw new Error("Failed to login");
   }
 
+  localStorage.removeItem("tempUserData");
+
   return data;
 };
 

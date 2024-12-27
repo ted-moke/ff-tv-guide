@@ -47,7 +47,6 @@ export const useAuth = ({ enabled = true }: { enabled?: boolean } = {}) => {
     if (isError) {
       console.error("Auth query error:", error);
       setIsAuthEnabled(false);
-      
     }
   }, [isError, error, location.pathname]);
 

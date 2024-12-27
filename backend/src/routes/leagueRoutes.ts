@@ -18,6 +18,6 @@ router.post("/:leagueId/sync", authenticate, syncLeague);
 router.get("/stats", getLeagueStats);
 
 // New route for updating leagues by IDs
-router.put("/update-by-ids", authenticate, updateLeaguesByIdsRoute);
+router.put("/update-by-ids", updateLeaguesByIdsRoute);
 
 export default router;
