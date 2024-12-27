@@ -7,6 +7,7 @@ import { getCurrentWeek } from "../../utils/getCurrentWeek";
 import * as fs from "fs";
 import * as path from "path";
 import { z } from "zod";
+import { SleeperMatchup, SleeperRoster } from "../../types/sleeperTypes";
 
 export class SleeperService {
   private static instance: SleeperService;
@@ -84,21 +85,26 @@ export class SleeperService {
       const teamsCollection = db.collection("teams");
 
       // Fetch all necessary data upfront
-      const [matchups, rosters] = await Promise.all([
+      let [matchups, rosters] = await Promise.all([
         this.fetchMatchups(league.externalLeagueId, week),
         this.fetchRosters(league.externalLeagueId),
       ]);
 
-      // Create a map of roster_id to owner_id and roster settings
-      const rosterMap = new Map(
-        rosters.map((roster: any) => [
-          roster.roster_id.toString(),
-          {
-            owner_id: roster.owner_id,
-            settings: roster.settings,
-          },
-        ]),
-      );
+      // Filter out matchups that don't have a matchup_id
+      const teamToMatchupMap = new Map<number, number>();
+      const pairedMatchups = new Map<string, SleeperMatchup[]>();
+      matchups = matchups.filter((matchup) => matchup.matchup_id != null);
+
+      // Mold the sleeper matchup data into something easier to work with
+      for (const matchup of matchups) {
+        if (matchup.matchup_id == null) continue;
+
+        if (!pairedMatchups.has(matchup.matchup_id.toString())) {
+          pairedMatchups.set(matchup.matchup_id.toString(), []);
+        }
+        pairedMatchups.get(matchup.matchup_id.toString())?.push(matchup);
+        teamToMatchupMap.set(matchup.roster_id, matchup.matchup_id);
+      }
 
       // Fetch all existing teams for this league in one query
       const existingTeamsSnapshot = await teamsCollection
@@ -115,14 +121,34 @@ export class SleeperService {
       // Process matchups in batches
       const batch = db.batch();
 
-      for (const matchup of matchups) {
-        const team = this.createTeamObject(
-          matchup,
-          rosterMap.get(matchup.roster_id.toString()),
-          league,
+      for (const teamInLoop of rosters) {
+        const matchupId = teamToMatchupMap.get(teamInLoop.roster_id);
+        const matchup = matchupId
+          ? pairedMatchups.get(matchupId.toString())
+          : null;
+
+        const opponentId = matchup
+          ? matchup
+              .find(
+                (matchup: any) => matchup.roster_id !== teamInLoop.roster_id,
+              )
+              ?.roster_id.toString()
+          : undefined;
+
+        const teamInMatchup = matchup?.find(
+          (matchup: any) => matchup.roster_id === teamInLoop.roster_id,
         );
+
+        // Take our matchup and roster info and create the internal team object
+        const team = this.createTeamObject({
+          matchup: teamInMatchup,
+          opponentId,
+          rosterInfo: teamInLoop,
+          league,
+        });
         if (!team) continue;
 
+        // Update the internal teams in our db
         const existingTeam = existingTeamsMap.get(team.externalTeamId);
         if (existingTeam) {
           batch.update(existingTeam.ref, { ...team, id: existingTeam.id });
@@ -135,7 +161,7 @@ export class SleeperService {
       await batch.commit();
 
       // Clear large data structures
-      rosterMap.clear();
+      // rosterMap.clear();
       existingTeamsMap.clear();
     } catch (error) {
       console.error(`Error upserting teams for league ${league.name}:`, error);
@@ -147,27 +173,35 @@ export class SleeperService {
     }
   }
 
-  private createTeamObject(
-    matchup: any,
-    rosterInfo: any,
-    league: League,
-  ): Team | null {
+  private createTeamObject({
+    matchup,
+    rosterInfo,
+    league,
+    opponentId,
+  }: {
+    matchup?: SleeperMatchup;
+    rosterInfo: SleeperRoster;
+    league: League;
+    opponentId?: string;
+  }): Team | null {
     if (!rosterInfo) {
-      console.error("Roster info not found for roster_id:", matchup.roster_id);
+      console.error("No roster info found for team");
       return null;
     }
 
     return {
       externalLeagueId: league.externalLeagueId,
-      externalTeamId: matchup.roster_id.toString(),
+      externalTeamId: rosterInfo.roster_id.toString(),
       platformId: league.platform.name,
       leagueId: league.id || "",
       leagueName: league.name,
-      name: `Team ${matchup.roster_id}`,
+      name: `Team ${rosterInfo.roster_id}`,
       externalUsername: "",
       externalUserId: rosterInfo.owner_id || "",
-      opponentId: matchup.matchup_id ? matchup.matchup_id.toString() : "",
-      playerData: this.processPlayerData(matchup.players, matchup.starters),
+      opponentId: opponentId ?? null,
+      playerData: matchup
+        ? this.processPlayerData(matchup.players, matchup.starters ?? null)
+        : [],
       stats: {
         wins: rosterInfo.settings.wins ?? 0,
         losses: rosterInfo.settings.losses ?? 0,
@@ -241,7 +275,7 @@ export class SleeperService {
   private async fetchMatchups(
     externalLeagueId: string,
     week: number,
-  ): Promise<any> {
+  ): Promise<SleeperMatchup[]> {
     // await ApiTrackingService.trackApiCall("sleeper", "GET leagues/matchups");
     const matchupsSchema = z.array(
       z.object({
@@ -270,7 +304,9 @@ export class SleeperService {
     }
   }
 
-  private async fetchRosters(externalLeagueId: string): Promise<any> {
+  private async fetchRosters(
+    externalLeagueId: string,
+  ): Promise<SleeperRoster[]> {
     // await ApiTrackingService.trackApiCall("sleeper", "GET leagues/rosters");
     const rostersSchema = z.array(
       z.object({
@@ -306,7 +342,12 @@ export class SleeperService {
     }
   }
 
-  private processPlayerData(players: string[], starters: string[]): Player[] {
+  private processPlayerData(
+    players: string[] | null,
+    starters: string[] | null,
+  ): Player[] {
+    if (!players) return [];
+
     return players
       .map((playerId) => {
         try {

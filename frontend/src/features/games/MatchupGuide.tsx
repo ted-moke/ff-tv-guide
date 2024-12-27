@@ -54,23 +54,21 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
         </div>
       )}
 
-     
-
       {matchupPlayers && (
         <div className={`${styles.gameBucketGroups} ${styles.scrollbar}`}>
-           {!hideAlert && (
-        <div className={styles.alertContainer}>
-          <Alert
-            message="&#127941; Good luck in your championships! &#127941;"
-            buttonText="Hide"
-            variant="outlined"
-          onButtonClick={() => {
-            setHideAlert(true);
-              localStorage.setItem("hideAlertShip24", "true");
-            }}
-          />
-        </div>
-      )}
+          {!hideAlert && (
+            <div className={styles.alertContainer}>
+              <Alert
+                message="&#127941; Good luck in your championships! &#127941;"
+                buttonText="Hide"
+                variant="outlined"
+                onButtonClick={() => {
+                  setHideAlert(true);
+                  localStorage.setItem("hideAlertShip24", "true");
+                }}
+              />
+            </div>
+          )}
           {matchupPlayers.games.inProgress.length > 0 && (
             <GameBucketGroup
               key={"inProgress"}

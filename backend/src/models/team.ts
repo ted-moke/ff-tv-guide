@@ -11,7 +11,7 @@ export interface Team {
   externalUsername?: string;
   externalUserId?: string;
   platformId: string;
-  opponentId: string;
+  opponentId: string | null;
   playerData: Player[];
   stats: {
     wins: number;
