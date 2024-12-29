@@ -1,0 +1,13 @@
+{
+    "compilerOptions": {
+      "target": "ES6",
+      "module": "ESNext",
+      "outDir": "./lib", // Output directory for compiled JavaScript
+      "rootDir": "./scripts", // Root directory for TypeScript files
+      "strict": true,
+      "esModuleInterop": true,
+      "moduleResolution": "node", // Use 'node' for module resolution
+      "skipLibCheck": true // Skip type checking of declaration files
+    },
+    "include": ["scripts/**/*.ts"] // Include all TypeScript files in the scripts directory
+  }

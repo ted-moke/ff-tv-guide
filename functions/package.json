@@ -1,0 +1,29 @@
+{
+  "name": "functions",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "lib/fetchSleeperData.js",
+  "runtime": "nodejs22",
+  "engines": {
+    "node": "22"
+  },
+  "scripts": {
+    "build": "tsc",
+    "emulate": "firebase emulators:start --only functions,pubsub,firestore"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "firebase-admin": "^13.0.2",
+    "firebase-functions": "^6.2.0",
+    "firebase-tools": "^13.29.1",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@types/node-fetch": "^2.6.12",
+    "typescript": "^5.7.2"
+  }
+}
