@@ -9,7 +9,8 @@
   },
   "scripts": {
     "build": "tsc",
-    "emulate": "firebase emulators:start --only functions,pubsub,firestore"
+    "emulate": "firebase emulators:start --only functions,pubsub,firestore",
+    "deploy": "firebase deploy --only functions"
   },
   "keywords": [],
   "author": "",

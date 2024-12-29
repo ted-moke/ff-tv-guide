@@ -11,6 +11,7 @@ const SLEEPER_API_BASE_URL = 'https://api.sleeper.app/v1';
 
 interface FetchSleeperDataMessage {
   leagueId: string;
+  week: number;
 }
 
 export const fetchSleeperData = functions.pubsub.onMessagePublished('fetchSleeperData', async (message) => {
@@ -19,23 +20,31 @@ export const fetchSleeperData = functions.pubsub.onMessagePublished('fetchSleepe
   // Access the data property and decode it from Base64
   const dataBuffer = Buffer.from(message.data.message.data, 'base64');
   const payload = JSON.parse(dataBuffer.toString()) as FetchSleeperDataMessage;
-  const leagueId = payload.leagueId;
+  const { leagueId, week } = payload;
 
-  if (!leagueId) {
-    console.error('No league ID provided in the message payload.');
+  if (!leagueId || !week) {
+    console.error('League ID or week not provided in the message payload.');
     return;
   }
 
   console.log("League ID: ", leagueId);
+  console.log("Week: ", week);
 
   try {
-    const response = await fetch(`${SLEEPER_API_BASE_URL}/league/${leagueId}`);
-    if (!response.ok) {
-      throw new Error(`Failed to fetch data: ${response.statusText}`);
+    // Call multiple endpoints
+    const leagueResponse = await fetch(`${SLEEPER_API_BASE_URL}/league/${leagueId}`);
+    const weekResponse = await fetch(`${SLEEPER_API_BASE_URL}/league/${leagueId}/matchups/${week}`);
+    const rostersResponse = await fetch(`${SLEEPER_API_BASE_URL}/league/${leagueId}/rosters`);
+
+    if (!leagueResponse.ok || !weekResponse.ok || !rostersResponse.ok) {
+      throw new Error(`Failed to fetch data: ${leagueResponse.statusText}, ${weekResponse.statusText}, or ${rostersResponse.statusText}`);
     }
 
-    const data: any = await response.json();
-    await db.collection('sleeperData').doc(leagueId).set(data);
+    const leagueData: any = await leagueResponse.json();
+    const weekData: any = await weekResponse.json();
+    const rostersData: any = await rostersResponse.json();
+
+    await db.collection('sleeperData').doc(leagueId).set({ leagueData, weekData, rostersData });
 
     console.log('Data successfully fetched and stored.');
   } catch (error) {

@@ -4,7 +4,7 @@
 PROJECT_ID="fantasy-tv-guide"
 
 # JSON payload with the leagueId
-json_payload='{"leagueId": "1108780053288165376"}'  # Replace with the actual league ID
+json_payload='{"leagueId": "1108780053288165376", "week": 1}'  # Replace with the actual league ID
 
 # Base64 encode the JSON payload
 base64_payload=$(echo -n "$json_payload" | base64)
