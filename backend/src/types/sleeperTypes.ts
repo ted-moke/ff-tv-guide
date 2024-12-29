@@ -10,6 +10,7 @@ export type SleeperRoster = {
     fpts_against?: number;
     fpts_against_decimal?: number;
   };
+  co_owners?: string[] | null;
 };
 
 export type SleeperMatchup = {

@@ -108,10 +108,10 @@ export class FleaflickerService {
         ),
       );
 
-      const teamOwners = new Map<string, Owner>(
+      const teamOwners = new Map<string, Owner[]>(
         leagueStandings.divisions.flatMap((division) =>
           division?.teams
-            ? division.teams.map((team) => [team.id.toString(), team.owners[0]])
+            ? division.teams.map((team) => [team.id.toString(), team.owners])
             : [],
         ),
       );
@@ -127,7 +127,9 @@ export class FleaflickerService {
           week,
         );
 
-        const owner = teamOwners.get(teamData.id.toString());
+        const owners = teamOwners.get(teamData.id.toString()) || [];
+        const primaryOwner = owners[0];
+        const coOwners = owners.slice(1).map(owner => owner.displayName);
 
         const currentRoster = leagueStandingsMap.get(teamData.id.toString());
 
@@ -138,10 +140,11 @@ export class FleaflickerService {
           leagueId: league.id!,
           leagueName: league.name,
           name: teamData.name,
-          externalUsername: owner ? owner.displayName : rosterData.ownerName,
-          externalUserId: owner
-            ? owner.id.toString()
+          externalUsername: primaryOwner ? primaryOwner.displayName : rosterData.ownerName,
+          externalUserId: primaryOwner
+            ? primaryOwner.id.toString()
             : rosterData.ownerId.toString(),
+          coOwners,
           opponentId: opponentId.toString(),
           playerData: this.processPlayerData(rosterData.groups),
           stats: {

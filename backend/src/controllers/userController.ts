@@ -238,10 +238,6 @@ export const convertTempUser = async (req: Request, res: Response) => {
       preferences: tempUserData?.preferences,
       isTemporary: false,
     };
-    const newUserDoc = await db
-      .collection("users")
-      .doc(newUserId)
-      .set(newUserData);
 
     // Copy platform credentials
     const platformCredentialsSnapshot = await db

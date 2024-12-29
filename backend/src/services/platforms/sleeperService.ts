@@ -199,6 +199,7 @@ export class SleeperService {
       externalUsername: "",
       externalUserId: rosterInfo.owner_id || "",
       opponentId: opponentId ?? null,
+      coOwners: rosterInfo.co_owners ?? [],
       playerData: matchup
         ? this.processPlayerData(matchup.players, matchup.starters ?? null)
         : [],
@@ -242,7 +243,7 @@ export class SleeperService {
 
       for (const teamDoc of teamsQuery.docs) {
         const team = teamDoc.data() as Team;
-        if (team.externalUserId === externalUserId) {
+        if (team.externalUserId === externalUserId || team.coOwners.includes(externalUserId)) {
           // Check if the userTeam already exists
           const userTeamQuery = await userTeamsCollection
             .where("userId", "==", userId)
@@ -312,6 +313,7 @@ export class SleeperService {
       z.object({
         roster_id: z.number(),
         owner_id: z.string().optional(),
+        co_owners: z.array(z.string()).optional().nullable(),
         settings: z.object({
           wins: z.number().optional(),
           losses: z.number().optional(),
