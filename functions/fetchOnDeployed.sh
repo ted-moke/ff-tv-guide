@@ -4,13 +4,16 @@
 gcloud auth login
 
 # Set your Google Cloud project
-PROJECT_ID="fantasy-tv-guide"  # Replace with your actual project ID
-LEAGUE_ID="1049490994725167104"
-WEEK=1
+PROJECT_ID="fantasy-tv-guide"
+LEAGUE_ID="1108780053288165376"
+WEEK=17
 
-# make message out here
-# use variable for leagueId and week
-# compose message based on PROJECT_ID and WEEK
+# Compose message
 MESSAGE='{"leagueId": "'$LEAGUE_ID'", "week": '$WEEK'}'
+
 # Publish a message to the Pub/Sub topic
-gcloud pubsub topics publish fetchSleeperData --project="$PROJECT_ID" --message "$MESSAGE"  # Replace with actual league ID and week
+gcloud pubsub topics publish fetchSleeperData \
+  --project="$PROJECT_ID" \
+  --message "$MESSAGE"
+
+echo "Published message to fetch data for League ID: $LEAGUE_ID, Week: $WEEK"

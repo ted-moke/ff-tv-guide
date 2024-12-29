@@ -14,7 +14,16 @@ interface FetchSleeperDataMessage {
   week: number;
 }
 
+const START_DATE = Date.now();
+const SEVEN_DAYS = 7 * 24 * 60 * 60 * 1000;
+
 export const fetchSleeperData = functions.pubsub.onMessagePublished('fetchSleeperData', async (message) => {
+  // Check if 7 days have passed
+  if (Date.now() - START_DATE > SEVEN_DAYS) {
+    console.log('7 days have passed, stopping data collection');
+    return;
+  }
+
   console.log("Fetching Sleeper Data");
 
   // Access the data property and decode it from Base64
@@ -35,16 +44,45 @@ export const fetchSleeperData = functions.pubsub.onMessagePublished('fetchSleepe
     const leagueResponse = await fetch(`${SLEEPER_API_BASE_URL}/league/${leagueId}`);
     const weekResponse = await fetch(`${SLEEPER_API_BASE_URL}/league/${leagueId}/matchups/${week}`);
     const rostersResponse = await fetch(`${SLEEPER_API_BASE_URL}/league/${leagueId}/rosters`);
+    const winnersBracketResponse = await fetch(`${SLEEPER_API_BASE_URL}/league/${leagueId}/winners_bracket`);
+    const transactionsResponse = await fetch(`${SLEEPER_API_BASE_URL}/league/${leagueId}/transactions/${week}`);
+    const tradedPicksResponse = await fetch(`${SLEEPER_API_BASE_URL}/league/${leagueId}/traded_picks`);
+    const nflStateResponse = await fetch(`${SLEEPER_API_BASE_URL}/state/nfl`);
 
-    if (!leagueResponse.ok || !weekResponse.ok || !rostersResponse.ok) {
-      throw new Error(`Failed to fetch data: ${leagueResponse.statusText}, ${weekResponse.statusText}, or ${rostersResponse.statusText}`);
+    if (!leagueResponse.ok || !weekResponse.ok || !rostersResponse.ok || 
+        !winnersBracketResponse.ok || !transactionsResponse.ok || 
+        !tradedPicksResponse.ok || !nflStateResponse.ok) {
+      throw new Error('Failed to fetch data from one or more endpoints');
     }
 
     const leagueData: any = await leagueResponse.json();
     const weekData: any = await weekResponse.json();
     const rostersData: any = await rostersResponse.json();
+    const winnersBracketData: any = await winnersBracketResponse.json();
+    const transactionsData: any = await transactionsResponse.json();
+    const tradedPicksData: any = await tradedPicksResponse.json();
+    const nflStateData: any = await nflStateResponse.json();
 
-    await db.collection('sleeperData').doc(leagueId).set({ leagueData, weekData, rostersData });
+    const timestamp = Date.now();
+    const datetime = new Date(timestamp).toISOString();
+
+    await db.collection('sleeperData').add({
+      leagueData,
+      weekData,
+      rostersData,
+      winnersBracketData,
+      transactionsData,
+      tradedPicksData,
+      nflStateData,
+      metadata: {
+        leagueId,
+        week,
+        sport: 'nfl',
+        timestamp,
+        datetime,
+        fetchedAt: datetime,
+      }
+    });
 
     console.log('Data successfully fetched and stored.');
   } catch (error) {
