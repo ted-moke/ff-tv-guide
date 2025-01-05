@@ -1932,12 +1932,126 @@
       "weekNumber": 18,
       "games": [
         {
+          "date": "2025-01-04",
+          "time": "16:30",
+          "awayTeam": "Cleveland Browns",
+          "homeTeam": "Baltimore Ravens",
+          "channel": "ESPN/ABC*",
+          "notes": "Saturday game"
+        },
+        {
+          "date": "2025-01-04",
+          "time": "20:00",
+          "awayTeam": "Cincinnati Bengals",
+          "homeTeam": "Pittsburgh Steelers",
+          "channel": "ESPN/ABC*",
+          "notes": "Saturday game"
+        },
+        {
           "date": "2025-01-05",
           "time": "13:00",
-          "awayTeam": "Denver Broncos",
-          "homeTeam": "Cincinnati Bengals",
-          "channel": "NFL Network",
-          "notes": "Saturday game"
+          "awayTeam": "Buffalo Bills",
+          "homeTeam": "New England Patriots",
+          "channel": "CBS"
+        },
+        {
+          "date": "2025-01-05",
+          "time": "13:00",
+          "awayTeam": "Carolina Panthers",
+          "homeTeam": "Atlanta Falcons",
+          "channel": "CBS"
+        },
+        {
+          "date": "2025-01-05",
+          "time": "13:00",
+          "awayTeam": "Chicago Bears",
+          "homeTeam": "Green Bay Packers",
+          "channel": "FOX"
+        },
+        {
+          "date": "2025-01-05",
+          "time": "13:00",
+          "awayTeam": "Houston Texans",
+          "homeTeam": "Tennessee Titans",
+          "channel": "CBS"
+        },
+        {
+          "date": "2025-01-05",
+          "time": "13:00",
+          "awayTeam": "Jacksonville Jaguars",
+          "homeTeam": "Indianapolis Colts",
+          "channel": "FOX"
+        },
+        {
+          "date": "2025-01-05",
+          "time": "16:25",
+          "awayTeam": "San Francisco 49ers",
+          "homeTeam": "Arizona Cardinals",
+          "channel": "FOX"
+        },
+        {
+          "date": "2025-01-05",
+          "time": "13:00",
+          "awayTeam": "Carolina Panthers",
+          "homeTeam": "Atlanta Falcons",
+          "channel": "CBS"
+        },
+        {
+          "date": "2025-01-05",
+          "time": "13:00",
+          "awayTeam": "New Orleans Saints",
+          "homeTeam": "Tampa Bay Buccaneers",
+          "channel": "FOX"
+        },
+        {
+          "date": "2025-01-05",
+          "time": "13:00",
+          "awayTeam": "New York Giants",
+          "homeTeam": "Philadelphia Eagles",
+          "channel": "FOX"
+        },
+        {
+          "date": "2025-01-05",
+          "time": "13:00",
+          "awayTeam": "Washington Commanders",
+          "homeTeam": "Dallas Cowboys",
+          "channel": "FOX"
+        },
+        {
+          "date": "2025-01-05",
+          "time": "16:05",
+          "awayTeam": "Kansas City Chiefs",
+          "homeTeam": "Denver Broncos",
+          "channel": "CBS"
+        },
+        {
+          "date": "2025-01-05",
+          "time": "16:05",
+          "awayTeam": "Los Angeles Chargers",
+          "homeTeam": "Las Vegas Raiders",
+          "channel": "CBS"
+        },
+        {
+          "date": "2025-01-05",
+          "time": "20:20",
+          "awayTeam": "Minnesota Vikings",
+          "homeTeam": "Detroit Lions",
+          "channel": "NBC"
+        },
+        {
+          "date": "2025-01-05",
+          "time": "16:25",
+          "awayTeam": "Seattle Seahawks",
+          "homeTeam": "Los Angeles Rams",
+          "channel": "FOX"
+        },
+
+        {
+          "date": "2025-01-05",
+          "time": "16:25",
+          "awayTeam": "Miami Dolphins",
+          "homeTeam": "New York Jets",
+          "channel": "CBS"
         }
       ]
     }
