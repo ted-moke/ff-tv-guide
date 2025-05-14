@@ -10,6 +10,7 @@ import userRoutes from "./routes/userRoutes";
 import platformCredentialRoutes from "./routes/platformCredentialRoutes";
 import externalLeagueRoutes from "./routes/externalLeagueRoutes";
 import userTeamRoutes from "./routes/userTeamRoutes";
+import tradeRoutes from "./routes/tradeRoutes";
 const app = express();
 
 console.log("Starting server");
@@ -50,6 +51,8 @@ app.use("/team-players", teamPlayerRoutes);
 app.use("/users", userRoutes);
 app.use("/external-leagues", externalLeagueRoutes);
 app.use("/user-teams", userTeamRoutes);
+app.use("/trades", tradeRoutes);
+
 
 app.get("/health", (req, res) => {
   res.send("OK");

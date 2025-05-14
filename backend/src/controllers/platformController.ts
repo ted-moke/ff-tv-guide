@@ -3,7 +3,9 @@ import { getDb } from "../firebase";
 
 export const getAllPlatforms = async (req: Request, res: Response) => {
   try {
+    console.log("getAllPlatforms");
     const db = await getDb();
+    console.log("db returned");
     const platformsSnapshot = await db.collection("platforms").get();
     const platforms = platformsSnapshot.docs.map((doc) => ({
       id: doc.id,
