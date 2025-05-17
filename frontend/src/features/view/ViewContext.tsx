@@ -63,6 +63,10 @@ const getCurrentWeek = () => {
     (easternTime.getTime() - seasonStart.getTime()) / (7 * 24 * 60 * 60 * 1000)
   );
 
+  if (weeksPassed >= 19) {
+    return null;
+  }
+
   return Math.min(Math.max(weeksPassed + 1, 1), 18); // Ensure week is between 1 and 18
 };
 

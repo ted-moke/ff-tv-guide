@@ -8,6 +8,8 @@ const updateStaleTeams = async (teams: FantasyTeam[], queryClient: any) => {
   const teamsToUpdate = teams.filter((team) => team.needsUpdate);
   let ids = teamsToUpdate.map((team) => team.leagueId);
 
+  console.log('teamsToUpdate', teamsToUpdate)
+
   if (ids.length > 0) {
     try {
       await fetch(`${API_URL}/leagues/update-by-ids`, {
@@ -21,6 +23,8 @@ const updateStaleTeams = async (teams: FantasyTeam[], queryClient: any) => {
       // Invalidate queries after update
       queryClient.invalidateQueries({ queryKey: ["userTeams"] });
       queryClient.invalidateQueries({ queryKey: ["opponentTeams"] });
+
+      console.log('teams updated')
     } catch (error) {
       console.error("Error updating leagues by IDs:", error);
     }

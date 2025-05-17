@@ -291,7 +291,8 @@ export class SleeperService {
       const data = await fetchFromUrl(
         `https://api.sleeper.app/v1/league/${externalLeagueId}/matchups/${week}`,
       );
-      return matchupsSchema.parse(data);
+      const validMatchups = this.ensurePlayersArray(data);
+      return matchupsSchema.parse(validMatchups);
     } catch (error) {
       console.error(
         `Error fetching matchups for league ${externalLeagueId}:`,
@@ -384,5 +385,12 @@ export class SleeperService {
         }
       })
       .filter((player) => player !== null) as Player[];
+  }
+
+  private ensurePlayersArray(matchups: any[]): any[] {
+    return matchups.map(matchup => ({
+      ...matchup,
+      players: matchup.players || []
+    }));
   }
 }

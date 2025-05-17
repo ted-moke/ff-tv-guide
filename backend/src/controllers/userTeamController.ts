@@ -30,6 +30,8 @@ export const getUserTeams = async (req: Request, res: Response) => {
             ? team.lastFetched
             : null;
 
+      console.log('lastFetchedDate', lastFetchedDate)
+
       return {
         ...team,
         needsUpdate:
@@ -39,6 +41,8 @@ export const getUserTeams = async (req: Request, res: Response) => {
           lastFetchedDate < staleTime,
       };
     });
+
+    console.log('augmentedTeams', augmentedTeams)
 
     res.status(200).json({ teams: augmentedTeams });
   } catch (error) {

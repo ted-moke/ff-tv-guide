@@ -9,6 +9,10 @@ const HomePage: React.FC = () => {
     setSelectedWeek,
   } = useView();
 
+  if (!selectedWeek) {
+    return <div>No games scheduled for this week.</div>;
+  }
+
   return (
     <div className={styles["sports-dashboard"]}>
       <main className={styles["main-content"]}>
