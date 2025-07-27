@@ -21,7 +21,7 @@ const Overview: React.FC = () => {
   const { activeConference, sortBy, hideEmptyTeams } =
     useView();
   const { players, isLoading, error } = usePlayers({ includeOpponents: false });
-  const { user, isLoading: isAuthLoading } = useAuthContext();
+  const { isLoading: isAuthLoading } = useAuthContext();
   const { isLoading: needsConnectLoading, needsConnect } = useNeedsConnect();
 
   let allPlayers: Player[] = players ?? [];
@@ -68,11 +68,11 @@ const Overview: React.FC = () => {
 
   if (isAuthLoading || needsConnectLoading ) return <LoadingSpinner />;
   if (needsConnect) {
-    return <Navigate to="/connect-team" />;
+    return <Navigate to="/splash" />;
   }
 
   if (isLoading) return <LoadingSpinner />;
-  
+
   if (error) {
     console.error("Error in Overview:", error);
     return <div>Error loading players: {(error as Error).message}</div>;

@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./SplashPage.module.css";
 import Button from "../components/ui/Button";
-import LinkButton from "../components/ui/LinkButton";
+import LinkButton, { LinkButtonColor } from "../components/ui/LinkButton";
 import FFTVGLogo from "../assets/FFTVGLogo";
 import ssSingleMatch from "../assets/ss-single-match.png";
 
@@ -17,8 +17,18 @@ const SplashPage: React.FC = () => {
           <h4>Let us guide your Gameday.</h4>
         </div>
         <div className={styles.buttonContainer}>
-          <LinkButton to="/auth">Sign In</LinkButton>
-          <Button link="/auth?register=true">Create Account</Button>
+          <Button link="/connect-team">
+            Connect a League
+          </Button>
+          <p>or if you want the full experience cross devices</p>
+          <div className={styles.secondaryButtons}>
+            <LinkButton to="/auth" >
+              Sign In
+            </LinkButton>
+            <Button outline link="/auth?register=true"  >
+              Create Account
+            </Button>
+          </div>
         </div>
         <div className={styles.imageContainer}>
           <div className={styles.keyFeatures}>

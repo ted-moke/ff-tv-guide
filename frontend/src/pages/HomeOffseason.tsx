@@ -13,7 +13,7 @@ const HomeOffseason: React.FC = () => {
   }
 
   if (needsConnect) {
-    return <Navigate to="/connect-team" />;
+    return <Navigate to="/splash" />;
   }
 
   console.log("needsConnect", needsConnect);
