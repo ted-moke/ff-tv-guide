@@ -8,6 +8,7 @@ import { useAuthContext } from "../features/auth/AuthProvider";
 import { Navigate } from "react-router-dom";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 import PlayerCondensed from "../features/players/PlayerCondensed";
+import { useNeedsConnect } from "../features/teams/useNeedsConnect";
 
 interface GroupedPlayer {
   team: string;
@@ -21,6 +22,7 @@ const Overview: React.FC = () => {
     useView();
   const { players, isLoading, error } = usePlayers({ includeOpponents: false });
   const { user, isLoading: isAuthLoading } = useAuthContext();
+  const { isLoading: needsConnectLoading, needsConnect } = useNeedsConnect();
 
   let allPlayers: Player[] = players ?? [];
 
@@ -64,13 +66,13 @@ const Overview: React.FC = () => {
     allPlayers,
   ]);
 
-  if (isAuthLoading) return <LoadingSpinner />;
-  if (!user) {
-    console.log("user", user);
+  if (isAuthLoading || needsConnectLoading ) return <LoadingSpinner />;
+  if (needsConnect) {
     return <Navigate to="/connect-team" />;
   }
 
   if (isLoading) return <LoadingSpinner />;
+  
   if (error) {
     console.error("Error in Overview:", error);
     return <div>Error loading players: {(error as Error).message}</div>;

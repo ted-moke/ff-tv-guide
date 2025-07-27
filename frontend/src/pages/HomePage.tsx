@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./HomePage.module.css";
 import MatchupGuide from "../features/games/MatchupGuide";
+import HomeOffseason from "./HomeOffseason";
 import { useView } from "../features/view/ViewContext";
 
 const HomePage: React.FC = () => {
@@ -10,7 +11,7 @@ const HomePage: React.FC = () => {
   } = useView();
 
   if (!selectedWeek) {
-    return <div>No games scheduled for this week.</div>;
+    return <HomeOffseason />;
   }
 
   return (

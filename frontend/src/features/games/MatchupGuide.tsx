@@ -8,6 +8,7 @@ import { useAuthContext } from "../auth/AuthProvider";
 import MatchupCarousel from "./MatchupCarousel";
 import { useView } from "../view/ViewContext";
 import Alert from "../../components/ui/Alert";
+import { useNeedsConnect } from "../teams/useNeedsConnect";
 
 interface MatchupGuideProps {
   selectedWeek: number;
@@ -17,15 +18,16 @@ interface MatchupGuideProps {
 const hideAlertOnLoad = localStorage.getItem("hideAlertShip24") === "true";
 
 const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
-  const { user, isLoading: isAuthLoading } = useAuthContext();
-  const { userTeams } = useView();
+  const { isLoading: isAuthLoading } = useAuthContext();
+  const { isLoading: needsConnectLoading, needsConnect } = useNeedsConnect();
   const { matchupPlayers, isLoading, initialized, error } =
     useMatchupPlayers(selectedWeek);
   const [hideAlert, setHideAlert] = useState(hideAlertOnLoad);
 
-  if (isAuthLoading) return <LoadingSpinner />;
+  if (isLoading || needsConnectLoading || isAuthLoading) {
+    return <LoadingSpinner />;
+  }
 
-  if (isLoading) return <LoadingSpinner />;
   if (error) {
     console.error("Error in MatchupGuide:", error);
     return <div>Error loading user teams: {(error as Error).message}</div>;
@@ -35,10 +37,7 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
     return <div>No games scheduled for this week.</div>;
   }
 
-  if (!userTeams || !user) {
-    console.log("redirected");
-    console.log("user", user);
-    console.log("matchupPlayers", matchupPlayers);
+  if (needsConnect) {
     return <Navigate to="/connect-team" />;
   }
 
