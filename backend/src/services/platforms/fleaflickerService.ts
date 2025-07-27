@@ -305,6 +305,6 @@ export class FleaflickerService {
 
   private getCurrentSeason(): number {
     // Implement logic to determine current NFL season
-    return 2024; // Placeholder
+    return 2025; // Placeholder
   }
 }

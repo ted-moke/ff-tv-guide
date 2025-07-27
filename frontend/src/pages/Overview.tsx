@@ -8,7 +8,7 @@ import { useAuthContext } from "../features/auth/AuthProvider";
 import { Navigate } from "react-router-dom";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 import PlayerCondensed from "../features/players/PlayerCondensed";
-import { useNeedsConnect } from "../features/teams/useNeedsConnect";
+import { useNeedsResources } from "../features/teams/useNeedsResources";
 
 interface GroupedPlayer {
   team: string;
@@ -22,7 +22,7 @@ const Overview: React.FC = () => {
     useView();
   const { players, isLoading, error } = usePlayers({ includeOpponents: false });
   const { isLoading: isAuthLoading } = useAuthContext();
-  const { isLoading: needsConnectLoading, needsConnect } = useNeedsConnect();
+    const { isLoading: needsConnectLoading, needsConnect, needsAccount } = useNeedsResources();
 
   let allPlayers: Player[] = players ?? [];
 
@@ -67,8 +67,12 @@ const Overview: React.FC = () => {
   ]);
 
   if (isAuthLoading || needsConnectLoading ) return <LoadingSpinner />;
-  if (needsConnect) {
+  if (needsAccount) {
     return <Navigate to="/splash" />;
+  }
+
+  if (needsConnect) {
+    return <Navigate to="/connect-team" />;
   }
 
   if (isLoading) return <LoadingSpinner />;

@@ -6,9 +6,8 @@ import LoadingSpinner from "../../components/ui/LoadingSpinner";
 import { Navigate } from "react-router-dom";
 import { useAuthContext } from "../auth/AuthProvider";
 import MatchupCarousel from "./MatchupCarousel";
-import { useView } from "../view/ViewContext";
 import Alert from "../../components/ui/Alert";
-import { useNeedsConnect } from "../teams/useNeedsConnect";
+import { useNeedsResources } from "../teams/useNeedsResources";
 
 interface MatchupGuideProps {
   selectedWeek: number;
@@ -19,7 +18,7 @@ const hideAlertOnLoad = localStorage.getItem("hideAlertShip24") === "true";
 
 const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
   const { isLoading: isAuthLoading } = useAuthContext();
-  const { isLoading: needsConnectLoading, needsConnect } = useNeedsConnect();
+  const { isLoading: needsConnectLoading, needsConnect, needsAccount } = useNeedsResources();
   const { matchupPlayers, isLoading, initialized, error } =
     useMatchupPlayers(selectedWeek);
   const [hideAlert, setHideAlert] = useState(hideAlertOnLoad);
@@ -37,8 +36,12 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
     return <div>No games scheduled for this week.</div>;
   }
 
-  if (needsConnect) {
+  if (needsAccount) {
     return <Navigate to="/splash" />;
+  }
+
+  if (needsConnect) {
+    return <Navigate to="/connect-team" />;
   }
 
   return (

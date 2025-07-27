@@ -1,22 +1,24 @@
 import React from "react";
 import styles from "./HomeOffseason.module.css";
 import FFTVGLogo from "../assets/FFTVGLogo";
-import { useNeedsConnect } from "../features/teams/useNeedsConnect";
+import {    useNeedsResources } from "../features/teams/useNeedsResources";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 import { Navigate } from "react-router-dom";
 
 const HomeOffseason: React.FC = () => {
-  const { isLoading: needsConnectLoading, needsConnect } = useNeedsConnect();
+  const { isLoading: needsConnectLoading, needsConnect, needsAccount } = useNeedsResources();
 
   if (needsConnectLoading) {
     return <LoadingSpinner />;
   }
 
-  if (needsConnect) {
+  if (needsAccount) {
     return <Navigate to="/splash" />;
   }
 
-  console.log("needsConnect", needsConnect);
+  if (needsConnect) {
+    return <Navigate to="/connect-team" />;
+  }
 
   return (
     <div className={styles.offseasonContainer}>

@@ -42,7 +42,7 @@ export const getExternalLeagues = async (req: Request, res: Response) => {
       }));
     } else if (platformId === "sleeper") {
       leagues = await fetchFromUrl(
-        `${SLEEPER_API_URL}/${credential.externalUserId}/leagues/nfl/2024`,
+        `${SLEEPER_API_URL}/${credential.externalUserId}/leagues/nfl/2025`,
       );
       leagues = leagues.map((league: any) => ({
         ...league,
