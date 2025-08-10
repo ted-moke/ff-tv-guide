@@ -1,0 +1,159 @@
+@import "../../styles/variables.css";
+@import "../../styles/utils.css";
+
+.tableContainer {
+  background-color: var(--background-color-offset);
+  border: 1px solid var(--background-color-offset-2);
+  border-radius: var(--border-radius-medium);
+  overflow: hidden;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-small);
+}
+
+.table.compact {
+  font-size: var(--font-size-small);
+}
+
+.header {
+  background-color: var(--background-color-offset-2);
+  color: var(--text-color);
+  font-weight: 600;
+  padding: var(--size1) var(--size2);
+  border-bottom: 1px solid var(--background-color-offset);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: var(--font-size-small);
+}
+
+.row {
+  transition: background-color 0.2s ease;
+}
+
+.row:hover {
+  background-color: var(--background-color-offset-2);
+}
+
+.row.striped {
+  background-color: var(--background-color-offset-2);
+}
+
+.row.striped:hover {
+  background-color: var(--background-color-offset);
+}
+
+.cell {
+  padding: var(--size1) var(--size2);
+  border-bottom: 1px solid var(--background-color-offset-2);
+  color: var(--text-color);
+}
+
+.cell:last-child {
+  border-bottom: none;
+}
+
+/* Special styling for rank column */
+.cell:first-child {
+  font-weight: 600;
+  color: var(--primary-color);
+}
+
+/* Collapsible functionality */
+.collapseRow {
+  background-color: var(--background-color-offset-2);
+}
+
+.collapseCell {
+  padding: var(--size1) var(--size2);
+  text-align: center;
+  border-bottom: 1px solid var(--background-color-offset-2);
+}
+
+.collapseButton {
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  cursor: pointer;
+  font-size: var(--font-size-small);
+  padding: var(--size0_5) var(--size1);
+  border-radius: var(--border-radius-small);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: var(--size0_5);
+  margin: 0 auto;
+}
+
+.collapseButton:hover {
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.collapseIcon {
+  transition: transform 0.2s ease;
+  font-size: var(--font-size-small);
+}
+
+.collapseIcon.collapsed {
+  transform: rotate(-90deg);
+}
+
+/* Separator styling */
+.separatorRow {
+  background-color: var(--background-color-offset-2);
+}
+
+.separatorCell {
+  padding: var(--size1) var(--size2);
+  text-align: center;
+  border-bottom: 1px solid var(--background-color-offset-2);
+}
+
+.separatorContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--size1);
+}
+
+.separatorButton {
+  width: 100%;
+  padding: var(--size1) var(--size2);
+  border: none;
+  background: none;
+}
+
+.separatorButton:hover {
+  background-color: var(--background-color-offset);
+}
+
+.separatorText {
+  color: var(--text-color-muted);
+  font-size: var(--font-size-small);
+  font-style: italic;
+  white-space: nowrap;
+  transition: color 0.2s ease;
+}
+
+.separatorButton:hover .separatorText {
+  color: var(--primary-color);
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .tableContainer {
+    overflow-x: auto;
+  }
+  
+  .table {
+    min-width: 400px;
+  }
+  
+  .header,
+  .cell {
+    padding: var(--size0_5) var(--size1);
+  }
+}

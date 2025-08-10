@@ -75,6 +75,17 @@
   font-weight: bold;
 }
 
+.teamsTableWrapper {
+  margin-bottom: var(--size2);
+}
+
+.sectionTitle {
+  color: var(--text-color);
+  font-size: var(--font-size-medium);
+  margin: 0 0 var(--size1) 0;
+  font-weight: 600;
+}
+
 @media (max-width: 768px) {
   .summaryStats {
     flex-direction: column;
