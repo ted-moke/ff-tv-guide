@@ -1,61 +1,96 @@
-# React + TypeScript + Vite
+# FF TV Guide
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Local Development Setup
 
-Currently, two official plugins are available:
+If you want to test locally before deploying:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### 1. Start Firebase Emulators
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+```bash
+cd backend
+yarn run emulate
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### 2. Start Backend (in another terminal)
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+```bash
+cd backend
+yarn run serve:dev
 ```
 
-# Project Name
+### 3. Start Frontend (in another terminal)
 
-## Setup
+```bash
+cd frontend
+yarn dev
+```
 
-### Prerequisites
+### 4. Access Local Development
 
-- Node.js (v14 or later)
-- npm (v6 or later)
+- **Frontend**: http://localhost:5173
+- **Backend API**: http://localhost:3000
+- **Firebase Emulator UI**: http://localhost:4000
+- **Firebase Hosting**: http://localhost:5000
 
-### Install Dependencies
+## Available Scripts
+
+### Backend (`backend/package.json`)
+- `yarn run serve:dev` - Start development server with nodemon
+- `yarn run build` - Build TypeScript to JavaScript
+- `yarn run start` - Start production server
+- `yarn run emulate` - Start Firebase emulators (Firestore + Auth)
+- `yarn run deploy` - Deploy to production
+- `yarn run lint` - Run ESLint
+
+### Frontend (`frontend/package.json`)
+- `yarn dev` - Start development server
+- `yarn build` - Build for production
+- `yarn preview` - Preview production build
+- `yarn deploy` - Deploy to Firebase Hosting
+- `yarn lint` - Run ESLint
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Port conflicts**: Make sure ports 8080, 9099, 5000, 5001, 8085, 4000, 5173, and 3000 are available for local development
+2. **Firebase CLI not found**: Install with `npm install -g firebase-tools`
+3. **Node version**: Ensure you're using Node.js v22.5.1 or later
+4. **Environment variables**: Make sure all required environment variables are set
+5. **Google Cloud CLI**: Ensure you're authenticated with `gcloud auth login`
+
+### Reset Emulator Data
+
+To clear emulator data and start fresh:
+
+```bash
+firebase emulators:start --import=./emulator-data --export-on-exit
+```
+
+### View Emulator Logs
+
+Check the emulator logs in the Firebase Emulator UI at http://localhost:4000 or in the terminal where emulators are running.
+
+## Important Notes
+
+1. **Firebase Project**: Your app is configured to use the `fantasy-tv-guide` Firebase project
+2. **Environment Variables**: You'll need to get the actual Firebase config values from your Firebase console
+3. **Google Cloud Run**: The backend uses Cloud Run for deployment, which requires Google Cloud CLI setup
+4. **Secrets**: The backend uses Google Secret Manager for sensitive data
+5. **Build Process**: The frontend build process compiles TypeScript and creates optimized production assets
+
+## Security Considerations
+
+- Keep your Firebase service account keys secure
+- Use environment variables for sensitive configuration
+- Regularly update dependencies
+- Monitor your Firebase usage and costs
+
+## Support
+
+If you encounter issues during deployment:
+
+1. Check the Firebase console for deployment logs
+2. Verify all environment variables are correctly set
+3. Ensure you have the necessary permissions for the Firebase project
+4. Check that all dependencies are properly installed

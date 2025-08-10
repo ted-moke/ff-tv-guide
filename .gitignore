@@ -30,3 +30,5 @@ emulator-data/
 *.njsproj
 *.sln
 *.sw?
+
+FOR_ME.md

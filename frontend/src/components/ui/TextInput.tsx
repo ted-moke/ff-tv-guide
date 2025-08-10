@@ -11,6 +11,9 @@ interface TextInputProps {
   label?: string;
   required?: boolean;
   className?: string;
+  outline?: boolean;
+  icon?: React.ReactNode;
+  iconPosition?: 'left' | 'right';
 }
 
 const TextInput: React.FC<TextInputProps> = ({ 
@@ -22,11 +25,15 @@ const TextInput: React.FC<TextInputProps> = ({
   onChange, 
   label,
   required,
-  className
+  className,
+  outline = false,
+  icon,
+  iconPosition = 'left'
 }) => {
   return (
-    <div className={styles.inputContainer}>
+    <div className={`${styles.inputContainer} ${outline ? styles.outline : ''}`}>
       {label && <label htmlFor={id} className={styles.label}>{label}</label>}
+      {icon && iconPosition === 'left' && <div className={styles.icon}>{icon}</div>}
       <input
         type={type}
         id={id}
@@ -37,7 +44,8 @@ const TextInput: React.FC<TextInputProps> = ({
         required={required}
         className={`${styles.input} ${className || ''}`}
       />
-    </div>
+      {icon && iconPosition === 'right' && <div className={styles.icon}>{icon}</div>}
+      </div>
   );
 };
 

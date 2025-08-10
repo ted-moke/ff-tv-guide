@@ -13,6 +13,7 @@ import { useUserTeams } from "../teams/useUserTeams";
 
 export type ViewMode = "overview" | "matchup";
 export type SortOption = "division" | "players" | "name";
+export type PlayerSharesSortOption = "division" | "players" | "shares";
 
 interface ViewContextType {
   isMenuOpen: boolean;
@@ -35,7 +36,18 @@ interface ViewContextType {
   setSortBy: (option: SortOption) => void;
   hideEmptyTeams: boolean;
   setHideEmptyTeams: (hide: boolean) => void;
-  selectedWeek: number;
+  // Player Shares specific state
+  playerSharesSortBy: PlayerSharesSortOption;
+  setPlayerSharesSortBy: (option: PlayerSharesSortOption) => void;
+  playerSharesHideEmptyTeams: boolean;
+  setPlayerSharesHideEmptyTeams: (hide: boolean) => void;
+  selectedTeams: string[];
+  setSelectedTeams: (teams: string[]) => void;
+  selectedPositions: string[];
+  setSelectedPositions: (positions: string[]) => void;
+  playerSharesSearchTerm: string;
+  setPlayerSharesSearchTerm: (term: string) => void;
+  selectedWeek: number | null;
   setSelectedWeek: (week: number) => void;
   isMobile: boolean;
   setIsMobile: (isMobile: boolean) => void;
@@ -80,6 +92,12 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
   const [activeConference, setActiveConference] = useState<Conference>("Both");
   const [sortBy, setSortBy] = useState<SortOption>("players");
   const [hideEmptyTeams, setHideEmptyTeams] = useState(false);
+  // Player Shares specific state
+  const [playerSharesSortBy, setPlayerSharesSortBy] = useState<PlayerSharesSortOption>("shares");
+  const [playerSharesHideEmptyTeams, setPlayerSharesHideEmptyTeams] = useState(false);
+  const [selectedTeams, setSelectedTeams] = useState<string[]>([]);
+  const [selectedPositions, setSelectedPositions] = useState<string[]>([]);
+  const [playerSharesSearchTerm, setPlayerSharesSearchTerm] = useState<string>("");
   const [selectedWeek, setSelectedWeek] = useState(getCurrentWeek());
   const [isMobile, setIsMobile] = useState(false);
   const [userTeams, setUserTeams] = useState<FantasyTeam[]>([]);
@@ -206,6 +224,17 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     setSortBy,
     hideEmptyTeams,
     setHideEmptyTeams,
+    // Player Shares specific state
+    playerSharesSortBy,
+    setPlayerSharesSortBy,
+    playerSharesHideEmptyTeams,
+    setPlayerSharesHideEmptyTeams,
+    selectedTeams,
+    setSelectedTeams,
+    selectedPositions,
+    setSelectedPositions,
+    playerSharesSearchTerm,
+    setPlayerSharesSearchTerm,
     selectedWeek,
     setSelectedWeek,
     isMobile,

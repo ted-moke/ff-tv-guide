@@ -33,6 +33,15 @@ const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotType }) => {
 
   const { teamMap } = useUserTeams();
 
+  const calculateAveragePoints = useCallback((leagueId: string, week: number | null): string | null => {
+    if (!week) return null;
+    const teamStats = teamMap?.[leagueId]?.stats;
+    if (!teamStats?.pointsFor || week <= 1) {
+      return null;
+    }
+    return (teamStats.pointsFor / (week - 1)).toFixed(1);
+  }, [teamMap]);
+
   const handlePopup = useCallback(
     (copy: OwnedPlayer, event: React.MouseEvent) => {
       const rect = (event.target as HTMLElement).getBoundingClientRect();
@@ -130,19 +139,12 @@ const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotType }) => {
                     {teamMap?.[selectedCopy.leagueId]?.stats.losses}-
                     {teamMap?.[selectedCopy.leagueId]?.stats.ties}
                   </p>
-                  {teamMap?.[selectedCopy.leagueId]?.stats.pointsFor ? (
-                    <p className={styles.leaguePopupContentLabel}>
-                      Avg Points For
-                    </p>
-                  ) : null}
-                  {teamMap?.[selectedCopy.leagueId]?.stats.pointsFor ? (
-                    <p className={styles.leaguePopupContentValue}>
-                      {(
-                        teamMap?.[selectedCopy.leagueId]?.stats.pointsFor /
-                        (selectedWeek - 1)
-                      ).toFixed(1)}
-                    </p>
-                  ) : null}
+                  <p className={styles.leaguePopupContentLabel}>
+                    Avg Points For
+                  </p>
+                  <p className={styles.leaguePopupContentValue}>
+                    {calculateAveragePoints(selectedCopy.leagueId, selectedWeek) ?? "N/A"}
+                  </p>
                   <p className={styles.leaguePopupContentLabel}>Points For</p>
                   <p className={styles.leaguePopupContentValue}>
                     {teamMap?.[selectedCopy.leagueId]?.stats.pointsFor}

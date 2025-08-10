@@ -1,0 +1,59 @@
+@import "../../styles/variables.css";
+@import "../../styles/utils.css";
+
+.collapsible {
+  margin-bottom: var(--size2);
+}
+
+.collapsible:last-child {
+  margin-bottom: 0;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  padding: var(--size1);
+  border-radius: var(--border-radius-small);
+  transition: background-color 0.2s ease;
+}
+
+.header:hover {
+  background-color: var(--background-color-offset-2);
+}
+
+.title {
+  margin: 0;
+  color: var(--text-color);
+  font-size: var(--font-size-m_l);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: var(--size1);
+}
+
+.clearButton {
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  cursor: pointer;
+  font-size: var(--font-size-small);
+  padding: var(--size0_5);
+  border-radius: var(--border-radius-small);
+  transition: background-color 0.2s ease;
+}
+
+.clearButton:hover {
+  background-color: var(--background-color-offset-2);
+}
+
+.collapseIcon {
+  transition: transform 0.2s ease;
+}
+
+.collapseIcon.collapsed {
+  transform: rotate(-90deg);
+}

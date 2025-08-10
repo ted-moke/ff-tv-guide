@@ -1,0 +1,136 @@
+@import "../styles/variables.css";
+@import "../styles/utils.css";
+
+.filtersContainer {
+  background-color: var(--background-color-offset);
+  border: 1px solid var(--background-color-offset-2);
+  border-radius: var(--border-radius-medium);
+  padding: var(--size2);
+  margin-bottom: var(--size2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--size1);
+}
+
+.filterSectionStack {
+  display: flex;
+  flex-direction: row;
+  gap: var(--size3);
+  align-items: center;
+}
+
+
+.filterSection {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--size1);
+}
+
+.filterSection p {
+  margin: 0;
+}
+
+.filterSection:last-child {
+  margin-bottom: 0;
+}
+
+.filterSection h3 {
+  margin: 0;
+  color: var(--text-color);
+  font-size: var(--font-size-medium);
+}
+
+.sortOptions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--size1);
+}
+
+.teamsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: var(--size1);
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.positionsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  gap: var(--size1);
+}
+
+.helperLinks {
+  display: flex;
+  gap: var(--size1);
+  margin-bottom: var(--size2);
+  padding: var(--size1);
+  background-color: var(--background-color-offset-2);
+  border-radius: var(--border-radius-small);
+}
+
+.helperLink {
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  cursor: pointer;
+  font-size: var(--font-size-small);
+  padding: var(--size0_5) var(--size1);
+  border-radius: var(--border-radius-small);
+  transition: background-color 0.2s ease;
+  text-decoration: underline;
+}
+
+.helperLink:hover {
+  background-color: var(--background-color);
+}
+
+
+
+.clearAllButton {
+  background-color: var(--background-color-offset-2);
+  border: 1px solid var(--background-color-offset-2);
+  color: var(--text-color);
+  cursor: pointer;
+  font-size: var(--font-size-small);
+  padding: var(--size1) var(--size2);
+  border-radius: var(--border-radius-small);
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.clearAllButton:hover {
+  background-color: var(--background-color);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+@media (max-width: 768px) {
+  .teamsGrid {
+    grid-template-columns: 1fr;
+    max-height: 200px;
+  }
+  
+  .positionsGrid {
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+  }
+
+  .filterSectionStack {
+    flex-direction: column;
+  }
+
+  .filterSection {
+    flex-direction: column;
+    gap: var(--size1);
+  }
+
+  .filterSection p {
+    margin: 0 0 var(--size1) 0;
+  }
+
+  .helperLinks {
+    flex-direction: column;
+    gap: var(--size0_5);
+  }
+}

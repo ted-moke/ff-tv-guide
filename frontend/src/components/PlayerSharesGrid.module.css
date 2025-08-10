@@ -1,0 +1,29 @@
+@import "../styles/variables.css";
+@import "../styles/utils.css";
+
+.teamsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--size2);
+}
+
+.noResults {
+  text-align: center;
+  padding: var(--size4);
+  color: var(--text-color-muted);
+}
+
+.noResults p {
+  margin: var(--size1) 0;
+}
+
+.noResults p:first-child {
+  font-size: var(--font-size-large);
+  margin-bottom: var(--size2);
+}
+
+@media (max-width: 768px) {
+  .teamsGrid {
+    grid-template-columns: 1fr;
+  }
+}

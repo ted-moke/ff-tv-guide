@@ -39,6 +39,14 @@ const Sidebar: React.FC = () => {
             }}
           />
           <MenuItem
+            text="Player Shares"
+            to="/player-shares"
+            isActive={location.pathname === "/player-shares"}
+            onClick={() => {
+              setIsMenuOpen(false);
+            }}
+          />
+          <MenuItem
             text="Connect a League"
             to="/connect-team"
             isActive={location.pathname === "/connect-team"}

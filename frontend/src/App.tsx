@@ -15,6 +15,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import AdminLeagues from "./pages/AdminLeagues";
 import AdminUserTeamsPage from "./pages/AdminUserTeamsPage";
 import Overview from "./pages/Overview";
+import PlayerShares from "./pages/PlayerShares";
 import Layout from "./components/ui/Layout";
 import { ViewProvider } from "./features/view/ViewContext";
 import { Toaster } from "react-hot-toast";
@@ -99,6 +100,14 @@ const App: React.FC = () => {
                 element={
                   <Layout>
                     <Overview />
+                  </Layout>
+                }
+              />
+              <Route
+                path="/player-shares"
+                element={
+                  <Layout>
+                    <PlayerShares />
                   </Layout>
                 }
               />

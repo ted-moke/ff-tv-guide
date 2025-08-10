@@ -1,6 +1,8 @@
 .chip {
-  display: inline-block;
-  padding: 1.5px var(--size1) 2.5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
   border-radius: var(--border-radius-large);
   font-size: var(--font-size-small);
   cursor: pointer;
@@ -14,7 +16,6 @@
 .chip p {
   margin: 1px;
   line-height: 1;
-  font-size: var(--font-size-medium);
   font-family: monospace, sans-serif;
 }
 
@@ -24,7 +25,7 @@
 
 .chip.primary {
   background-color: var(--primary-color);
-  color: var(--primary-color-text);
+  color: var(--text-color-light);
 }
 
 .chip.muted {
@@ -57,4 +58,22 @@
   background-color: transparent;
   color: var(--text-color-muted);
   border: none;
+}
+
+.chip.small {
+  padding: 1.5px var(--size1) 2.5px;
+}
+
+.chip.small p {
+  font-size: var(--font-size-medium);
+}
+
+.chip.large {
+  padding: var(--size0_5) var(--size1) ;
+  font-size: var(--font-size-m_l);
+  border-radius: 100px;
+}
+
+.chip.large p {
+  font-size: var(--font-size-m_l);
 }

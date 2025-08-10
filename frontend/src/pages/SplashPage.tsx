@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./SplashPage.module.css";
 import Button from "../components/ui/Button";
-import LinkButton, { LinkButtonColor } from "../components/ui/LinkButton";
+import LinkButton from "../components/ui/LinkButton";
 import FFTVGLogo from "../assets/FFTVGLogo";
 import ssSingleMatch from "../assets/ss-single-match.png";
 
