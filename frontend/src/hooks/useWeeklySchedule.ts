@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { NFLGame } from "../features/nfl/nflTypes";
-import nflSchedule from "../assets/nfl-schedule-2024.json";
+import nflSchedule from "../assets/nfl-schedule-2025.json";
 
 interface NflWeekSchedule {
   weekNumber: number;
