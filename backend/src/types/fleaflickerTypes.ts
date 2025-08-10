@@ -105,4 +105,65 @@ export interface FleaflickerDraftPick {
   currentOwner?: FleaflickerTeam;
 }
 
+// Fleaflicker Scoreboard/Matchups API Types
+export interface FleaflickerScoreboardResponse {
+  schedulePeriod: FleaflickerSchedulePeriod;
+  eligibleSchedulePeriods: FleaflickerSchedulePeriod[];
+  games: FleaflickerGame[];
+}
+
+export interface FleaflickerSchedulePeriod {
+  ordinal: number;
+  low: FleaflickerPeriodBound;
+  high: FleaflickerPeriodBound;
+  containsNow: boolean;
+  value: number;
+}
+
+export interface FleaflickerPeriodBound {
+  duration: string;
+  ordinal: number;
+  season: number;
+  startEpochMilli: string; // int64 as string
+  isNow: boolean;
+  label: string;
+}
+
+export interface FleaflickerGame {
+  id: string; // int64 as string
+  away: FleaflickerGameTeam;
+  home?: FleaflickerGameTeam; // Optional as it might not always be present
+}
+
+export interface FleaflickerGameTeam {
+  id: number;
+  name: string;
+  sport: string;
+  logoUrl: string;
+  recordOverall: FleaflickerGameRecord;
+  recordDivision?: FleaflickerGameRecord;
+  recordPostseason?: FleaflickerGameRecord;
+  pointsFor: FleaflickerGamePoints;
+  pointsAgainst: FleaflickerGamePoints;
+}
+
+export interface FleaflickerGameRecord {
+  wins: number;
+  losses: number;
+  ties: number;
+  winPercentage: FleaflickerFormattedValue;
+  rank: number;
+  formatted: string;
+}
+
+export interface FleaflickerGamePoints {
+  value: number;
+  formatted: string;
+}
+
+export interface FleaflickerFormattedValue {
+  value: number;
+  formatted: string;
+}
+
 // Add any other Fleaflicker-specific types here

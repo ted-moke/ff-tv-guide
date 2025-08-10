@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "./PlayerSharesFilters.module.css";
 import { useView } from "../features/view/ViewContext";
 import { NFL_TEAMS } from "../features/nfl/nflTeams";

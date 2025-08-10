@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 import styles from "./PlayerShares.module.css";
 import { getTeamsByConference, NFL_TEAMS } from "../features/nfl/nflTeams";
 import { Player } from "../features/nfl/nflTypes";

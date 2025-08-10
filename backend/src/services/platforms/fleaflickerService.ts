@@ -6,9 +6,16 @@ import {
   FleaflickerTeam,
   Owner,
 } from "../../types/fleaflickerTypes";
+import { 
+  fleaflickerScoreboardResponseSchema, 
+  FleaflickerScoreboardResponse,
+  FleaflickerGame,
+  FleaflickerGameTeam
+} from "../../types/fleaflickerSchemas";
 import { getCurrentWeek } from "../../utils/getCurrentWeek";
 import { ApiTrackingService } from "../apiTrackingService";
 import fetchFromUrl from "../../utils/fetchFromUrl";
+import z from "zod";
 
 export class FleaflickerService {
   private static instance: FleaflickerService;
@@ -181,8 +188,14 @@ export class FleaflickerService {
         return;
       }
       for (const matchup of matchups) {
-        await addAndUpdateTeam(matchup.away, matchup.home.id);
-        await addAndUpdateTeam(matchup.home, matchup.away.id);
+        // Convert FleaflickerGame to FleaflickerTeam format
+        const awayTeam = this.convertGameTeamToFleaflickerTeam(matchup.away);
+        const homeTeam = matchup.home ? this.convertGameTeamToFleaflickerTeam(matchup.home) : null;
+        
+        await addAndUpdateTeam(awayTeam, homeTeam?.id.toString() || '');
+        if (homeTeam) {
+          await addAndUpdateTeam(homeTeam, awayTeam.id.toString());
+        }
       }
 
       // Clear large data structures
@@ -251,14 +264,33 @@ export class FleaflickerService {
     externalLeagueId: string,
     week: number,
     season: number,
-  ): Promise<any> {
-    await ApiTrackingService.trackApiCall(
-      "fleaflicker",
-      "GET leagues/scoreboard",
-    );
-    const url = `https://www.fleaflicker.com/api/FetchLeagueScoreboard?league_id=${externalLeagueId}&season=${season}&scoring_period=${week}`;
-    const data = await fetchFromUrl(url);
-    return data.games;
+  ): Promise<FleaflickerGame[]> {
+    try {
+      await ApiTrackingService.trackApiCall(
+        "fleaflicker",
+        `GET leagues/scoreboard?league_id=${externalLeagueId}&season=${season}&scoring_period=${week}`,
+      );
+      
+      const url = `https://www.fleaflicker.com/api/FetchLeagueScoreboard?league_id=${externalLeagueId}&season=${season}&scoring_period=${week}`;
+      const rawData = await fetchFromUrl(url);
+      
+      // Temporary fallback: bypass strict validation until we understand the actual response format
+      if (Array.isArray(rawData)) {
+        return rawData as FleaflickerGame[];
+      } else if (rawData && typeof rawData === 'object' && 'games' in rawData && Array.isArray(rawData.games)) {
+        return rawData.games as FleaflickerGame[];
+      } else {
+        console.error("Unexpected Fleaflicker API response format:", rawData);
+        throw new Error("Unexpected response format from Fleaflicker API");
+      }
+    } catch (error) {
+      console.error("Error fetching fleaflicker matchups:", error);
+      if (error instanceof z.ZodError) {
+        console.error("Validation errors:", error.errors);
+        // Note: rawData might not be in scope here, so we'll just log the error
+      }
+      throw new Error(`Failed to fetch or validate Fleaflicker matchups: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
   }
 
   private async fetchRoster(
@@ -306,5 +338,40 @@ export class FleaflickerService {
   private getCurrentSeason(): number {
     // Implement logic to determine current NFL season
     return 2025; // Placeholder
+  }
+
+  private convertGameTeamToFleaflickerTeam(gameTeam: FleaflickerGameTeam): FleaflickerTeam {
+    return {
+      id: gameTeam.id,
+      name: gameTeam.name,
+      logoUrl: gameTeam.logo_url || '',
+      recordOverall: gameTeam.record_overall ? {
+        wins: gameTeam.record_overall.wins,
+        losses: gameTeam.record_overall.losses,
+        ties: gameTeam.record_overall.ties,
+        winPercentage: {
+          value: gameTeam.record_overall.win_percentage.value,
+          formatted: gameTeam.record_overall.win_percentage.formatted,
+        },
+        rank: gameTeam.record_overall.rank,
+        formatted: gameTeam.record_overall.formatted,
+      } : {
+        wins: 0,
+        losses: 0,
+        ties: 0,
+        winPercentage: { value: 0, formatted: '0%' },
+        rank: 0,
+        formatted: '0-0-0',
+      },
+      pointsFor: gameTeam.points_for ? {
+        value: gameTeam.points_for.value,
+        formatted: gameTeam.points_for.formatted,
+      } : { value: 0, formatted: '0' },
+      pointsAgainst: gameTeam.points_against ? {
+        value: gameTeam.points_against.value,
+        formatted: gameTeam.points_against.formatted,
+      } : { value: 0, formatted: '0' },
+      owners: [], // Game teams don't include owner info, so we'll use empty array
+    };
   }
 }

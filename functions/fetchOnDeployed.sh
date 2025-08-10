@@ -6,7 +6,7 @@ gcloud auth login
 # Set your Google Cloud project
 PROJECT_ID="fantasy-tv-guide"
 LEAGUE_ID="1108780053288165376"
-WEEK=17
+WEEK=1
 
 # Compose message
 MESSAGE='{"leagueId": "'$LEAGUE_ID'", "week": '$WEEK'}'

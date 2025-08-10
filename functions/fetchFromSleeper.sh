@@ -3,7 +3,7 @@
 # Set project ID
 PROJECT_ID="fantasy-tv-guide"
 LEAGUE_ID="1108780053288165376"
-WEEK=17
+WEEK=1
 
 # Create JSON payload
 json_payload='{"leagueId": "'$LEAGUE_ID'", "week": '$WEEK'}'

@@ -277,7 +277,7 @@ export class SleeperService {
     externalLeagueId: string,
     week: number,
   ): Promise<SleeperMatchup[]> {
-    // await ApiTrackingService.trackApiCall("sleeper", "GET leagues/matchups");
+    await ApiTrackingService.trackApiCall("sleeper", `GET league/${externalLeagueId}/matchups/${week}`);
     const matchupsSchema = z.array(
       z.object({
         roster_id: z.number(),
