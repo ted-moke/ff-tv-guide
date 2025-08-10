@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import styles from "./PlayerShares.module.css";
 import { getTeamsByConference, NFL_TEAMS } from "../features/nfl/nflTeams";
 import { Player } from "../features/nfl/nflTypes";
@@ -10,6 +10,9 @@ import LoadingSpinner from "../components/ui/LoadingSpinner";
 import PlayerSharesFilters from "../components/PlayerSharesFilters";
 import PlayerSharesGrid from "../components/PlayerSharesGrid";
 import { useNeedsResources } from "../features/teams/useNeedsResources";
+import Collapsible from "../components/ui/Collapsible";
+import { LuFilter } from "react-icons/lu";
+import { getTeamCodeByName } from "../features/teams/getTeamCodeByName";
 
 interface GroupedPlayer {
   team: string;
@@ -19,17 +22,22 @@ interface GroupedPlayer {
 }
 
 const PlayerShares: React.FC = () => {
-  const { 
-    activeConference, 
-    playerSharesSortBy, 
+  const {
+    activeConference,
+    playerSharesSortBy,
     playerSharesHideEmptyTeams,
     selectedTeams,
+    userTeams,
     selectedPositions,
-    playerSharesSearchTerm
+    playerSharesSearchTerm,
   } = useView();
   const { players, isLoading, error } = usePlayers({ includeOpponents: false });
   const { isLoading: isAuthLoading } = useAuthContext();
-  const { isLoading: needsConnectLoading, needsConnect, needsAccount } = useNeedsResources();
+  const {
+    isLoading: needsConnectLoading,
+    needsConnect,
+    needsAccount,
+  } = useNeedsResources();
 
   let allPlayers: Player[] = players ?? [];
 
@@ -63,8 +71,14 @@ const PlayerShares: React.FC = () => {
           b.players.length - a.players.length || a.team.localeCompare(b.team)
         );
       } else if (playerSharesSortBy === "shares") {
-        const aShares = a.players.reduce((count, player) => count + player.copies.length, 0);
-        const bShares = b.players.reduce((count, player) => count + player.copies.length, 0);
+        const aShares = a.players.reduce(
+          (count, player) => count + player.copies.length,
+          0
+        );
+        const bShares = b.players.reduce(
+          (count, player) => count + player.copies.length,
+          0
+        );
         return bShares - aShares || a.team.localeCompare(b.team);
       } else {
         return a.team.localeCompare(b.team);
@@ -79,13 +93,37 @@ const PlayerShares: React.FC = () => {
 
   // Calculate summary statistics
   const summaryStats = useMemo(() => {
-    const totalPlayers = sortedGroupedPlayers.reduce((sum, team) => sum + team.players.length, 0);
-    const totalShares = sortedGroupedPlayers.reduce((sum, team) => 
-      sum + team.players.reduce((teamSum, player) => teamSum + player.copies.length, 0), 0
+    const totalPlayers = sortedGroupedPlayers.reduce(
+      (sum, team) => sum + team.players.length,
+      0
     );
-    const teamsWithPlayers = sortedGroupedPlayers.filter(team => team.players.length > 0).length;
-    
-    return { totalPlayers, totalShares, teamsWithPlayers };
+    const totalShares = sortedGroupedPlayers.reduce(
+      (sum, team) =>
+        sum +
+        team.players.reduce(
+          (teamSum, player) => teamSum + player.copies.length,
+          0
+        ),
+      0
+    );
+    const teamsWithPlayers = sortedGroupedPlayers.filter(
+      (team) => team.players.length > 0
+    ).length;
+
+    const sharesByTeam = sortedGroupedPlayers.reduce((acc, team) => {
+      acc[team.team] = team.players.reduce((sum, player) => sum + player.copies.length, 0);
+      return acc;
+    }, {} as Record<string, number>);
+
+    const mostOwnedTeam = Object.entries(sharesByTeam).reduce((max, [team, shares]) => {
+      return shares > max.shares ? { team, shares } : max;
+    }, { team: "", shares: 0 });
+
+    const leastOwnedTeam = Object.entries(sharesByTeam).reduce((min, [team, shares]) => {
+      return shares < min.shares ? { team, shares } : min;
+    }, { team: "", shares: Infinity });
+
+    return { totalPlayers, totalShares, teamsWithPlayers, sharesByTeam, mostOwnedTeam, leastOwnedTeam };
   }, [sortedGroupedPlayers]);
 
   if (isAuthLoading || needsConnectLoading) return <LoadingSpinner />;
@@ -115,28 +153,76 @@ const PlayerShares: React.FC = () => {
   return (
     <div className={`${styles.playerShares} page-container`}>
       <h1>Player Shares</h1>
-      
+
+      <div className={styles.userTeamFilterWrapper}>
+        <p>Showing {userTeams.length} teams</p>
+      </div>
+
       <div className={styles.summaryStats}>
+        
         <div className={styles.statItem}>
-          <span className={styles.statLabel}>Teams:</span>
-          <span className={styles.statValue}>{summaryStats.teamsWithPlayers}</span>
+          <label className={styles.statLabel}>Most Owned Team:</label>
+          <div className={styles.statValueContainer}>
+            <p className={styles.statValue}>{getTeamCodeByName(summaryStats.mostOwnedTeam.team)}</p>
+            <p className={styles.statValueSub}>{summaryStats.mostOwnedTeam.shares} shares</p>
+            <p className={styles.statValueSub}>{((summaryStats.mostOwnedTeam.shares / summaryStats.totalShares) * 100).toFixed(1)}%</p>
+          </div>
         </div>
         <div className={styles.statItem}>
-          <span className={styles.statLabel}>Players:</span>
-          <span className={styles.statValue}>{summaryStats.totalPlayers}</span>
+          <label className={styles.statLabel}>Least Owned Team:</label>
+          <div className={styles.statValueContainer}>
+            <p className={styles.statValue}>{getTeamCodeByName(summaryStats.leastOwnedTeam.team)}</p>
+            <p className={styles.statValueSub}>{summaryStats.leastOwnedTeam.shares} shares</p>
+            <p className={styles.statValueSub}>{((summaryStats.leastOwnedTeam.shares / summaryStats.totalShares) * 100).toFixed(1)}%</p>
+          </div>
         </div>
         <div className={styles.statItem}>
-          <span className={styles.statLabel}>Total Shares:</span>
-          <span className={styles.statValue}>{summaryStats.totalShares}</span>
+          <label className={styles.statLabel}>NFL Teams:</label>
+          <div className={styles.statValueContainer}>
+            <p className={styles.statValue}>
+              {summaryStats.teamsWithPlayers}
+            </p>
+          </div>
+        </div>
+        <div className={styles.statItem}>
+          <label className={styles.statLabel}>Players:</label>
+          <div className={styles.statValueContainer}>
+            <p className={styles.statValue}>
+              {summaryStats.totalPlayers}
+            </p>
+          </div>
+        </div>
+        <div className={styles.statItem}>
+          <label className={styles.statLabel}>Total Shares:</label>
+          <div className={styles.statValueContainer}>
+            <p className={styles.statValue}>
+              {summaryStats.totalShares}
+            </p>
+          </div>
         </div>
       </div>
 
-      <PlayerSharesFilters />
-      
+      <Collapsible
+        title="Filters"
+        defaultCollapsed={true}
+        onClear={() => {}}
+        showClear={false}
+        clearLabel="Clear"
+        className={styles.filtersCollapsible}
+        icon={<LuFilter />}
+      >
+        <PlayerSharesFilters />
+      </Collapsible>
+
       <p className={styles.sortBy}>
-        Sorted by {playerSharesSortBy === "players" ? "Player Count" : playerSharesSortBy === "shares" ? "Shares" : playerSharesSortBy}
+        Sorted by{" "}
+        {playerSharesSortBy === "players"
+          ? "Player Count"
+          : playerSharesSortBy === "shares"
+          ? "Shares"
+          : playerSharesSortBy}
       </p>
-      
+
       <PlayerSharesGrid
         groupedPlayers={sortedGroupedPlayers}
         selectedTeams={selectedTeams}

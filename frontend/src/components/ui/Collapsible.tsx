@@ -10,6 +10,8 @@ interface CollapsibleProps {
   showClear?: boolean;
   clearLabel?: string;
   className?: string;
+  icon?: React.ReactNode;
+  iconPosition?: 'left' | 'right';
 }
 
 const Collapsible: React.FC<CollapsibleProps> = ({
@@ -20,6 +22,8 @@ const Collapsible: React.FC<CollapsibleProps> = ({
   showClear = false,
   clearLabel = "Clear",
   className = "",
+  icon,
+  iconPosition = 'left',
 }) => {
   const [isCollapsed, setIsCollapsed] = useState(defaultCollapsed);
 
@@ -46,7 +50,11 @@ const Collapsible: React.FC<CollapsibleProps> = ({
           }
         }}
       >
-        <p className={styles.title}>{title}</p>
+        <div className={styles.titleContainer}>
+          {icon && iconPosition === 'left' && <div className={styles.icon}>{icon}</div>}
+          <p className={styles.title}>{title}</p>
+          {icon && iconPosition === 'right' && <div className={styles.icon}>{icon}</div>}
+        </div>
         <div className={styles.actions}>
           {showClear && onClear && (
             <button

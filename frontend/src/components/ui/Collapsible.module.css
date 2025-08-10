@@ -17,6 +17,11 @@
   padding: var(--size1);
   border-radius: var(--border-radius-small);
   transition: background-color 0.2s ease;
+
+}
+
+.header.fullWidth {
+  width: 100%;
 }
 
 .header:hover {
@@ -27,6 +32,12 @@
   margin: 0;
   color: var(--text-color);
   font-size: var(--font-size-m_l);
+}
+
+.titleContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--size1);
 }
 
 .actions {
