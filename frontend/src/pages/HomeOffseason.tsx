@@ -13,10 +13,12 @@ const HomeOffseason: React.FC = () => {
   }
 
   if (needsAccount) {
+    console.warn("needsAccount", needsAccount);
     return <Navigate to="/splash" />;
   }
 
   if (needsConnect) {
+    console.warn("needsConnect", needsConnect);
     return <Navigate to="/connect-team" />;
   }
 
