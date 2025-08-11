@@ -32,7 +32,10 @@ const PlayerShares: React.FC = () => {
     selectedPositions,
     playerSharesSearchTerm,
   } = useView();
-  const { players, isLoading, error } = usePlayers({ includeOpponents: false });
+  const { players, isLoading, error } = usePlayers({
+    includeOpponents: false,
+    hideHiddenTeams: true,
+  });
   const { isLoading: isAuthLoading } = useAuthContext();
   const {
     isLoading: needsConnectLoading,
@@ -41,6 +44,11 @@ const PlayerShares: React.FC = () => {
   } = useNeedsResources();
 
   let allPlayers: Player[] = players ?? [];
+
+  const numberOfSelectedTeams = useMemo(
+    () => userTeams.filter((team) => team.visibilityType === "show").length,
+    [userTeams]
+  );
 
   const sortedGroupedPlayers = useMemo<GroupedPlayer[]>(() => {
     const teams =
@@ -119,12 +127,18 @@ const PlayerShares: React.FC = () => {
       return acc;
     }, {} as Record<string, number>);
 
-    const teamsByMostOwned = Object.entries(sharesByTeam).sort(
-      (a, b) => b[1] - a[1]
-    );
-    const teamsByLeastOwned = Object.entries(sharesByTeam).sort(
-      (a, b) => a[1] - b[1]
-    );
+    const teamsByMostOwned = Object.entries(sharesByTeam).sort((a, b) => {
+      if (a[1] === b[1]) {
+        return b[0].localeCompare(a[0]);
+      }
+      return b[1] - a[1];
+    });
+    const teamsByLeastOwned = Object.entries(sharesByTeam).sort((a, b) => {
+      if (a[1] === b[1]) {
+        return a[0].localeCompare(b[0]);
+      }
+      return a[1] - b[1];
+    });
 
     const mostOwnedTeam = teamsByMostOwned[0][0];
     const leastOwnedTeam = teamsByLeastOwned[0][0];
@@ -171,9 +185,19 @@ const PlayerShares: React.FC = () => {
     <div className={`${styles.playerShares} page-container`}>
       <h1>Player Shares</h1>
 
-      <div className={styles.userTeamFilterWrapper}>
-        <p>Showing {userTeams.length} teams</p>
-      </div>
+      <label>Showing {numberOfSelectedTeams} teams</label>
+
+        <Collapsible
+          title="Filters"
+          defaultCollapsed={true}
+          onClear={() => {}}
+          showClear={false}
+          clearLabel="Clear"
+          className={styles.filtersCollapsible}
+          icon={<LuFilter />}
+        >
+          <PlayerSharesFilters />
+        </Collapsible>
 
       <div className={styles.summaryStats}>
         <div className={styles.statItem}>
@@ -234,18 +258,6 @@ const PlayerShares: React.FC = () => {
         </div>
       </div>
 
-      <Collapsible
-        title="Filters"
-        defaultCollapsed={true}
-        onClear={() => {}}
-        showClear={false}
-        clearLabel="Clear"
-        className={styles.filtersCollapsible}
-        icon={<LuFilter />}
-      >
-        <PlayerSharesFilters />
-      </Collapsible>
-
       <div className={styles.teamsTableWrapper}>
         <h3 className={styles.sectionTitle}>Players By Team</h3>
         <DataTable
@@ -253,30 +265,32 @@ const PlayerShares: React.FC = () => {
             team: team[0] ?? "??",
             shares: team[1],
             percentage: ((team[1] / summaryStats.totalShares) * 100).toFixed(1),
-            rank: summaryStats.teamsByMostOwned.findIndex(t => t[0] === team[0]) + 1,
+            rank:
+              summaryStats.teamsByMostOwned.findIndex((t) => t[0] === team[0]) +
+              1,
           }))}
           columns={[
-            { 
-              key: 'rank', 
-              label: 'Rank', 
-              align: 'center', 
-              width: '60px',
-              format: (value) => `#${value}`
+            {
+              key: "rank",
+              label: "Rank",
+              align: "center",
+              width: "60px",
+              format: (value) => `#${value}`,
             },
-            { key: 'team', label: 'Team', align: 'left', width: '80px' },
-            { 
-              key: 'shares', 
-              label: 'Shares', 
-              align: 'right', 
-              width: '100px',
-              format: (value) => value.toLocaleString()
+            { key: "team", label: "Team", align: "left", width: "80px" },
+            {
+              key: "shares",
+              label: "Shares",
+              align: "right",
+              width: "100px",
+              format: (value) => value.toLocaleString(),
             },
-            { 
-              key: 'percentage', 
-              label: 'Share %', 
-              align: 'right', 
-              width: '100px',
-              format: (value) => `${value}%`
+            {
+              key: "percentage",
+              label: "Share %",
+              align: "right",
+              width: "100px",
+              format: (value) => `${value}%`,
             },
           ]}
           compact={true}
@@ -284,7 +298,7 @@ const PlayerShares: React.FC = () => {
           collapsible={{
             topRows: 3,
             bottomRows: 3,
-            defaultCollapsed: true
+            defaultCollapsed: true,
           }}
         />
       </div>

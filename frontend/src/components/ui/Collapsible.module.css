@@ -1,10 +1,6 @@
 @import "../../styles/variables.css";
 @import "../../styles/utils.css";
 
-.collapsible {
-  margin-bottom: var(--size2);
-}
-
 .collapsible:last-child {
   margin-bottom: 0;
 }
