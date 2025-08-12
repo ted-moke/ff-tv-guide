@@ -33,25 +33,33 @@ export class FleaflickerService {
     leagueName,
     externalLeagueId,
     platformCredentialId,
+    leagueMasterId,
+    season,
     lastModified,
   }: {
     leagueName: string;
     externalLeagueId: string;
     platformCredentialId: string;
+    leagueMasterId: string;
+    season: number;
     lastModified: Date;
   }): Promise<League> {
     console.log("FF Upserting league");
     const db = await getDb();
     const leaguesCollection = db.collection("leagues");
     const leagueData: League = {
+      leagueMasterId,
       name: leagueName,
       platform: { name: "fleaflicker", id: platformCredentialId },
       externalLeagueId,
+      season,
       lastModified,
     };
 
+    // Look for existing league with same externalLeagueId and season
     const existingLeagueQuery = await leaguesCollection
       .where("externalLeagueId", "==", externalLeagueId)
+      .where("season", "==", season)
       .limit(1)
       .get();
 
@@ -145,7 +153,9 @@ export class FleaflickerService {
           externalTeamId: teamData.id.toString(),
           platformId: league.platform.name,
           leagueId: league.id!,
+          leagueMasterId: league.leagueMasterId,
           leagueName: league.name,
+          season: league.season,
           name: teamData.name,
           externalUsername: primaryOwner ? primaryOwner.displayName : rosterData.ownerName,
           externalUserId: primaryOwner
@@ -234,25 +244,27 @@ export class FleaflickerService {
         team.externalUserId === externalUserId ||
         team.externalTeamId.toString() === externalTeamIdString
       ) {
-        // Check if the userTeam already exists
+        // Check if the userTeam already exists for this leagueMaster
         const userTeamQuery = await userTeamsCollection
           .where("userId", "==", userId)
-          .where("teamId", "==", teamDoc.id)
+          .where("leagueMasterId", "==", league.leagueMasterId)
           .get();
 
         if (userTeamQuery.empty) {
           await userTeamsCollection.add({
             userId: userId,
+            leagueMasterId: league.leagueMasterId,
             teamId: teamDoc.id,
-            leagueId: league.id,
+            currentSeason: league.season,
           });
         } else {
-          // Update existing userTeam
+          // Update existing userTeam with new team and season
           const existingUserTeamDoc = userTeamQuery.docs[0];
           await existingUserTeamDoc.ref.update({
             userId: userId,
+            leagueMasterId: league.leagueMasterId,
             teamId: teamDoc.id,
-            leagueId: league.id,
+            currentSeason: league.season,
           });
         }
         break; // We've found the user's team, no need to continue

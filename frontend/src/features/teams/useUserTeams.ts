@@ -2,13 +2,14 @@ import { useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuthContext } from "../auth/AuthProvider"; // Assuming you have an auth context
 import { FantasyTeam } from "./teamTypes";
-const API_URL = import.meta.env.VITE_API_URL;
+import { API_URL } from "../../config";
+import { CURRENT_SEASON } from "../../constants";
 
 const updateStaleTeams = async (teams: FantasyTeam[], queryClient: any) => {
   const teamsToUpdate = teams.filter((team) => team.needsUpdate);
   let ids = teamsToUpdate.map((team) => team.leagueId);
 
-  console.log('teamsToUpdate', teamsToUpdate)
+  console.log("teamsToUpdate", teamsToUpdate);
 
   if (ids.length > 0) {
     try {
@@ -24,14 +25,20 @@ const updateStaleTeams = async (teams: FantasyTeam[], queryClient: any) => {
       queryClient.invalidateQueries({ queryKey: ["userTeams"] });
       queryClient.invalidateQueries({ queryKey: ["opponentTeams"] });
 
-      console.log('teams updated')
+      console.log("teams updated");
     } catch (error) {
       console.error("Error updating leagues by IDs:", error);
     }
   }
 };
 
-export const useUserTeams = () => {
+export const useUserTeams = ({
+  seasonStart = CURRENT_SEASON,
+  seasonEnd = null,
+}: {
+  seasonStart?: number | null;
+  seasonEnd?: number | null;
+} = {}) => {
   const { user } = useAuthContext();
   const queryClient = useQueryClient();
 
@@ -41,13 +48,16 @@ export const useUserTeams = () => {
       try {
         if (!user) throw new Error("User not authenticated");
 
-        const response = await fetch(`${API_URL}/users/${user.uid}/teams`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-          },
-        });
+        const response = await fetch(
+          `${API_URL}/users/${user.uid}/teams?seasonStart=${seasonStart}&seasonEnd=${seasonEnd}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            },
+          }
+        );
         if (!response.ok) {
           const errorText = await response.text();
           console.error("Failed to fetch user teams:", errorText);

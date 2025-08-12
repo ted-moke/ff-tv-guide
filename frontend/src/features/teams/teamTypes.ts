@@ -5,11 +5,13 @@ export interface FantasyTeam {
   opponentId: string;
   externalUserId: string;
   leagueId: string;
+  leagueMasterId: string;
   externalLeagueId: string;
   platformId: string;
   name: string;
   externalTeamId: string;
-  externalUsername: string,
+  externalUsername: string;
+  season: number;
   playerData: Array<{
     name: string;
     team: string;

@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { PlatformServiceFactory } from "../services/platforms/platformServiceFactory";
 import { getDb } from "../firebase";
 import { League } from "../models/league";
+import { LeagueMasterService } from "../services/leagueMasterService";
 import { startBackgroundJob } from "../utils/backgroundJobs";
 
 const BATCH_SIZE = 7; // Adjust as needed
@@ -13,6 +14,7 @@ export const upsertLeague = async (req: Request, res: Response) => {
     platformCredentialId,
     platformId,
     externalTeamId,
+    season = 2025, // Default to current season
   } = req.body;
 
   if (
@@ -38,12 +40,22 @@ export const upsertLeague = async (req: Request, res: Response) => {
     const userId = platformCredentialDoc.data()!.userId;
     const externalUserId = platformCredentialDoc.data()!.externalUserId;
 
+    // Find or create LeagueMaster
+    const leagueMaster = await LeagueMasterService.findOrCreateLeagueMaster({
+      name: leagueName,
+      platform: { name: platformId as "sleeper" | "fleaflicker", id: platformId },
+      externalLeagueId,
+      createdBy: userId,
+    });
+
     const platformService = PlatformServiceFactory.getService(platformId);
     const league = await platformService.upsertLeague({
       leagueName,
       externalLeagueId,
       platformCredentialId,
-      lastModified: new Date(), // Add this line
+      leagueMasterId: leagueMaster.id!,
+      season,
+      lastModified: new Date(),
     });
     await platformService.upsertTeams(league);
 
@@ -53,7 +65,11 @@ export const upsertLeague = async (req: Request, res: Response) => {
       externalUserId,
       externalTeamId,
     });
-    res.status(200).json({ message: "League connected successfully", league });
+    res.status(200).json({ 
+      message: "League connected successfully", 
+      league,
+      leagueMaster 
+    });
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });
   }

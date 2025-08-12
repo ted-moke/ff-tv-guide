@@ -15,9 +15,10 @@ const dateOrTimestampSchema = z.union([dateSchema, timestampSchema]);
 
 export const getUserTeams = async (req: Request, res: Response) => {
   const { uid } = req.params;
+  const { seasonStart, seasonEnd } = req.query as { seasonStart: string, seasonEnd: string | null };
 
   try {
-    const teams = await getTeamsForUser(uid);
+    const teams = await getTeamsForUser(uid, seasonStart, seasonEnd);
     const mostRecentKeyTime = getMostRecentKeyTime();
     const staleTime = new Date(Date.now() - TIME_TO_TEAM_STALE);
 
@@ -180,12 +181,18 @@ export const getOpponentTeams = async (req: Request, res: Response) => {
   }
 };
 
-async function getTeamsForUser(userId: string): Promise<Team[]> {
+async function getTeamsForUser(userId: string, seasonStart: string, seasonEnd: string | null): Promise<Team[]> {
   console.log("Getting teams for user", userId);
   const db = await getDb();
   const userTeamsSnapshot = await db
     .collection("userTeams")
     .where("userId", "==", userId)
+    .where("currentSeason", ">=", seasonStart || 0)
+    .where(
+      "currentSeason",
+      seasonEnd ? "<=" : ">=", 
+      seasonEnd || 0
+    )
     .get();
 
   const teamIds = userTeamsSnapshot.docs.map((doc) => doc.data().teamId);

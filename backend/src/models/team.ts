@@ -3,10 +3,11 @@ import { Timestamp } from 'firebase-admin/firestore';
 export interface Team {
   id?: string;
   externalTeamId: string;
-  leagueId: string;
-  // TODO abstract leagueId and externalLeagueId to a league model, so team.league.id
+  leagueId: string; // Points to season-specific League
+  leagueMasterId: string; // Reference to LeagueMaster for cross-season queries
   externalLeagueId: string;
   leagueName: string;
+  season: number; // 2024, 2025, etc.
   name?: string;
   externalUsername?: string;
   externalUserId?: string;
