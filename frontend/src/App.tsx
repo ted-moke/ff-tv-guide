@@ -16,6 +16,7 @@ import AdminLeagues from "./pages/AdminLeagues";
 import AdminUserTeamsPage from "./pages/AdminUserTeamsPage";
 import Overview from "./pages/Overview";
 import PlayerShares from "./pages/PlayerShares";
+import TeamHistory from "./pages/TeamHistory";
 import Layout from "./components/ui/Layout";
 import { ViewProvider } from "./features/view/ViewContext";
 import { Toaster } from "react-hot-toast";
@@ -108,6 +109,14 @@ const App: React.FC = () => {
                 element={
                   <Layout>
                     <PlayerShares />
+                  </Layout>
+                }
+              />
+              <Route
+                path="/history/teams"
+                element={
+                  <Layout>
+                    <TeamHistory />
                   </Layout>
                 }
               />

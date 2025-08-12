@@ -1,8 +1,5 @@
 import { getDb } from "../src/firebase";
-import { League } from "../src/models/league";
-import { LeagueMaster } from "../src/models/leagueMaster";
-import { Team } from "../src/models/team";
-import { UserTeam } from "../src/models/userTeam";
+import type { League, LeagueMaster, Team, UserTeam } from "../src/types/shared";
 
 interface MigrationStats {
   leaguesProcessed: number;

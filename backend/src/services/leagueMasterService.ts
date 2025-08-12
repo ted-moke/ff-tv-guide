@@ -1,6 +1,5 @@
 import { getDb } from "../firebase";
-import { LeagueMaster } from "../models/leagueMaster";
-import { League } from "../models/league";
+import type { LeagueMaster, League } from "../types/shared";
 
 export class LeagueMasterService {
   /**

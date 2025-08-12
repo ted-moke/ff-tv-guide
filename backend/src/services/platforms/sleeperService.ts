@@ -1,6 +1,5 @@
 import { getDb } from "../../firebase";
-import { League } from "../../models/league";
-import { Team, Player } from "../../models/team";
+import type { League, Team, Player } from "../../types/shared";
 import { ApiTrackingService } from "../apiTrackingService";
 import fetchFromUrl from "../../utils/fetchFromUrl";
 import { getCurrentWeek } from "../../utils/getCurrentWeek";

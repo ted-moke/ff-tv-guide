@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { PlatformServiceFactory } from "../services/platforms/platformServiceFactory";
 import { getDb } from "../firebase";
-import { League } from "../models/league";
+import type { League } from "../types/shared";
 import { LeagueMasterService } from "../services/leagueMasterService";
 import { startBackgroundJob } from "../utils/backgroundJobs";
 

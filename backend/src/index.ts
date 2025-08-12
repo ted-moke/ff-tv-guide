@@ -10,6 +10,7 @@ import userRoutes from "./routes/userRoutes";
 import platformCredentialRoutes from "./routes/platformCredentialRoutes";
 import externalLeagueRoutes from "./routes/externalLeagueRoutes";
 import userTeamRoutes from "./routes/userTeamRoutes";
+import userTeamHistoryRoutes from "./routes/userTeamHistoryRoutes";
 import tradeRoutes from "./routes/tradeRoutes";
 const app = express();
 
@@ -51,6 +52,7 @@ app.use("/team-players", teamPlayerRoutes);
 app.use("/users", userRoutes);
 app.use("/external-leagues", externalLeagueRoutes);
 app.use("/user-teams", userTeamRoutes);
+app.use("/user-team-history", userTeamHistoryRoutes);
 app.use("/trades", tradeRoutes);
 
 
