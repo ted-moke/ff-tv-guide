@@ -58,7 +58,9 @@ const LeagueList: React.FC = () => {
         {data.leagues.map((league: any) => (
           <div key={league.id} className={styles.leagueCard}>
             <div className={styles.leagueInfo}>
-              <h4>{league.name}</h4>
+              <h4>{league.name} - {league.season ?? "No Season"}</h4>
+              <p>Id: {league.id ?? "-"}</p>
+              <p>Master: {league.leagueMasterId ?? "-"}</p>
               <p>
                 Last modified: {new Date(league.lastModified).toLocaleString()}
               </p>
