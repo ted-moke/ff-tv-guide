@@ -1,0 +1,42 @@
+@import "../../styles/variables.css";
+
+.statsSection {
+  margin-bottom: var(--size3);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--size2);
+}
+
+.header h2 {
+  margin: 0;
+  color: var(--text-color);
+}
+
+.stats {
+  padding: var(--size2);
+  border: 1px solid var(--background-color-offset-2);
+  border-radius: var(--border-radius-medium);
+  background-color: var(--background-color-offset);
+}
+
+.stats p {
+  margin: var(--size0) 0;
+  color: var(--text-color);
+}
+
+.platformCounts {
+  margin-top: var(--size1);
+}
+
+.platformCounts div {
+  margin: var(--size0) 0;
+}
+
+.platformCounts p {
+  font-size: var(--font-size-small);
+  color: var(--text-color-muted);
+}

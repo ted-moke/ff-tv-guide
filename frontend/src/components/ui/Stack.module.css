@@ -1,0 +1,11 @@
+.stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size1);
+}
+
+.stack-row {
+    display: flex;
+    flex-direction: row;
+    gap: var(--size1);
+}

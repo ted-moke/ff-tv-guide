@@ -164,10 +164,52 @@ export const getLeaguesPaginated = async (req: Request, res: Response) => {
   const sortBy = (req.query.sortBy as string) || "name";
   const sortOrder = (req.query.sortOrder as "asc" | "desc") || "asc";
 
+  // Filter parameters
+  const season = req.query.season ? parseInt(req.query.season as string) : undefined;
+  const externalLeagueId = req.query.externalLeagueId as string | undefined;
+  const id = req.query.id as string | undefined;
+  const leagueMasterId = req.query.leagueMasterId as string | undefined;
+  const name = req.query.name as string | undefined;
+  const nameSearch = req.query.nameSearch as string | undefined; // For contains search
+
   try {
     const db = await getDb();
-    let query = db.collection("leagues").orderBy(sortBy, sortOrder);
+    let query: any = db.collection("leagues");
 
+    // Apply filters
+    if (season !== undefined) {
+      query = query.where("season", "==", season);
+    }
+    if (externalLeagueId) {
+      // Use prefix search for external league ID
+      const searchTerm = externalLeagueId;
+      const endTerm = searchTerm + '\uf8ff';
+      query = query.where("externalLeagueId", ">=", searchTerm).where("externalLeagueId", "<=", endTerm);
+    }
+    if (leagueMasterId) {
+      // Use prefix search for league master ID
+      const searchTerm = leagueMasterId;
+      const endTerm = searchTerm + '\uf8ff';
+      query = query.where("leagueMasterId", ">=", searchTerm).where("leagueMasterId", "<=", endTerm);
+    }
+    if (name) {
+      // Use prefix search for name
+      const searchTerm = name;
+      const endTerm = searchTerm + '\uf8ff';
+      query = query.where("name", ">=", searchTerm).where("name", "<=", endTerm);
+    } else if (nameSearch) {
+      // For contains search - use prefix matching
+      // This will find names that start with the search term
+      const searchTerm = nameSearch;
+      const endTerm = searchTerm + '\uf8ff'; // Unicode character that comes after most characters
+      console.log("Searching for names starting with:", searchTerm);
+      console.log("End term:", endTerm);
+      query = query.where("name", ">=", searchTerm).where("name", "<=", endTerm);
+    }
+    // Apply sorting
+    query = query.orderBy(sortBy, sortOrder);
+
+    // Apply pagination
     if (startAfter) {
       const startAfterDoc = await db
         .collection("leagues")
@@ -177,7 +219,8 @@ export const getLeaguesPaginated = async (req: Request, res: Response) => {
     }
 
     const snapshot = await query.limit(limit + 1).get();
-    const leagues = snapshot.docs.slice(0, limit).map((doc) => {
+    console.log("Query returned", snapshot.docs.length, "documents");
+    let leagues = snapshot.docs.slice(0, limit).map((doc: any) => {
       const data = doc.data();
 
       const leagueData: any = {
@@ -191,6 +234,11 @@ export const getLeaguesPaginated = async (req: Request, res: Response) => {
 
       return leagueData;
     });
+
+    // Apply ID filter after fetching (since we can't use document ID in where clause with other filters)
+    if (id) {
+      leagues = leagues.filter((league: any) => league.id.startsWith(id));
+    }
 
     const hasNextPage = snapshot.docs.length > limit;
     const nextStartAfter = hasNextPage ? snapshot.docs[limit - 1].id : null;

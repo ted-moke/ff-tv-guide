@@ -4,16 +4,15 @@ import styles from "./Button.module.css";
 
 export enum ButtonColor {
   PRIMARY = "primary",
-  SECONDARY = "secondary",
   CLEAR = "clear",
   DANGER = "danger", // Add danger variant
 }
 
-type ButtonColorStr = "primary" | "secondary" | "clear" | "danger";
+type ButtonColorStr = "primary" | "clear" | "danger";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   link?: string;
-  color?: ButtonColorStr;
+  color?: ButtonColorStr; 
   outline?: boolean;
 }
 

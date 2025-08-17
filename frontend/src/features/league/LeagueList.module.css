@@ -45,3 +45,57 @@
   margin-bottom: var(--size2);
 }
 
+.filterControls {
+  margin-bottom: var(--size2);
+  padding: var(--size2);
+  border: 1px solid var(--background-color-offset-2);
+  border-radius: var(--border-radius-medium);
+  background-color: var(--background-color-offset);
+}
+
+.filterRow {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--size2);
+  margin-bottom: var(--size2);
+}
+
+.filterField {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size1);
+}
+
+.filterField label {
+  font-size: var(--font-size-small);
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.filterActions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.activeFilters {
+  margin-bottom: var(--size2);
+  padding: var(--size1);
+  background-color: var(--background-color-offset-2);
+  border-radius: var(--border-radius-small);
+  font-size: var(--font-size-small);
+}
+
+.activeFilters span {
+  margin-right: var(--size1);
+}
+
+.filterTag {
+  display: inline-block;
+  background-color: var(--primary-color);
+  color: white;
+  padding: var(--size0) var(--size1);
+  border-radius: var(--border-radius-small);
+  margin-right: var(--size1);
+  font-size: var(--font-size-small);
+}
+

@@ -1,0 +1,65 @@
+@import "../../styles/variables.css";
+
+.migrationSection {
+  margin-top: var(--size3);
+  padding: var(--size2);
+  border: 1px solid var(--background-color-offset-2);
+  border-radius: var(--border-radius-medium);
+  background-color: var(--background-color-offset);
+}
+
+.migrationControls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size2);
+  margin-bottom: var(--size2);
+}
+
+.migrationInput {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size1);
+}
+
+.migrationInput label {
+  font-size: var(--font-size-small);
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.migrationButtons {
+  display: flex;
+  gap: var(--size2);
+  flex-wrap: wrap;
+}
+
+.error {
+  margin-top: var(--size2);
+  padding: var(--size1);
+  background-color: var(--error-color);
+  color: white;
+  border-radius: var(--border-radius-small);
+  font-size: var(--font-size-small);
+}
+
+.success {
+  margin-top: var(--size2);
+  padding: var(--size1);
+  background-color: var(--success-color);
+  color: white;
+  border-radius: var(--border-radius-small);
+  font-size: var(--font-size-small);
+}
+
+.migrationInfo {
+  margin-top: var(--size2);
+  padding: var(--size1);
+  background-color: var(--background-color-offset-2);
+  border-radius: var(--border-radius-small);
+  font-size: var(--font-size-small);
+}
+
+.migrationInfo p {
+  margin: var(--size0) 0;
+  color: var(--text-color-muted);
+}
