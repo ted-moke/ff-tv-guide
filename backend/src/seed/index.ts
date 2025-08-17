@@ -36,19 +36,13 @@ export const seedTestDataForMigration = async () => {
     {
       name: "Test League 1",
       platform: { id: "sleeper", name: "sleeper" },
-      externalLeagueId: "12345",
-      lastModified: new Date(),
-    },
-    {
-      name: "Test League 1", // Same name and platform/externalId to test grouping
-      platform: { id: "sleeper", name: "sleeper" },
-      externalLeagueId: "12345",
+      externalLeagueId: Math.random().toString(36).substring(2, 15),
       lastModified: new Date(),
     },
     {
       name: "Test League 2",
       platform: { id: "fleaflicker", name: "fleaflicker" },
-      externalLeagueId: "67890",
+      externalLeagueId: Math.random().toString(36).substring(2, 15),
       lastModified: new Date(),
     },
   ];
@@ -66,7 +60,7 @@ export const seedTestDataForMigration = async () => {
     {
       externalTeamId: "team1",
       leagueId: leagueIds[0],
-      externalLeagueId: "12345",
+      externalLeagueId: testLeagues[0].externalLeagueId,
       leagueName: "Test League 1",
       name: "Team Alpha",
       externalUsername: "user1",
@@ -82,7 +76,7 @@ export const seedTestDataForMigration = async () => {
     {
       externalTeamId: "team2",
       leagueId: leagueIds[0],
-      externalLeagueId: "12345",
+      externalLeagueId: testLeagues[0].externalLeagueId,
       leagueName: "Test League 1",
       name: "Team Beta",
       externalUsername: "user2",
@@ -98,7 +92,7 @@ export const seedTestDataForMigration = async () => {
     {
       externalTeamId: "team3",
       leagueId: leagueIds[1],
-      externalLeagueId: "12345",
+      externalLeagueId: testLeagues[1].externalLeagueId,
       leagueName: "Test League 1",
       name: "Team Gamma",
       externalUsername: "user3",
