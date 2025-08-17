@@ -115,3 +115,38 @@ export const getLeagueStats = async (): Promise<LeagueStats> => {
 
   return response.json();
 };
+
+// Migration API functions
+export const runMigration = async (season: number) => {
+  const response = await fetch(`${API_URL}/migration/add-league-master?season=${season}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.error || "Failed to run migration");
+  }
+
+  return response.json();
+};
+
+export const seedTestData = async () => {
+  const response = await fetch(`${API_URL}/migration/seed-test-data`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.error || "Failed to seed test data");
+  }
+
+  return response.json();
+};

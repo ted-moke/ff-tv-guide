@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './TextInput.module.css';
 
 interface TextInputProps {
-  type: 'text' | 'email' | 'password' | 'tel' | 'url' | 'search';
+  type: 'text' | 'email' | 'password' | 'tel' | 'url' | 'search' | 'number';
   id: string;
   name?: string;
   value?: string;

@@ -9,7 +9,7 @@ interface MigrationStats {
   errors: string[];
 }
 
-export async function migrateToLeagueMaster(): Promise<MigrationStats> {
+export async function migrateToLeagueMaster({ season }: { season: number }): Promise<MigrationStats> {
   const db = await getDb();
   const stats: MigrationStats = {
     leaguesProcessed: 0,
@@ -48,9 +48,6 @@ export async function migrateToLeagueMaster(): Promise<MigrationStats> {
       try {
         // Use the first league as the base for LeagueMaster
         const baseLeague = leagues[0];
-        
-        // Determine season - default to 2024 for existing data
-        const season = 2024; // TODO: This should be detected from data or user input
         
         const leagueMaster: LeagueMaster = {
           name: baseLeague.name,
@@ -169,7 +166,7 @@ export async function migrateToLeagueMaster(): Promise<MigrationStats> {
 
 // Run migration if this script is executed directly
 if (require.main === module) {
-  migrateToLeagueMaster()
+  migrateToLeagueMaster({ season: 2025 })
     .then((stats) => {
       console.log("Migration completed with stats:", stats);
       process.exit(0);
