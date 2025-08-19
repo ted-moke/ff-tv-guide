@@ -11,7 +11,7 @@ const AdminDashboard: React.FC = () => {
       </div>
       <div className={styles.nav}>
         <LinkButton to="leagues">Leagues</LinkButton>
-        <LinkButton to="userTeams">User Teams</LinkButton>
+        <LinkButton to="user-teams/duplicates">Duplicate UserTeams</LinkButton>
       </div>
       <div className={styles.content}>
         <Outlet /> {/* This is where nested routes will be rendered */}

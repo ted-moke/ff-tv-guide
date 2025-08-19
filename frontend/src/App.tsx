@@ -13,7 +13,6 @@ import NotFoundPage from "./pages/NotFoundPage";
 import ConnectTeam from "./pages/ConnectTeam";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminLeagues from "./pages/AdminLeagues";
-import AdminUserTeamsPage from "./pages/AdminUserTeamsPage";
 import Overview from "./pages/Overview";
 import PlayerShares from "./pages/PlayerShares";
 import TeamHistory from "./pages/TeamHistory";
@@ -27,6 +26,7 @@ import { AuthProvider } from "./features/auth/AuthProvider";
 import "./assets/fonts/altehaasgroteskbold-webfont.woff2";
 import "./assets/fonts/altehaasgroteskregular-webfont.woff2";
 import UIShowcase from "./pages/UIShowcase";
+import AdminDuplicateUserTeamsPage from "./pages/AdminDuplicateUserTeamsPage";
 
 const queryClient = new QueryClient();
 
@@ -92,8 +92,8 @@ const App: React.FC = () => {
                   element={<AdminLeagues />}
                 />
                 <Route
-                  path="userTeams"
-                  element={<AdminUserTeamsPage />}
+                  path="user-teams/duplicates"
+                  element={<AdminDuplicateUserTeamsPage />}
                 />
               </Route>
               <Route
