@@ -27,6 +27,7 @@ import "./assets/fonts/altehaasgroteskbold-webfont.woff2";
 import "./assets/fonts/altehaasgroteskregular-webfont.woff2";
 import UIShowcase from "./pages/UIShowcase";
 import AdminDuplicateUserTeamsPage from "./pages/AdminDuplicateUserTeamsPage";
+import AdminUserTeams from "./pages/AdminUserTeams";
 
 const queryClient = new QueryClient();
 
@@ -94,6 +95,10 @@ const App: React.FC = () => {
                 <Route
                   path="user-teams/duplicates"
                   element={<AdminDuplicateUserTeamsPage />}
+                />
+                <Route
+                  path="user-teams"
+                  element={<AdminUserTeams />}
                 />
               </Route>
               <Route

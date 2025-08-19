@@ -5,7 +5,7 @@ import styles from "./AdminUserTeams.module.css";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-const AdminUserTeams: React.FC = () => {
+const AdminDuplicateUserTeams: React.FC = () => {
   const {
     data: duplicatesData,
     isLoading: isLoadingDuplicates,
@@ -79,4 +79,4 @@ const AdminUserTeams: React.FC = () => {
   );
 };
 
-export default AdminUserTeams;
+export default AdminDuplicateUserTeams;

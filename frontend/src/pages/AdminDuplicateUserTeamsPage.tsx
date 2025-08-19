@@ -1,11 +1,11 @@
 import React from "react";
-import AdminUserTeams from "../components/admin/AdminUserTeams";
+import AdminDuplicateUserTeams from "../components/admin/AdminDuplicateUserTeams";
 
 const AdminDuplicateUserTeamsPage: React.FC = () => {
   return (
     <div>
       <h2>Duplicate User Teams</h2>
-      <AdminUserTeams />
+      <AdminDuplicateUserTeams />
     </div>
   );
 };
