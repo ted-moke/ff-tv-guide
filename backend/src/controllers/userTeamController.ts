@@ -181,6 +181,66 @@ export const getOpponentTeams = async (req: Request, res: Response) => {
   }
 };
 
+export const getAllUserTeamsPaginated = async (req: Request, res: Response) => {
+  try {
+    console.log("Getting all user teams paginated");
+    const limit = parseInt(req.query.limit as string) || 10;
+    const startAfter = req.query.startAfter as string || null;
+    const endBefore = req.query.endBefore as string || null;
+
+    const db = await getDb();
+    let query = db.collection("userTeams").orderBy("__name__").limit(limit);
+    
+    let userTeamsSnapshot: FirebaseFirestore.QuerySnapshot<FirebaseFirestore.DocumentData> | null = null;
+    let userTeamDocs: FirebaseFirestore.DocumentData[] = [];
+    if (startAfter) {
+      const startAfterDoc = await db.collection("userTeams").doc(startAfter).get();
+      if (startAfterDoc.exists) {
+        query = query.startAfter(startAfterDoc);
+      }
+      userTeamsSnapshot = await query.get();
+      userTeamDocs = userTeamsSnapshot.docs.slice(0, limit)
+    } else if (endBefore) {
+      const endBeforeDoc = await db.collection("userTeams").doc(endBefore).get();
+      if (endBeforeDoc.exists) {
+        query = query.endAt(endBeforeDoc);
+      }
+      userTeamsSnapshot = await query.get();
+
+      userTeamDocs = userTeamsSnapshot.docs.slice(0, limit)
+    } else {
+      userTeamsSnapshot = await query.get();
+      userTeamDocs = userTeamsSnapshot.docs.slice(0, limit)
+    }
+    
+
+    if (!userTeamsSnapshot) {
+      throw new Error("No user teams snapshot");
+    }
+
+    const firstDoc = userTeamDocs[0];
+    const lastDoc = userTeamDocs[userTeamDocs.length - 1];
+
+    const userTeams = userTeamDocs.map((doc) => {
+      return {
+        ...doc.data(),
+        docId: doc.id
+      }
+    });
+
+    res.status(200).json({ 
+      teams: userTeams, 
+      nextStartAfter: lastDoc?.id || null,
+      prevEndBefore: firstDoc?.id || null
+    });
+  } catch (error) {
+    console.error("Error fetching user teams:", error);
+    res.status(500).json({ error: (error as Error).message });
+  }
+};
+
+
+
 async function getTeamsForUser(userId: string, seasonStart: string, seasonEnd: string | null): Promise<Team[]> {
   console.log("Getting teams for user", userId);
   const db = await getDb();
