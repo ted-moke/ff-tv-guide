@@ -15,5 +15,20 @@ export const useTeamHistory = () => {
     enabled: !!user,
   });
 
-  return { data, isLoading, error };
+  let groupedByTeam: { [key: string]: TeamHistoryData[] } = {};
+  let noLeagueMasterId: TeamHistoryData[] = [];
+  if (data) {
+    data.forEach((team) => {
+      if (!team.leagueMaster.id) {
+        noLeagueMasterId.push(team);
+        return;
+      }
+      if (!groupedByTeam[team.leagueMaster.id]) {
+        groupedByTeam[team.leagueMaster.id] = [];
+      }
+      groupedByTeam[team.leagueMaster.id].push(team);
+    });
+  }
+
+  return { data, groupedByTeam, isLoading, error };
 };
