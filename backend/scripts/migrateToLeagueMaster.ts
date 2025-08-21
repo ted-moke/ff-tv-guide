@@ -9,6 +9,15 @@ interface MigrationStats {
   errors: string[];
 }
 
+interface SingleLeagueMigrationStats {
+  leagueProcessed: boolean;
+  leagueMasterCreated: boolean;
+  leagueMasterId?: string;
+  teamsUpdated: number;
+  userTeamsUpdated: number;
+  errors: string[];
+}
+
 export async function migrateToLeagueMaster({ season }: { season: number }): Promise<MigrationStats> {
   const db = await getDb();
   const stats: MigrationStats = {
@@ -75,6 +84,7 @@ export async function migrateToLeagueMaster({ season }: { season: number }): Pro
           batch.update(leagueRef, {
             leagueMasterId: leagueMasterRef.id,
             season: season,
+            lastModified: new Date(),
           });
           stats.leaguesProcessed++;
         }
@@ -140,6 +150,7 @@ export async function migrateToLeagueMaster({ season }: { season: number }): Pro
         userTeamBatch.update(userTeamRef, {
           leagueMasterId: team.leagueMasterId,
           currentSeason: team.season,
+          lastModified: new Date(),
         });
         
         stats.userTeamsUpdated++;
@@ -159,6 +170,151 @@ export async function migrateToLeagueMaster({ season }: { season: number }): Pro
     
   } catch (error) {
     console.error("Migration failed:", error);
+    stats.errors.push(`Migration failed: ${error}`);
+    return stats;
+  }
+}
+
+export async function migrateSingleLeague({ 
+  leagueId, 
+  season 
+}: { 
+  leagueId: string; 
+  season: number; 
+}): Promise<SingleLeagueMigrationStats> {
+  const db = await getDb();
+  const stats: SingleLeagueMigrationStats = {
+    leagueProcessed: false,
+    leagueMasterCreated: false,
+    teamsUpdated: 0,
+    userTeamsUpdated: 0,
+    errors: [],
+  };
+
+  try {
+    console.log(`Starting single league migration for league ${leagueId} with season ${season}...`);
+
+    // Step 1: Get the specific league
+    const leagueDoc = await db.collection("leagues").doc(leagueId).get();
+    
+    if (!leagueDoc.exists) {
+      throw new Error(`League with ID ${leagueId} not found`);
+    }
+
+    const league = leagueDoc.data() as League;
+    console.log(`Found league: ${league.name} (${league.platform.name})`);
+
+    // Check if league already has leagueMasterId
+    if (league.leagueMasterId) {
+      throw new Error(`League ${league.name} already has leagueMasterId: ${league.leagueMasterId}`);
+    }
+
+    // Step 2: Check if a LeagueMaster already exists for this platform/externalLeagueId
+    const existingLeagueMasterQuery = await db
+      .collection("leagueMasters")
+      .where("platform.name", "==", league.platform.name)
+      .where("externalLeagueId", "==", league.externalLeagueId)
+      .get();
+
+    let leagueMasterId: string;
+
+    if (!existingLeagueMasterQuery.empty) {
+      // Use existing LeagueMaster
+      const existingLeagueMaster = existingLeagueMasterQuery.docs[0];
+      leagueMasterId = existingLeagueMaster.id;
+      stats.leagueMasterCreated = false;
+      console.log(`Using existing LeagueMaster: ${leagueMasterId}`);
+    } else {
+      // Create new LeagueMaster
+      const leagueMaster: LeagueMaster = {
+        name: league.name,
+        platform: league.platform,
+        externalLeagueId: league.externalLeagueId,
+        createdBy: "migration",
+        createdAt: new Date(),
+        lastModified: new Date(),
+      };
+
+      const leagueMasterRef = await db.collection("leagueMasters").add(leagueMaster);
+      leagueMasterId = leagueMasterRef.id;
+      stats.leagueMasterCreated = true;
+      stats.leagueMasterId = leagueMasterId;
+      console.log(`Created new LeagueMaster: ${leagueMasterId}`);
+    }
+
+    // Step 3: Update the league with leagueMasterId and season
+    const result = await db.collection("leagues").doc(leagueId).update({
+      leagueMasterId: leagueMasterId,
+      season: season,
+      lastModified: new Date(),
+    });
+    console.log('result', result);
+    stats.leagueProcessed = true;
+    console.log(`Updated league ${leagueId} with leagueMasterId: ${leagueMasterId}`);
+
+    // Step 4: Update teams for this league
+    const teamsSnapshot = await db
+      .collection("teams")
+      .where("leagueId", "==", leagueId)
+      .get();
+    
+    console.log(`Found ${teamsSnapshot.size} teams for league ${leagueId}`);
+
+    if (teamsSnapshot.size > 0) {
+      const teamBatch = db.batch();
+      
+      for (const doc of teamsSnapshot.docs) {
+        const team = doc.data() as Team;
+        const teamRef = db.collection("teams").doc(doc.id);
+        
+        teamBatch.update(teamRef, {
+          leagueMasterId: leagueMasterId,
+          season: season,
+        });
+        stats.teamsUpdated++;
+      }
+      
+      await teamBatch.commit();
+      console.log(`Updated ${stats.teamsUpdated} teams`);
+    }
+
+    // Step 5: Update userTeams that reference teams from this league
+    const teamIds = teamsSnapshot.docs.map(doc => doc.id);
+    
+    if (teamIds.length > 0) {
+      const userTeamsSnapshot = await db
+        .collection("userTeams")
+        .where("teamId", "in", teamIds)
+        .get();
+      
+      console.log(`Found ${userTeamsSnapshot.size} userTeams for teams in league ${leagueId}`);
+
+      if (userTeamsSnapshot.size > 0) {
+        const userTeamBatch = db.batch();
+        
+        for (const doc of userTeamsSnapshot.docs) {
+          const userTeam = doc.data() as UserTeam;
+          const userTeamRef = db.collection("userTeams").doc(doc.id);
+          
+          userTeamBatch.update(userTeamRef, {
+            leagueMasterId: leagueMasterId,
+            currentSeason: season,
+          });
+          stats.userTeamsUpdated++;
+        }
+        
+        await userTeamBatch.commit();
+        console.log(`Updated ${stats.userTeamsUpdated} userTeams`);
+      }
+    }
+
+    console.log("Single league migration completed successfully!");
+    console.log("Stats:", stats);
+    
+    return stats;
+    
+  } catch (error) {
+    console.error("Single league migration failed:", error);
     stats.errors.push(`Migration failed: ${error}`);
     return stats;
   }
