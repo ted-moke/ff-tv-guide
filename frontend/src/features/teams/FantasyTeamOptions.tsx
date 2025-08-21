@@ -5,55 +5,28 @@ import Checkbox from "../../components/ui/Checkbox";
 import { useView } from "../view/ViewContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FantasyTeam } from "./teamTypes";
+import { useTeamVisibility } from "./useTeamVisibility";
+import { Stack } from "../../components/ui/Stack";
+import { FantasyTeamOption } from "./FantasyTeamOption";
 
 const FantasyTeamOptions: React.FC = () => {
+  const { setIsMenuOpen, userTeams, userTeamsLoading, userTeamsError } =
+    useView();
   const {
-    setIsMenuOpen,
-    updateUserTeamVisibility,
-    updateOpponentTeamVisibility,
-    userTeams,
-    userTeamsLoading,
-    userTeamsError,
-  } = useView();
+    visibleTeams,
+    hideTeam,
+    showTeam,
+    hideAllTeams,
+    showAllTeams,
+    visibleOpponentTeams,
+    hideOpponentTeam,
+    showOpponentTeam,
+  } = useTeamVisibility();
   const navigate = useNavigate();
   const location = useLocation();
 
   const handleSelectAllFantasyTeams = () => {
     if (!userTeams) return;
-
-    const updatedTeams: FantasyTeam[] = userTeams.map((team) => ({
-      ...team,
-      visibilityType: "show",
-    }));
-
-    updatedTeams.forEach((team) => {
-      updateUserTeamVisibility(team);
-      updateOpponentTeamVisibility(team);
-    });
-  };
-
-  const handleClearAllFantasyTeams = () => {
-    const updatedTeams: FantasyTeam[] = userTeams.map((team) => ({
-      ...team,
-      visibilityType: "hide",
-    }));
-
-    updatedTeams.forEach((team) => {
-      updateUserTeamVisibility(team);
-      updateOpponentTeamVisibility(team);
-    });
-  };
-
-  const handleFantasyTeamToggle = (leagueId: string) => {
-    const team = userTeams.find((team) => team.leagueId === leagueId);
-    if (!team) return;
-
-    const updatedTeam: FantasyTeam = {
-      ...team,
-      visibilityType: team.visibilityType === "show" ? "hide" : "show",
-    };
-    updateUserTeamVisibility(updatedTeam);
-    updateOpponentTeamVisibility(updatedTeam);
   };
 
   return (
@@ -70,22 +43,29 @@ const FantasyTeamOptions: React.FC = () => {
       ) : (
         <div className={styles["fantasy-team-list"]}>
           <div className={styles["fantasy-team-actions"]}>
-            <LinkButton onClick={handleClearAllFantasyTeams}>
-              Hide All
-            </LinkButton>
-            <LinkButton onClick={handleSelectAllFantasyTeams}>
-              Show All
-            </LinkButton>
+            <LinkButton onClick={hideAllTeams}>Hide All</LinkButton>
+            <LinkButton onClick={showAllTeams}>Show All</LinkButton>
           </div>
-          {userTeams.map((team) => (
-            <Checkbox
-              key={team.leagueId}
-              id={team.leagueId}
-              checked={team.visibilityType === "show"}
-              onChange={() => handleFantasyTeamToggle(team.leagueId)}
-              label={`${team.leagueName}`}
-            />
-          ))}
+          {userTeams.map((team) => {
+            const isVisible = visibleTeams.some(
+              (t) => t.leagueId === team.leagueId
+            );
+            const isOpponentVisible = visibleOpponentTeams.some(
+              (t) => t.leagueId === team.leagueId
+            );
+            return (
+              <FantasyTeamOption
+                key={team.leagueId}
+                team={team}
+                isVisible={isVisible}
+                isOpponentVisible={isOpponentVisible}
+                showTeam={showTeam}
+                hideTeam={hideTeam}
+                showOpponentTeam={showOpponentTeam}
+                hideOpponentTeam={hideOpponentTeam}
+              />
+            );
+          })}
         </div>
       )}
       {location.pathname !== "/connect-team" && (

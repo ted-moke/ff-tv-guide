@@ -6,12 +6,14 @@ export const connectLeague = async ({
   platformCredentialId,
   platformId,
   externalTeamId,
+  season,
 }: {
   leagueName: string;
   externalLeagueId: string;
   platformCredentialId: string;
   platformId: string;
   externalTeamId?: string;
+  season: number;
 }) => {
   const response = await fetch(`${API_URL}/leagues`, {
     method: "POST",
@@ -25,6 +27,7 @@ export const connectLeague = async ({
       platformCredentialId,
       externalTeamId,
       platformId,
+      season,
     }),
   });
 

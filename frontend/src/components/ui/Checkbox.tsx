@@ -5,7 +5,7 @@ interface CheckboxProps {
   id: string;
   checked: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  label: string;
+  label?: string;
 }
 
 const Checkbox: React.FC<CheckboxProps> = ({ id, checked, onChange, label }) => {
@@ -18,9 +18,11 @@ const Checkbox: React.FC<CheckboxProps> = ({ id, checked, onChange, label }) => 
         onChange={onChange}
         className={styles.checkbox}
       />
-      <label htmlFor={id} className={styles.label}>
-        {label}
-      </label>
+      {label && (
+        <label htmlFor={id} className={styles.label}>
+          {label}
+        </label>
+      )}
     </div>
   );
 };
