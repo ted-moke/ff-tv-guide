@@ -14,14 +14,14 @@ interface MatchupGuideProps {
   setSelectedWeek: (week: number) => void;
 }
 
-const hideAlertOnLoad = localStorage.getItem("hideAlertShip24") === "true";
+// const hideAlertOnLoad = localStorage.getItem("hideAlertShip24") === "true";
 
 const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
   const { isLoading: isAuthLoading } = useAuthContext();
   const { isLoading: needsConnectLoading, needsConnect, needsAccount } = useNeedsResources();
   const { matchupPlayers, isLoading, initialized, error } =
     useMatchupPlayers(selectedWeek);
-  const [hideAlert, setHideAlert] = useState(hideAlertOnLoad);
+  // const [hideAlert, setHideAlert] = useState(hideAlertOnLoad);
 
   if (isLoading || needsConnectLoading || isAuthLoading) {
     return <LoadingSpinner />;
@@ -60,7 +60,7 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
 
       {matchupPlayers && (
         <div className={`${styles.gameBucketGroups} ${styles.scrollbar}`}>
-          {!hideAlert && (
+          {/* {!hideAlert && (
             <div className={styles.alertContainer}>
               <Alert
                 message="&#127941; Good luck in your championships! &#127941;"
@@ -72,7 +72,7 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
                 }}
               />
             </div>
-          )}
+          )} */}
           {matchupPlayers.games.inProgress.length > 0 && (
             <GameBucketGroup
               key={"inProgress"}
