@@ -22,6 +22,8 @@ export const getUserTeams = async (req: Request, res: Response) => {
     const mostRecentKeyTime = getMostRecentKeyTime();
     const staleTime = new Date(Date.now() - TIME_TO_TEAM_STALE);
 
+    console.log('teams', teams.length)
+
     // Augment each team with the 'needsUpdate' parameter
     const augmentedTeams = teams.map((team) => {
       const lastFetchedDate =
@@ -43,7 +45,11 @@ export const getUserTeams = async (req: Request, res: Response) => {
       };
     });
 
-    console.log('augmentedTeams', augmentedTeams)
+    const teamsWithNoLastFetched = augmentedTeams.filter((team) => team.lastFetched == null);
+    const teamsWithNeedsUpdate = augmentedTeams.filter((team) => team.needsUpdate);
+
+    console.log('teamsWithNoLastFetched', teamsWithNoLastFetched.length)
+    console.log('teamsWithNeedsUpdate', teamsWithNeedsUpdate.length)
 
     res.status(200).json({ teams: augmentedTeams });
   } catch (error) {
@@ -244,16 +250,21 @@ export const getAllUserTeamsPaginated = async (req: Request, res: Response) => {
 async function getTeamsForUser(userId: string, seasonStart: string, seasonEnd: string | null): Promise<Team[]> {
   console.log("Getting teams for user", userId);
   const db = await getDb();
-  const userTeamsSnapshot = await db
+
+  const seasonStartNumber = parseInt(seasonStart);
+  const seasonEndNumber = seasonEnd ? parseInt(seasonEnd) : null;
+
+
+  let query = db
     .collection("userTeams")
     .where("userId", "==", userId)
-    .where("currentSeason", ">=", seasonStart || 0)
-    .where(
-      "currentSeason",
-      seasonEnd ? "<=" : ">=", 
-      seasonEnd || 0
-    )
-    .get();
+    .where("currentSeason", ">=", seasonStartNumber)
+
+  if (seasonEndNumber) {
+    query = query.where("currentSeason", "<=", seasonEndNumber);
+  }
+
+  const userTeamsSnapshot = await query.get();
 
   const teamIds = userTeamsSnapshot.docs.map((doc) => doc.data().teamId);
 
