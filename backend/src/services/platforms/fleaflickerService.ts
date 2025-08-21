@@ -58,23 +58,23 @@ export class FleaflickerService {
       console.log("League already exists");
       const existingLeagueDoc = existingLeagueQuery.docs[0];
       return existingLeagueDoc.data() as League;
-    } else {
-      console.log("League does not exist");
-      const newLeagueData: League = {
-        leagueMasterId,
-        name: leagueName,
-        platform: { name: "fleaflicker", id: platformCredentialId },
-        externalLeagueId,
-        season,
-        lastModified: new Date(),
-      };
-      const newLeagueRef = await leaguesCollection.add(newLeagueData);
-      const finalLeagueData = { ...newLeagueData, id: newLeagueRef.id };
-      await newLeagueRef.update({ id: newLeagueRef.id });
-
-      // Send optimistic update to frontend
-      return finalLeagueData;
     }
+
+    console.log("League does not exist");
+    const newLeagueData: League = {
+      leagueMasterId,
+      name: leagueName,
+      platform: { name: "fleaflicker", id: platformCredentialId },
+      externalLeagueId,
+      season,
+      lastModified: new Date(),
+    };
+    const newLeagueRef = await leaguesCollection.add(newLeagueData);
+    const finalLeagueData = { ...newLeagueData, id: newLeagueRef.id };
+    await newLeagueRef.update({ id: newLeagueRef.id });
+
+    // Send optimistic update to frontend
+    return finalLeagueData;
   }
 
   async upsertTeams(league: League) {
