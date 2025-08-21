@@ -6,6 +6,14 @@ This guide covers the deployment process and migration strategy for the season-t
 
 The migration introduces a new `LeagueMaster` data structure that groups leagues across seasons, enabling better multi-season support and data organization.
 
+## Migration Options
+
+### 1. Single League Migration (Recommended for Testing)
+Migrate one league at a time for safe testing and incremental deployment.
+
+### 2. Full Migration
+Migrate all leagues at once (use after testing with single league migration).
+
 ## What the Migration Does
 
 ### Data Structure Changes
@@ -92,13 +100,46 @@ yarn build
 yarn run deploy
 ```
 
-### 3. Run Migration
+### 3. Find League IDs for Testing
+
+Use the league listing script to find league IDs for testing:
+
+```bash
+cd backend
+yarn ts-node scripts/listLeagues.ts
+```
+
+This will show you all leagues with their IDs and migration status.
+
+### 4. Test Single League Migration
 
 **Option 1: Via Admin UI (Recommended)**
 1. Navigate to your admin panel
 2. Use the MigrationTools component
+3. Enter a league ID from the listing script
+4. Enter the season (e.g., 2025)
+5. Click "Migrate Single League"
+
+**Option 2: Via API Endpoint**
+```bash
+curl -X POST "https://your-api-url/migration/single-league?leagueId=YOUR_LEAGUE_ID&season=2025" \
+  -H "Authorization: Bearer YOUR_AUTH_TOKEN"
+```
+
+**Option 3: Via Script**
+```bash
+cd backend
+yarn ts-node scripts/migrateToLeagueMaster.ts
+# (You'll need to modify the script to call migrateSingleLeague)
+```
+
+### 5. Run Full Migration (After Testing)
+
+**Option 1: Via Admin UI**
+1. Navigate to your admin panel
+2. Use the MigrationTools component
 3. Enter the season (e.g., 2025)
-4. Click "Run Migration"
+4. Click "Run Full Migration"
 
 **Option 2: Via API Endpoint**
 ```bash
@@ -112,7 +153,7 @@ cd backend
 yarn ts-node scripts/runMigration.ts
 ```
 
-### 4. Verify Migration Success
+### 6. Verify Migration Success
 
 Check the migration response for:
 - All leagues processed successfully
@@ -120,7 +161,25 @@ Check the migration response for:
 - Teams and UserTeams updated
 - No errors in the process
 
-Expected response:
+Expected response for single league migration:
+```json
+{
+  "success": true,
+  "message": "Single league migration completed successfully",
+  "leagueId": "abc123",
+  "season": 2025,
+  "stats": {
+    "leagueProcessed": true,
+    "leagueMasterCreated": true,
+    "leagueMasterId": "xyz789",
+    "teamsUpdated": 12,
+    "userTeamsUpdated": 1,
+    "errors": []
+  }
+}
+```
+
+Expected response for full migration:
 ```json
 {
   "success": true,
@@ -136,13 +195,32 @@ Expected response:
 }
 ```
 
-### 5. Post-Deployment Verification
+### 7. Post-Deployment Verification
 
 - [ ] **User team history** displays correctly
 - [ ] **League grouping** works as expected
 - [ ] **Season-based filtering** functions properly
 - [ ] **No runtime errors** in application logs
 - [ ] **Critical user flows** work as expected
+
+## Single League Migration Benefits
+
+### Safety
+- **Low risk**: Only affects one league at a time
+- **Easy rollback**: Can manually revert changes if needed
+- **Incremental testing**: Test with different league types
+
+### Testing Strategy
+1. **Start with test data**: Use the "Seed Test Data" feature
+2. **Test with small leagues**: Choose leagues with few teams
+3. **Test with different platforms**: Try both Sleeper and Fleaflicker leagues
+4. **Verify data integrity**: Check that all relationships are maintained
+
+### Incremental Deployment
+1. **Migrate a few test leagues** first
+2. **Monitor for issues** for 24-48 hours
+3. **Migrate user leagues** in small batches
+4. **Run full migration** once confident
 
 ## Risks & Breaking Data Concerns
 
@@ -238,7 +316,14 @@ POST /migration/seed-test-data
 
 This creates test leagues, teams, and user teams for migration testing.
 
-### 3. Validation Tests
+### 3. Single League Testing
+1. **List available leagues**: Use `yarn ts-node scripts/listLeagues.ts`
+2. **Choose a test league**: Pick a small league with few teams
+3. **Run single league migration**: Use the admin UI or API
+4. **Verify results**: Check that all relationships are maintained
+5. **Test functionality**: Ensure the app works with migrated data
+
+### 4. Validation Tests
 - Verify LeagueMaster creation
 - Check league-team relationships
 - Test user team history functionality
@@ -279,6 +364,7 @@ This creates test leagues, teams, and user teams for migration testing.
 - Always test on staging first
 - Use production-like data for testing
 - Test rollback procedures
+- **Start with single league migration**
 
 ### 4. Monitoring
 - Set up comprehensive monitoring
@@ -309,6 +395,11 @@ This creates test leagues, teams, and user teams for migration testing.
    - Check for rate limiting
    - Optimize batch operations
 
+5. **League Not Found**
+   - Verify the league ID is correct
+   - Check if the league already has a leagueMasterId
+   - Use the listing script to find valid league IDs
+
 ### Getting Help
 
 If you encounter issues during migration:
@@ -320,6 +411,12 @@ If you encounter issues during migration:
 
 ## Conclusion
 
-This migration is a significant structural change that will improve data organization and enable better multi-season support. While it carries some risks, careful planning, testing, and monitoring can ensure a successful deployment.
+This migration is a significant structural change that will improve data organization and enable better multi-season support. The single league migration feature allows for safe, incremental testing and deployment.
+
+**Recommended approach:**
+1. **Test with single league migration** first
+2. **Verify everything works** with migrated data
+3. **Migrate a few user leagues** as a pilot
+4. **Run full migration** once confident
 
 Remember: **Always backup your data before running the migration, and test thoroughly on staging first.**
