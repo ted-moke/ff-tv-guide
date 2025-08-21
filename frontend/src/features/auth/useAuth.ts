@@ -9,6 +9,7 @@ import {
 import { useState, useEffect, useCallback } from "react";
 import { AuthData } from "./authTypes";
 import { auth } from "../../firebaseConfig";
+import { useNavigate } from "react-router-dom";
 
 export const useAuth = ({ enabled = true }: { enabled?: boolean } = {}) => {
   const [tempUser, setTempUser] = useState<AuthData | null>(
@@ -18,17 +19,18 @@ export const useAuth = ({ enabled = true }: { enabled?: boolean } = {}) => {
   );
   const queryClient = useQueryClient();
   const [isAuthEnabled, setIsAuthEnabled] = useState(enabled);
-
-  const _clearAuthData = useCallback(() => {
+  const navigate = useNavigate();
+  const _clearAuthData = useCallback(async () => {
     setIsAuthEnabled(false);
     localStorage.removeItem("authToken");
     localStorage.removeItem("tempUserData");
+    await auth.signOut();
     queryClient.setQueryData(["auth"], null);
-    auth.signOut();
   }, [queryClient]);
 
-  const logout = () => {
-    _clearAuthData();
+  const logout = async () => {
+    await _clearAuthData();
+    navigate("/");
     // Remove navigation logic from here
   };
 
