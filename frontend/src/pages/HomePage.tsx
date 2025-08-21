@@ -10,15 +10,12 @@ const HomePage: React.FC = () => {
     setSelectedWeek,
   } = useView();
 
-  if (!selectedWeek) {
-    return <HomeOffseason />;
-  }
 
   return (
     <div className={styles["sports-dashboard"]}>
       <main className={styles["main-content"]}>
         <MatchupGuide
-          selectedWeek={selectedWeek}
+          selectedWeek={selectedWeek ?? 1}
           setSelectedWeek={setSelectedWeek}
         />
       </main>

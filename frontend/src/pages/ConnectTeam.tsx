@@ -16,6 +16,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import FFTVGLogo from "../assets/FFTVGLogo";
 import { useView } from "../features/view/ViewContext";
+import { getCurrentSeason } from "../utils/seasonUtils";
 
 const ConnectTeam: React.FC = () => {
   const navigate = useNavigate(); // Add this line
@@ -87,6 +88,7 @@ const ConnectTeam: React.FC = () => {
               platformCredentialId: selectedCredential.id,
               platformId: selectedCredential.platformId,
               externalTeamId: league.ownedTeam?.id,
+              season: getCurrentSeason(),
             });
           }
           return Promise.resolve();

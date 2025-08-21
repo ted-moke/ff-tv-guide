@@ -38,7 +38,7 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
 
   if (needsAccount) {
     console.warn("needsAccount", needsAccount);
-    return <Navigate to="/splash" />;
+    return <Navigate to="/connect-team" />;
   }
 
   if (needsConnect) {
