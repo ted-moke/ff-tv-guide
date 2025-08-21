@@ -40,14 +40,12 @@ export class SleeperService {
     platformCredentialId,
     leagueMasterId,
     season,
-    lastModified,
   }: {
     leagueName: string;
     externalLeagueId: string;
     platformCredentialId: string;
     leagueMasterId: string;
     season: number;
-    lastModified: Date;
   }): Promise<League> {
     console.log(
       "Starting upsert league: ",
@@ -57,14 +55,7 @@ export class SleeperService {
     );
     const db = await getDb();
     const leaguesCollection = db.collection("leagues");
-    const leagueData: League = {
-      leagueMasterId,
-      name: leagueName,
-      platform: { name: "sleeper", id: platformCredentialId },
-      externalLeagueId,
-      season,
-      lastModified,
-    };
+
     
     // Look for existing league with same externalLeagueId and season
     const existingLeagueQuery = await leaguesCollection
@@ -75,15 +66,22 @@ export class SleeperService {
 
     if (!existingLeagueQuery.empty) {
       const existingLeagueDoc = existingLeagueQuery.docs[0];
-      await existingLeagueDoc.ref.update({
-        ...leagueData,
-        id: existingLeagueDoc.id,
-      });
-      return { ...leagueData, id: existingLeagueDoc.id };
+      return existingLeagueDoc.data() as League;
     } else {
+      const leagueData: League = {
+        leagueMasterId,
+        name: leagueName,
+        platform: { name: "sleeper", id: platformCredentialId },
+        externalLeagueId,
+        season,
+        lastModified: new Date(),
+      };
       const newLeagueRef = await leaguesCollection.add(leagueData);
+      const finalLeagueData = { ...leagueData, id: newLeagueRef.id };
       await newLeagueRef.update({ id: newLeagueRef.id });
-      return { ...leagueData, id: newLeagueRef.id };
+
+      // Send optimistic update to frontend
+      return finalLeagueData;
     }
   }
 

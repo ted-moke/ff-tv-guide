@@ -9,12 +9,14 @@ export const useConnectLeague = () => {
       platformCredentialId,
       platformId,
       externalTeamId,
+      season,
     }: {
       leagueName: string;
       externalLeagueId: string;
       platformCredentialId: string;
       platformId: string;
       externalTeamId?: string;
+      season: number;
     }) =>
       connectLeague({
         leagueName,
@@ -22,6 +24,7 @@ export const useConnectLeague = () => {
         platformCredentialId,
         platformId,
         externalTeamId,
+        season,
       }),
   });
 };

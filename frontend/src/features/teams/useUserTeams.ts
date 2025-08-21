@@ -39,17 +39,17 @@ export const useUserTeams = ({
   seasonStart?: number | null;
   seasonEnd?: number | null;
 } = {}) => {
-  const { user } = useAuthContext();
+  const { user, isLoading: isAuthLoading } = useAuthContext();
   const queryClient = useQueryClient();
 
-  const { data, isLoading, error } = useQuery<FantasyTeam[]>({
+  const { data, isLoading, isPending, error } = useQuery<FantasyTeam[]>({
     queryKey: ["userTeams", user?.uid],
     queryFn: async (): Promise<FantasyTeam[]> => {
       try {
         if (!user) throw new Error("User not authenticated");
 
         const response = await fetch(
-          `${API_URL}/users/${user.uid}/teams?seasonStart=${seasonStart}&seasonEnd=${seasonEnd}`,
+          `${API_URL}/users/${user.uid}/teams?seasonStart=2025&seasonEnd=${seasonEnd}`,
           {
             method: "GET",
             headers: {
@@ -86,7 +86,10 @@ export const useUserTeams = ({
     }, {} as Record<string, FantasyTeam>);
   }, [data]);
 
-  return { data, isLoading, error, teamMap };
+  console.log("isLoading", isAuthLoading || isLoading);
+  console.log("data", data);
+
+  return { data, isLoading: isAuthLoading || isLoading, isPending, error, teamMap };
 };
 
 export const useOpponentTeams = ({

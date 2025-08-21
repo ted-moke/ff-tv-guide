@@ -26,19 +26,14 @@ export class LeagueMasterService {
       .limit(1)
       .get();
 
+      // If we found the league master, return it
     if (!existingQuery.empty) {
       const existingDoc = existingQuery.docs[0];
       const existingLeagueMaster = existingDoc.data() as LeagueMaster;
       
-      // Update lastModified
-      await existingDoc.ref.update({
-        lastModified: new Date(),
-      });
-      
       return {
         ...existingLeagueMaster,
         id: existingDoc.id,
-        lastModified: new Date(),
       };
     }
 

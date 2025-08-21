@@ -4,7 +4,7 @@ import { Team } from "../models/team";
 import { z } from "zod";
 import { Timestamp } from "firebase-admin/firestore";
 
-const TIME_TO_TEAM_STALE = 20 * 60 * 1000; // 20 minutes
+const TIME_TO_TEAM_STALE = 120 * 60 * 1000; // 2 hours
 
 // Define Zod schemas for Date and Timestamp
 const dateSchema = z.instanceof(Date);

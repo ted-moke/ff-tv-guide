@@ -21,7 +21,8 @@ export const upsertLeague = async (req: Request, res: Response) => {
     !leagueName ||
     !externalLeagueId ||
     !platformCredentialId ||
-    !platformId
+    !platformId ||
+    !season
   ) {
     return res.status(400).json({ error: "Missing required fields" });
   }
@@ -49,22 +50,27 @@ export const upsertLeague = async (req: Request, res: Response) => {
     });
 
     const platformService = PlatformServiceFactory.getService(platformId);
+
+    // Upsert the league
     const league = await platformService.upsertLeague({
       leagueName,
       externalLeagueId,
       platformCredentialId,
       leagueMasterId: leagueMaster.id!,
       season,
-      lastModified: new Date(),
     });
+
+    // Upsert the teams
     await platformService.upsertTeams(league);
 
+    // Upsert the user teams
     await platformService.upsertUserTeams({
       league,
       userId,
       externalUserId,
       externalTeamId,
     });
+    
     res.status(200).json({ 
       message: "League connected successfully", 
       league,
