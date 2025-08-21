@@ -1,45 +1,48 @@
+@import "../styles/variables.css";
+@import "../styles/utils.css";
+
 .container {
-  padding: 2rem;
+  padding: var(--size3);
   max-width: 1200px;
   margin: 0 auto;
 }
 
 .title {
-  font-size: 2rem;
+  font-size: var(--font-size-xxl);
   font-weight: bold;
-  margin-bottom: 2rem;
-  color: var(--text-primary);
+  margin-bottom: var(--size3);
+  color: var(--text-color);
 }
 
 .leagueCard {
-  background: var(--surface-primary);
-  border-radius: 12px;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: var(--background-color-offset);
+  border: 1px solid var(--background-color-offset-2);
+  border-radius: var(--border-radius-medium);
+  padding: var(--size2);
+  margin-bottom: var(--size3);
 }
 
 .leagueHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--border-color);
+  margin-bottom: var(--size2);
+  padding-bottom: var(--size1);
+  border-bottom: 1px solid var(--background-color-offset-2);
 }
 
 .leagueName {
-  font-size: 1.5rem;
+  font-size: var(--font-size-large);
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--text-color);
 }
 
 .platformBadge {
-  background: var(--accent-color);
-  color: white;
-  padding: 0.25rem 0.75rem;
-  border-radius: 20px;
-  font-size: 0.875rem;
+  background: var(--primary-color);
+  color: var(--text-color-light);
+  padding: var(--size0_5) var(--size1);
+  border-radius: var(--border-radius-medium);
+  font-size: var(--font-size-small);
   font-weight: 500;
   text-transform: capitalize;
 }
@@ -47,78 +50,96 @@
 .seasonsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1rem;
+  gap: var(--size2);
 }
 
 .seasonCard {
-  background: var(--surface-secondary);
-  border-radius: 8px;
-  padding: 1rem;
-  border: 1px solid var(--border-color);
+  background: var(--background-color);
+  border: 1px solid var(--background-color-offset-2);
+  border-radius: var(--border-radius-medium);
+  padding: var(--size2);
 }
 
 .seasonHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: var(--size2);
 }
 
 .seasonYear {
-  font-size: 1.25rem;
+  font-size: var(--font-size-large);
   font-weight: 600;
-  color: var(--text-primary);
+  color: var(--text-color);
 }
 
 .teamName {
-  font-size: 1rem;
-  color: var(--text-secondary);
+  font-size: var(--font-size-medium);
+  color: var(--text-color-muted);
   font-weight: 500;
 }
 
 .statsGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 0.75rem;
+  gap: var(--size1);
 }
 
 .statItem {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem;
-  background: var(--surface-tertiary);
-  border-radius: 6px;
+  padding: var(--size1);
+  background: var(--background-color-offset);
+  border-radius: var(--border-radius-small);
 }
 
 .statLabel {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
+  font-size: var(--font-size-small);
+  color: var(--text-color-muted);
   font-weight: 500;
 }
 
 .statValue {
-  font-size: 0.875rem;
-  color: var(--text-primary);
+  font-size: var(--font-size-small);
+  color: var(--text-color);
   font-weight: 600;
+}
+
+.statValueLarge {
+  font-size: var(--font-size-large);
+  font-weight: bold;
 }
 
 .record {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--size0_5);
+  color: var(--text-color);
 }
 
 .wins {
-  color: var(--success-color);
+  color: var(--text-color);
 }
 
 .losses {
-  color: var(--error-color);
+  color: var(--text-color);
 }
 
 .ties {
-  color: var(--warning-color);
+  color: var(--text-color);
+}
+
+.winPercentageGood {
+  color: var(--secondary-color);
+}
+
+.winPercentageBad {
+  color: var(--color-red);
+}
+
+.winPercentageNeutral {
+  color: var(--text-color-muted);
 }
 
 .loading {
@@ -126,8 +147,8 @@
   justify-content: center;
   align-items: center;
   min-height: 200px;
-  font-size: 1.125rem;
-  color: var(--text-secondary);
+  font-size: var(--font-size-medium);
+  color: var(--text-color-muted);
 }
 
 .error {
@@ -135,8 +156,8 @@
   justify-content: center;
   align-items: center;
   min-height: 200px;
-  color: var(--error-color);
-  font-size: 1.125rem;
+  color: var(--color-red);
+  font-size: var(--font-size-medium);
 }
 
 .empty {
@@ -144,7 +165,7 @@
   justify-content: center;
   align-items: center;
   min-height: 200px;
-  color: var(--text-secondary);
-  font-size: 1.125rem;
+  color: var(--text-color-muted);
+  font-size: var(--font-size-medium);
   text-align: center;
 }

@@ -8,7 +8,7 @@ const TeamHistory: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className={styles.container}>
+      <div className={`${styles.container} page-container`}>
         <div className={styles.loading}>
           <LoadingSpinner />
           <span style={{ marginLeft: "1rem" }}>Loading team history...</span>
@@ -19,7 +19,7 @@ const TeamHistory: React.FC = () => {
 
   if (error) {
     return (
-      <div className={styles.container}>
+      <div className={`${styles.container} page-container`}>
         <div className={styles.error}>
           Error loading team history: {error.message}
         </div>
@@ -29,7 +29,7 @@ const TeamHistory: React.FC = () => {
 
   if (!history || history.length === 0) {
     return (
-      <div className={styles.container}>
+      <div className={`${styles.container} page-container`}>
         <h1 className={styles.title}>Team History</h1>
         <div className={styles.empty}>
           No team history found. Connect some leagues to see your performance across seasons!
@@ -39,7 +39,7 @@ const TeamHistory: React.FC = () => {
   }
 
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container} page-container`}>
       <h1 className={styles.title}>Team History</h1>
       
       {history.map((leagueData) => (
@@ -56,19 +56,34 @@ const TeamHistory: React.FC = () => {
               <div key={`${leagueData.leagueMaster.id}-${seasonData.season}`} className={styles.seasonCard}>
                 <div className={styles.seasonHeader}>
                   <span className={styles.seasonYear}>{seasonData.season}</span>
-                  <span className={styles.teamName}>{seasonData.team.name}</span>
                 </div>
                 
                 <div className={styles.statsGrid}>
                   <div className={styles.statItem}>
                     <span className={styles.statLabel}>Record</span>
-                    <div className={styles.record}>
+                    <div className={`${styles.record} ${styles.statValueLarge}`}>
                       <span className={styles.wins}>{seasonData.stats.wins}W</span>
                       <span className={styles.losses}>{seasonData.stats.losses}L</span>
                       {seasonData.stats.ties > 0 && (
                         <span className={styles.ties}>{seasonData.stats.ties}T</span>
                       )}
                     </div>
+                  </div>
+
+                  <div className={styles.statItem}>
+                    <span className={styles.statLabel}>Win %</span>
+                    <span className={`${styles.statValue} ${styles.statValueLarge} ${(() => {
+                      const winPercentage = seasonData.stats.wins + seasonData.stats.losses + seasonData.stats.ties > 0
+                        ? (seasonData.stats.wins / (seasonData.stats.wins + seasonData.stats.losses + seasonData.stats.ties)) * 100
+                        : 0;
+                      if (winPercentage > 50) return styles.winPercentageGood;
+                      if (winPercentage < 50) return styles.winPercentageBad;
+                      return styles.winPercentageNeutral;
+                    })()}`}>
+                      {seasonData.stats.wins + seasonData.stats.losses + seasonData.stats.ties > 0
+                        ? ((seasonData.stats.wins / (seasonData.stats.wins + seasonData.stats.losses + seasonData.stats.ties)) * 100).toFixed(1)
+                        : "0.0"}%
+                    </span>
                   </div>
                   
                   <div className={styles.statItem}>
@@ -85,14 +100,7 @@ const TeamHistory: React.FC = () => {
                     </span>
                   </div>
                   
-                  <div className={styles.statItem}>
-                    <span className={styles.statLabel}>Win %</span>
-                    <span className={styles.statValue}>
-                      {seasonData.stats.wins + seasonData.stats.losses + seasonData.stats.ties > 0
-                        ? ((seasonData.stats.wins / (seasonData.stats.wins + seasonData.stats.losses + seasonData.stats.ties)) * 100).toFixed(1)
-                        : "0.0"}%
-                    </span>
-                  </div>
+                  
                 </div>
               </div>
             ))}
