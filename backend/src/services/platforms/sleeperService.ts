@@ -24,7 +24,7 @@ export class SleeperService {
   }
 
   private loadNFLPlayers() {
-    const filePath = path.join(process.cwd(), "src", "seed", "nflPlayers.json");
+    const filePath = path.join(process.cwd(), "src", "seed", "nflPlayers-2025.json");
     try {
       const fileContent = fs.readFileSync(filePath, "utf-8");
       this.nflPlayers = JSON.parse(fileContent);
