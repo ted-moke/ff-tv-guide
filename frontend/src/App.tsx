@@ -13,7 +13,6 @@ import NotFoundPage from "./pages/NotFoundPage";
 import ConnectTeam from "./pages/ConnectTeam";
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminLeagues from "./pages/AdminLeagues";
-import Overview from "./pages/Overview";
 import PlayerShares from "./pages/PlayerShares";
 import TeamHistory from "./pages/TeamHistory";
 import Layout from "./components/ui/Layout";
@@ -101,14 +100,6 @@ const App: React.FC = () => {
                   element={<AdminUserTeams />}
                 />
               </Route>
-              <Route
-                path="/nfl-teams"
-                element={
-                  <Layout>
-                    <Overview />
-                  </Layout>
-                }
-              />
               <Route
                 path="/player-shares"
                 element={

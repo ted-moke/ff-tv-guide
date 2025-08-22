@@ -31,14 +31,6 @@ const Sidebar: React.FC = () => {
             }}
           />
           <MenuItem
-            text="NFL Teams"
-            to="/nfl-teams"
-            isActive={location.pathname === "/nfl-teams"}
-            onClick={() => {
-              setIsMenuOpen(false);
-            }}
-          />
-          <MenuItem
             text="Player Shares"
             to="/player-shares"
             isActive={location.pathname === "/player-shares"}
@@ -46,14 +38,14 @@ const Sidebar: React.FC = () => {
               setIsMenuOpen(false);
             }}
           />
-          <MenuItem
+          {/* <MenuItem
             text="Team History"
             to="/history/teams"
             isActive={location.pathname === "/history/teams"}
             onClick={() => {
               setIsMenuOpen(false);
             }}
-          />
+          /> */}
           <MenuItem
             text="Connect a League"
             to="/connect-team"
