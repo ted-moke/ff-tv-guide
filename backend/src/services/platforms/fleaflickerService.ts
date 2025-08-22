@@ -15,6 +15,9 @@ import { getCurrentWeek } from "../../utils/getCurrentWeek";
 import { ApiTrackingService } from "../apiTrackingService";
 import fetchFromUrl from "../../utils/fetchFromUrl";
 import z from "zod";
+import { Filter } from "firebase-admin/firestore";
+import { migrateSingleLeague } from "../../../scripts/migrateToLeagueMaster";
+import { getCurrentSeason } from "../../utils/getCurrentSeason";
 
 export class FleaflickerService {
   private static instance: FleaflickerService;
@@ -60,6 +63,31 @@ export class FleaflickerService {
       return existingLeagueDoc.data() as League;
     }
 
+    // Check if the last year's league exists with missing migration data
+    const existingLeagueWithMissingMigrationData = await leaguesCollection
+      .where("externalLeagueId", "==", externalLeagueId)
+      .where(
+        Filter.or(
+          Filter.where("season", "==", null),
+          Filter.where("leagueMasterId", "==", null),
+        ),
+      )
+      .limit(1)
+      .get();
+
+    // If the last year's league exists with missing migration data, migrate it
+    if (!existingLeagueWithMissingMigrationData.empty) {
+      console.log("Migrating last year's league");
+      const localLeagueId = existingLeagueWithMissingMigrationData.docs[0].id;
+      const migrationStats = await migrateSingleLeague({
+        leagueId: localLeagueId,
+        season: season - 1,
+      });
+      console.log(
+        `Migrated last year's league for ${localLeagueId}: ${JSON.stringify(migrationStats)}`,
+      );
+    }
+
     console.log("League does not exist");
     const newLeagueData: League = {
       leagueMasterId,
@@ -81,7 +109,7 @@ export class FleaflickerService {
     try {
       const db = await getDb();
       const week = getCurrentWeek();
-      const season = this.getCurrentSeason();
+      const season = getCurrentSeason();
       const matchups = await this.fetchMatchups(
         league.externalLeagueId,
         week,
@@ -352,11 +380,6 @@ export class FleaflickerService {
     );
     const url = `https://www.fleaflicker.com/api/FetchLeagueStandings?sport=NFL&league_id=${externalLeagueId}`;
     return fetchFromUrl(url);
-  }
-
-  private getCurrentSeason(): number {
-    // Implement logic to determine current NFL season
-    return 2025; // Placeholder
   }
 
   private convertGameTeamToFleaflickerTeam(

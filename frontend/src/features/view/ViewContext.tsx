@@ -12,24 +12,36 @@ import { FantasyTeam } from "../teams/teamTypes";
 import { useOpponentTeams } from "../teams/useUserTeams";
 import { useUserTeams } from "../teams/useUserTeams";
 import { useTeamVisibility } from "../teams/useTeamVisibility";
+import { CURRENT_SEASON } from "../../constants";
+import { useLeagueStats } from "../league/useLeagueStats";
 
 export type ViewMode = "overview" | "matchup";
 export type SortOption = "division" | "players" | "name";
 export type PlayerSharesSortOption = "division" | "players" | "shares";
 
+export type LeagueStats = {
+  wins: number;
+  losses: number;
+  ties: number;
+  pointsFor: number;
+  pointsAgainst: number;
+  averagePointsFor: number;
+};
+
+export type LeagueStatsMap = Record<string, Record<string, LeagueStats>>;
+
+export type UserTeams = Record<string, Record<string, FantasyTeam>>;
+
 interface ViewContextType {
-  isMenuOpen: boolean;
-  setIsMenuOpen: (isOpen: boolean) => void;
-  selectedConference: string | null;
-  setSelectedConference: (conference: string | null) => void;
-  viewMode: ViewMode;
-  setViewMode: (mode: ViewMode) => void;
+  // Leagues
+  leagueStats: LeagueStatsMap;
+  // Teams
   userTeamsLoading: boolean;
   userTeamsPending: boolean;
   opponentTeamsLoading: boolean;
   userTeamsError: Error | null;
   opponentTeamsError: Error | null;
-  userTeams: FantasyTeam[];
+  userTeams: UserTeams;
   opponentTeams: FantasyTeam[];
   // Team Visibility
   visibleTeams: FantasyTeam[];
@@ -43,11 +55,13 @@ interface ViewContextType {
   // Conference
   activeConference: Conference;
   setActiveConference: (conference: Conference) => void;
-  // Sorting
+  // Sort and Filter
   sortBy: SortOption;
   setSortBy: (option: SortOption) => void;
   hideEmptyTeams: boolean;
   setHideEmptyTeams: (hide: boolean) => void;
+  selectedConference: string | null;
+  setSelectedConference: (conference: string | null) => void;
   // Player Shares specific state
   playerSharesSortBy: PlayerSharesSortOption;
   setPlayerSharesSortBy: (option: PlayerSharesSortOption) => void;
@@ -61,9 +75,14 @@ interface ViewContextType {
   setPlayerSharesSearchTerm: (term: string) => void;
   selectedWeek: number | null;
   setSelectedWeek: (week: number) => void;
+  // UI Data
   isMobile: boolean;
   setIsMobile: (isMobile: boolean) => void;
   scrollToElement: (elementId: string) => void;
+  viewMode: ViewMode;
+  setViewMode: (mode: ViewMode) => void;
+  isMenuOpen: boolean;
+  setIsMenuOpen: (isOpen: boolean) => void;
 }
 
 const ViewContext = createContext<ViewContextType | undefined>(undefined);
@@ -127,12 +146,17 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     isLoading: userTeamsLoading,
     isPending: userTeamsPending,
     error: userTeamsError,
+    teamMap,
   } = useUserTeams();
   const {
     data: fetchedOpponentTeams,
     isLoading: opponentTeamsLoading,
     error: opponentTeamsError,
   } = useOpponentTeams({ enabled: true });
+
+  const leagueStats = useLeagueStats({
+    userTeams: teamMap,
+  });
 
   const scrollToElement = (elementId: string) => {
     const element = document.getElementById(elementId);
@@ -144,27 +168,27 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     }
   };
 
-  const addTeamMetadata = useCallback(
-    (teams: FantasyTeam[], isUserTeams = true): FantasyTeam[] => {
-      const storedTeams: FantasyTeam[] = JSON.parse(
-        localStorage.getItem(isUserTeams ? "userTeams" : "opponentTeams") ||
-          "[]"
-      );
+  // const addTeamMetadata = useCallback(
+  //   (teams: FantasyTeam[], isUserTeams = true): FantasyTeam[] => {
+  //     const storedTeams: FantasyTeam[] = JSON.parse(
+  //       localStorage.getItem(isUserTeams ? "userTeams" : "opponentTeams") ||
+  //         "[]"
+  //     );
 
-      const teamsWithMetadata: FantasyTeam[] = teams.map((team) => ({
-        ...team,
-        visibilityType:
-          (storedTeams &&
-            storedTeams.find((t) => t.leagueId === team.leagueId)
-              ?.visibilityType) ||
-          "show",
-      }));
+  //     const teamsWithMetadata: FantasyTeam[] = teams.map((team) => ({
+  //       ...team,
+  //       visibilityType:
+  //         (storedTeams &&
+  //           storedTeams.find((t) => t.leagueId === team.leagueId)
+  //             ?.visibilityType) ||
+  //         "show",
+  //     }));
 
-      // Add metadata to teams that aren't on the server
-      return teamsWithMetadata;
-    },
-    []
-  );
+  //     // Add metadata to teams that aren't on the server
+  //     return teamsWithMetadata;
+  //   },
+  //   []
+  // );
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -181,15 +205,15 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
-  const userTeamsWithMetadata = useMemo(() => {
-    if (!fetchedUserTeams) return [];
-    return addTeamMetadata(fetchedUserTeams);
-  }, [fetchedUserTeams, addTeamMetadata]);
+  // const userTeamsWithMetadata = useMemo(() => {
+  //   if (!fetchedUserTeams) return [];
+  //   return addTeamMetadata(fetchedUserTeams);
+  // }, [fetchedUserTeams, addTeamMetadata]);
 
-  const opponentTeamsWithMetadata = useMemo(() => {
-    if (!fetchedOpponentTeams) return [];
-    return addTeamMetadata(fetchedOpponentTeams, false);
-  }, [fetchedOpponentTeams, addTeamMetadata]);
+  // const opponentTeamsWithMetadata = useMemo(() => {
+  //   if (!fetchedOpponentTeams) return [];
+  //   return addTeamMetadata(fetchedOpponentTeams, false);
+  // }, [fetchedOpponentTeams, addTeamMetadata]);
 
   const {
     visibleTeams,
@@ -201,48 +225,16 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     hideOpponentTeam,
     showOpponentTeam,
   } = useTeamVisibility({
-    userTeams: userTeamsWithMetadata,
-    opponentTeams: opponentTeamsWithMetadata,
+    userTeams: fetchedUserTeams?.teamsBySeason[CURRENT_SEASON] || [],
+    opponentTeams: fetchedOpponentTeams || [],
   });
 
   const value = {
-    isMenuOpen,
-    setIsMenuOpen,
-    selectedConference,
-    setSelectedConference,
-    viewMode,
-    setViewMode,
-    teamVisibility,
-    setTeamVisibility,
-    activeConference,
-    setActiveConference,
-    sortBy,
-    setSortBy,
-    hideEmptyTeams,
-    setHideEmptyTeams,
-    // Player Shares specific state
-    playerSharesSortBy,
-    setPlayerSharesSortBy,
-    playerSharesHideEmptyTeams,
-    setPlayerSharesHideEmptyTeams,
-    // Filters
-    selectedTeams,
-    setSelectedTeams,
-    selectedPositions,
-    setSelectedPositions,
-    playerSharesSearchTerm,
-    setPlayerSharesSearchTerm,
-    // Selected Week
-    selectedWeek,
-    setSelectedWeek,
-    // Mobile
-    isMobile,
-    setIsMobile,
-    // Utility
-    scrollToElement,
+    // League Stats
+    leagueStats,
     // Teams
-    userTeams: userTeamsWithMetadata,
-    opponentTeams: opponentTeamsWithMetadata,
+    userTeams: teamMap,
+    opponentTeams: fetchedOpponentTeams || [],
     userTeamsLoading,
     userTeamsPending,
     opponentTeamsLoading,
@@ -257,6 +249,42 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     showAllTeams,
     hideOpponentTeam,
     showOpponentTeam,
+    teamVisibility,
+    setTeamVisibility,
+    hideEmptyTeams,
+    setHideEmptyTeams,
+    // Player Shares specific state
+    playerSharesSortBy,
+    setPlayerSharesSortBy,
+    playerSharesHideEmptyTeams,
+    setPlayerSharesHideEmptyTeams,
+    // Filters
+    selectedTeams,
+    setSelectedTeams,
+    selectedPositions,
+    setSelectedPositions,
+    playerSharesSearchTerm,
+    setPlayerSharesSearchTerm,
+    activeConference,
+    setActiveConference,
+    sortBy,
+    setSortBy,
+    // Selected Week
+    selectedWeek,
+    setSelectedWeek,
+    // Mobile
+    isMobile,
+    setIsMobile,
+    // Utility
+    scrollToElement,
+
+    // UI Data
+    isMenuOpen,
+    setIsMenuOpen,
+    selectedConference,
+    setSelectedConference,
+    viewMode,
+    setViewMode,
   };
 
   return <ViewContext.Provider value={value}>{children}</ViewContext.Provider>;

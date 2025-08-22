@@ -34,6 +34,8 @@ export interface Team {
   stats: TeamStats;
   lastSynced: Date;
   lastFetched: Date;
+  needsUpdate?: boolean;
+  needsMigrate?: boolean;
 }
 
 export interface League {

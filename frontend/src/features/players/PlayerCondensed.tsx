@@ -5,7 +5,7 @@ import Popup from "../../components/ui/Popup";
 import Button from "../../components/ui/Button";
 import Chip from "../../components/ui/Chip"; // Assuming you have a Chip component
 import { useView } from "../view/ViewContext"; // Import the useView hook
-import { useUserTeams } from "../teams/useUserTeams";
+import { CURRENT_SEASON } from "../../constants";
 
 interface PlayerProps {
   player: PlayerType;
@@ -24,23 +24,12 @@ const generateLeagueUrl = (leagueId: string, platformId: string) => {
 };
 
 const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotType }) => {
-  const { isMobile, selectedWeek } = useView(); // Get isMobile from the context
+  const { isMobile, leagueStats } = useView(); // Get isMobile from the context
   const [selectedCopy, setSelectedCopy] = useState<OwnedPlayer | null>(null);
   const [popupPosition, setPopupPosition] = useState<{
     x: number;
     y: number;
   } | null>(null);
-
-  const { teamMap } = useUserTeams();
-
-  const calculateAveragePoints = useCallback((leagueId: string, week: number | null): string | null => {
-    if (!week) return null;
-    const teamStats = teamMap?.[leagueId]?.stats;
-    if (!teamStats?.pointsFor || week <= 1) {
-      return null;
-    }
-    return (teamStats.pointsFor / (week - 1)).toFixed(1);
-  }, [teamMap]);
 
   const handlePopup = useCallback(
     (copy: OwnedPlayer, event: React.MouseEvent) => {
@@ -77,6 +66,8 @@ const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotType }) => {
       selectedCopy?.platformId!
     );
   }, [selectedCopy]);
+
+  const currentSeasonStats = leagueStats?.[CURRENT_SEASON.toString()];
 
   return (
     <div
@@ -135,25 +126,25 @@ const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotType }) => {
                 <div className={styles.leaguePopupContentRow}>
                   <p className={styles.leaguePopupContentLabel}>Record</p>
                   <p className={styles.leaguePopupContentValue}>
-                    {teamMap?.[selectedCopy.leagueId]?.stats.wins}-
-                    {teamMap?.[selectedCopy.leagueId]?.stats.losses}-
-                    {teamMap?.[selectedCopy.leagueId]?.stats.ties}
+                    {currentSeasonStats?.[selectedCopy.leagueId]?.wins}-
+                    {currentSeasonStats?.[selectedCopy.leagueId]?.losses}-
+                    {currentSeasonStats?.[selectedCopy.leagueId]?.ties}
                   </p>
                   <p className={styles.leaguePopupContentLabel}>
                     Avg Points For
                   </p>
                   <p className={styles.leaguePopupContentValue}>
-                    {calculateAveragePoints(selectedCopy.leagueId, selectedWeek) ?? "N/A"}
+                    {currentSeasonStats?.[selectedCopy.leagueId]?.averagePointsFor ?? "N/A"}
                   </p>
                   <p className={styles.leaguePopupContentLabel}>Points For</p>
                   <p className={styles.leaguePopupContentValue}>
-                    {teamMap?.[selectedCopy.leagueId]?.stats.pointsFor}
+                    {currentSeasonStats?.[selectedCopy.leagueId]?.pointsFor}
                   </p>
                   <p className={styles.leaguePopupContentLabel}>
                     Points Against
                   </p>
                   <p className={styles.leaguePopupContentValue}>
-                    {teamMap?.[selectedCopy.leagueId]?.stats.pointsAgainst}
+                    {currentSeasonStats?.[selectedCopy.leagueId]?.pointsAgainst}
                   </p>
                 </div>
               </div>

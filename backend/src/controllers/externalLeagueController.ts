@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import { getDb } from "../firebase";
 import fetchFromUrl from "../utils/fetchFromUrl";
+import { fetchSleeperUserLeagues } from "../services/platforms/sleeperService";
+import { getCurrentSeason } from "../utils/getCurrentSeason";
 
 const FLEAFLICKER_API_URL =
   "https://www.fleaflicker.com/api/FetchUserLeagues?sport=NFL&email=";
@@ -41,13 +43,7 @@ export const getExternalLeagues = async (req: Request, res: Response) => {
         id: league.id, // Fleaflicker uses 'id'
       }));
     } else if (platformId === "sleeper") {
-      leagues = await fetchFromUrl(
-        `${SLEEPER_API_URL}/${credential.externalUserId}/leagues/nfl/2025`,
-      );
-      leagues = leagues.map((league: any) => ({
-        ...league,
-        id: league.league_id, // Sleeper uses 'league_id'
-      }));
+      leagues = await fetchSleeperUserLeagues(credential.externalUserId, getCurrentSeason());
     } else {
       return res.status(400).json({ error: "Unsupported platform" });
     }

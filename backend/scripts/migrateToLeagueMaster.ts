@@ -61,7 +61,6 @@ export async function migrateToLeagueMaster({ season }: { season: number }): Pro
         const leagueMaster: LeagueMaster = {
           name: baseLeague.name,
           platform: baseLeague.platform,
-          externalLeagueId: baseLeague.externalLeagueId,
           createdBy: "migration", // TODO: This should be determined from user data
           createdAt: new Date(),
           lastModified: new Date(),
@@ -177,7 +176,7 @@ export async function migrateToLeagueMaster({ season }: { season: number }): Pro
 
 export async function migrateSingleLeague({ 
   leagueId, 
-  season 
+  season, 
 }: { 
   leagueId: string; 
   season: number; 
@@ -213,7 +212,7 @@ export async function migrateSingleLeague({
     const existingLeagueMasterQuery = await db
       .collection("leagueMasters")
       .where("platform.name", "==", league.platform.name)
-      .where("externalLeagueId", "==", league.externalLeagueId)
+      .where("leagueId", "==", league.id)
       .get();
 
     let leagueMasterId: string;
@@ -229,7 +228,6 @@ export async function migrateSingleLeague({
       const leagueMaster: LeagueMaster = {
         name: league.name,
         platform: league.platform,
-        externalLeagueId: league.externalLeagueId,
         createdBy: "migration",
         createdAt: new Date(),
         lastModified: new Date(),

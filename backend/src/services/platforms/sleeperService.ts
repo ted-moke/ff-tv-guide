@@ -24,7 +24,12 @@ export class SleeperService {
   }
 
   private loadNFLPlayers() {
-    const filePath = path.join(process.cwd(), "src", "seed", "nflPlayers-2025.json");
+    const filePath = path.join(
+      process.cwd(),
+      "src",
+      "seed",
+      "nflPlayers-2025.json",
+    );
     try {
       const fileContent = fs.readFileSync(filePath, "utf-8");
       this.nflPlayers = JSON.parse(fileContent);
@@ -56,7 +61,6 @@ export class SleeperService {
     const db = await getDb();
     const leaguesCollection = db.collection("leagues");
 
-    
     // Look for existing league with same externalLeagueId and season
     const existingLeagueQuery = await leaguesCollection
       .where("externalLeagueId", "==", externalLeagueId)
@@ -67,22 +71,25 @@ export class SleeperService {
     if (!existingLeagueQuery.empty) {
       const existingLeagueDoc = existingLeagueQuery.docs[0];
       return existingLeagueDoc.data() as League;
-    } else {
-      const leagueData: League = {
-        leagueMasterId,
-        name: leagueName,
-        platform: { name: "sleeper", id: platformCredentialId },
-        externalLeagueId,
-        season,
-        lastModified: new Date(),
-      };
-      const newLeagueRef = await leaguesCollection.add(leagueData);
-      const finalLeagueData = { ...leagueData, id: newLeagueRef.id };
-      await newLeagueRef.update({ id: newLeagueRef.id });
-
-      // Send optimistic update to frontend
-      return finalLeagueData;
     }
+
+    // Check if the last year's league exists with missing migration data
+    
+
+    const leagueData: League = {
+      leagueMasterId,
+      name: leagueName,
+      platform: { name: "sleeper", id: platformCredentialId },
+      externalLeagueId,
+      season,
+      lastModified: new Date(),
+    };
+    const newLeagueRef = await leaguesCollection.add(leagueData);
+    const finalLeagueData = { ...leagueData, id: newLeagueRef.id };
+    await newLeagueRef.update({ id: newLeagueRef.id });
+
+    // Send optimistic update to frontend
+    return finalLeagueData;
   }
 
   async upsertTeams(league: League) {
@@ -252,7 +259,10 @@ export class SleeperService {
 
       for (const teamDoc of teamsQuery.docs) {
         const team = teamDoc.data() as Team;
-        if (team.externalUserId === externalUserId || team.coOwners.includes(externalUserId)) {
+        if (
+          team.externalUserId === externalUserId ||
+          team.coOwners.includes(externalUserId)
+        ) {
           // Check if the userTeam already exists for this leagueMaster
           const userTeamQuery = await userTeamsCollection
             .where("userId", "==", userId)
@@ -288,7 +298,10 @@ export class SleeperService {
     externalLeagueId: string,
     week: number,
   ): Promise<SleeperMatchup[]> {
-    await ApiTrackingService.trackApiCall("sleeper", `GET league/${externalLeagueId}/matchups/${week}`);
+    await ApiTrackingService.trackApiCall(
+      "sleeper",
+      `GET league/${externalLeagueId}/matchups/${week}`,
+    );
     const matchupsSchema = z.array(
       z.object({
         roster_id: z.number(),
@@ -399,9 +412,24 @@ export class SleeperService {
   }
 
   private ensurePlayersArray(matchups: any[]): any[] {
-    return matchups.map(matchup => ({
+    return matchups.map((matchup) => ({
       ...matchup,
-      players: matchup.players || []
+      players: matchup.players || [],
     }));
   }
 }
+
+export const fetchSleeperUserLeagues = async (
+  externalUserId: string,
+  season: number,
+) => {
+  const data = await fetchFromUrl(
+    `https://api.sleeper.app/v1/user/${externalUserId}/leagues/nfl/${season}`,
+  );
+
+  const leagues = data.map((league: any) => ({
+    ...league,
+    id: league.league_id, // Sleeper uses 'league_id'
+  }));
+  return leagues;
+};

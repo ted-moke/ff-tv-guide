@@ -29,6 +29,8 @@ export const upsertLeague = async (req: Request, res: Response) => {
 
   try {
     const db = await getDb();
+
+    // Get the user info from the platform credential
     const platformCredentialRef = db
       .collection("platformCredentials")
       .doc(platformCredentialId);
@@ -70,7 +72,7 @@ export const upsertLeague = async (req: Request, res: Response) => {
       externalUserId,
       externalTeamId,
     });
-    
+
     res.status(200).json({ 
       message: "League connected successfully", 
       league,

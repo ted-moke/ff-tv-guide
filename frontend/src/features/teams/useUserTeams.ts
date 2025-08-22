@@ -4,6 +4,7 @@ import { useAuthContext } from "../auth/AuthProvider"; // Assuming you have an a
 import { FantasyTeam } from "./teamTypes";
 import { API_URL } from "../../config";
 import { CURRENT_SEASON } from "../../constants";
+import { UserTeams } from "../view/ViewContext";
 
 const updateStaleTeams = async (teams: FantasyTeam[], queryClient: any) => {
   const teamsToUpdate = teams.filter((team) => team.needsUpdate);
@@ -42,14 +43,25 @@ export const useUserTeams = ({
   const { user, isLoading: isAuthLoading } = useAuthContext();
   const queryClient = useQueryClient();
 
-  const { data, isLoading, isPending, error } = useQuery<FantasyTeam[]>({
+  let hasTeamsToUpdate = false;
+  let hasTeamsToMigrate = false;
+
+  const { data, isLoading, isPending, error } = useQuery<{
+    teamsBySeason: Record<number, FantasyTeam[]>;
+    teamsNeedingUpdate: FantasyTeam[];
+    teamsNeedingMigrate: FantasyTeam[];
+  }>({
     queryKey: ["userTeams", user?.uid],
-    queryFn: async (): Promise<FantasyTeam[]> => {
+    queryFn: async (): Promise<{
+      teamsBySeason: Record<number, FantasyTeam[]>;
+      teamsNeedingUpdate: FantasyTeam[];
+      teamsNeedingMigrate: FantasyTeam[];
+    }> => {
       try {
         if (!user) throw new Error("User not authenticated");
 
         const response = await fetch(
-          `${API_URL}/users/${user.uid}/teams?seasonStart=2025&seasonEnd=${seasonEnd}`,
+          `${API_URL}/users/${user.uid}/teams?seasonStart=${seasonStart}&seasonEnd=${seasonEnd}`,
           {
             method: "GET",
             headers: {
@@ -64,13 +76,26 @@ export const useUserTeams = ({
           throw new Error(`Failed to fetch user teams: ${errorText}`);
         }
 
-        const data: { teams: FantasyTeam[] } = await response.json();
-        const teams = data.teams;
+        const data: {
+          teamsBySeason: Record<number, FantasyTeam[]>;
+          teamsNeedingUpdate: FantasyTeam[];
+          teamsNeedingMigrate: FantasyTeam[];
+        } = await response.json();
+        const teamsBySeason = data.teamsBySeason;
+        const teamsNeedingUpdate = data.teamsNeedingUpdate;
+        const teamsNeedingMigrate = data.teamsNeedingMigrate;
+
+        hasTeamsToUpdate = teamsNeedingUpdate.length > 0;
+        hasTeamsToMigrate = teamsNeedingMigrate.length > 0;
 
         // Call the abstracted updateStaleTeams function
-        await updateStaleTeams(teams, queryClient);
+        updateStaleTeams(teamsNeedingUpdate, queryClient);
 
-        return teams;
+        // // Migrate teams
+        // await updateStaleTeams(teamsNeedingMigrate, queryClient);
+
+        // Might not need to return teams needing update and migrate
+        return { teamsBySeason, teamsNeedingUpdate, teamsNeedingMigrate };
       } catch (error) {
         console.error("Error fetching user teams:", error);
         throw error;
@@ -79,14 +104,27 @@ export const useUserTeams = ({
     enabled: !!user, // Only run the query if there's a user
   });
 
-  const teamMap = useMemo(() => {
-    return data?.reduce((acc, team) => {
-      acc[team.leagueId] = team;
-      return acc;
-    }, {} as Record<string, FantasyTeam>);
-  }, [data]);
+  const { teamsBySeason } = data || {};
 
-  return { data, isLoading: isAuthLoading || isLoading, isPending, error, teamMap };
+  let teamMap: UserTeams = {};
+  if (teamsBySeason) {
+    for (let [season, teams] of Object.entries(teamsBySeason)) {
+      teamMap[season] = teams.reduce((acc, team) => {
+        acc[team.leagueId] = team;
+        return acc;
+      }, {} as Record<string, FantasyTeam>);
+    }
+  }
+
+  return {
+    data,
+    isLoading: isAuthLoading || isLoading,
+    isPending,
+    error,
+    teamMap,
+    hasTeamsToUpdate,
+    hasTeamsToMigrate,
+  };
 };
 
 export const useOpponentTeams = ({
