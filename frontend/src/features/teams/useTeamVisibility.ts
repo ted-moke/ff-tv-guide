@@ -12,11 +12,6 @@ export const useTeamVisibility = () => {
         newSet.add(leagueId);
         return newSet;
     });
-    setHiddenOpponentTeams((prev) => {
-        const newSet = new Set(prev);
-        newSet.add(leagueId);
-        return newSet;
-    });
   }
 
   const showTeam = (leagueId: string) => {
@@ -25,21 +20,6 @@ export const useTeamVisibility = () => {
         newSet.delete(leagueId);
         return newSet;
     });
-    setHiddenOpponentTeams((prev) => {
-        const newSet = new Set(prev);
-        newSet.delete(leagueId);
-        return newSet;
-    });
-  }
-
-  const hideAllTeams = () => {
-    setHiddenTeams(new Set(userTeams.map((team) => team.leagueId)));
-    setHiddenOpponentTeams(new Set(opponentTeams.map((team) => team.leagueId)));
-  }
-
-  const showAllTeams = () => {
-    setHiddenTeams(new Set());
-    setHiddenOpponentTeams(new Set());
   }
 
   const hideOpponentTeam = (leagueId: string) => {
@@ -56,6 +36,16 @@ export const useTeamVisibility = () => {
         newSet.delete(leagueId);
         return newSet;
     });
+  }
+
+  const hideAllTeams = () => {
+    setHiddenTeams(new Set(userTeams.map((team) => team.leagueId)));
+    setHiddenOpponentTeams(new Set(opponentTeams.map((team) => team.leagueId)));
+  }
+
+  const showAllTeams = () => {
+    setHiddenTeams(new Set());
+    setHiddenOpponentTeams(new Set());
   }
 
   const visibleTeams = useMemo(() => {

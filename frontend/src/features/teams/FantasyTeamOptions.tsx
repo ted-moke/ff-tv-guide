@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./FantasyTeamOptions.module.css";
 import LinkButton, { LinkButtonColor } from "../../components/ui/LinkButton";
 import Checkbox from "../../components/ui/Checkbox";
@@ -10,6 +10,7 @@ import { Stack } from "../../components/ui/Stack";
 import { FantasyTeamOption } from "./FantasyTeamOption";
 
 const FantasyTeamOptions: React.FC = () => {
+  const [selectedLeagueId, setSelectedLeagueId] = useState<string | null>(null);
   const { setIsMenuOpen, userTeams, userTeamsLoading, userTeamsError } =
     useView();
   const {
@@ -27,6 +28,20 @@ const FantasyTeamOptions: React.FC = () => {
 
   const handleSelectAllFantasyTeams = () => {
     if (!userTeams) return;
+    showAllTeams();
+  };
+
+  const handleHideAllTeams = () => {
+    if (!visibleOpponentTeams) return;
+    hideAllTeams();
+  };
+
+  const handleClickLeague = (leagueId: string) => {
+    if (leagueId === selectedLeagueId) {
+      setSelectedLeagueId(null);
+    } else {
+      setSelectedLeagueId(leagueId);
+    }
   };
 
   return (
@@ -43,8 +58,8 @@ const FantasyTeamOptions: React.FC = () => {
       ) : (
         <div className={styles["fantasy-team-list"]}>
           <div className={styles["fantasy-team-actions"]}>
-            <LinkButton onClick={hideAllTeams}>Hide All</LinkButton>
-            <LinkButton onClick={showAllTeams}>Show All</LinkButton>
+            <LinkButton onClick={handleHideAllTeams}>Hide All</LinkButton>
+            <LinkButton onClick={handleSelectAllFantasyTeams}>Show All</LinkButton>
           </div>
           {userTeams.map((team) => {
             const isVisible = visibleTeams.some(
@@ -63,6 +78,8 @@ const FantasyTeamOptions: React.FC = () => {
                 hideTeam={hideTeam}
                 showOpponentTeam={showOpponentTeam}
                 hideOpponentTeam={hideOpponentTeam}
+                selected={selectedLeagueId === team.leagueId}
+                handleClick={() => handleClickLeague(team.leagueId)}
               />
             );
           })}

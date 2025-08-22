@@ -32,3 +32,7 @@
 .justify-around {
   justify-content: space-around;
 }
+
+.muted {
+  color: var(--text-color-muted);
+}
