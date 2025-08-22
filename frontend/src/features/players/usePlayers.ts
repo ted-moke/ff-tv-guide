@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Player, OwnedPlayer } from "../nfl/nflTypes";
 import { FantasyTeam } from "../teams/teamTypes";
 import { useView } from "../view/ViewContext";
+import { useTeamVisibility } from "../teams/useTeamVisibility";
 
 // Define the order of positions
 const positionOrder = [
@@ -82,25 +83,27 @@ export const usePlayers = ({
     opponentTeams,
     opponentTeamsLoading,
     opponentTeamsError,
+    visibleTeams,
+    visibleOpponentTeams,
   } = useView();
 
-  const players: Player[] | null = useMemo(() => {
-    if (!userTeams || (includeOpponents && !opponentTeams)) {
-      return null;
-    }
-
-    let userTeamsLocal = userTeams;
-    let opponentTeamsLocal = opponentTeams;
-
+  const teamsToUse = useMemo(() => {
     if (hideHiddenTeams) {
-      userTeamsLocal = userTeamsLocal.filter(
-        (team) => team.visibilityType === "show"
-      );
+      return visibleTeams;
     }
-    if (opponentTeamsLocal) {
-      opponentTeamsLocal = opponentTeamsLocal.filter(
-        (team) => team.visibilityType === "show"
-      );
+    return userTeams;
+  }, [visibleTeams, userTeams, hideHiddenTeams]);
+
+  const opponentTeamsToUse = useMemo(() => {
+    if (hideHiddenTeams) {
+      return visibleOpponentTeams;
+    }
+    return opponentTeams;
+  }, [visibleOpponentTeams, opponentTeams, hideHiddenTeams]);
+
+  const players: Player[] | null = useMemo(() => {
+    if (!teamsToUse || (includeOpponents && !opponentTeamsToUse)) {
+      return null;
     }
 
     const playerMap = new Map<string, Player>();
@@ -148,12 +151,12 @@ export const usePlayers = ({
       });
     };
 
-    if (userTeamsLocal) {
-      processTeams(userTeamsLocal, "self");
+    if (teamsToUse) {
+      processTeams(teamsToUse, "self");
     }
 
-    if (includeOpponents && opponentTeamsLocal) {
-      processTeams(opponentTeamsLocal, "opponent");
+    if (includeOpponents && opponentTeamsToUse) {
+      processTeams(opponentTeamsToUse, "opponent");
     }
 
     // Sort copies for each player
@@ -162,7 +165,7 @@ export const usePlayers = ({
     });
 
     return Array.from(playerMap.values()).sort(sortPlayers);
-  }, [userTeams, opponentTeams, hideHiddenTeams]);
+  }, [teamsToUse, opponentTeamsToUse, hideHiddenTeams]);
 
   return {
     players,

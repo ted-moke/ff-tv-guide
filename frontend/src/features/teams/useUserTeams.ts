@@ -86,9 +86,6 @@ export const useUserTeams = ({
     }, {} as Record<string, FantasyTeam>);
   }, [data]);
 
-  console.log("isLoading", isAuthLoading || isLoading);
-  console.log("data", data);
-
   return { data, isLoading: isAuthLoading || isLoading, isPending, error, teamMap };
 };
 

@@ -11,6 +11,7 @@ import { Conference } from "../nfl/nflTypes";
 import { FantasyTeam } from "../teams/teamTypes";
 import { useOpponentTeams } from "../teams/useUserTeams";
 import { useUserTeams } from "../teams/useUserTeams";
+import { useTeamVisibility } from "../teams/useTeamVisibility";
 
 export type ViewMode = "overview" | "matchup";
 export type SortOption = "division" | "players" | "name";
@@ -30,8 +31,19 @@ interface ViewContextType {
   opponentTeamsError: Error | null;
   userTeams: FantasyTeam[];
   opponentTeams: FantasyTeam[];
+  // Team Visibility
+  visibleTeams: FantasyTeam[];
+  visibleOpponentTeams: FantasyTeam[];
+  hideTeam: (leagueId: string) => void;
+  showTeam: (leagueId: string) => void;
+  hideAllTeams: () => void;
+  showAllTeams: () => void;
+  hideOpponentTeam: (leagueId: string) => void;
+  showOpponentTeam: (leagueId: string) => void;
+  // Conference
   activeConference: Conference;
   setActiveConference: (conference: Conference) => void;
+  // Sorting
   sortBy: SortOption;
   setSortBy: (option: SortOption) => void;
   hideEmptyTeams: boolean;
@@ -99,11 +111,14 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
   const [sortBy, setSortBy] = useState<SortOption>("players");
   const [hideEmptyTeams, setHideEmptyTeams] = useState(false);
   // Player Shares specific state
-  const [playerSharesSortBy, setPlayerSharesSortBy] = useState<PlayerSharesSortOption>("shares");
-  const [playerSharesHideEmptyTeams, setPlayerSharesHideEmptyTeams] = useState(false);
+  const [playerSharesSortBy, setPlayerSharesSortBy] =
+    useState<PlayerSharesSortOption>("shares");
+  const [playerSharesHideEmptyTeams, setPlayerSharesHideEmptyTeams] =
+    useState(false);
   const [selectedTeams, setSelectedTeams] = useState<string[]>([]);
   const [selectedPositions, setSelectedPositions] = useState<string[]>([]);
-  const [playerSharesSearchTerm, setPlayerSharesSearchTerm] = useState<string>("");
+  const [playerSharesSearchTerm, setPlayerSharesSearchTerm] =
+    useState<string>("");
   const [selectedWeek, setSelectedWeek] = useState(getCurrentWeek());
   const [isMobile, setIsMobile] = useState(false);
 
@@ -139,9 +154,11 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
       const teamsWithMetadata: FantasyTeam[] = teams.map((team) => ({
         ...team,
         visibilityType:
-          storedTeams && storedTeams.find((t) => t.leagueId === team.leagueId)?.visibilityType || "show",
+          (storedTeams &&
+            storedTeams.find((t) => t.leagueId === team.leagueId)
+              ?.visibilityType) ||
+          "show",
       }));
-
 
       // Add metadata to teams that aren't on the server
       return teamsWithMetadata;
@@ -174,25 +191,19 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     return addTeamMetadata(fetchedOpponentTeams, false);
   }, [fetchedOpponentTeams, addTeamMetadata]);
 
-  // // After fetching opponent teams, add metadata to teams that aren't on the server
-  // useEffect(() => {
-  //   if (fetchedOpponentTeams) {
-  //     const updatedOpponentTeams = addTeamMetadata(fetchedOpponentTeams, false);
-  //     setOpponentTeams(updatedOpponentTeams);
-  //   }
-  // }, [fetchedOpponentTeams, setOpponentTeams, addTeamMetadata]);
-
-  // // Once teams update, update the local storage
-  // useEffect(() => {
-  //   if (!userTeams.length) return;
-  //   localStorage.setItem("userTeams", JSON.stringify(userTeams));
-  // }, [userTeams]);
-
-  // // Once opponent teams update, update the local storage
-  // useEffect(() => {
-  //   if (!opponentTeams.length) return;
-  //   localStorage.setItem("opponentTeams", JSON.stringify(opponentTeams));
-  // }, [opponentTeams]);
+  const {
+    visibleTeams,
+    visibleOpponentTeams,
+    hideTeam,
+    showTeam,
+    hideAllTeams,
+    showAllTeams,
+    hideOpponentTeam,
+    showOpponentTeam,
+  } = useTeamVisibility({
+    userTeams: userTeamsWithMetadata,
+    opponentTeams: opponentTeamsWithMetadata,
+  });
 
   const value = {
     isMenuOpen,
@@ -214,17 +225,22 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     setPlayerSharesSortBy,
     playerSharesHideEmptyTeams,
     setPlayerSharesHideEmptyTeams,
+    // Filters
     selectedTeams,
     setSelectedTeams,
     selectedPositions,
     setSelectedPositions,
     playerSharesSearchTerm,
     setPlayerSharesSearchTerm,
+    // Selected Week
     selectedWeek,
     setSelectedWeek,
+    // Mobile
     isMobile,
     setIsMobile,
+    // Utility
     scrollToElement,
+    // Teams
     userTeams: userTeamsWithMetadata,
     opponentTeams: opponentTeamsWithMetadata,
     userTeamsLoading,
@@ -232,6 +248,15 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     opponentTeamsLoading,
     userTeamsError,
     opponentTeamsError,
+    // Team Visibility
+    visibleTeams,
+    visibleOpponentTeams,
+    hideTeam,
+    showTeam,
+    hideAllTeams,
+    showAllTeams,
+    hideOpponentTeam,
+    showOpponentTeam,
   };
 
   return <ViewContext.Provider value={value}>{children}</ViewContext.Provider>;

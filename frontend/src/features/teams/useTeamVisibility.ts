@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
 import { useView } from "../view/ViewContext";
+import { FantasyTeam } from "./teamTypes";
 
-export const useTeamVisibility = () => {
-  const { userTeams, opponentTeams } = useView();
+export const useTeamVisibility = ({ userTeams, opponentTeams }: { userTeams: FantasyTeam[], opponentTeams: FantasyTeam[] }) => {
   const [hiddenTeams, setHiddenTeams] = useState<Set<string>>(new Set());
   const [hiddenOpponentTeams, setHiddenOpponentTeams] = useState<Set<string>>(new Set());
 

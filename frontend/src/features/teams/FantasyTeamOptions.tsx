@@ -1,12 +1,9 @@
 import React, { useState } from "react";
 import styles from "./FantasyTeamOptions.module.css";
 import LinkButton, { LinkButtonColor } from "../../components/ui/LinkButton";
-import Checkbox from "../../components/ui/Checkbox";
 import { useView } from "../view/ViewContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FantasyTeam } from "./teamTypes";
-import { useTeamVisibility } from "./useTeamVisibility";
-import { Stack } from "../../components/ui/Stack";
 import { FantasyTeamOption } from "./FantasyTeamOption";
 
 const FantasyTeamOptions: React.FC = () => {
@@ -22,7 +19,7 @@ const FantasyTeamOptions: React.FC = () => {
     visibleOpponentTeams,
     hideOpponentTeam,
     showOpponentTeam,
-  } = useTeamVisibility();
+  } = useView();
   const navigate = useNavigate();
   const location = useLocation();
 

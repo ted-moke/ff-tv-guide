@@ -150,7 +150,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game, id }) => {
                   </div>
                   {game.homePlayers.starters.map((player: Player) => (
                     <PlayerCondensed
-                      key={`${player.name}-${player.team}`}
+                      key={`${player.name}-${player.team}-${player.position}`}
                       player={player}
                       slotType="start"
                     />
