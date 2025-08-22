@@ -28,7 +28,7 @@ const PlayerShares: React.FC = () => {
     playerSharesSortBy,
     playerSharesHideEmptyTeams,
     selectedTeams,
-    userTeams,
+    visibleTeams,
     selectedPositions,
     playerSharesSearchTerm,
   } = useView();
@@ -45,10 +45,7 @@ const PlayerShares: React.FC = () => {
 
   let allPlayers: Player[] = players ?? [];
 
-  const numberOfSelectedTeams = useMemo(
-    () => userTeams.filter((team) => team.visibilityType === "show").length,
-    [userTeams]
-  );
+  const numberOfSelectedTeams = visibleTeams.length;
 
   const sortedGroupedPlayers = useMemo<GroupedPlayer[]>(() => {
     const teams =
