@@ -24,6 +24,9 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
   // const [hideAlert, setHideAlert] = useState(hideAlertOnLoad);
 
   if (isLoading || needsConnectLoading || isAuthLoading) {
+    console.log("isLoading", isLoading);
+    console.log("needsConnectLoading", needsConnectLoading);
+    console.log("isAuthLoading", isAuthLoading);  
     return <LoadingSpinner />;
   }
 

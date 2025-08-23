@@ -56,8 +56,12 @@ export const fetchUserTeamsWithNeedsUpdate = async (
       } as Team;
     });
 
+    console.log("augmentedTeams", augmentedTeams.length);
+
     // get all unique seasons present in the teams
     const seasonsPresent = [...new Set(augmentedTeams.map((team) => team.season))];
+
+    console.log("seasonsPresent", seasonsPresent);
 
     return {teams: augmentedTeams, seasonsPresent};
   } catch (error) {
@@ -91,6 +95,7 @@ export async function getTeamsForUser(
   const teamIds = userTeamsSnapshot.docs.map((doc) => doc.data().teamId);
 
   if (teamIds.length === 0) {
+    console.log("No teams found for user", userId);
     return [];
   }
 
@@ -98,6 +103,8 @@ export async function getTeamsForUser(
     .collection("teams")
     .where("id", "in", teamIds)
     .get();
+
+  console.log("teamsSnapshot", teamsSnapshot.docs.length);
 
   const now = Date.now();
   const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
@@ -132,6 +139,7 @@ export async function getTeamsForUser(
   // Update lastFetched in the DB, but don't wait for it to finish so we can return the teams immediately
   commitBatchAsync(batch);
 
+  console.log("returning teams", teams.length);
   return teams;
 }
 

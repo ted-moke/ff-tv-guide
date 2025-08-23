@@ -8,7 +8,7 @@ export class LeagueMasterService {
   static async findOrCreateLeagueMaster({
     name,
     platform,
-    externalLeagueId,
+    externalLeagueId, 
     createdBy,
   }: {
     name: string;
@@ -41,7 +41,6 @@ export class LeagueMasterService {
     const leagueMaster: LeagueMaster = {
       name,
       platform,
-      externalLeagueId,
       createdBy,
       createdAt: new Date(),
       lastModified: new Date(),

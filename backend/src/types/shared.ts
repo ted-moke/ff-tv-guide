@@ -52,7 +52,6 @@ export interface LeagueMaster {
   id?: string;
   name: string;
   platform: { name: "sleeper" | "fleaflicker"; id: string };
-  externalLeagueId: string;
   createdBy: string;
   createdAt: Date;
   lastModified: Date;
@@ -62,5 +61,4 @@ export interface UserTeam {
   userId: string;
   leagueMasterId: string;
   teamId: string;
-  currentSeason: number;
 }

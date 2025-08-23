@@ -5,12 +5,15 @@ import { useView } from "../view/ViewContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FantasyTeam } from "./teamTypes";
 import { FantasyTeamOption } from "./FantasyTeamOption";
+import { CURRENT_SEASON } from "../../constants";
 
 const FantasyTeamOptions: React.FC = () => {
   const [selectedLeagueId, setSelectedLeagueId] = useState<string | null>(null);
-  const { setIsMenuOpen, userTeams, userTeamsLoading, userTeamsError } =
-    useView();
   const {
+    setIsMenuOpen,
+    userTeams,
+    userTeamsLoading,
+    userTeamsError,
     visibleTeams,
     hideTeam,
     showTeam,
@@ -41,6 +44,8 @@ const FantasyTeamOptions: React.FC = () => {
     }
   };
 
+  console.log("userTeams", userTeams);
+
   return (
     <div className={styles["fantasy-team-list-wrapper"]}>
       <h5>Your Leagues</h5>
@@ -48,7 +53,7 @@ const FantasyTeamOptions: React.FC = () => {
         <p>Loading leagues...</p>
       ) : userTeamsError ? (
         <p>Error loading leagues: {(userTeamsError as Error).message}</p>
-      ) : userTeams.length < 1 ? (
+      ) : Object.keys(userTeams).length < 1 ? (
         <div className={styles["fantasy-team-basic-list"]}>
           <p>No leagues found</p>
         </div>
@@ -56,9 +61,11 @@ const FantasyTeamOptions: React.FC = () => {
         <div className={styles["fantasy-team-list"]}>
           <div className={styles["fantasy-team-actions"]}>
             <LinkButton onClick={handleHideAllTeams}>Hide All</LinkButton>
-            <LinkButton onClick={handleSelectAllFantasyTeams}>Show All</LinkButton>
+            <LinkButton onClick={handleSelectAllFantasyTeams}>
+              Show All
+            </LinkButton>
           </div>
-          {userTeams.map((team) => {
+            {Object.values(userTeams[CURRENT_SEASON.toString()]).map((team) => {
             const isVisible = visibleTeams.some(
               (t) => t.leagueId === team.leagueId
             );

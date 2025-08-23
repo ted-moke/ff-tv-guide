@@ -3,10 +3,24 @@ import Sidebar from "../Sidebar";
 import Navigation from "../Navigation";
 import styles from "./Layout.module.css";
 import { useView } from "../../features/view/ViewContext";
+import { useAuthContext } from "../../features/auth/AuthProvider";
+import LoadingSpinner from "./LoadingSpinner";
+import { Navigate } from "react-router-dom";
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
+const Layout = ({ isAuthBlocking = true, children }: { isAuthBlocking?: boolean, children: React.ReactNode }) => {
   const { isMobile, isMenuOpen } = useView();
+  const { user, isLoading: isAuthLoading } = useAuthContext();
 
+  if (isAuthLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (!user && isAuthBlocking) {
+    console.log("No user, redirecting to connect-team");
+    return <Navigate to="/connect-team" />;
+  }
+
+  console.log('user', user);
   return (
     <div className={`${styles["app-container"]} ${isMenuOpen ? styles["sidebar-open"] : ""}`}>
       {isMobile && (

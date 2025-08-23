@@ -7,6 +7,12 @@ const isProduction = process.env.NODE_ENV === "production";
 const envFile = isProduction ? ".env.production" : ".env.development";
 dotenv.config({ path: path.resolve(__dirname, "..", envFile) });
 
+// Set emulator environment variables for development
+if (!isProduction) {
+  process.env.FIRESTORE_EMULATOR_HOST = "localhost:8080";
+  process.env.FIREBASE_AUTH_EMULATOR_HOST = "localhost:9099";
+}
+
 let dbInstance: admin.firestore.Firestore | null = null;
 let adminInstance: typeof admin | null = null;
 
@@ -14,16 +20,25 @@ const initializeFirebase = async () => {
   try {
     if (adminInstance) return; // Already initialized
     console.log("Initializing Firebase. Production: ", isProduction);
-
-    const serviceAccount = isProduction
-      ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY || "")
-      : await getSecret("firestore_service_acc");
-
-    admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount),
-      projectId: process.env.FB_PROJECT_ID,
-      storageBucket: process.env.FB_STORAGE_BUCKET,
+    console.log("Emulator hosts:", {
+      FIRESTORE_EMULATOR_HOST: process.env.FIRESTORE_EMULATOR_HOST,
+      FIREBASE_AUTH_EMULATOR_HOST: process.env.FIREBASE_AUTH_EMULATOR_HOST
     });
+
+    if (isProduction) {
+      const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT_KEY || "");
+      admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount),
+        projectId: process.env.FB_PROJECT_ID,
+        storageBucket: process.env.FB_STORAGE_BUCKET,
+      });
+    } else {
+      // Development mode - use emulator
+      console.log("Initializing Firebase Admin with emulator");
+      admin.initializeApp({
+        projectId: "fantasy-tv-guide",
+      });
+    }
 
     adminInstance = admin;
     dbInstance = admin.firestore();
@@ -65,7 +80,13 @@ export const getDb = async () => {
 export const verifyIdToken = async (idToken: string) => {
   await initializeFirebase();
   if (process.env.NODE_ENV !== "production") {
-    return await adminInstance!.auth().verifyIdToken(idToken, true);
+    console.log("Verifying id token in development");
+    try {
+      return await adminInstance!.auth().verifyIdToken(idToken, true);
+    } catch (error) {
+      console.error("Error verifying token in development:", error);
+      throw error;
+    }
   } else {
     return await adminInstance!.auth().verifyIdToken(idToken);
   }

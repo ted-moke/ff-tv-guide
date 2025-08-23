@@ -9,13 +9,18 @@ export const useNeedsResources = () => {
   let needsAccount = false;
   let isLoading = false;
 
-  if (isAuthLoading || userTeamsLoading || userTeamsPending) {
+  if (isAuthLoading || userTeamsLoading) {
+    console.log("isAuthLoading", isAuthLoading);
+    console.log("userTeamsLoading", userTeamsLoading);
+    console.log("userTeamsPending", userTeamsPending);
     isLoading = true;
   } else if (!user) {
     needsAccount = true;
-  } else if (!userTeams || userTeams.length === 0) {
+  } else if (!userTeams || Object.keys(userTeams).length === 0) {
     needsConnect = true;
   }
+
+  
 
   return { isLoading, needsConnect, needsAccount };
 };

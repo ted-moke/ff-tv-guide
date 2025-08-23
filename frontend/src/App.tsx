@@ -76,7 +76,7 @@ const App: React.FC = () => {
               <Route
                 path="/connect-team"
                 element={
-                  <Layout>
+                  <Layout isAuthBlocking={false}>
                     <ConnectTeam />
                   </Layout>
                 }

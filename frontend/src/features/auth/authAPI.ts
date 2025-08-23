@@ -3,24 +3,46 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   onAuthStateChanged,
+  User,
 } from "firebase/auth";
 import { AuthData } from "./authTypes";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 // Set up auth state listener
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    console.log("User is signed in, grabbing new token and setting");
-    const token = await user.getIdToken(true);
-    localStorage.setItem("authToken", token);
+let authStateListenerSet = false;
+
+export const setupAuthStateListener = (callback: (user: User) => void) => {
+  if (authStateListenerSet) {
+    console.log("Auth state listener already set up");
+    return;
   }
-});
+  
+  authStateListenerSet = true;
+  onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      console.log("User is signed in, grabbing new token and setting", user);
+      try {
+        const tokenResult = await user.getIdTokenResult(false); // Don't force refresh
+        console.log("tokenResult", tokenResult);
+        localStorage.setItem("authToken", tokenResult.token);
+        callback(user);
+      } catch (error) {
+        console.error("Error getting token:", error);
+      }
+    } else {
+      console.log("User signed out");
+      localStorage.removeItem("authToken");
+    }
+  });
+};
 
 export const verifyToken = async (): Promise<AuthData> => {
+  console.log("verifying token");
   const token = localStorage.getItem("authToken");
 
   if (!token) {
+    console.log("No token found");
     return { authenticated: false };
   }
 
@@ -34,7 +56,9 @@ export const verifyToken = async (): Promise<AuthData> => {
     });
 
     if (!response.ok) throw new Error("Failed to verify token");
-    return response.json();
+    const data = await response.json();
+    console.log("data from verifyToken", data);
+    return data;
   } catch (error) {
     console.error("Error verifying token:", error);
     return { authenticated: false };
@@ -42,6 +66,7 @@ export const verifyToken = async (): Promise<AuthData> => {
 };
 
 export const registerTemporaryUser = async () => {
+  console.log("registering temporary user");
   const response = await fetch(`${API_URL}/users/register`, {
     method: "POST",
     headers: {
@@ -69,6 +94,7 @@ export const registerUser = async (userData: {
   password: string;
   isTemporary: boolean;
 }) => {
+  console.log("registering user");
   const userCredential = await createUserWithEmailAndPassword(
     auth,
     userData.email,
@@ -103,6 +129,7 @@ export const loginUser = async (credentials: {
   email: string;
   password: string;
 }) => {
+  console.log("logging in user");
   const userCredential = await signInWithEmailAndPassword(
     auth,
     credentials.email,

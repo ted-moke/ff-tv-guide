@@ -159,15 +159,23 @@ export const verifyToken = async (req: Request, res: Response) => {
     const authHeader = req.headers.authorization;
     const token = authHeader && authHeader.split(" ")[1];
 
+    console.log("Verifying token in development verifyToken");
+    console.log("Token length:", token?.length);
+    console.log("Token preview:", token?.substring(0, 50) + "...");
+
     if (!token) {
       return res
         .status(200)
         .json({ authenticated: false, message: "No token provided" });
     }
 
+    console.log("about to decode token");
     const decodedToken = await verifyIdToken(token);
+    console.log("decodedToken", decodedToken);
     const uid = decodedToken.uid;
     const userRecord = await admin.auth().getUser(uid);
+
+    console.log("userRecord", userRecord);
 
     // Fetch user data from Firestore
     const userDoc = await db.collection("users").doc(uid).get();
@@ -181,6 +189,11 @@ export const verifyToken = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error("Error verifying token:", error);
+    console.error("Error details:", {
+      name: error instanceof Error ? error.name : 'Unknown',
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : 'No stack trace'
+    });
     res.status(200).json({ authenticated: false, error: "Invalid token" });
   }
 };

@@ -20,6 +20,8 @@ export const getUserTeams = async (req: Request, res: Response) => {
     let priorYearTeams: Team[] = [];
     let priorYearSeasons: number[] = [];
 
+    console.log("teams before prior check", teams.length);
+
     if (teams.length === 0) {
       console.log(
         `No teams found for user for ${uid} and season ${seasonStart} to ${seasonEnd}`,
@@ -36,25 +38,28 @@ export const getUserTeams = async (req: Request, res: Response) => {
 
       if (priorYearTeams.length === 0) {
         console.log(`No teams found for user for ${uid} and season ${priorYear}`);
-        return res.status(200).json({ teams: [], includedSeasons: [] });
+        return res.status(200).json({ teamsBySeason: {}, teamsNeedingUpdate: [], teamsNeedingMigrate: [] });
       }
     }
 
     const allTeams = [...teams, ...priorYearTeams];
     const allSeasons = new Set([...seasonsPresent, ...priorYearSeasons]);
 
-    let teamsBySeason = new Map<number, Team[]>();
+    let teamsBySeason: Record<string, Team[]> = {};
 
     for (const team of allTeams) {
+      console.log("team", team);
       const season = team.season || 0;
-      if (!teamsBySeason.has(season)) {
-        teamsBySeason.set(season, []);
+      if (!teamsBySeason[season]) {
+        teamsBySeason[season] = [];
       }
-      teamsBySeason.get(season)?.push(team);
+      teamsBySeason[season].push(team);
+      console.log('teamsbyseason', teamsBySeason);
     }
 
     const teamsNeedingUpdate = allTeams.filter((team) => team.needsUpdate);
     const teamsNeedingMigrate = allTeams.filter((team) => team.needsMigrate);
+    
 
     res.status(200).json({ teamsBySeason, teamsNeedingUpdate, teamsNeedingMigrate });
   } catch (error) {

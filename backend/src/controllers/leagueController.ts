@@ -7,6 +7,7 @@ import { startBackgroundJob } from "../utils/backgroundJobs";
 
 const BATCH_SIZE = 7; // Adjust as needed
 
+
 export const upsertLeague = async (req: Request, res: Response) => {
   const {
     leagueName,
@@ -24,7 +25,14 @@ export const upsertLeague = async (req: Request, res: Response) => {
     !platformId ||
     !season
   ) {
-    return res.status(400).json({ error: "Missing required fields" });
+    const missingFields: string[] = [];
+    if (!leagueName) missingFields.push("leagueName");
+    if (!externalLeagueId) missingFields.push("externalLeagueId");
+    if (!platformCredentialId) missingFields.push("platformCredentialId");
+    if (!platformId) missingFields.push("platformId");
+    if (!season) missingFields.push("season");
+    console.log("missingFields", missingFields);
+    return res.status(400).json({ error: `Missing required fields: ${missingFields.join(", ")}` });
   }
 
   try {
@@ -43,7 +51,7 @@ export const upsertLeague = async (req: Request, res: Response) => {
     const userId = platformCredentialDoc.data()!.userId;
     const externalUserId = platformCredentialDoc.data()!.externalUserId;
 
-    // Find or create LeagueMaster
+    // // Find or create LeagueMaster
     const leagueMaster = await LeagueMasterService.findOrCreateLeagueMaster({
       name: leagueName,
       platform: { name: platformId as "sleeper" | "fleaflicker", id: platformId },
@@ -76,7 +84,6 @@ export const upsertLeague = async (req: Request, res: Response) => {
     res.status(200).json({ 
       message: "League connected successfully", 
       league,
-      leagueMaster 
     });
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });

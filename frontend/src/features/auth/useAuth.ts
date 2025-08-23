@@ -5,20 +5,22 @@ import {
   registerUser,
   registerTemporaryUser,
   convertTempUser,
+  setupAuthStateListener,
 } from "./authAPI";
 import { useState, useEffect, useCallback } from "react";
 import { AuthData } from "./authTypes";
 import { auth } from "../../firebaseConfig";
 import { useNavigate } from "react-router-dom";
 
-export const useAuth = ({ enabled = true }: { enabled?: boolean } = {}) => {
+export const useAuth = ({ enabled = false }: { enabled?: boolean } = {}) => {
   const [tempUser, setTempUser] = useState<AuthData | null>(
     localStorage.getItem("tempUserData")
       ? JSON.parse(localStorage.getItem("tempUserData")!)
       : null
   );
-  const queryClient = useQueryClient();
   const [isAuthEnabled, setIsAuthEnabled] = useState(enabled);
+  const [tokenVerified, setTokenVerified] = useState(false);
+  const queryClient = useQueryClient();
   const navigate = useNavigate();
   const _clearAuthData = useCallback(async () => {
     setIsAuthEnabled(false);
@@ -46,20 +48,35 @@ export const useAuth = ({ enabled = true }: { enabled?: boolean } = {}) => {
   });
 
   useEffect(() => {
+    setupAuthStateListener((user) => {
+      console.log("user", user);
+      setIsAuthEnabled(true);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (data && data.authenticated) {
+      setTokenVerified(true);
+    }
+    console.log('data', data);
+  }, [data]);
+
+  useEffect(() => {
     if (isError) {
       console.error("Auth query error:", error);
       setIsAuthEnabled(false);
     }
   }, [isError, error, location.pathname]);
 
-  const user = data?.authenticated ? data : tempUser ? tempUser : null;
+  const user = !tokenVerified ? null : data?.authenticated ? data : tempUser ? tempUser : null;
 
   const loginMutation = useMutation({
     mutationFn: loginUser,
     onSuccess: (data: AuthData) => {
       queryClient.setQueryData(["auth"], data);
       setIsAuthEnabled(true);
-      refetch();
+      // Don't call refetch immediately to avoid race condition
+      // refetch();
       // Remove navigation logic from here
     },
     onError: (error: Error) => {
@@ -73,7 +90,8 @@ export const useAuth = ({ enabled = true }: { enabled?: boolean } = {}) => {
     onSuccess: (data: AuthData) => {
       queryClient.setQueryData(["auth"], data);
       setIsAuthEnabled(true);
-      refetch();
+      // Don't call refetch immediately to avoid race condition
+      // refetch();
       // Remove navigation logic from here
     },
     onError: (error: Error) => {
@@ -105,7 +123,8 @@ export const useAuth = ({ enabled = true }: { enabled?: boolean } = {}) => {
       localStorage.removeItem("tempUserData");
       queryClient.setQueryData(["auth"], data);
       setIsAuthEnabled(true);
-      refetch();
+      // Don't call refetch immediately to avoid race condition
+      // refetch();
       // Remove navigation logic from here
     },
     onError: (error: Error) => {
