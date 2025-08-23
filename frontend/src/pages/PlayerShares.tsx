@@ -14,7 +14,7 @@ import Collapsible from "../components/ui/Collapsible";
 import DataTable from "../components/ui/DataTable";
 import { LuFilter } from "react-icons/lu";
 import { getTeamCodesByName } from "../features/teams/getTeamCodeByName";
-
+import { Stack } from "../components/ui/Stack";
 interface GroupedPlayer {
   team: string;
   players: Player[];
@@ -124,6 +124,30 @@ const PlayerShares: React.FC = () => {
       return acc;
     }, {} as Record<string, number>);
 
+    // Calculate division shares from ALL teams, not just filtered ones
+    const allTeams =
+      activeConference === "Both"
+        ? Object.values(NFL_TEAMS)
+        : getTeamsByConference(activeConference);
+
+    const sharesByDivision = allTeams.reduce((acc, team) => {
+      if (!acc[team.conference]) {
+        acc[team.conference] = {};
+      }
+      if (!acc[team.conference][team.division]) {
+        acc[team.conference][team.division] = 0;
+      }
+
+      const teamPlayers = getPlayersByTeam(team.codes, allPlayers);
+      const teamShares = teamPlayers.allSelf.reduce(
+        (sum, player) => sum + player.copies.length,
+        0
+      );
+
+      acc[team.conference][team.division] += teamShares;
+      return acc;
+    }, {} as Record<string, Record<string, number>>);
+
     const teamsByMostOwned = Object.entries(sharesByTeam).sort((a, b) => {
       if (a[1] === b[1]) {
         return b[0].localeCompare(a[0]);
@@ -137,8 +161,40 @@ const PlayerShares: React.FC = () => {
       return a[1] - b[1];
     });
 
+    // Flatten the division data to create proper division names
+    const flattenedDivisions = Object.entries(sharesByDivision).flatMap(
+      ([conference, divisions]) =>
+        Object.entries(divisions).map(([division, shares]) => ({
+          divisionName: `${conference} ${division}`,
+          shares,
+          conference,
+          division,
+        }))
+    );
+
+    const teamsByMostOwnedByDivision = flattenedDivisions
+      .sort((a, b) => {
+        if (a.shares === b.shares) {
+          return a.divisionName.localeCompare(b.divisionName);
+        }
+        return b.shares - a.shares;
+      })
+      .map((item) => [item.divisionName, item.shares]);
+
+    const teamsByLeastOwnedByDivision = flattenedDivisions
+      .sort((a, b) => {
+        if (a.shares === b.shares) {
+          return a.divisionName.localeCompare(b.divisionName);
+        }
+        return a.shares - b.shares;
+      })
+      .map((item) => [item.divisionName, item.shares]);
+
     const mostOwnedTeam = teamsByMostOwned[0][0];
     const leastOwnedTeam = teamsByLeastOwned[0][0];
+
+    const mostOwnedTeamByDivision = teamsByMostOwnedByDivision[0][0];
+    const leastOwnedTeamByDivision = teamsByLeastOwnedByDivision[0][0];
 
     return {
       totalPlayers,
@@ -148,7 +204,11 @@ const PlayerShares: React.FC = () => {
       mostOwnedTeam,
       leastOwnedTeam,
       teamsByMostOwned,
+      teamsByMostOwnedByDivision,
       teamsByLeastOwned,
+      teamsByLeastOwnedByDivision,
+      mostOwnedTeamByDivision,
+      leastOwnedTeamByDivision,
     };
   }, [sortedGroupedPlayers]);
 
@@ -184,17 +244,38 @@ const PlayerShares: React.FC = () => {
 
       <label>Showing {numberOfSelectedTeams} teams</label>
 
-        <Collapsible
-          title="Filters"
-          defaultCollapsed={true}
-          onClear={() => {}}
-          showClear={false}
-          clearLabel="Clear"
-          className={styles.filtersCollapsible}
-          icon={<LuFilter />}
-        >
-          <PlayerSharesFilters />
-        </Collapsible>
+      <Collapsible
+        title="Filters"
+        defaultCollapsed={true}
+        onClear={() => {}}
+        showClear={false}
+        clearLabel="Clear"
+        className={styles.filtersCollapsible}
+        icon={<LuFilter />}
+      >
+        <PlayerSharesFilters />
+      </Collapsible>
+
+      <Stack direction="row" gap={1}>
+        <div className={styles.statItemRow}>
+          <label className={styles.statLabel}>NFL Teams:</label>
+          <div className={styles.statValueContainer}>
+            <p className={styles.statValue}>{summaryStats.teamsWithPlayers}</p>
+          </div>
+        </div>
+        <div className={styles.statItemRow}>
+          <label className={styles.statLabel}>Players:</label>
+          <div className={styles.statValueContainer}>
+            <p className={styles.statValue}>{summaryStats.totalPlayers}</p>
+          </div>
+        </div>
+        <div className={styles.statItemRow}>
+          <label className={styles.statLabel}>Total Shares:</label>
+          <div className={styles.statValueContainer}>
+            <p className={styles.statValue}>{summaryStats.totalShares}</p>
+          </div>
+        </div>
+      </Stack>
 
       <div className={styles.summaryStats}>
         <div className={styles.statItem}>
@@ -236,21 +317,55 @@ const PlayerShares: React.FC = () => {
           </div>
         </div>
         <div className={styles.statItem}>
-          <label className={styles.statLabel}>NFL Teams:</label>
+          <label className={styles.statLabel}>Most Owned Division:</label>
           <div className={styles.statValueContainer}>
-            <p className={styles.statValue}>{summaryStats.teamsWithPlayers}</p>
+            <p className={styles.statValue}>
+              {summaryStats.mostOwnedTeamByDivision}
+            </p>
+            <p className={styles.statValueSub}>
+              {typeof summaryStats.teamsByMostOwnedByDivision[0]?.[1] ===
+              "number"
+                ? summaryStats.teamsByMostOwnedByDivision[0][1]
+                : 0}{" "}
+              shares
+            </p>
+            <p className={styles.statValueSub}>
+              {(
+                ((typeof summaryStats.teamsByMostOwnedByDivision[0]?.[1] ===
+                "number"
+                  ? summaryStats.teamsByMostOwnedByDivision[0][1]
+                  : 0) /
+                  summaryStats.totalShares) *
+                100
+              ).toFixed(1)}
+              %
+            </p>
           </div>
         </div>
         <div className={styles.statItem}>
-          <label className={styles.statLabel}>Players:</label>
+          <label className={styles.statLabel}>Least Owned Division:</label>
           <div className={styles.statValueContainer}>
-            <p className={styles.statValue}>{summaryStats.totalPlayers}</p>
-          </div>
-        </div>
-        <div className={styles.statItem}>
-          <label className={styles.statLabel}>Total Shares:</label>
-          <div className={styles.statValueContainer}>
-            <p className={styles.statValue}>{summaryStats.totalShares}</p>
+            <p className={styles.statValue}>
+              {summaryStats.leastOwnedTeamByDivision}
+            </p>
+            <p className={styles.statValueSub}>
+              {typeof summaryStats.teamsByLeastOwnedByDivision[0]?.[1] ===
+              "number"
+                ? summaryStats.teamsByLeastOwnedByDivision[0][1]
+                : 0}{" "}
+              shares
+            </p>
+            <p className={styles.statValueSub}>
+              {(
+                ((typeof summaryStats.teamsByLeastOwnedByDivision[0]?.[1] ===
+                "number"
+                  ? summaryStats.teamsByLeastOwnedByDivision[0][1]
+                  : 0) /
+                  summaryStats.totalShares) *
+                100
+              ).toFixed(1)}
+              %
+            </p>
           </div>
         </div>
       </div>
@@ -297,6 +412,50 @@ const PlayerShares: React.FC = () => {
             bottomRows: 3,
             defaultCollapsed: true,
           }}
+        />
+      </div>
+
+      <div className={styles.teamsTableWrapper}>
+        <h3 className={styles.sectionTitle}>Players By Division</h3>
+        <DataTable
+          data={summaryStats.teamsByMostOwnedByDivision.map((division) => {
+            const shares = typeof division[1] === "number" ? division[1] : 0;
+            return {
+              division: division[0] ?? "??",
+              shares,
+              percentage: ((shares / summaryStats.totalShares) * 100).toFixed(
+                1
+              ),
+              rank:
+                summaryStats.teamsByMostOwnedByDivision.findIndex(
+                  (t) => t[0] === division[0]
+                ) + 1,
+            };
+          })}
+          columns={[
+            {
+              key: "division",
+              label: "Division",
+              align: "left",
+              width: "80px",
+            },
+            {
+              key: "shares",
+              label: "Shares",
+              align: "right",
+              width: "100px",
+              format: (value) => value.toLocaleString(),
+            },
+            {
+              key: "percentage",
+              label: "Share %",
+              align: "right",
+              width: "100px",
+              format: (value) => `${value}%`,
+            },
+          ]}
+          compact={true}
+          striped={true}
         />
       </div>
 

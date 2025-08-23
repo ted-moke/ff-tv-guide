@@ -30,6 +30,13 @@
   gap: var(--size0_5);
 }
 
+.statItemRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--size0_5);
+}
+
 
 .statLabel {
   color: var(--text-color-muted);
