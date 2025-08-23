@@ -179,7 +179,7 @@ export class FleaflickerService {
           leagueId: league.id!,
           leagueMasterId: league.leagueMasterId,
           leagueName: league.name,
-          season: league.season,
+          season,
           name: teamData.name,
           externalUsername: primaryOwner
             ? primaryOwner.displayName

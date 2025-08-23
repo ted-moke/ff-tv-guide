@@ -20,8 +20,6 @@ export const getUserTeams = async (req: Request, res: Response) => {
     let priorYearTeams: Team[] = [];
     let priorYearSeasons: number[] = [];
 
-    console.log("teams before prior check", teams.length);
-
     if (teams.length === 0) {
       console.log(
         `No teams found for user for ${uid} and season ${seasonStart} to ${seasonEnd}`,
@@ -48,7 +46,6 @@ export const getUserTeams = async (req: Request, res: Response) => {
     let teamsBySeason: Record<string, Team[]> = {};
 
     for (const team of allTeams) {
-      console.log("team", team);
       const season = team.season || 0;
       if (!teamsBySeason[season]) {
         teamsBySeason[season] = [];

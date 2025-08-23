@@ -274,7 +274,6 @@ export class SleeperService {
               userId: userId,
               leagueMasterId: league.leagueMasterId,
               teamId: teamDoc.id,
-              currentSeason: league.season,
             });
           } else {
             // Update existing userTeam with new team and season
@@ -283,7 +282,6 @@ export class SleeperService {
               userId: userId,
               leagueMasterId: league.leagueMasterId,
               teamId: teamDoc.id,
-              currentSeason: league.season,
             });
           }
           break; // We've found the user's team, no need to continue

@@ -59,11 +59,13 @@ export const fetchUserTeamsWithNeedsUpdate = async (
     console.log("augmentedTeams", augmentedTeams.length);
 
     // get all unique seasons present in the teams
-    const seasonsPresent = [...new Set(augmentedTeams.map((team) => team.season))];
+    const seasonsPresent = [
+      ...new Set(augmentedTeams.map((team) => team.season)),
+    ];
 
     console.log("seasonsPresent", seasonsPresent);
 
-    return {teams: augmentedTeams, seasonsPresent};
+    return { teams: augmentedTeams, seasonsPresent };
   } catch (error) {
     console.error("Error fetching user teams:", error);
     throw error;
@@ -81,16 +83,7 @@ export async function getTeamsForUser(
   const seasonStartNumber = parseInt(seasonStart);
   const seasonEndNumber = seasonEnd ? parseInt(seasonEnd) : null;
 
-  let query = db
-    .collection("userTeams")
-    .where("userId", "==", userId)
-    .where("currentSeason", ">=", seasonStartNumber);
-
-  if (seasonEndNumber) {
-    query = query.where("currentSeason", "<=", seasonEndNumber);
-  }
-
-  const userTeamsSnapshot = await query.get();
+  const userTeamsSnapshot = await db.collection("userTeams").where("userId", "==", userId).get();
 
   const teamIds = userTeamsSnapshot.docs.map((doc) => doc.data().teamId);
 
@@ -99,12 +92,16 @@ export async function getTeamsForUser(
     return [];
   }
 
-  const teamsSnapshot = await db
+  let teamsQuery = db
     .collection("teams")
     .where("id", "in", teamIds)
-    .get();
+    .where("season", ">=", seasonStartNumber);
 
-  console.log("teamsSnapshot", teamsSnapshot.docs.length);
+  if (seasonEndNumber) {
+    teamsQuery = teamsQuery.where("season", "<=", seasonEndNumber);
+  }
+
+  const teamsSnapshot = await teamsQuery.get();
 
   const now = Date.now();
   const tenMinutesAgo = new Date(Date.now() - 10 * 60 * 1000);
