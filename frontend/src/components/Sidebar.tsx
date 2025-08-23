@@ -70,7 +70,7 @@ const Sidebar: React.FC = () => {
           className={`${styles["divider"]} ${styles["divider-no-margin"]}`}
         />
         <div className={styles["menu-items"]}>
-          {user && !user.isTemporary ? (
+          {user && !user.isAnonymous ? (
             <Button
               color={ButtonColor.CLEAR}
               onClick={() => {
@@ -100,6 +100,17 @@ const Sidebar: React.FC = () => {
               >
                 Sign In
               </Button>
+              {user && user.isAnonymous && (
+                <Button
+                  color={ButtonColor.CLEAR}
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    logout();
+                  }}
+                >
+                  Clear data
+                </Button>
+              )}
             </>
           )}
         </div>

@@ -129,14 +129,14 @@ export const useUserTeams = ({
 export const useOpponentTeams = ({
   enabled = true,
 }: { enabled?: boolean } = {}) => {
-  const { backendUser, user } = useAuthContext();
+  const { user } = useAuthContext();
 
   return useQuery<FantasyTeam[]>({
-    queryKey: ["opponentTeams", backendUser?.uid],
+    queryKey: ["opponentTeams", user?.uid],
     queryFn: async (): Promise<FantasyTeam[]> => {
-      if (!backendUser) throw new Error("User not authenticated");
+      if (!user) throw new Error("User not authenticated");
       const idToken = await user?.getIdToken();
-      const response = await fetch(`${API_URL}/users/${backendUser.uid}/opponents`, {
+      const response = await fetch(`${API_URL}/users/${user.uid}/opponents`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

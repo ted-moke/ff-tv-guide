@@ -54,7 +54,6 @@ export const getUserTeams = async (req: Request, res: Response) => {
         teamsBySeason[season] = [];
       }
       teamsBySeason[season].push(team);
-      console.log('teamsbyseason', teamsBySeason);
     }
 
     const teamsNeedingUpdate = allTeams.filter((team) => team.needsUpdate);
