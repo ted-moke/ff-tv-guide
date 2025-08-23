@@ -12,16 +12,6 @@
   width: 100%;
 }
 
-.fantasy-team-item {
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-
-.fantasy-team-item input[type="checkbox"] {
-  margin-right: var(--size0_5);
-}
-
 .fantasy-team-list-wrapper h5 {
   margin-bottom: var(--size1);
 }
@@ -29,6 +19,7 @@
 .fantasy-team-list {
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 .fantasy-team-list > * {

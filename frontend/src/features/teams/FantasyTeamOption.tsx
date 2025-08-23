@@ -5,7 +5,7 @@ import LinkButton from "../../components/ui/LinkButton";
 import { Stack } from "../../components/ui/Stack";
 import { FantasyTeam } from "./teamTypes";
 import RadioButton from "../../components/ui/RadioButton";
-import styles from "./FantasyTeamOptions.module.css";
+import styles from "./FantasyTeamOption.module.css";
 
 export const FantasyTeamOption = ({
   team,
@@ -34,9 +34,9 @@ export const FantasyTeamOption = ({
 
   if (!selected) {
     return (
-      <div style={{ cursor: "pointer" }} onClick={handleClick}>
+      <div className={styles["fantasy-team-item"]} onClick={handleClick}>
         <Stack direction="row" align="center">
-          <p className={styles["fantasy-team-item"]}>{team.leagueName}</p>
+          <p>{team.leagueName}</p>
           {allHidden && <small className="muted">Hidden</small>}
           {opponentHidden && <small className="muted">Team Only</small>}
         </Stack>
