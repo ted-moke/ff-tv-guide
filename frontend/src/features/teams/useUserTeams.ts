@@ -46,8 +46,6 @@ export const useUserTeams = ({
   let hasTeamsToUpdate = false;
   let hasTeamsToMigrate = false;
 
-  console.log('user', user);
-
   const { data, isLoading, isPending, error } = useQuery<{
     teamsBySeason: Record<number, FantasyTeam[]>;
     teamsNeedingUpdate: FantasyTeam[];

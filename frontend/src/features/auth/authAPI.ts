@@ -10,32 +10,39 @@ import { AuthData } from "./authTypes";
 const API_URL = import.meta.env.VITE_API_URL;
 
 // Set up auth state listener
-let authStateListenerSet = false;
+// let authStateListenerSet = false;
+// let isInitialLoad = true;
+// onAuthStateChanged(auth, async (user) => {
+//   console.log("root auth state changed", user);
+// });
 
-export const setupAuthStateListener = (callback: (user: User) => void) => {
-  if (authStateListenerSet) {
-    console.log("Auth state listener already set up");
-    return;
-  }
+// export const setupAuthStateListener = (callback: (user: User) => void) => {
+//   console.log("setting up auth state listener");
+//   if (authStateListenerSet) {
+//     console.log("Auth state listener already set up");
+//     return;
+//   }
   
-  authStateListenerSet = true;
-  onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      console.log("User is signed in, grabbing new token and setting", user);
-      try {
-        const tokenResult = await user.getIdTokenResult(false); // Don't force refresh
-        console.log("tokenResult", tokenResult);
-        localStorage.setItem("authToken", tokenResult.token);
-        callback(user);
-      } catch (error) {
-        console.error("Error getting token:", error);
-      }
-    } else {
-      console.log("User signed out");
-      localStorage.removeItem("authToken");
-    }
-  });
-};
+//   authStateListenerSet = true;
+//   onAuthStateChanged(auth, async (user) => {
+//     console.log("auth state changed", user);
+
+//     // if (user) {
+//     //   console.log("User is signed in, grabbing new token and setting", user);
+//     //   try {
+//     //     const tokenResult = await user.getIdTokenResult(false); // Don't force refresh
+//     //     console.log("tokenResult", tokenResult);
+//     //     localStorage.setItem("authToken", tokenResult.token);
+//     //     callback(user);
+//     //   } catch (error) {
+//     //     console.error("Error getting token:", error);
+//     //   }
+//     // } else {
+//     //   console.log("User signed out");
+//     //   // localStorage.removeItem("authToken");
+//     // }
+//   });
+// };
 
 export const verifyToken = async (): Promise<AuthData> => {
   console.log("verifying token");
@@ -121,6 +128,7 @@ export const registerUser = async (userData: {
   if (!data.authenticated) {
     throw new Error("Failed to login");
   }
+  
 
   return data;
 };

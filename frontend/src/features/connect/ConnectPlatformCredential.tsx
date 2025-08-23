@@ -71,7 +71,9 @@ const ConnectPlatformCredential: React.FC<ConnectPlatformCredentialProps> = ({
 
       if (!user) {
         currentUser = await registerTemporaryUser();
+        console.log('new temp user', currentUser);
       }
+
 
       if (selectedPlatform && currentUser?.uid) {
         await mutation.mutateAsync({

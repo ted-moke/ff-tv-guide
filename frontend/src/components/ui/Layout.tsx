@@ -11,7 +11,7 @@ const Layout = ({ isAuthBlocking = true, children }: { isAuthBlocking?: boolean,
   const { isMobile, isMenuOpen } = useView();
   const { user, isLoading: isAuthLoading } = useAuthContext();
 
-  if (isAuthLoading) {
+  if (isAuthLoading && isAuthBlocking) {
     return <LoadingSpinner />;
   }
 
@@ -20,7 +20,6 @@ const Layout = ({ isAuthBlocking = true, children }: { isAuthBlocking?: boolean,
     return <Navigate to="/connect-team" />;
   }
 
-  console.log('user', user);
   return (
     <div className={`${styles["app-container"]} ${isMenuOpen ? styles["sidebar-open"] : ""}`}>
       {isMobile && (

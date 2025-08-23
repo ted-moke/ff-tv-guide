@@ -20,4 +20,4 @@ if (import.meta.env.MODE === 'development') {
   connectFirestoreEmulator(db, 'localhost', 8080);
 }
 
-export { auth, db };
+export { auth, db, app, getAuth };

@@ -44,8 +44,6 @@ const FantasyTeamOptions: React.FC = () => {
     }
   };
 
-  console.log("userTeams", userTeams);
-
   return (
     <div className={styles["fantasy-team-list-wrapper"]}>
       <h5>Your Leagues</h5>

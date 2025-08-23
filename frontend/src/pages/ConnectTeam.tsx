@@ -29,8 +29,8 @@ const ConnectTeam: React.FC = () => {
   const { user, isLoading: isAuthLoading } = useAuthContext();
   const {
     data: credentials,
-    isLoading,
-    error,
+    isLoading: credentialsLoading,
+    error: credentialsError,
     refetch: refetchCredentials,
   } = useCredentials({ user: user ?? undefined });
   const { mutateAsync: connectLeague } = useConnectLeague();
@@ -115,9 +115,9 @@ const ConnectTeam: React.FC = () => {
     }
   };
 
-  if (isLoading || isAuthLoading) return <LoadingSpinner />;
-  if (error)
-    return <div>Error loading credentials: {(error as Error).message}</div>;
+  // if (credentialsLoading || isAuthLoading) return <LoadingSpinner />;
+  if (credentialsError)
+    return <div>Error loading credentials: {(credentialsError as Error).message}</div>;
 
   let derivedShowCredentialForm = showNewCredentialForm;
   if (!user) {
