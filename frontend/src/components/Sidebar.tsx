@@ -82,7 +82,7 @@ const Sidebar: React.FC = () => {
             </Button>
           ) : (
             <>
-              <p className={styles["temp-user-message"]}>
+              {/* <p className={styles["temp-user-message"]}>
                 To sync your leagues cross device and reap the full benefits of
                 FF TV Guide, create a free account.
               </p>
@@ -99,7 +99,7 @@ const Sidebar: React.FC = () => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Sign In
-              </Button>
+              </Button> */}
               {user && user.isAnonymous && (
                 <Button
                   color={ButtonColor.CLEAR}

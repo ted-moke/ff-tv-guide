@@ -9,12 +9,12 @@
 .fantasy-team-actions {
   display: flex;
   justify-content: space-between;
+  width: 100%;
 }
 
 .fantasy-team-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: var(--size1);
+  text-decoration: underline;
+  cursor: pointer;
 }
 
 
@@ -29,22 +29,14 @@
 .fantasy-team-list {
   display: flex;
   flex-direction: column;
-  gap: var(--size1);
-  padding: var(--size1);
 }
 
 .fantasy-team-list > * {
-  padding-bottom: var(--size1); 
   border-bottom: 1px solid var(--background-color-offset-2);
 }
 
-.fantasy-team-list {
+.fantasy-team-list-container {
   background-color: var(--background-color-offset);
   border-radius: var(--border-radius-small);
-}
-
-.fantasy-team-actions {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 10px;
+  padding: var(--size1);
 }

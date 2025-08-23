@@ -6,6 +6,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { FantasyTeam } from "./teamTypes";
 import { FantasyTeamOption } from "./FantasyTeamOption";
 import { CURRENT_SEASON } from "../../constants";
+import { Stack } from "../../components/ui/Stack";
 
 const FantasyTeamOptions: React.FC = () => {
   const [selectedLeagueId, setSelectedLeagueId] = useState<string | null>(null);
@@ -56,48 +57,55 @@ const FantasyTeamOptions: React.FC = () => {
           <p>No leagues found</p>
         </div>
       ) : (
-        <div className={styles["fantasy-team-list"]}>
-          <div className={styles["fantasy-team-actions"]}>
-            <LinkButton onClick={handleHideAllTeams}>Hide All</LinkButton>
-            <LinkButton onClick={handleSelectAllFantasyTeams}>
-              Show All
-            </LinkButton>
-          </div>
-            {Object.values(userTeams[CURRENT_SEASON.toString()]).map((team) => {
-            const isVisible = visibleTeams.some(
-              (t) => t.leagueId === team.leagueId
-            );
-            const isOpponentVisible = visibleOpponentTeams.some(
-              (t) => t.leagueId === team.leagueId
-            );
-            return (
-              <FantasyTeamOption
-                key={team.leagueId}
-                team={team}
-                isVisible={isVisible}
-                isOpponentVisible={isOpponentVisible}
-                showTeam={showTeam}
-                hideTeam={hideTeam}
-                showOpponentTeam={showOpponentTeam}
-                hideOpponentTeam={hideOpponentTeam}
-                selected={selectedLeagueId === team.leagueId}
-                handleClick={() => handleClickLeague(team.leagueId)}
-              />
-            );
-          })}
-        </div>
-      )}
-      {location.pathname !== "/connect-team" && (
-        <div className={styles["connect-team-container"]}>
-          <LinkButton
-            color={LinkButtonColor.PRIMARY}
-            onClick={() => {
-              setIsMenuOpen(false);
-              navigate("/connect-team");
-            }}
-          >
-            + Connect a League
-          </LinkButton>
+        <div className={styles["fantasy-team-list-container"]}>
+          <Stack gap={0.5}>
+          <small className="muted">Click league to change visibility</small>
+            <div className={styles["fantasy-team-actions"]}>
+              <LinkButton onClick={handleHideAllTeams}>Hide All</LinkButton>
+              <LinkButton onClick={handleSelectAllFantasyTeams}>
+                Show All
+              </LinkButton>
+            </div>
+            <div className={styles["fantasy-team-list"]}>
+              {Object.values(userTeams[CURRENT_SEASON.toString()]).map(
+                (team) => {
+                  const isVisible = visibleTeams.some(
+                    (t) => t.leagueId === team.leagueId
+                  );
+                  const isOpponentVisible = visibleOpponentTeams.some(
+                    (t) => t.leagueId === team.leagueId
+                  );
+                  return (
+                    <FantasyTeamOption
+                      key={team.leagueId}
+                      team={team}
+                      isVisible={isVisible}
+                      isOpponentVisible={isOpponentVisible}
+                      showTeam={showTeam}
+                      hideTeam={hideTeam}
+                      showOpponentTeam={showOpponentTeam}
+                      hideOpponentTeam={hideOpponentTeam}
+                      selected={selectedLeagueId === team.leagueId}
+                      handleClick={() => handleClickLeague(team.leagueId)}
+                    />
+                  );
+                }
+              )}
+            </div>
+          </Stack>
+          {location.pathname !== "/connect-team" && (
+            <div className={styles["connect-team-container"]}>
+              <LinkButton
+                color={LinkButtonColor.PRIMARY}
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  navigate("/connect-team");
+                }}
+              >
+                + Connect a League
+              </LinkButton>
+            </div>
+          )}
         </div>
       )}
     </div>
