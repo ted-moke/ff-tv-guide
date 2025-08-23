@@ -21,6 +21,7 @@
   background-color: var(--background-color-offset);
   border: 1px solid var(--background-color-offset-2);
   border-radius: var(--border-radius-medium);
+  justify-content: center;
 }
 
 .statItem {

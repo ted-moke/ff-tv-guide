@@ -15,6 +15,7 @@ import DataTable from "../components/ui/DataTable";
 import { LuFilter } from "react-icons/lu";
 import { getTeamCodesByName } from "../features/teams/getTeamCodeByName";
 import { Stack } from "../components/ui/Stack";
+import { DivisionChart } from "../features/stats/DivisionChart";
 interface GroupedPlayer {
   team: string;
   players: Player[];
@@ -242,9 +243,9 @@ const PlayerShares: React.FC = () => {
     <div className={`${styles.playerShares} page-container`}>
       <h1>Player Shares</h1>
 
-      <label>Showing {numberOfSelectedTeams} teams</label>
+      {/* <label>Showing {numberOfSelectedTeams} teams</label> */}
 
-      <Collapsible
+      {/* <Collapsible
         title="Filters"
         defaultCollapsed={true}
         onClear={() => {}}
@@ -254,7 +255,7 @@ const PlayerShares: React.FC = () => {
         icon={<LuFilter />}
       >
         <PlayerSharesFilters />
-      </Collapsible>
+      </Collapsible> */}
 
       <Stack direction="row" gap={1}>
         <div className={styles.statItemRow}>
@@ -369,6 +370,9 @@ const PlayerShares: React.FC = () => {
           </div>
         </div>
       </div>
+
+      <DivisionChart data={summaryStats.teamsByMostOwnedByDivision} />
+
 
       <div className={styles.teamsTableWrapper}>
         <h3 className={styles.sectionTitle}>Players By Team</h3>
