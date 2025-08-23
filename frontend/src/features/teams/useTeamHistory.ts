@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useAuthContext } from "../auth/AuthProvider";
+import { useAuthContext } from "../auth/AuthProvider2";
 import { getUserTeamHistory } from "./teamHistoryAPI";
 import type { TeamHistoryData } from "../../types/shared";
 

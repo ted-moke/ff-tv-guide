@@ -4,7 +4,7 @@ import { getTeamsByConference, NFL_TEAMS } from "../features/nfl/nflTeams";
 import { Player } from "../features/nfl/nflTypes";
 import { usePlayers, getPlayersByTeam } from "../features/players/usePlayers";
 import { useView } from "../features/view/ViewContext";
-import { useAuthContext } from "../features/auth/AuthProvider";
+import { useAuthContext } from "../features/auth/AuthProvider2";
 import { Navigate } from "react-router-dom";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 import PlayerSharesFilters from "../components/PlayerSharesFilters";

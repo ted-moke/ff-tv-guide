@@ -18,9 +18,9 @@ import TeamHistory from "./pages/TeamHistory";
 import Layout from "./components/ui/Layout";
 import { ViewProvider } from "./features/view/ViewContext";
 import { Toaster } from "react-hot-toast";
-import { useAuthContext } from "./features/auth/AuthProvider";
+import { useAuthContext } from "./features/auth/AuthProvider2";
 import LoadingSpinner from "./components/ui/LoadingSpinner";
-import { AuthProvider } from "./features/auth/AuthProvider";
+import { AuthProvider2 } from "./features/auth/AuthProvider2";
 
 import "./assets/fonts/altehaasgroteskbold-webfont.woff2";
 import "./assets/fonts/altehaasgroteskregular-webfont.woff2";
@@ -48,7 +48,7 @@ const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <Router>
-        <AuthProvider>
+        <AuthProvider2>
           <ViewProvider>
             <Toaster
               position="top-right"
@@ -122,7 +122,7 @@ const App: React.FC = () => {
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </ViewProvider>
-        </AuthProvider>
+        </AuthProvider2>
       </Router>
     </QueryClientProvider>
   );

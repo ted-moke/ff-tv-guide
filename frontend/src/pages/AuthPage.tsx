@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useAuthContext } from "../features/auth/AuthProvider";
+import { useAuthContext } from "../features/auth/AuthProvider2";
 
 import { useSearchParams, useNavigate } from "react-router-dom";
 import FFTVGLogo from "../assets/FFTVGLogo";

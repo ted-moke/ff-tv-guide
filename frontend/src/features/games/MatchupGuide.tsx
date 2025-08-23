@@ -4,7 +4,7 @@ import { useMatchupPlayers } from "../players/useMatchupPlayers";
 import GameBucketGroup from "./GameBucketGroup";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
 import { Navigate } from "react-router-dom";
-import { useAuthContext } from "../auth/AuthProvider";
+import { useAuthContext } from "../auth/AuthProvider2";
 import MatchupCarousel from "./MatchupCarousel";
 import Alert from "../../components/ui/Alert";
 import { useNeedsResources } from "../teams/useNeedsResources";
@@ -24,9 +24,6 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
   // const [hideAlert, setHideAlert] = useState(hideAlertOnLoad);
 
   if (isLoading || needsConnectLoading || isAuthLoading) {
-    console.log("isLoading", isLoading);
-    console.log("needsConnectLoading", needsConnectLoading);
-    console.log("isAuthLoading", isAuthLoading);  
     return <LoadingSpinner />;
   }
 

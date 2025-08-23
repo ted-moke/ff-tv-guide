@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { useAuthContext } from "../features/auth/AuthProvider";
+import { useAuthContext } from "../features/auth/AuthProvider2";
 import LoadingSpinner from "./ui/LoadingSpinner";
 
 export const PageWrapper = ({ children }: { children: React.ReactNode }) => {

@@ -3,8 +3,8 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { usePlatforms } from "../platforms/usePlatforms";
 import { Platform, PlatformCredential } from "../platforms/platformTypes";
 import { createPlatformCredential } from "./connectTeamAPI";
-import { useAuthContext } from "../auth/AuthProvider";
-
+import { useAuthContext } from "../auth/AuthProvider2";
+import { signInAnonymously, getAuth } from "firebase/auth";
 import RadioButton from "../../components/ui/RadioButton";
 import TextInput from "../../components/ui/TextInput";
 import Button from "../../components/ui/Button";
@@ -13,6 +13,8 @@ import styles from "./ConnectPlatformCredential.module.css";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
 import logoFF from "../../assets/logo-ff.png";
 import logoSleeper from "../../assets/logo-sleeper.png";
+import { app } from "../../firebaseConfig";
+
 
 interface ConnectPlatformCredentialProps {
   onSuccess: (newCredential: PlatformCredential) => void;
@@ -40,7 +42,7 @@ const ConnectPlatformCredential: React.FC<ConnectPlatformCredentialProps> = ({
   );
   const [credential, setCredential] = useState("");
   const { data: platforms, isLoading, error } = usePlatforms();
-  const { user, registerTemporaryUser } = useAuthContext();
+  const { backendUser, registerTemporaryUser } = useAuthContext();
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
@@ -67,10 +69,12 @@ const ConnectPlatformCredential: React.FC<ConnectPlatformCredentialProps> = ({
     event.preventDefault();
     setIsWorking(true);
     try {
-      let currentUser = user;
+      let currentUser = backendUser;
 
-      if (!user) {
-        currentUser = await registerTemporaryUser();
+      const auth = getAuth(app);
+      if (!backendUser) {
+        const userCredential = await signInAnonymously(auth);
+        currentUser = await registerTemporaryUser(userCredential.user);
         console.log('new temp user', currentUser);
       }
 

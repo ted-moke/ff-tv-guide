@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./Navigation.module.css";
 import Button, { ButtonColor } from "./ui/Button";
 import LinkButton from "./ui/LinkButton";
-import { useAuthContext } from "../features/auth/AuthProvider";
+import { useAuthContext } from "../features/auth/AuthProvider2";
 
 import { LuMenu as Menu, LuX as Close } from "react-icons/lu";
 import { useView } from "../features/view/ViewContext";

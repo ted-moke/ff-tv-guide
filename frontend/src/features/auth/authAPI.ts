@@ -72,12 +72,15 @@ export const verifyToken = async (): Promise<AuthData> => {
   }
 };
 
-export const registerTemporaryUser = async () => {
+export const registerTemporaryUser = async (user: User) => {
   console.log("registering temporary user");
+  const idToken = await user.getIdToken();
+  
   const response = await fetch(`${API_URL}/users/register`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${idToken}`,
     },
     body: JSON.stringify({
       username: `temp-${Math.random().toString(36).substring(2, 15)}`,

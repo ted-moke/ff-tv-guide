@@ -5,19 +5,17 @@ import { generateTempUserId } from "../utils/tempUser";
 export const registerUser = async (req: Request, res: Response) => {
   const { email, username, isTemporary } = req.body;
   const idToken = req.headers.authorization?.split("Bearer ")[1];
-
+  
+  if (!idToken) {
+    return res.status(401).send({ error: "No token provided" });
+  }
   let uid: string;
   let derivedEmail = email;
+  const decodedToken = await verifyIdToken(idToken);
+  uid = decodedToken.uid;
+  
   if (isTemporary) {
-    uid = generateTempUserId();
     derivedEmail = `temp-${uid}@example.com`;
-  } else {
-    if (!idToken) {
-      return res.status(401).send({ error: "No token provided" });
-    }
-
-    const decodedToken = await verifyIdToken(idToken);
-    uid = decodedToken.uid;
   }
 
   try {
@@ -84,15 +82,23 @@ export const loginUser = async (req: Request, res: Response) => {
       return res.status(401).send({ error: "No token provided" });
     }
 
+    const db = await getDb();
+
     const decodedToken = await verifyIdToken(idToken);
     const uid = decodedToken.uid;
 
     const admin = await getAdmin();
     const userRecord = await admin.auth().getUser(uid);
 
+    const backendUser = (await db.collection("users").doc(uid).get()).data();
+
+    if (!backendUser || !backendUser.uid) {
+      return res.status(401).send({ error: "User not found" });
+    }
+
     res.status(200).send({
       authenticated: true,
-      uid: userRecord.uid,
+      uid: backendUser.uid,
       email: userRecord.email,
       username: userRecord.displayName,
     });

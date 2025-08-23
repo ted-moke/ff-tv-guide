@@ -1,6 +1,5 @@
-import { useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useAuthContext } from "../auth/AuthProvider"; // Assuming you have an auth context
+import { useAuthContext } from "../auth/AuthProvider2"; 
 import { FantasyTeam } from "./teamTypes";
 import { API_URL } from "../../config";
 import { CURRENT_SEASON } from "../../constants";
@@ -9,8 +8,6 @@ import { UserTeams } from "../view/ViewContext";
 const updateStaleTeams = async (teams: FantasyTeam[], queryClient: any) => {
   const teamsToUpdate = teams.filter((team) => team.needsUpdate);
   let ids = teamsToUpdate.map((team) => team.leagueId);
-
-  console.log("teamsToUpdate", teamsToUpdate);
 
   if (ids.length > 0) {
     try {
@@ -40,7 +37,7 @@ export const useUserTeams = ({
   seasonStart?: number | null;
   seasonEnd?: number | null;
 } = {}) => {
-  const { user, isLoading: isAuthLoading } = useAuthContext();
+  const { backendUser, user, isLoading: isAuthLoading } = useAuthContext();
   const queryClient = useQueryClient();
 
   let hasTeamsToUpdate = false;
@@ -51,22 +48,24 @@ export const useUserTeams = ({
     teamsNeedingUpdate: FantasyTeam[];
     teamsNeedingMigrate: FantasyTeam[];
   }>({
-    queryKey: ["userTeams", user?.uid],
+    queryKey: ["userTeams", backendUser?.uid],
     queryFn: async (): Promise<{
       teamsBySeason: Record<number, FantasyTeam[]>;
       teamsNeedingUpdate: FantasyTeam[];
       teamsNeedingMigrate: FantasyTeam[];
     }> => {
       try {
-        if (!user) throw new Error("User not authenticated");
+        if (!backendUser) throw new Error("User not authenticated");
+
+        const idToken = await user?.getIdToken();
 
         const response = await fetch(
-          `${API_URL}/users/${user.uid}/teams?seasonStart=${seasonStart}&seasonEnd=${seasonEnd}`,
+          `${API_URL}/users/${backendUser.uid}/teams?seasonStart=${seasonStart}&seasonEnd=${seasonEnd}`,
           {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+              Authorization: `Bearer ${idToken}`,
             },
           }
         );
@@ -101,7 +100,7 @@ export const useUserTeams = ({
         throw error;
       }
     },
-    enabled: !!user, // Only run the query if there's a user
+    enabled: !!backendUser, // Only run the query if there's a user
   });
 
   const { teamsBySeason } = data || {};
@@ -130,17 +129,18 @@ export const useUserTeams = ({
 export const useOpponentTeams = ({
   enabled = true,
 }: { enabled?: boolean } = {}) => {
-  const { user } = useAuthContext();
+  const { backendUser, user } = useAuthContext();
 
   return useQuery<FantasyTeam[]>({
-    queryKey: ["opponentTeams", user?.uid],
+    queryKey: ["opponentTeams", backendUser?.uid],
     queryFn: async (): Promise<FantasyTeam[]> => {
-      if (!user) throw new Error("User not authenticated");
-      const response = await fetch(`${API_URL}/users/${user.uid}/opponents`, {
+      if (!backendUser) throw new Error("User not authenticated");
+      const idToken = await user?.getIdToken();
+      const response = await fetch(`${API_URL}/users/${backendUser.uid}/opponents`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          Authorization: `Bearer ${idToken}`,
         },
       });
       if (!response.ok) {

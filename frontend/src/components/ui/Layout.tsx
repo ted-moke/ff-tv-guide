@@ -3,7 +3,7 @@ import Sidebar from "../Sidebar";
 import Navigation from "../Navigation";
 import styles from "./Layout.module.css";
 import { useView } from "../../features/view/ViewContext";
-import { useAuthContext } from "../../features/auth/AuthProvider";
+import { useAuthContext } from "../../features/auth/AuthProvider2";
 import LoadingSpinner from "./LoadingSpinner";
 import { Navigate } from "react-router-dom";
 

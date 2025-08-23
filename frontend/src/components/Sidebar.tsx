@@ -3,7 +3,7 @@ import styles from "./Sidebar.module.css";
 import MenuItem from "./ui/MenuItem";
 import { useView } from "../features/view/ViewContext";
 import FantasyTeamOptions from "../features/teams/FantasyTeamOptions";
-import { useAuthContext } from "../features/auth/AuthProvider";
+import { useAuthContext } from "../features/auth/AuthProvider2";
 
 import Button, { ButtonColor } from "./ui/Button";
 import { useLocation } from "react-router-dom";

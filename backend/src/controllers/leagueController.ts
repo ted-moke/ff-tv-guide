@@ -81,6 +81,8 @@ export const upsertLeague = async (req: Request, res: Response) => {
       externalTeamId,
     });
 
+    console.log("League connected successfully", league.id);
+
     res.status(200).json({ 
       message: "League connected successfully", 
       league,

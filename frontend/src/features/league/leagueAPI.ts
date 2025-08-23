@@ -1,3 +1,6 @@
+import { getAuth } from "firebase/auth";
+import { app } from "../../firebaseConfig";
+
 const API_URL = import.meta.env.VITE_API_URL;
 
 export const connectLeague = async ({
@@ -15,11 +18,14 @@ export const connectLeague = async ({
   externalTeamId?: string;
   season: number;
 }) => {
+  const auth = getAuth(app);
+  const idToken = await auth.currentUser?.getIdToken();
+  console.log("idToken", idToken);
   const response = await fetch(`${API_URL}/leagues`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+      Authorization: `Bearer ${idToken}`,
     },
     body: JSON.stringify({
       leagueName,

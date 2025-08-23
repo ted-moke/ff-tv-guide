@@ -10,7 +10,7 @@ import { PlatformCredential } from "../features/platforms/platformTypes";
 import { useConnectLeague } from "../features/league/useLeague";
 import styles from "./ConnectTeam.module.css";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
-import { useAuthContext } from "../features/auth/AuthProvider";
+import { useAuthContext } from "../features/auth/AuthProvider2";
 
 import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
@@ -26,10 +26,9 @@ const ConnectTeam: React.FC = () => {
   const [selectedLeagues, setSelectedLeagues] = useState<string[]>([]);
   const [isConnecting, setIsConnecting] = useState(false);
   const queryClient = useQueryClient();
-  const { user, isLoading: isAuthLoading } = useAuthContext();
+  const { backendUser, user } = useAuthContext();
   const {
     data: credentials,
-    isLoading: credentialsLoading,
     error: credentialsError,
     refetch: refetchCredentials,
   } = useCredentials({ user: user ?? undefined });
@@ -115,12 +114,14 @@ const ConnectTeam: React.FC = () => {
     }
   };
 
-  // if (credentialsLoading || isAuthLoading) return <LoadingSpinner />;
-  if (credentialsError)
-    return <div>Error loading credentials: {(credentialsError as Error).message}</div>;
+  if (credentialsError) {
+    return (
+      <div>Error loading credentials: {(credentialsError as Error).message}</div>
+    );
+  }
 
   let derivedShowCredentialForm = showNewCredentialForm;
-  if (!user) {
+  if (!backendUser) {
     derivedShowCredentialForm = true;
   }
 
@@ -170,7 +171,7 @@ const ConnectTeam: React.FC = () => {
         />
       )}
 
-      {!selectedCredential && !user && (
+      {!selectedCredential && !backendUser && (
         <div className={styles.signInContainer}>
           <p>Already a member?</p>
           <Button outline link="/auth">
