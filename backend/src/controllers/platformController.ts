@@ -11,7 +11,10 @@ export const getAllPlatforms = async (req: Request, res: Response) => {
       id: doc.id,
       ...doc.data(),
     }));
-    res.json(platforms);
+    res.json({
+      platforms,
+      timestamp: Date.now() // Add timestamp for cache busting
+    });
   } catch (_error) {
     res.status(500).json({ error: "Failed to fetch platforms" });
   }

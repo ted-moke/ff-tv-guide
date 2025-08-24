@@ -16,13 +16,14 @@ const fetchExternalLeagues = async (
   credentialId: string
 ): Promise<ExternalLeague[]> => {
   const response = await fetch(
-    `${API_URL}/external-leagues?credentialId=${credentialId}`
+    `${API_URL}/external-leagues?credentialId=${credentialId}&_t=${Date.now()}`
   );
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
 
-  return response.json();
+  const data = await response.json();
+  return data.leagues || data; // Handle both new and old response formats
 };
 
 const useExternalLeagues = (credentialId: string) => {

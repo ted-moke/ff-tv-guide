@@ -52,7 +52,10 @@ export const getExternalLeagues = async (req: Request, res: Response) => {
       return res.status(404).json({ error: "No leagues found" });
     }
 
-    return res.json(leagues);
+    return res.json({
+      leagues,
+      timestamp: Date.now() // Add timestamp for cache busting
+    });
   } catch (error) {
     return res.status(500).json({ error: (error as Error).message });
   }

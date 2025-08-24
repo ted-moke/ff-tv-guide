@@ -92,6 +92,9 @@ export const getLeaguesPaginated = async (
     }
   }
 
+  // Add cache-busting parameter
+  url.searchParams.append("_t", Date.now().toString());
+  
   const response = await fetch(url.toString(), {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("authToken")}`,

@@ -60,7 +60,7 @@ export const useUserTeams = ({
         const idToken = await user?.getIdToken();
 
         const response = await fetch(
-          `${API_URL}/users/${backendUser.uid}/teams?seasonStart=${seasonStart}&seasonEnd=${seasonEnd}`,
+          `${API_URL}/users/${backendUser.uid}/teams?seasonStart=${seasonStart}&seasonEnd=${seasonEnd}&_t=${Date.now()}`,
           {
             method: "GET",
             headers: {
@@ -136,7 +136,7 @@ export const useOpponentTeams = ({
     queryFn: async (): Promise<FantasyTeam[]> => {
       if (!user) throw new Error("User not authenticated");
       const idToken = await user?.getIdToken();
-      const response = await fetch(`${API_URL}/users/${user.uid}/opponents`, {
+      const response = await fetch(`${API_URL}/users/${user.uid}/opponents?_t=${Date.now()}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

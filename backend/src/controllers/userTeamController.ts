@@ -57,7 +57,12 @@ export const getUserTeams = async (req: Request, res: Response) => {
     const teamsNeedingMigrate = allTeams.filter((team) => team.needsMigrate);
     
 
-    res.status(200).json({ teamsBySeason, teamsNeedingUpdate, teamsNeedingMigrate });
+    res.status(200).json({ 
+      teamsBySeason, 
+      teamsNeedingUpdate, 
+      teamsNeedingMigrate,
+      timestamp: Date.now() // Add timestamp for cache busting
+    });
   } catch (error) {
     console.error("Error fetching user teams:", error);
     res.status(500).json({ error: (error as Error).message });
@@ -186,7 +191,10 @@ export const getOpponentTeams = async (req: Request, res: Response) => {
       }),
     );
 
-    res.status(200).json({ opponents });
+    res.status(200).json({ 
+      opponents,
+      timestamp: Date.now() // Add timestamp for cache busting
+    });
   } catch (error) {
     console.error("Error fetching opponent teams:", error);
     res.status(500).json({ error: "Internal server error" });
@@ -250,6 +258,7 @@ export const getAllUserTeamsPaginated = async (req: Request, res: Response) => {
       teams: userTeams,
       nextStartAfter: lastDoc?.id || null,
       prevEndBefore: firstDoc?.id || null,
+      timestamp: Date.now() // Add timestamp for cache busting
     });
   } catch (error) {
     console.error("Error fetching user teams:", error);
