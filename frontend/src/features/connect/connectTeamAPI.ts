@@ -1,4 +1,4 @@
-import { AuthData } from "../auth/authTypes";
+import { User } from "firebase/auth";
 import { PlatformCredential } from "../platforms/platformTypes";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -23,7 +23,7 @@ export const createPlatformCredential = async (
 };
 
 export const fetchUserPlatformCredentials = async (
-  user?: AuthData
+  user?: User
 ): Promise<PlatformCredential[]> => {
   if (!user) {
     return [];

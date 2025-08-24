@@ -3,7 +3,6 @@ import styles from "./FantasyTeamOptions.module.css";
 import LinkButton, { LinkButtonColor } from "../../components/ui/LinkButton";
 import { useView } from "../view/ViewContext";
 import { useLocation, useNavigate } from "react-router-dom";
-import { FantasyTeam } from "./teamTypes";
 import { FantasyTeamOption } from "./FantasyTeamOption";
 import { CURRENT_SEASON } from "../../constants";
 import { Stack } from "../../components/ui/Stack";

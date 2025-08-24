@@ -1,4 +1,4 @@
-import { LeagueStats, LeagueStatsMap, UserTeams } from "../view/ViewContext";
+import { LeagueStatsMap, UserTeams } from "../view/ViewContext";
 import { useMemo } from "react";
 
 export const useLeagueStats = ({

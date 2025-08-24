@@ -2,7 +2,6 @@ import { auth } from "../../firebaseConfig";
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  onAuthStateChanged,
   User,
 } from "firebase/auth";
 import { AuthData } from "./authTypes";

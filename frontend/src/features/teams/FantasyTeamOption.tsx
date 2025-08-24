@@ -1,7 +1,5 @@
 import { MdClose } from "react-icons/md";
 import IconButton from "../../components/IconButton";
-import Checkbox from "../../components/ui/Checkbox";
-import LinkButton from "../../components/ui/LinkButton";
 import { Stack } from "../../components/ui/Stack";
 import { FantasyTeam } from "./teamTypes";
 import RadioButton from "../../components/ui/RadioButton";

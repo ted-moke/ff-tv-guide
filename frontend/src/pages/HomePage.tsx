@@ -1,7 +1,6 @@
 import React from "react";
 import styles from "./HomePage.module.css";
 import MatchupGuide from "../features/games/MatchupGuide";
-import HomeOffseason from "./HomeOffseason";
 import { useView } from "../features/view/ViewContext";
 
 const HomePage: React.FC = () => {
@@ -9,7 +8,6 @@ const HomePage: React.FC = () => {
     selectedWeek,
     setSelectedWeek,
   } = useView();
-
 
   return (
     <div className={styles["sports-dashboard"]}>

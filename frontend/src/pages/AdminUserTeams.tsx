@@ -5,16 +5,18 @@ import { Stack } from "../components/ui/Stack";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 import Button from "../components/ui/Button";
 
+const LIMIT = 10;
+
 const AdminUserTeams: React.FC = () => {
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
+  // const [page, setPage] = useState(1);
+  // const [limit, setLimit] = useState(10);
   const [pagination, setPagination] = useState({
     startAfter: null,
     endBefore: null,
   });
-  const [sortBy, setSortBy] = useState("name");
-  const [sortOrder, setSortOrder] = useState("asc");
-  const [filters, setFilters] = useState({});
+  // const [sortBy, setSortBy] = useState("name");
+  // const [sortOrder, setSortOrder] = useState("asc");
+  // const [filters, setFilters] = useState({});
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["userTeams", pagination],
@@ -22,10 +24,9 @@ const AdminUserTeams: React.FC = () => {
       getAllUserTeams({
         startAfter: pagination.startAfter,
         endBefore: pagination.endBefore,
-        limit: limit,
+        limit: LIMIT,
         sortBy: "name",
         sortOrder: "asc",
-        filters: {},
       }),
   });
 

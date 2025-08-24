@@ -7,12 +7,12 @@ import { useView } from "../features/view/ViewContext";
 import { useAuthContext } from "../features/auth/AuthProvider2";
 import { Navigate } from "react-router-dom";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
-import PlayerSharesFilters from "../components/PlayerSharesFilters";
 import PlayerSharesGrid from "../components/PlayerSharesGrid";
 import { useNeedsResources } from "../features/teams/useNeedsResources";
-import Collapsible from "../components/ui/Collapsible";
+// import PlayerSharesFilters from "../components/PlayerSharesFilters";
+// import Collapsible from "../components/ui/Collapsible";
+// import { LuFilter } from "react-icons/lu";
 import DataTable from "../components/ui/DataTable";
-import { LuFilter } from "react-icons/lu";
 import { getTeamCodesByName } from "../features/teams/getTeamCodeByName";
 import { Stack } from "../components/ui/Stack";
 import { DivisionChart } from "../features/stats/DivisionChart";
@@ -29,7 +29,6 @@ const PlayerShares: React.FC = () => {
     playerSharesSortBy,
     playerSharesHideEmptyTeams,
     selectedTeams,
-    visibleTeams,
     selectedPositions,
     playerSharesSearchTerm,
   } = useView();
@@ -45,8 +44,6 @@ const PlayerShares: React.FC = () => {
   } = useNeedsResources();
 
   let allPlayers: Player[] = players ?? [];
-
-  const numberOfSelectedTeams = visibleTeams.length;
 
   const sortedGroupedPlayers = useMemo<GroupedPlayer[]>(() => {
     const teams =

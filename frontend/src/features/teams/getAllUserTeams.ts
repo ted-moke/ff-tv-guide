@@ -7,14 +7,12 @@ export const getAllUserTeams = async ({
   limit,
   sortBy,
   sortOrder,
-  filters,
 }: {
   startAfter: string | null;
   endBefore: string | null;
   limit: number;
   sortBy: string;
   sortOrder: string;
-  filters: any;
 }) => {
   const url = new URL(`${API_URL}/user-teams`);
   url.searchParams.append("limit", limit.toString());

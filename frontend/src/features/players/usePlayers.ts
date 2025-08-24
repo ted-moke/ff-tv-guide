@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { Player, OwnedPlayer } from "../nfl/nflTypes";
 import { FantasyTeam } from "../teams/teamTypes";
 import { useView } from "../view/ViewContext";
-import { useTeamVisibility } from "../teams/useTeamVisibility";
+import { getCurrentSeason } from "../../utils/seasonUtils";
 
 // Define the order of positions
 const positionOrder = [
@@ -91,7 +91,8 @@ export const usePlayers = ({
     if (hideHiddenTeams) {
       return visibleTeams;
     }
-    return userTeams;
+    const currentSeason = getCurrentSeason();
+    return Object.values(userTeams[currentSeason]);
   }, [visibleTeams, userTeams, hideHiddenTeams]);
 
   const opponentTeamsToUse = useMemo(() => {

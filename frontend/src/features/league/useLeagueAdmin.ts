@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { updateAllLeagues } from './leagueAPI';
+import { updateAllLeagues } from '../admin/adminAPI';
 
 export const useUpdateAllLeagues = () => {
   const queryClient = useQueryClient();

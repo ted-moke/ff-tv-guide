@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "./MatchupGuide.module.css";
 import { useMatchupPlayers } from "../players/useMatchupPlayers";
 import GameBucketGroup from "./GameBucketGroup";
@@ -6,7 +6,6 @@ import LoadingSpinner from "../../components/ui/LoadingSpinner";
 import { Navigate } from "react-router-dom";
 import { useAuthContext } from "../auth/AuthProvider2";
 import MatchupCarousel from "./MatchupCarousel";
-import Alert from "../../components/ui/Alert";
 import { useNeedsResources } from "../teams/useNeedsResources";
 
 interface MatchupGuideProps {

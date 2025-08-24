@@ -11,7 +11,7 @@
   --color-green-hover: #769c1c; 
   --color-green-active: #769c1c;
   --color-green-text: #192106;
-  --color-yellow: #fca311;
+  --color-yellow: rgb(252, 163, 17);
   --color-yellow-hover: #e08e0d;
   --color-yellow-active: #e08e0d;
   --color-yellow-text: #2d1d03;
@@ -20,9 +20,9 @@
   --color-purple-active: #813d80;
   --color-purple-text: #2e1020;
 
-  --background-color: #121212;
+  --background-color: rgb(18, 18, 18);
   --background-color-offset: #1a1a1a;
-  --background-color-offset-2: #2a2a2a;
+  --background-color-offset-2: rgb(42, 42, 42);
   --background-color-light: #e0e0e0;
   --text-color: #e0e0e0;
   --text-color-muted: #a0a0a0;

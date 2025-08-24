@@ -6,7 +6,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import AuthPage from "./pages/AuthPage";
+// import AuthPage from "./pages/AuthPage";
 import HomePage from "./pages/HomePage";
 import SplashPage from "./pages/SplashPage";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -72,7 +72,7 @@ const App: React.FC = () => {
                   </Layout>
                 }
               />
-              <Route path="/auth" element={<AuthPage />} />
+              {/* <Route path="/auth" element={<AuthPage />} /> */}
               <Route
                 path="/connect-team"
                 element={

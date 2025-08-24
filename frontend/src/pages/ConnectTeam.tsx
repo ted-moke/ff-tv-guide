@@ -9,7 +9,6 @@ import Button from "../components/ui/Button";
 import { PlatformCredential } from "../features/platforms/platformTypes";
 import { useConnectLeague } from "../features/league/useLeague";
 import styles from "./ConnectTeam.module.css";
-import LoadingSpinner from "../components/ui/LoadingSpinner";
 import { useAuthContext } from "../features/auth/AuthProvider2";
 
 import { useQueryClient } from "@tanstack/react-query";
@@ -20,7 +19,6 @@ import { getCurrentSeason } from "../utils/seasonUtils";
 import splashImage from "../assets/mockups-composite.png";
 import mobileImageShares from "../assets/mockup-shares-single.png";
 import mobileImageGuide from "../assets/mockup-guide-single.png";
-import LinkButton, { LinkButtonColor } from "../components/ui/LinkButton";
 import { Stack } from "../components/ui/Stack";
 
 const ConnectTeam: React.FC = () => {
@@ -38,8 +36,7 @@ const ConnectTeam: React.FC = () => {
     refetch: refetchCredentials,
   } = useCredentials({ user: user ?? undefined });
   const { mutateAsync: connectLeague } = useConnectLeague();
-  const { isMobile } = useView();
-  const [showOverlayText, setShowOverlayText] = useState(true);
+  const { isMobile, selectedWeek } = useView();
 
   const handleSelectCredential = (credential: PlatformCredential) => {
     setSelectedCredential(credential);
@@ -110,7 +107,11 @@ const ConnectTeam: React.FC = () => {
           } connected successfully!`
         );
 
-        navigate("/");
+        if (selectedWeek === null) {
+          navigate("/player-shares");
+        } else {
+          navigate("/");
+        }
       } catch (error) {
         console.error("Error connecting leagues:", error);
         toast.error("Error connecting leagues. Please try again.");
@@ -157,10 +158,8 @@ const ConnectTeam: React.FC = () => {
         </Stack>
       )}
 
-      {!selectedCredential && !user && !isMobile && (
+      {!selectedCredential && !showNewCredentialForm && !user && !isMobile && (
         <div className={styles.splashImageWrapperDesktop}>
-          
-
             <div className={styles.overlayText}>
               <Stack gap={1}>
                 <h3><span>Streamline</span> your NFL and fantasy viewing experience</h3>

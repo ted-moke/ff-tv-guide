@@ -4,8 +4,6 @@ import React, {
   useContext,
   ReactNode,
   useEffect,
-  useCallback,
-  useMemo,
 } from "react";
 import { Conference } from "../nfl/nflTypes";
 import { FantasyTeam } from "../teams/teamTypes";

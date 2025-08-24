@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import { useView } from "../view/ViewContext";
 import { FantasyTeam } from "./teamTypes";
 
 export const useTeamVisibility = ({ userTeams, opponentTeams }: { userTeams: FantasyTeam[], opponentTeams: FantasyTeam[] }) => {
