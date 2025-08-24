@@ -59,3 +59,16 @@
 .mutedLinkButton:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+
+.blackLinkButton {
+  color: var(--text-color-light);
+}
+
+.blackLinkButton:hover {
+  color: var(--text-color-light-muted);
+}
+
+.blackLinkButton:focus,
+.blackLinkButton:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}

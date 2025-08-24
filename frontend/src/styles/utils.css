@@ -36,3 +36,8 @@
 .muted {
   color: var(--text-color-muted);
 }
+
+.list-disc li {
+  list-style-type: disc;
+  margin-left: var(--size3);
+}

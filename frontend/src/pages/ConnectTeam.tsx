@@ -17,6 +17,11 @@ import toast from "react-hot-toast";
 import FFTVGLogo from "../assets/FFTVGLogo";
 import { useView } from "../features/view/ViewContext";
 import { getCurrentSeason } from "../utils/seasonUtils";
+import splashImage from "../assets/mockups-composite.png";
+import mobileImageShares from "../assets/mockup-shares-single.png";
+import mobileImageGuide from "../assets/mockup-guide-single.png";
+import LinkButton, { LinkButtonColor } from "../components/ui/LinkButton";
+import { Stack } from "../components/ui/Stack";
 
 const ConnectTeam: React.FC = () => {
   const navigate = useNavigate(); // Add this line
@@ -33,7 +38,8 @@ const ConnectTeam: React.FC = () => {
     refetch: refetchCredentials,
   } = useCredentials({ user: user ?? undefined });
   const { mutateAsync: connectLeague } = useConnectLeague();
-  const { isMobile } = useView()
+  const { isMobile } = useView();
+  const [showOverlayText, setShowOverlayText] = useState(true);
 
   const handleSelectCredential = (credential: PlatformCredential) => {
     setSelectedCredential(credential);
@@ -116,7 +122,9 @@ const ConnectTeam: React.FC = () => {
 
   if (credentialsError) {
     return (
-      <div>Error loading credentials: {(credentialsError as Error).message}</div>
+      <div>
+        Error loading credentials: {(credentialsError as Error).message}
+      </div>
     );
   }
 
@@ -129,11 +137,57 @@ const ConnectTeam: React.FC = () => {
     <div className={`${styles.connectTeamPageContainer} page-container`}>
       <div className={styles.pageHeader}>
         {!isMobile && <FFTVGLogo size="large" withText />}
-        <p className={styles.shortPitch}>
-          Streamline your fantasy experience: See only what matters on game day.
-        </p>
       </div>
 
+      {isMobile && !selectedCredential && !user && (
+        <Stack gap={1} className={styles.splashTextWrapperMobile}>
+          <h3>Streamline your <span>NFL and fantasy</span> viewing experience</h3>
+          <ul className="list-disc">
+            <li>
+              <span>Stop flipping between apps</span> and websites, see who to
+              watch in each NFL game
+            </li>
+            <li>
+              Easily see <span>who playing for your opponents</span>
+            </li>
+            <li>
+              <span>Track your ownership</span> across NFL teams and divisions
+            </li>
+          </ul>
+        </Stack>
+      )}
+
+      {!selectedCredential && !user && !isMobile && (
+        <div className={styles.splashImageWrapperDesktop}>
+          
+
+            <div className={styles.overlayText}>
+              <Stack gap={1}>
+                <h3><span>Streamline</span> your NFL and fantasy viewing experience</h3>
+                <p>
+                  If you're like us, your're sick of the sensory overload on
+                  game day. It's already crazy enough to be following 8+ games
+                  at a time, let alone trying to remember who you started and
+                  who you're against.
+                </p>
+                <ul className="list-disc">
+                  <li>
+                    <span>Stop flipping between apps</span> and websites, see
+                    who to watch in each NFL game
+                  </li>
+                  <li>
+                    See what players <span>your opponents have</span>
+                  </li>
+                  <li>
+                    <span>Track your ownership</span> across NFL teams and
+                    divisions
+                  </li>
+                </ul>
+              </Stack>
+            </div>
+          <img src={splashImage} alt="Splash Image" />
+        </div>
+      )}
       {!selectedCredential && !derivedShowCredentialForm && (
         <CredentialManager
           credentials={credentials as PlatformCredential[]}
@@ -178,6 +232,17 @@ const ConnectTeam: React.FC = () => {
             Sign In
           </Button>
         </div>
+      )}
+
+      {isMobile && (
+        <>
+        <div className={`${styles.splashImageWrapper} ${styles.splashImageWrapperMobile}`}>
+          <img src={mobileImageGuide} alt="Splash Image" />
+        </div>
+        <div className={`${styles.splashImageWrapper} ${styles.splashImageWrapperMobile}`}>
+          <img src={mobileImageShares} alt="Splash Image" />
+        </div>
+        </>
       )}
     </div>
   );

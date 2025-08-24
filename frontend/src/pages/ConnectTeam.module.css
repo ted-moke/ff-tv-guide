@@ -6,6 +6,7 @@
   align-items: center;
   height: 100%;
   gap: var(--size2);
+  padding-bottom: var(--size4); 
 }
 
 .pageHeader {
@@ -76,6 +77,65 @@ li {
   text-align: center;
 }
 
+.splashImageWrapper {
+  width: 100%;
+  border-radius: var(--border-radius);
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.splashImageWrapper img {
+  width: 70vw;
+  object-position: top;
+  object-fit: cover;
+}
+
+.splashImageWrapperMobile {
+  max-height: 600px;
+  overflow: hidden;
+}
+
+.splashImageWrapperMobile::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  /* CSS gradient to fade out the bottom of the image */
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(17, 17, 17, 1));
+}
+
+.splashImageWrapperDesktop {
+  width: 100%;
+  border-radius: var(--border-radius);
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.splashImageWrapperDesktop img {
+  height: 500px;
+  object-position: top;
+  object-fit: cover;
+}
+
+
+.overlayText h3 {
+  font-size: var(--font-size-large);
+  font-weight: bold;
+}
+
+.overlayText li span {
+  color: var(--primary-color);
+}
+
+.splashTextWrapperMobile span {
+  color: var(--primary-color);
+}
+
 @media (min-width: 768px) {
   .connectTeamPageContainer {
     gap: var(--size4);
@@ -85,7 +145,16 @@ li {
     width: 350px;
   }
 
-  .shortPitch {
-    width: 500px;
+  .overlayText h3 {
+    font-size: var(--font-size-xl);
+  }
+
+  .splashImageWrapper img {
+    border-radius: var(--border-radius-medium);
+    object-position: top;
+  }
+
+  .splashTextWrapperMobile {
+    display: none;
   }
 }

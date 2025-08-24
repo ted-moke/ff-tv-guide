@@ -7,6 +7,7 @@ export enum LinkButtonColor {
   PRIMARY = "primary",
   SECONDARY = "secondary",
   MUTED = "muted",
+  BLACK = "black",
 }
 
 const getLinkButtonClass = (color: LinkButtonColor) => {
@@ -17,6 +18,8 @@ const getLinkButtonClass = (color: LinkButtonColor) => {
       return styles.secondaryLinkButton;
     case LinkButtonColor.MUTED:
       return styles.mutedLinkButton;
+    case LinkButtonColor.BLACK:
+      return styles.blackLinkButton;
     default:
       return "";
   }
