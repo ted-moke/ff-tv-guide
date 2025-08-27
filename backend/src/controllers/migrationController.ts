@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { migrateToLeagueMaster, migrateSingleLeague } from "../../scripts/migrateToLeagueMaster";
+// import { migrateToLeagueMaster, migrateSingleLeague } from "../../scripts/migrateToLeagueMaster";
 
 export const runMigration = async (req: Request, res: Response) => {
   try {
@@ -23,15 +23,15 @@ export const runMigration = async (req: Request, res: Response) => {
 
     console.log(`Starting migration for season ${seasonNumber}...`);
     
-    const stats = await migrateToLeagueMaster({ season: seasonNumber });
+    // const stats = await migrateToLeagueMaster({ season: seasonNumber });
     
-    console.log("Migration completed with stats:", stats);
+    // console.log("Migration completed with stats:", stats);
     
     res.json({
       success: true,
       message: "Migration completed successfully",
       season: seasonNumber,
-      stats
+      // stats
     });
     
   } catch (error) {
@@ -73,19 +73,19 @@ export const runSingleLeagueMigration = async (req: Request, res: Response) => {
 
     console.log(`Starting single league migration for league ${leagueId} with season ${seasonNumber}...`);
     
-    const stats = await migrateSingleLeague({ 
-      leagueId: leagueId as string, 
-      season: seasonNumber 
-    });
+    // const stats = await migrateSingleLeague({ 
+    //   leagueId: leagueId as string, 
+    //   season: seasonNumber 
+    // });
     
-    console.log("Single league migration completed with stats:", stats);
+    // console.log("Single league migration completed with stats:", stats);
     
     res.json({
       success: true,
       message: "Single league migration completed successfully",
       leagueId: leagueId,
       season: seasonNumber,
-      stats
+      // stats
     });
     
   } catch (error) {

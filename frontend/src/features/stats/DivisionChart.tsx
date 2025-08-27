@@ -1,24 +1,30 @@
 import { AgCharts } from "ag-charts-react";
+import { useColors } from "../../styles/useColors";
 
-const myTheme = {
-  palette: {
-    fills: [
-      "#cd4631",
-      "#357ded",
-      "#95c623",
-      "#fca311",
-      "#a14da0",
-      "#2a2a2a",
-      "#2e100b",
-      "#101d30",
-      "#192106",
-      "#2d1d03",
-    ],
-    strokes: ["#000"],
-  },
-};
+
 
 export const DivisionChart = (data: any) => {
+  const colors = useColors();
+
+  const myTheme = {
+    palette: {
+      fills: [
+        colors.red.base,
+        colors.blue.base,
+        colors.green.base,
+        colors.yellow.base,
+        colors.purple.base,
+        colors.background.light,
+        colors.purple.text,
+        colors.background.offset2,
+      ],  
+      strokes: [colors.background.light ],
+    },
+    params: {
+      tooltipBackgroundColor: colors.background.primary,
+      tooltipTextColor: colors.text.primary,
+    },
+  };
   const options = {
     theme: myTheme,
     data: data.data.map((item: any) => ({
@@ -31,7 +37,7 @@ export const DivisionChart = (data: any) => {
         calloutLabelKey: "division",
         angleKey: "shares",
         calloutLabel: {
-          color: "#ffffff",
+          color: colors.text.primary,
         },
       },
     ],

@@ -5,7 +5,6 @@ import useExternalLeagues from "../features/connect/useExternalLeagues";
 import ConnectPlatformCredential from "../features/connect/ConnectPlatformCredential";
 import CredentialManager from "../components/CredentialManager"; // Add this import
 import TeamSyncer from "../components/TeamSyncer"; // Add this import
-import Button from "../components/ui/Button";
 import { PlatformCredential } from "../features/platforms/platformTypes";
 import { useConnectLeague } from "../features/league/useLeague";
 import styles from "./ConnectTeam.module.css";
@@ -29,14 +28,14 @@ const ConnectTeam: React.FC = () => {
   const [selectedLeagues, setSelectedLeagues] = useState<string[]>([]);
   const [isConnecting, setIsConnecting] = useState(false);
   const queryClient = useQueryClient();
-  const { backendUser, user } = useAuthContext();
+  const { user } = useAuthContext();
   const {
     data: credentials,
     error: credentialsError,
     refetch: refetchCredentials,
   } = useCredentials({ user: user ?? undefined });
   const { mutateAsync: connectLeague } = useConnectLeague();
-  const { isMobile, selectedWeek } = useView();
+  const { isMobile, selectedWeek, userTeams } = useView();
 
   const handleSelectCredential = (credential: PlatformCredential) => {
     setSelectedCredential(credential);
@@ -129,10 +128,10 @@ const ConnectTeam: React.FC = () => {
     );
   }
 
-  let derivedShowCredentialForm = showNewCredentialForm;
-  if (!backendUser) {
-    derivedShowCredentialForm = true;
-  }
+  const noUserTeams = userTeams && Object.keys(userTeams).length === 0;
+
+  const showSplash = !selectedCredential && noUserTeams;
+  const hasCredentials = credentials && credentials.length > 0;
 
   return (
     <div className={`${styles.connectTeamPageContainer} page-container`}>
@@ -140,7 +139,7 @@ const ConnectTeam: React.FC = () => {
         {!isMobile && <FFTVGLogo size="large" withText />}
       </div>
 
-      {isMobile && !selectedCredential && !user && (
+      {isMobile && showSplash && (
         <Stack gap={1} className={styles.splashTextWrapperMobile}>
           <h3>Streamline your <span>NFL and fantasy</span> viewing experience</h3>
           <ul className="list-disc">
@@ -158,7 +157,7 @@ const ConnectTeam: React.FC = () => {
         </Stack>
       )}
 
-      {!selectedCredential && !showNewCredentialForm && !user && !isMobile && (
+      {showSplash && !isMobile && (
         <div className={styles.splashImageWrapperDesktop}>
             <div className={styles.overlayText}>
               <Stack gap={1}>
@@ -187,7 +186,7 @@ const ConnectTeam: React.FC = () => {
           <img src={splashImage} alt="Splash Image" />
         </div>
       )}
-      {!selectedCredential && !derivedShowCredentialForm && (
+      {!selectedCredential && hasCredentials && !showNewCredentialForm && (
         <CredentialManager
           credentials={credentials as PlatformCredential[]}
           onSelectCredential={handleSelectCredential}
@@ -195,7 +194,7 @@ const ConnectTeam: React.FC = () => {
         />
       )}
 
-      {derivedShowCredentialForm && (
+      {!selectedCredential && (!hasCredentials || showNewCredentialForm) && (
         <div className={styles.connectTeamFormWrapper}>
           <ConnectPlatformCredential
             onSuccess={async (newCredential) => {
@@ -224,16 +223,16 @@ const ConnectTeam: React.FC = () => {
         />
       )}
 
-      {!selectedCredential && !backendUser && (
+      {/* {!selectedCredential && !backendUser && (
         <div className={styles.signInContainer}>
           <p>Already a member?</p>
           <Button outline link="/auth">
             Sign In
           </Button>
         </div>
-      )}
+      )} */}
 
-      {isMobile && (
+      {isMobile && showSplash && (
         <>
         <div className={`${styles.splashImageWrapper} ${styles.splashImageWrapperMobile}`}>
           <img src={mobileImageGuide} alt="Splash Image" />

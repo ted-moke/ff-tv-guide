@@ -45,6 +45,8 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
     return <Navigate to="/connect-team" />;
   }
 
+  console.log("matchupPlayers", matchupPlayers);
+
   return (
     <div className={`${styles["matchup-guide"]} page-container`}>
       {matchupPlayers && (

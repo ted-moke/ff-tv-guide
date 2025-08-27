@@ -7,7 +7,8 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "outDir": "./lib" // Output directory for compiled files
+    "outDir": "./lib", // Output directory for compiled files
+    "rootDir": "./src" // Root directory of source files
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules"]

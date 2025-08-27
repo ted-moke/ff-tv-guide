@@ -72,9 +72,11 @@ const sortCopies = (a: OwnedPlayer, b: OwnedPlayer): number => {
 export const usePlayers = ({
   includeOpponents = true,
   hideHiddenTeams = false,
+  hideBenchPlayers = false,
 }: {
   includeOpponents?: boolean;
   hideHiddenTeams?: boolean;
+  hideBenchPlayers?: boolean;
 } = {}) => {
   const {
     userTeams,
@@ -147,6 +149,9 @@ export const usePlayers = ({
               | "bestBall",
             team: teamType,
           };
+          if (hideBenchPlayers && ownedPlayer.rosterSlotType === "bench") {
+            return;
+          }
           playerMap.get(key)!.copies.push(ownedPlayer);
         });
       });
@@ -166,7 +171,7 @@ export const usePlayers = ({
     });
 
     return Array.from(playerMap.values()).sort(sortPlayers);
-  }, [teamsToUse, opponentTeamsToUse, hideHiddenTeams]);
+  }, [teamsToUse, opponentTeamsToUse, hideHiddenTeams, hideBenchPlayers]);
 
   return {
     players,

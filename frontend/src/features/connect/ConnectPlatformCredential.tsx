@@ -42,7 +42,7 @@ const ConnectPlatformCredential: React.FC<ConnectPlatformCredentialProps> = ({
   );
   const [credential, setCredential] = useState("");
   const { data: platforms, isLoading, error } = usePlatforms();
-  const { backendUser, registerTemporaryUser } = useAuthContext();
+  const { backendUser } = useAuthContext();
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
@@ -63,26 +63,22 @@ const ConnectPlatformCredential: React.FC<ConnectPlatformCredentialProps> = ({
   const handlePlatformChange = (platformId: string) => {
     const platform = platforms?.find((p) => p.id === platformId);
     setSelectedPlatform(platform || null);
+
+    if (!backendUser) {
+      const auth = getAuth(app);
+       signInAnonymously(auth);
+    }
   };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setIsWorking(true);
     try {
-      let currentUser = backendUser;
 
-      const auth = getAuth(app);
-      if (!backendUser) {
-        const userCredential = await signInAnonymously(auth);
-        currentUser = await registerTemporaryUser(userCredential.user);
-        console.log('new temp user', currentUser);
-      }
-
-
-      if (selectedPlatform && currentUser?.uid) {
+      if (selectedPlatform && backendUser?.uid) {
         await mutation.mutateAsync({
           platformId: selectedPlatform.id,
-          userId: currentUser.uid,
+          userId: backendUser.uid,
           credential: credential,
         });
       }

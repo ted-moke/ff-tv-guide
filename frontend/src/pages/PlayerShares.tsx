@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import styles from "./PlayerShares.module.css";
 import { getTeamsByConference, NFL_TEAMS } from "../features/nfl/nflTeams";
 import { Player } from "../features/nfl/nflTypes";
@@ -16,6 +16,7 @@ import DataTable from "../components/ui/DataTable";
 import { getTeamCodesByName } from "../features/teams/getTeamCodeByName";
 import { Stack } from "../components/ui/Stack";
 import { DivisionChart } from "../features/stats/DivisionChart";
+import Checkbox from "../components/ui/Checkbox";
 interface GroupedPlayer {
   team: string;
   players: Player[];
@@ -24,6 +25,8 @@ interface GroupedPlayer {
 }
 
 const PlayerShares: React.FC = () => {
+  const [hideBenchPlayers, setHideBenchPlayers] = useState(false);
+  // const [hideBestBallPlayers, setHideBestBallPlayers] = useState(false);
   const {
     activeConference,
     playerSharesSortBy,
@@ -35,6 +38,8 @@ const PlayerShares: React.FC = () => {
   const { players, isLoading, error } = usePlayers({
     includeOpponents: false,
     hideHiddenTeams: true,
+    hideBenchPlayers,
+    // hideBestBallPlayers,
   });
   const { isLoading: isAuthLoading } = useAuthContext();
   const {
@@ -65,7 +70,7 @@ const PlayerShares: React.FC = () => {
       ? groupedPlayers.filter((team) => team.players.length > 0)
       : groupedPlayers;
 
-    return filteredPlayers.sort((a, b) => {
+    const sortedPlayers = filteredPlayers.sort((a, b) => {
       if (playerSharesSortBy === "division") {
         return (
           a.division.localeCompare(b.division) || a.team.localeCompare(b.team)
@@ -88,11 +93,14 @@ const PlayerShares: React.FC = () => {
         return a.team.localeCompare(b.team);
       }
     });
+
+    return sortedPlayers;
   }, [
     activeConference,
     playerSharesSortBy,
     playerSharesHideEmptyTeams,
     allPlayers,
+    hideBenchPlayers,
   ]);
 
   // Calculate summary statistics
@@ -239,6 +247,20 @@ const PlayerShares: React.FC = () => {
   return (
     <div className={`${styles.playerShares} page-container`}>
       <h1>Player Shares</h1>
+      <div className={styles.hideBenchPlayersContainer}>
+        <Checkbox
+          id="hideBenchPlayers"
+          label="Hide Bench Players"
+          checked={hideBenchPlayers}
+          onChange={() => setHideBenchPlayers(!hideBenchPlayers)}
+        />
+        {/* <Checkbox
+          id="hideBestBallPlayers"
+          label="Hide Best Ball Players"
+          checked={hideBestBallPlayers}
+          onChange={() => setHideBestBallPlayers(!hideBestBallPlayers)}
+        /> */}
+      </div>
 
       {/* <label>Showing {numberOfSelectedTeams} teams</label> */}
 
@@ -369,7 +391,6 @@ const PlayerShares: React.FC = () => {
       </div>
 
       <DivisionChart data={summaryStats.teamsByMostOwnedByDivision} />
-
 
       <div className={styles.teamsTableWrapper}>
         <h3 className={styles.sectionTitle}>Players By Team</h3>

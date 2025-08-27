@@ -5,10 +5,11 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { getAuth, onAuthStateChanged, User, signOut } from "firebase/auth";
-import { app } from "../../firebaseConfig"; // Your Firebase client config
+import { getAuth, onAuthStateChanged, User, signOut, signInAnonymously } from "firebase/auth";
+import { app } from "../../firebaseConfig";
 import { AuthData } from "./authTypes";
 import { API_URL } from "../../config";
+import { useQueryClient } from "@tanstack/react-query";
 
 const AuthContext = createContext<{
   user: User | null;
@@ -32,6 +33,8 @@ export const AuthProvider2 = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [backendUser, setBackendUser] = useState<AuthData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAuthInitializing, setIsAuthInitializing] = useState(false);
+  const queryClient = useQueryClient();
 
   const logout = async () => {
     const auth = getAuth(app);
@@ -39,6 +42,7 @@ export const AuthProvider2 = ({ children }: { children: React.ReactNode }) => {
       await signOut(auth);
       setBackendUser(null);
       setUser(null);
+      await queryClient.removeQueries({ queryKey: ["platform-credentials"] });
     } catch (error) {
       console.error("Failed to logout:", error);
     }
@@ -73,6 +77,7 @@ export const AuthProvider2 = ({ children }: { children: React.ReactNode }) => {
   };
 
   const loginWithFirebaseUser = useCallback(async (user: User) => {
+    console.log("logging in with firebase user");
     const idToken = await user.getIdToken();
     const response = await fetch(`${API_URL}/users/login`, {
       method: "POST",
@@ -82,11 +87,21 @@ export const AuthProvider2 = ({ children }: { children: React.ReactNode }) => {
       },
       credentials: "include",
     });
-    if (!response.ok) throw new Error("Failed to login");
+    if (!response.ok || response.status !== 200) {
+      console.log("failed to login, response not ok");
+      throw new Error(`Failed to login, response not ok. Code: ${response.status}`);
+    } 
 
     const data = await response.json();
     if (!data.authenticated) {
-      throw new Error("Failed to login");
+      console.log("failed to login, user not authenticated");
+      throw new Error("Failed to login, user not authenticated");
+    }
+
+    if (data.error === "User not found") {
+      console.log("failed to login, user not found");
+      logout();
+      throw new Error("Failed to login, user not found");
     }
 
     return data;
@@ -96,16 +111,33 @@ export const AuthProvider2 = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const auth = getAuth(app);
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      setUser(currentUser);
-      if (currentUser) {
-        const backendUserData = await loginWithFirebaseUser(currentUser);
-        setBackendUser(backendUserData);
+      if (isAuthInitializing || backendUser) return;
+      try {
+
+        setUser(currentUser);
+        console.log("currentUser on auth state changed", currentUser);
+        setIsAuthInitializing(true);
+        if (currentUser) {
+          const backendUserData = await loginWithFirebaseUser(currentUser);
+          setBackendUser(backendUserData);
+        }
+      } catch (error) {
+        console.error("Error in auth state changed:", error);
+
+        // If we tried an autologin and failed, register a temporary user
+        if (error instanceof Error && error.message.includes("401") && currentUser) {
+          console.log("401, registering temporary user");
+          const backendUserData = await registerTemporaryUser(currentUser);
+          setBackendUser(backendUserData);
+        }
+      } finally {
+        setIsLoading(false);
+        setIsAuthInitializing(false);
       }
-      setIsLoading(false);
     });
 
     return () => unsubscribe();
-  }, [loginWithFirebaseUser]);
+  }, [loginWithFirebaseUser, registerTemporaryUser, isAuthInitializing, backendUser, signInAnonymously]);
 
 
   return (

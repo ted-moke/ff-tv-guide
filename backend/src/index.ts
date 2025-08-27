@@ -3,7 +3,6 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import { errorHandler } from "./middleware/errorMiddleware";
 import { seedDatabase } from "./seed";
-import { getDeploymentInfo } from "./utils/deploymentInfo";
 import platformRoutes from "./routes/platformRoutes";
 import leagueRoutes from "./routes/leagueRoutes";
 import teamPlayerRoutes from "./routes/teamPlayerRoutes";
@@ -14,10 +13,9 @@ import userTeamRoutes from "./routes/userTeamRoutes";
 import userTeamHistoryRoutes from "./routes/userTeamHistoryRoutes";
 import tradeRoutes from "./routes/tradeRoutes";
 import migrationRoutes from "./routes/migrationRoutes";
-import cacheRoutes from "./routes/cacheRoutes";
 const app = express();
 
-console.log("Starting server");
+console.log("🚀 Starting server - v2 with cache control middleware - DEPLOYMENT TEST");
 
 const allowedOrigins = [
   'http://localhost:5173', // Development URL
@@ -67,12 +65,11 @@ app.use("/user-teams", userTeamRoutes);
 app.use("/user-team-history", userTeamHistoryRoutes);
 app.use("/trades", tradeRoutes);
 app.use("/migration", migrationRoutes);
-app.use("/cache", cacheRoutes);
 
 app.get("/health", (req, res) => {
   res.json({
     status: "OK",
-    ...getDeploymentInfo()
+    timestamp: Date.now()
   });
 });
 

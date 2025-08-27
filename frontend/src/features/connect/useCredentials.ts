@@ -5,7 +5,7 @@ import { PlatformCredential } from "../platforms/platformTypes";
 
 const useCredentials = ({ user }: { user?: User }) => {
   return useQuery<PlatformCredential[]>({
-    queryKey: ["userCredentials"],
+    queryKey: ["platform-credentials"],
     queryFn: () => fetchUserPlatformCredentials(user),
     enabled: !!user,
   });
