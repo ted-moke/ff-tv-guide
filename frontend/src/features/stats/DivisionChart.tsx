@@ -21,7 +21,7 @@ export const DivisionChart = (data: any) => {
       strokes: [colors.background.light ],
     },
     params: {
-      tooltipBackgroundColor: colors.background.primary,
+      tooltipBackgroundColor: colors.background.offset,
       tooltipTextColor: colors.text.primary,
     },
   };

@@ -22,7 +22,7 @@ const PlayerSharesCard: React.FC<PlayerSharesCardProps> = ({
   );
 
   return (
-    <div className={styles.teamCard}>
+    <div className={styles.teamCard} id={team.toLowerCase()}>
       <div className={styles.headerWrapper}>
         <div className={styles.teamHeader}>
           <h3>{team}</h3>

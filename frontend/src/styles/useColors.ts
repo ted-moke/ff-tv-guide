@@ -8,15 +8,6 @@ const getCSSVariable = (variableName: string): string => {
     .trim();
 };
 
-// Helper function to get CSS variable value with fallback
-const getCSSVariableWithFallback = (
-  variableName: string,
-  fallback: string
-): string => {
-  const value = getCSSVariable(variableName);
-  return value || fallback;
-};
-
 export interface Colors {
   // Brand Colors
   red: {
@@ -290,8 +281,6 @@ export const useColors = (): Colors => {
 
 // Utility functions for common color operations
 export const useColorUtils = () => {
-  const colors = useColors();
-
   return useMemo(() => {
     // Helper function to get a color with opacity
     const withOpacity = (color: string, opacity: number): string => {
@@ -348,45 +337,4 @@ export const useColorUtils = () => {
       },
     };
   }, []);
-};
-
-// Export individual color getters for convenience
-export const useBrandColors = () => {
-  const colors = useColors();
-  return colors.red;
-};
-
-export const useBackgroundColors = () => {
-  const colors = useColors();
-  return colors.background;
-};
-
-export const useTextColors = () => {
-  const colors = useColors();
-  return colors.text;
-};
-
-export const usePrimaryColors = () => {
-  const colors = useColors();
-  return colors.primary;
-};
-
-export const useSecondaryColors = () => {
-  const colors = useColors();
-  return colors.secondary;
-};
-
-export const useSizes = () => {
-  const colors = useColors();
-  return colors.sizes;
-};
-
-export const useFontSizes = () => {
-  const colors = useColors();
-  return colors.fontSizes;
-};
-
-export const useBorderRadius = () => {
-  const colors = useColors();
-  return colors.borderRadius;
 };

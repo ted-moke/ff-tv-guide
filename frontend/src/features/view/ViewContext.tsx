@@ -76,7 +76,7 @@ interface ViewContextType {
   // UI Data
   isMobile: boolean;
   setIsMobile: (isMobile: boolean) => void;
-  scrollToElement: (elementId: string) => void;
+  scrollToElement: (elementId: string, highlight?: boolean) => void;
   viewMode: ViewMode;
   setViewMode: (mode: ViewMode) => void;
   isMenuOpen: boolean;
@@ -156,10 +156,15 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     userTeams: teamMap,
   });
 
-  const scrollToElement = (elementId: string) => {
+  const scrollToElement = (elementId: string, highlight = false) => {
     const element = document.getElementById(elementId);
 
     if (element) {
+      if (highlight) {
+        element.classList.add("highlight");
+      } else {
+        element.classList.remove("highlight");
+      }
       element.scrollIntoView({ behavior: "smooth" });
     } else {
       console.error(`Element with id ${elementId} not found`);

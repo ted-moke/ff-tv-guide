@@ -26,6 +26,7 @@ interface GroupedPlayer {
 
 const PlayerShares: React.FC = () => {
   const [hideBenchPlayers, setHideBenchPlayers] = useState(false);
+  const [hideIDPlayers, setHideIDPlayers] = useState(false);
   // const [hideBestBallPlayers, setHideBestBallPlayers] = useState(false);
   const {
     activeConference,
@@ -34,11 +35,13 @@ const PlayerShares: React.FC = () => {
     selectedTeams,
     selectedPositions,
     playerSharesSearchTerm,
+    scrollToElement,
   } = useView();
-  const { players, isLoading, error } = usePlayers({
+  const { players, isLoading, error, hasIDPlayers } = usePlayers({
     includeOpponents: false,
     hideHiddenTeams: true,
     hideBenchPlayers,
+    hideIDPlayers,
     // hideBestBallPlayers,
   });
   const { isLoading: isAuthLoading } = useAuthContext();
@@ -254,6 +257,14 @@ const PlayerShares: React.FC = () => {
           checked={hideBenchPlayers}
           onChange={() => setHideBenchPlayers(!hideBenchPlayers)}
         />
+        {hasIDPlayers && (
+          <Checkbox
+            id="hideIDPlayers"
+            label="Hide IDP"
+            checked={hideIDPlayers}
+            onChange={() => setHideIDPlayers(!hideIDPlayers)}
+          />
+        )}
         {/* <Checkbox
           id="hideBestBallPlayers"
           label="Hide Best Ball Players"
@@ -433,6 +444,10 @@ const PlayerShares: React.FC = () => {
             topRows: 3,
             bottomRows: 3,
             defaultCollapsed: true,
+          }}
+          onRowClick={(row) => {
+            const team = row.team;
+            scrollToElement(team.toLowerCase(), true);
           }}
         />
       </div>

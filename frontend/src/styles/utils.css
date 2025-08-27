@@ -1,3 +1,5 @@
+@import "./animations.css";
+
 .divider {
   margin: var(--size2) 0;
   border: none;
@@ -40,4 +42,9 @@
 .list-disc li {
   list-style-type: disc;
   margin-left: var(--size3);
+
+}
+
+.highlight {
+  animation: blink .875s linear 0.75s 3;
 }

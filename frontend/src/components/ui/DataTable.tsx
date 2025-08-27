@@ -22,6 +22,7 @@ interface DataTableProps {
     bottomRows?: number;
     defaultCollapsed?: boolean;
   };
+  onRowClick?: (row: any) => void;
 }
 
 const DataTable: React.FC<DataTableProps> = ({
@@ -31,6 +32,7 @@ const DataTable: React.FC<DataTableProps> = ({
   striped = true,
   compact = false,
   collapsible,
+  onRowClick,
 }) => {
   const [isCollapsed, setIsCollapsed] = useState(collapsible?.defaultCollapsed ?? true);
   
@@ -87,6 +89,7 @@ const DataTable: React.FC<DataTableProps> = ({
               <React.Fragment key={originalIndex}>
                 <tr
                   className={`${styles.row} ${striped && originalIndex % 2 === 1 ? styles.striped : ''}`}
+                  onClick={() => onRowClick?.(row)}
                 >
                   {columns.map((column) => (
                     <td

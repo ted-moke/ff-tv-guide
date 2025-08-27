@@ -4,23 +4,10 @@ import { FantasyTeam } from "../teams/teamTypes";
 import { useView } from "../view/ViewContext";
 import { getCurrentSeason } from "../../utils/seasonUtils";
 
+const IDPPositions = ["DB", "S", "CB", "DE", "EDR", "DL", "IL", "LB"];
+
 // Define the order of positions
-const positionOrder = [
-  "QB",
-  "RB",
-  "WR",
-  "TE",
-  "K",
-  "DEF",
-  "DB",
-  "S",
-  "CB",
-  "DE",
-  "EDR",
-  "DL",
-  "IL",
-  "LB",
-];
+const positionOrder = ["QB", "RB", "WR", "TE", "K", "DEF", ...IDPPositions];
 
 // Custom sorting function
 const sortPlayers = (a: Player, b: Player) => {
@@ -73,10 +60,12 @@ export const usePlayers = ({
   includeOpponents = true,
   hideHiddenTeams = false,
   hideBenchPlayers = false,
+  hideIDPlayers = false,
 }: {
   includeOpponents?: boolean;
   hideHiddenTeams?: boolean;
   hideBenchPlayers?: boolean;
+  hideIDPlayers?: boolean;
 } = {}) => {
   const {
     userTeams,
@@ -104,6 +93,8 @@ export const usePlayers = ({
     return opponentTeams;
   }, [visibleOpponentTeams, opponentTeams, hideHiddenTeams]);
 
+  let hasIDPlayers = false;
+
   const players: Player[] | null = useMemo(() => {
     if (!teamsToUse || (includeOpponents && !opponentTeamsToUse)) {
       return null;
@@ -117,6 +108,13 @@ export const usePlayers = ({
     ) => {
       teams.forEach((team) => {
         team.playerData.forEach((player) => {
+          if (IDPPositions.includes(player.position)) {
+            hasIDPlayers = true;
+
+            if (hideIDPlayers) {
+              return;
+            }
+          }
           // if there's two players with the same name AND position, this could break
           // but it's unlikely. TODO fix this
           const key = `${player.name}-${player.position}`;
@@ -171,12 +169,20 @@ export const usePlayers = ({
     });
 
     return Array.from(playerMap.values()).sort(sortPlayers);
-  }, [teamsToUse, opponentTeamsToUse, hideHiddenTeams, hideBenchPlayers]);
+  }, [
+    teamsToUse,
+    opponentTeamsToUse,
+    hideHiddenTeams,
+    hideBenchPlayers,
+    hideIDPlayers,
+    hasIDPlayers,
+  ]);
 
   return {
     players,
     isLoading: userTeamsLoading || opponentTeamsLoading,
     error: userTeamsError || opponentTeamsError,
+    hasIDPlayers,
   };
 };
 
