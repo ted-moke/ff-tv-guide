@@ -1,13 +1,14 @@
 import { useQuery } from "@tanstack/react-query";
-import { User } from "firebase/auth";
 import { fetchUserPlatformCredentials } from "./connectTeamAPI";
 import { PlatformCredential } from "../platforms/platformTypes";
+import { AuthData } from "../auth/authTypes";
 
-const useCredentials = ({ user }: { user?: User }) => {
+const useCredentials = ({ backendUser }: { backendUser?: AuthData | null }) => {
+  console.log("backendUser,", backendUser);
   return useQuery<PlatformCredential[]>({
     queryKey: ["platform-credentials"],
-    queryFn: () => fetchUserPlatformCredentials(user),
-    enabled: !!user,
+    queryFn: () => fetchUserPlatformCredentials(backendUser),
+    enabled: !!backendUser,
   });
 };
 

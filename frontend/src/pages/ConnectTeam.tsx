@@ -28,12 +28,12 @@ const ConnectTeam: React.FC = () => {
   const [selectedLeagues, setSelectedLeagues] = useState<string[]>([]);
   const [isConnecting, setIsConnecting] = useState(false);
   const queryClient = useQueryClient();
-  const { user } = useAuthContext();
+  const { backendUser } = useAuthContext();
   const {
     data: credentials,
     error: credentialsError,
     refetch: refetchCredentials,
-  } = useCredentials({ user: user ?? undefined });
+  } = useCredentials({ backendUser });
   const { mutateAsync: connectLeague } = useConnectLeague();
   const { isMobile, selectedWeek, userTeams } = useView();
 
