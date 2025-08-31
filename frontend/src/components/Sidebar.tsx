@@ -10,7 +10,7 @@ import { useLocation } from "react-router-dom";
 import FFTVGLogo from "../assets/FFTVGLogo";
 
 const Sidebar: React.FC = () => {
-  const { isMenuOpen, setIsMenuOpen } = useView();
+  const { isMenuOpen, setIsMenuOpen, showAllTeams } = useView();
 
   const location = useLocation();
   const { logout, user } = useAuthContext();
@@ -106,6 +106,7 @@ const Sidebar: React.FC = () => {
                   onClick={() => {
                     setIsMenuOpen(false);
                     logout();
+                    showAllTeams();
                   }}
                 >
                   Clear data
