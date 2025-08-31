@@ -1,7 +1,11 @@
 .fantasy-team-item {
-  text-decoration: underline;
   cursor: pointer;
   padding: var(--size1) 0;
+}
+
+.fantasy-team-item p {
+  text-decoration: underline;
+
 }
 
 .fantasy-team-item input[type="checkbox"] {

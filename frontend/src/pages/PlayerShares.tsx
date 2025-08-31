@@ -253,7 +253,7 @@ const PlayerShares: React.FC = () => {
       <div className={styles.hideBenchPlayersContainer}>
         <Checkbox
           id="hideBenchPlayers"
-          label="Hide Bench Players"
+          label="Starters Only"
           checked={hideBenchPlayers}
           onChange={() => setHideBenchPlayers(!hideBenchPlayers)}
         />

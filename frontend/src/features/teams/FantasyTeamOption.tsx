@@ -53,8 +53,8 @@ export const FantasyTeamOption = ({
   };
 
   const handleHideAll = () => {
-    hideTeam(team.leagueId);
     hideOpponentTeam(team.leagueId);
+    hideTeam(team.leagueId);
   };
 
   return (
