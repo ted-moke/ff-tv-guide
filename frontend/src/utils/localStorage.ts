@@ -63,6 +63,18 @@ export class LocalStorageManager {
         // Silently fail
       }
     }
+
+    static clearAll(): void {
+      if (!this.isAvailable()) {
+        return;
+      }
+      
+      try {
+        localStorage.clear();
+      } catch {
+        // Silently fail
+      }
+    }
   }
   
   // Convenience functions for common use cases
@@ -74,3 +86,6 @@ export class LocalStorageManager {
   
   export const removeLocalStorageItem = (key: string): void => 
     LocalStorageManager.removeItem(key);
+
+  export const clearAllStorage = () => 
+    LocalStorageManager.clearAll();
