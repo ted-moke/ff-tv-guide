@@ -36,7 +36,7 @@ const FantasyTeamOptions: React.FC = () => {
     hideAllTeams();
   };
 
-  const handleClickLeague = (leagueId: string) => {
+  const handleToggleLeagueSelected = (leagueId: string) => {
     if (leagueId === selectedLeagueId) {
       setSelectedLeagueId(null);
     } else {
@@ -85,7 +85,7 @@ const FantasyTeamOptions: React.FC = () => {
                       showOpponentTeam={showOpponentTeam}
                       hideOpponentTeam={hideOpponentTeam}
                       selected={selectedLeagueId === team.leagueId}
-                      handleClick={() => handleClickLeague(team.leagueId)}
+                      handleToggleLeagueSelected={() => handleToggleLeagueSelected(team.leagueId)}
                     />
                   );
                 }

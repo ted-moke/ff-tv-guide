@@ -7,6 +7,7 @@ export const Stack = ({
   align = "start",
   justify = "start",
   className,
+  onClick,
 }: {
   children: React.ReactNode;
   direction?: "column" | "row";
@@ -14,9 +15,11 @@ export const Stack = ({
   align?: "start" | "center" | "end";
   justify?: "start" | "center" | "end" | "between" | "around" | "evenly";
   className?: string;
+  onClick?: () => void;
 }) => {
   return (
     <div
+      onClick={onClick}  // TODO fix this, shouldn't have a click on a div
       className={`${styles.stack} ${styles[`stack-${direction}`]} ${className}`}
       style={{ gap: `${gap}rem`, alignItems: align, justifyContent: justify }}
     >

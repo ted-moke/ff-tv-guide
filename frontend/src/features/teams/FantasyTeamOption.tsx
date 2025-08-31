@@ -14,7 +14,7 @@ export const FantasyTeamOption = ({
   showOpponentTeam,
   hideOpponentTeam,
   selected,
-  handleClick,
+  handleToggleLeagueSelected,
 }: {
   team: FantasyTeam;
   isVisible: boolean;
@@ -24,7 +24,7 @@ export const FantasyTeamOption = ({
   showOpponentTeam: (leagueId: string) => void;
   hideOpponentTeam: (leagueId: string) => void;
   selected: boolean;
-  handleClick: () => void;
+  handleToggleLeagueSelected: () => void;
 }) => {
   const allVisible = isVisible && isOpponentVisible;
   const allHidden = !isVisible && !isOpponentVisible;
@@ -32,7 +32,7 @@ export const FantasyTeamOption = ({
 
   if (!selected) {
     return (
-      <div className={styles["fantasy-team-item"]} onClick={handleClick}>
+      <div className={styles["fantasy-team-item"]} onClick={handleToggleLeagueSelected}>
         <Stack direction="row" align="center">
           <p>{team.leagueName}</p>
           {allHidden && <small className="muted">Hidden</small>}
@@ -45,23 +45,35 @@ export const FantasyTeamOption = ({
   const handleShowAll = () => {
     showTeam(team.leagueId);
     showOpponentTeam(team.leagueId);
+    handleToggleLeagueSelected();
   };
 
   const handleHideOpponent = () => {
     hideOpponentTeam(team.leagueId);
     showTeam(team.leagueId);
+    handleToggleLeagueSelected();
   };
 
   const handleHideAll = () => {
     hideOpponentTeam(team.leagueId);
     hideTeam(team.leagueId);
+    handleToggleLeagueSelected();
   };
+
+  console.log("team", team);
 
   return (
     <Stack>
-      <Stack direction="row" key={team.leagueId} gap={1} align="center">
-        <IconButton icon={<MdClose />} onClick={handleClick} />
+      <Stack
+        direction="row"
+        key={team.leagueId}
+        gap={1}
+        align="center"
+        onClick={handleToggleLeagueSelected}
+        className={styles["fantasy-team-item"]}
+      >
         <p>{team.leagueName}</p>
+        <MdClose />
       </Stack>
       <RadioButton
         id="show-all"

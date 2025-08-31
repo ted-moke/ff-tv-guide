@@ -1,6 +1,7 @@
 .fantasy-team-item {
   cursor: pointer;
   padding: var(--size1) 0;
+  width: 100%;
 }
 
 .fantasy-team-item p {
