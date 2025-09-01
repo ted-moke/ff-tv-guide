@@ -9,14 +9,15 @@ import { Navigate } from "react-router-dom";
 import LoadingSpinner from "../components/ui/LoadingSpinner";
 import PlayerSharesGrid from "../components/PlayerSharesGrid";
 import { useNeedsResources } from "../features/teams/useNeedsResources";
-// import PlayerSharesFilters from "../components/PlayerSharesFilters";
-// import Collapsible from "../components/ui/Collapsible";
-// import { LuFilter } from "react-icons/lu";
+import PlayerSharesFilters from "../components/PlayerSharesFilters";
+import Collapsible from "../components/ui/Collapsible";
+import { LuFilter, LuSearch } from "react-icons/lu";
 import DataTable from "../components/ui/DataTable";
 import { getTeamCodesByName } from "../features/teams/getTeamCodeByName";
 import { Stack } from "../components/ui/Stack";
 import { DivisionChart } from "../features/stats/DivisionChart";
 import Checkbox from "../components/ui/Checkbox";
+import TextInput from "../components/ui/TextInput";
 interface GroupedPlayer {
   team: string;
   players: Player[];
@@ -36,6 +37,7 @@ const PlayerShares: React.FC = () => {
     selectedPositions,
     playerSharesSearchTerm,
     scrollToElement,
+    setPlayerSharesSearchTerm,
   } = useView();
   const { players, isLoading, error, hasIDPlayers } = usePlayers({
     includeOpponents: false,
@@ -250,33 +252,31 @@ const PlayerShares: React.FC = () => {
   return (
     <div className={`${styles.playerShares} page-container`}>
       <h1>Player Shares</h1>
-      <div className={styles.hideBenchPlayersContainer}>
+        <TextInput
+          type="text"
+          id="player-search"
+          placeholder="Search players..."
+          value={playerSharesSearchTerm}
+          onChange={(e) => setPlayerSharesSearchTerm(e.target.value)}
+          outline
+          icon={<LuSearch />}
+          iconPosition="right"
+        />
+      <div className={styles.filtersContainer}>
         <Checkbox
           id="hideBenchPlayers"
           label="Starters Only"
           checked={hideBenchPlayers}
           onChange={() => setHideBenchPlayers(!hideBenchPlayers)}
         />
-        {hasIDPlayers && (
-          <Checkbox
-            id="hideIDPlayers"
-            label="Hide IDP"
-            checked={hideIDPlayers}
-            onChange={() => setHideIDPlayers(!hideIDPlayers)}
-          />
-        )}
         {/* <Checkbox
           id="hideBestBallPlayers"
           label="Hide Best Ball Players"
           checked={hideBestBallPlayers}
           onChange={() => setHideBestBallPlayers(!hideBestBallPlayers)}
         /> */}
-      </div>
-
-      {/* <label>Showing {numberOfSelectedTeams} teams</label> */}
-
-      {/* <Collapsible
-        title="Filters"
+      <Collapsible
+        title="More Filters"
         defaultCollapsed={true}
         onClear={() => {}}
         showClear={false}
@@ -284,218 +284,238 @@ const PlayerShares: React.FC = () => {
         className={styles.filtersCollapsible}
         icon={<LuFilter />}
       >
-        <PlayerSharesFilters />
-      </Collapsible> */}
-
-      <Stack direction="row" gap={1}>
-        <div className={styles.statItemRow}>
-          <label className={styles.statLabel}>NFL Teams:</label>
-          <div className={styles.statValueContainer}>
-            <p className={styles.statValue}>{summaryStats.teamsWithPlayers}</p>
-          </div>
-        </div>
-        <div className={styles.statItemRow}>
-          <label className={styles.statLabel}>Players:</label>
-          <div className={styles.statValueContainer}>
-            <p className={styles.statValue}>{summaryStats.totalPlayers}</p>
-          </div>
-        </div>
-        <div className={styles.statItemRow}>
-          <label className={styles.statLabel}>Total Shares:</label>
-          <div className={styles.statValueContainer}>
-            <p className={styles.statValue}>{summaryStats.totalShares}</p>
-          </div>
-        </div>
-      </Stack>
-
-      <div className={styles.summaryStats}>
-        <div className={styles.statItem}>
-          <label className={styles.statLabel}>Most Owned Team:</label>
-          <div className={styles.statValueContainer}>
-            <p className={styles.statValue}>
-              {getTeamCodesByName(summaryStats.mostOwnedTeam)?.[0] ?? "??"}
-            </p>
-            <p className={styles.statValueSub}>
-              {summaryStats.sharesByTeam[summaryStats.mostOwnedTeam]} shares
-            </p>
-            <p className={styles.statValueSub}>
-              {(
-                (summaryStats.sharesByTeam[summaryStats.mostOwnedTeam] /
-                  summaryStats.totalShares) *
-                100
-              ).toFixed(1)}
-              %
-            </p>
-          </div>
-        </div>
-        <div className={styles.statItem}>
-          <label className={styles.statLabel}>Least Owned Team:</label>
-          <div className={styles.statValueContainer}>
-            <p className={styles.statValue}>
-              {getTeamCodesByName(summaryStats.leastOwnedTeam)?.[0] ?? "??"}
-            </p>
-            <p className={styles.statValueSub}>
-              {summaryStats.sharesByTeam[summaryStats.leastOwnedTeam]} shares
-            </p>
-            <p className={styles.statValueSub}>
-              {(
-                (summaryStats.sharesByTeam[summaryStats.leastOwnedTeam] /
-                  summaryStats.totalShares) *
-                100
-              ).toFixed(1)}
-              %
-            </p>
-          </div>
-        </div>
-        <div className={styles.statItem}>
-          <label className={styles.statLabel}>Most Owned Division:</label>
-          <div className={styles.statValueContainer}>
-            <p className={styles.statValue}>
-              {summaryStats.mostOwnedTeamByDivision}
-            </p>
-            <p className={styles.statValueSub}>
-              {typeof summaryStats.teamsByMostOwnedByDivision[0]?.[1] ===
-              "number"
-                ? summaryStats.teamsByMostOwnedByDivision[0][1]
-                : 0}{" "}
-              shares
-            </p>
-            <p className={styles.statValueSub}>
-              {(
-                ((typeof summaryStats.teamsByMostOwnedByDivision[0]?.[1] ===
-                "number"
-                  ? summaryStats.teamsByMostOwnedByDivision[0][1]
-                  : 0) /
-                  summaryStats.totalShares) *
-                100
-              ).toFixed(1)}
-              %
-            </p>
-          </div>
-        </div>
-        <div className={styles.statItem}>
-          <label className={styles.statLabel}>Least Owned Division:</label>
-          <div className={styles.statValueContainer}>
-            <p className={styles.statValue}>
-              {summaryStats.leastOwnedTeamByDivision}
-            </p>
-            <p className={styles.statValueSub}>
-              {typeof summaryStats.teamsByLeastOwnedByDivision[0]?.[1] ===
-              "number"
-                ? summaryStats.teamsByLeastOwnedByDivision[0][1]
-                : 0}{" "}
-              shares
-            </p>
-            <p className={styles.statValueSub}>
-              {(
-                ((typeof summaryStats.teamsByLeastOwnedByDivision[0]?.[1] ===
-                "number"
-                  ? summaryStats.teamsByLeastOwnedByDivision[0][1]
-                  : 0) /
-                  summaryStats.totalShares) *
-                100
-              ).toFixed(1)}
-              %
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <DivisionChart data={summaryStats.teamsByMostOwnedByDivision} />
-
-      <div className={styles.teamsTableWrapper}>
-        <h3 className={styles.sectionTitle}>Players By Team</h3>
-        <DataTable
-          data={summaryStats.teamsByMostOwned.map((team) => ({
-            team: team[0] ?? "??",
-            shares: team[1],
-            percentage: ((team[1] / summaryStats.totalShares) * 100).toFixed(1),
-            rank:
-              summaryStats.teamsByMostOwned.findIndex((t) => t[0] === team[0]) +
-              1,
-          }))}
-          columns={[
-            {
-              key: "rank",
-              label: "Rank",
-              align: "center",
-              width: "60px",
-              format: (value) => `#${value}`,
-            },
-            { key: "team", label: "Team", align: "left", width: "80px" },
-            {
-              key: "shares",
-              label: "Shares",
-              align: "right",
-              width: "100px",
-              format: (value) => value.toLocaleString(),
-            },
-            {
-              key: "percentage",
-              label: "Share %",
-              align: "right",
-              width: "100px",
-              format: (value) => `${value}%`,
-            },
-          ]}
-          compact={true}
-          striped={true}
-          collapsible={{
-            topRows: 3,
-            bottomRows: 3,
-            defaultCollapsed: true,
-          }}
-          onRowClick={(row) => {
-            const team = row.team;
-            scrollToElement(team.toLowerCase(), true);
-          }}
+        <PlayerSharesFilters
+          hasIDPlayers={hasIDPlayers}
+          hideIDPlayers={hideIDPlayers}
+          setHideIDPlayers={setHideIDPlayers}
         />
+      </Collapsible>
       </div>
 
-      <div className={styles.teamsTableWrapper}>
-        <h3 className={styles.sectionTitle}>Players By Division</h3>
-        <DataTable
-          data={summaryStats.teamsByMostOwnedByDivision.map((division) => {
-            const shares = typeof division[1] === "number" ? division[1] : 0;
-            return {
-              division: division[0] ?? "??",
-              shares,
-              percentage: ((shares / summaryStats.totalShares) * 100).toFixed(
-                1
-              ),
-              rank:
-                summaryStats.teamsByMostOwnedByDivision.findIndex(
-                  (t) => t[0] === division[0]
-                ) + 1,
-            };
-          })}
-          columns={[
-            {
-              key: "division",
-              label: "Division",
-              align: "left",
-              width: "80px",
-            },
-            {
-              key: "shares",
-              label: "Shares",
-              align: "right",
-              width: "100px",
-              format: (value) => value.toLocaleString(),
-            },
-            {
-              key: "percentage",
-              label: "Share %",
-              align: "right",
-              width: "100px",
-              format: (value) => `${value}%`,
-            },
-          ]}
-          compact={true}
-          striped={true}
-        />
-      </div>
+      {/* <label>Showing {numberOfSelectedTeams} teams</label> */}
 
+
+      {(!playerSharesSearchTerm || playerSharesSearchTerm.length === 0) && (
+        <>
+          <Stack direction="row" gap={1}>
+            <div className={styles.statItemRow}>
+              <label className={styles.statLabel}>NFL Teams:</label>
+              <div className={styles.statValueContainer}>
+                <p className={styles.statValue}>
+                  {summaryStats.teamsWithPlayers}
+                </p>
+              </div>
+            </div>
+            <div className={styles.statItemRow}>
+              <label className={styles.statLabel}>Players:</label>
+              <div className={styles.statValueContainer}>
+                <p className={styles.statValue}>{summaryStats.totalPlayers}</p>
+              </div>
+            </div>
+            <div className={styles.statItemRow}>
+              <label className={styles.statLabel}>Total Shares:</label>
+              <div className={styles.statValueContainer}>
+                <p className={styles.statValue}>{summaryStats.totalShares}</p>
+              </div>
+            </div>
+          </Stack>
+
+          <div className={styles.summaryStats}>
+            <div className={styles.statItem}>
+              <label className={styles.statLabel}>Most Owned Team:</label>
+              <div className={styles.statValueContainer}>
+                <p className={styles.statValue}>
+                  {getTeamCodesByName(summaryStats.mostOwnedTeam)?.[0] ?? "??"}
+                </p>
+                <p className={styles.statValueSub}>
+                  {summaryStats.sharesByTeam[summaryStats.mostOwnedTeam]} shares
+                </p>
+                <p className={styles.statValueSub}>
+                  {(
+                    (summaryStats.sharesByTeam[summaryStats.mostOwnedTeam] /
+                      summaryStats.totalShares) *
+                    100
+                  ).toFixed(1)}
+                  %
+                </p>
+              </div>
+            </div>
+            <div className={styles.statItem}>
+              <label className={styles.statLabel}>Least Owned Team:</label>
+              <div className={styles.statValueContainer}>
+                <p className={styles.statValue}>
+                  {getTeamCodesByName(summaryStats.leastOwnedTeam)?.[0] ?? "??"}
+                </p>
+                <p className={styles.statValueSub}>
+                  {summaryStats.sharesByTeam[summaryStats.leastOwnedTeam]}{" "}
+                  shares
+                </p>
+                <p className={styles.statValueSub}>
+                  {(
+                    (summaryStats.sharesByTeam[summaryStats.leastOwnedTeam] /
+                      summaryStats.totalShares) *
+                    100
+                  ).toFixed(1)}
+                  %
+                </p>
+              </div>
+            </div>
+            <div className={styles.statItem}>
+              <label className={styles.statLabel}>Most Owned Division:</label>
+              <div className={styles.statValueContainer}>
+                <p className={styles.statValue}>
+                  {summaryStats.mostOwnedTeamByDivision}
+                </p>
+                <p className={styles.statValueSub}>
+                  {typeof summaryStats.teamsByMostOwnedByDivision[0]?.[1] ===
+                  "number"
+                    ? summaryStats.teamsByMostOwnedByDivision[0][1]
+                    : 0}{" "}
+                  shares
+                </p>
+                <p className={styles.statValueSub}>
+                  {(
+                    ((typeof summaryStats.teamsByMostOwnedByDivision[0]?.[1] ===
+                    "number"
+                      ? summaryStats.teamsByMostOwnedByDivision[0][1]
+                      : 0) /
+                      summaryStats.totalShares) *
+                    100
+                  ).toFixed(1)}
+                  %
+                </p>
+              </div>
+            </div>
+            <div className={styles.statItem}>
+              <label className={styles.statLabel}>Least Owned Division:</label>
+              <div className={styles.statValueContainer}>
+                <p className={styles.statValue}>
+                  {summaryStats.leastOwnedTeamByDivision}
+                </p>
+                <p className={styles.statValueSub}>
+                  {typeof summaryStats.teamsByLeastOwnedByDivision[0]?.[1] ===
+                  "number"
+                    ? summaryStats.teamsByLeastOwnedByDivision[0][1]
+                    : 0}{" "}
+                  shares
+                </p>
+                <p className={styles.statValueSub}>
+                  {(
+                    ((typeof summaryStats
+                      .teamsByLeastOwnedByDivision[0]?.[1] === "number"
+                      ? summaryStats.teamsByLeastOwnedByDivision[0][1]
+                      : 0) /
+                      summaryStats.totalShares) *
+                    100
+                  ).toFixed(1)}
+                  %
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <DivisionChart data={summaryStats.teamsByMostOwnedByDivision} />
+
+          <div className={styles.teamsTableWrapper}>
+            <h3 className={styles.sectionTitle}>Players By Team</h3>
+            <DataTable
+              data={summaryStats.teamsByMostOwned.map((team) => ({
+                team: team[0] ?? "??",
+                shares: team[1],
+                percentage: (
+                  (team[1] / summaryStats.totalShares) *
+                  100
+                ).toFixed(1),
+                rank:
+                  summaryStats.teamsByMostOwned.findIndex(
+                    (t) => t[0] === team[0]
+                  ) + 1,
+              }))}
+              columns={[
+                {
+                  key: "rank",
+                  label: "Rank",
+                  align: "center",
+                  width: "60px",
+                  format: (value) => `#${value}`,
+                },
+                { key: "team", label: "Team", align: "left", width: "80px" },
+                {
+                  key: "shares",
+                  label: "Shares",
+                  align: "right",
+                  width: "100px",
+                  format: (value) => value.toLocaleString(),
+                },
+                {
+                  key: "percentage",
+                  label: "Share %",
+                  align: "right",
+                  width: "100px",
+                  format: (value) => `${value}%`,
+                },
+              ]}
+              compact={true}
+              striped={true}
+              collapsible={{
+                topRows: 3,
+                bottomRows: 3,
+                defaultCollapsed: true,
+              }}
+              onRowClick={(row) => {
+                const team = row.team;
+                scrollToElement(team.toLowerCase(), true);
+              }}
+            />
+          </div>
+
+          <div className={styles.teamsTableWrapper}>
+            <h3 className={styles.sectionTitle}>Players By Division</h3>
+            <DataTable
+              data={summaryStats.teamsByMostOwnedByDivision.map((division) => {
+                const shares =
+                  typeof division[1] === "number" ? division[1] : 0;
+                return {
+                  division: division[0] ?? "??",
+                  shares,
+                  percentage: (
+                    (shares / summaryStats.totalShares) *
+                    100
+                  ).toFixed(1),
+                  rank:
+                    summaryStats.teamsByMostOwnedByDivision.findIndex(
+                      (t) => t[0] === division[0]
+                    ) + 1,
+                };
+              })}
+              columns={[
+                {
+                  key: "division",
+                  label: "Division",
+                  align: "left",
+                  width: "80px",
+                },
+                {
+                  key: "shares",
+                  label: "Shares",
+                  align: "right",
+                  width: "100px",
+                  format: (value) => value.toLocaleString(),
+                },
+                {
+                  key: "percentage",
+                  label: "Share %",
+                  align: "right",
+                  width: "100px",
+                  format: (value) => `${value}%`,
+                },
+              ]}
+              compact={true}
+              striped={true}
+            />
+          </div>
+        </>
+      )}
       <p className={styles.sortBy}>
         Sorted by{" "}
         {playerSharesSortBy === "players"

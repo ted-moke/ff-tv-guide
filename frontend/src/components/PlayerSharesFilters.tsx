@@ -1,125 +1,123 @@
 import React from "react";
 import styles from "./PlayerSharesFilters.module.css";
 import { useView } from "../features/view/ViewContext";
-import { NFL_TEAMS } from "../features/nfl/nflTeams";
-import Chip from "./ui/Chip";
+// import { NFL_TEAMS } from "../features/nfl/nflTeams";
+// import Chip from "./ui/Chip";
 import Checkbox from "./ui/Checkbox";
-import TextInput from "./ui/TextInput";
-import Collapsible from "./ui/Collapsible";
-import { LuSearch } from "react-icons/lu";
+// import Collapsible from "./ui/Collapsible";
 
-const POSITIONS = [
-  "QB",
-  "RB",
-  "WR",
-  "TE",
-  "K",
-  "DEF",
-  "DB",
-  "S",
-  "CB",
-  "DE",
-  "EDR",
-  "DL",
-  "IL",
-  "LB",
-];
+// const POSITIONS = [
+//   "QB",
+//   "RB",
+//   "WR",
+//   "TE",
+//   "K",
+//   "DEF",
+//   "DB",
+//   "S",
+//   "CB",
+//   "DE",
+//   "EDR",
+//   "DL",
+//   "IL",
+//   "LB",
+// ];
 
-const PlayerSharesFilters: React.FC = () => {
+const PlayerSharesFilters: React.FC<{
+  hasIDPlayers: boolean;
+  hideIDPlayers: boolean;
+  setHideIDPlayers: (hideIDPlayers: boolean) => void;
+}> = ({ hasIDPlayers, hideIDPlayers, setHideIDPlayers }) => {
   const {
-    playerSharesSortBy,
-    setPlayerSharesSortBy,
+    // playerSharesSortBy,
+    // setPlayerSharesSortBy,
     playerSharesHideEmptyTeams,
     setPlayerSharesHideEmptyTeams,
-    selectedTeams,
-    setSelectedTeams,
-    selectedPositions,
-    setSelectedPositions,
-    playerSharesSearchTerm,
-    setPlayerSharesSearchTerm,
+    // selectedTeams,
+    // setSelectedTeams,
+    // selectedPositions,
+    // setSelectedPositions,
   } = useView();
 
-  const handleTeamToggle = (teamName: string) => {
-    const newTeams = selectedTeams.includes(teamName)
-      ? selectedTeams.filter((t: string) => t !== teamName)
-      : [...selectedTeams, teamName];
-    setSelectedTeams(newTeams);
-  };
+  // const handleTeamToggle = (teamName: string) => {
+  //   const newTeams = selectedTeams.includes(teamName)
+  //     ? selectedTeams.filter((t: string) => t !== teamName)
+  //     : [...selectedTeams, teamName];
+  //   setSelectedTeams(newTeams);
+  // };
 
-  const handlePositionToggle = (position: string) => {
-    const newPositions = selectedPositions.includes(position)
-      ? selectedPositions.filter((p: string) => p !== position)
-      : [...selectedPositions, position];
-    setSelectedPositions(newPositions);
-  };
+  // const handlePositionToggle = (position: string) => {
+  //   const newPositions = selectedPositions.includes(position)
+  //     ? selectedPositions.filter((p: string) => p !== position)
+  //     : [...selectedPositions, position];
+  //   setSelectedPositions(newPositions);
+  // };
 
-  const clearAllFilters = () => {
-    setSelectedTeams([]);
-    setSelectedPositions([]);
-  };
+  // const clearAllFilters = () => {
+  //   setSelectedTeams([]);
+  //   setSelectedPositions([]);
+  // };
 
-  const hasActiveFilters =
-    selectedTeams.length > 0 || selectedPositions.length > 0;
+  // const hasActiveFilters =
+  //   selectedTeams.length > 0 || selectedPositions.length > 0;
 
-  // Calculate teams display text
-  const getTeamsDisplayText = () => {
-    if (selectedTeams.length === 0) {
-      return "All NFL Teams";
-    } else if (selectedTeams.length === Object.values(NFL_TEAMS).length) {
-      return "All NFL Teams";
-    } else {
-      return "Some NFL Teams";
-    }
-  };
+  // // Calculate teams display text
+  // const getTeamsDisplayText = () => {
+  //   if (selectedTeams.length === 0) {
+  //     return "All NFL Teams";
+  //   } else if (selectedTeams.length === Object.values(NFL_TEAMS).length) {
+  //     return "All NFL Teams";
+  //   } else {
+  //     return "Some NFL Teams";
+  //   }
+  // };
 
-  // Calculate positions display text
-  const getPositionsDisplayText = () => {
-    if (selectedPositions.length === 0) {
-      return "All Positions";
-    } else if (selectedPositions.length === POSITIONS.length) {
-      return "All Positions";
-    } else {
-      // Check if it's offense only
-      const offensePositions = ["QB", "RB", "WR", "TE", "K"];
-      const isOffenseOnly =
-        selectedPositions.length === offensePositions.length &&
-        offensePositions.every((pos) => selectedPositions.includes(pos));
+  // // Calculate positions display text
+  // const getPositionsDisplayText = () => {
+  //   if (selectedPositions.length === 0) {
+  //     return "All Positions";
+  //   } else if (selectedPositions.length === POSITIONS.length) {
+  //     return "All Positions";
+  //   } else {
+  //     // Check if it's offense only
+  //     const offensePositions = ["QB", "RB", "WR", "TE", "K"];
+  //     const isOffenseOnly =
+  //       selectedPositions.length === offensePositions.length &&
+  //       offensePositions.every((pos) => selectedPositions.includes(pos));
 
-      if (isOffenseOnly) {
-        return "Offense Only";
-      } else {
-        return "Some Positions";
-      }
-    }
-  };
+  //     if (isOffenseOnly) {
+  //       return "Offense Only";
+  //     } else {
+  //       return "Some Positions";
+  //     }
+  //   }
+  // };
 
-  // Helper functions for position selection
-  const selectAllPositions = () => {
-    setSelectedPositions([]);
-  };
+  // // Helper functions for position selection
+  // const selectAllPositions = () => {
+  //   setSelectedPositions([]);
+  // };
 
-  const selectOffenseOnly = () => {
-    const offensePositions = ["QB", "RB", "WR", "TE", "K"];
-    setSelectedPositions(offensePositions);
-  };
+  // const selectOffenseOnly = () => {
+  //   const offensePositions = ["QB", "RB", "WR", "TE", "K"];
+  //   setSelectedPositions(offensePositions);
+  // };
 
   return (
     <div className={styles.filtersContainer}>
       <div className={styles.filterSectionStack}>
         <div className={styles.filterSection}>
-          <TextInput
-            type="text"
-            id="player-search"
-            placeholder="Search players..."
-            value={playerSharesSearchTerm}
-            onChange={(e) => setPlayerSharesSearchTerm(e.target.value)}
-            outline
-            icon={<LuSearch />}
-            iconPosition="right"
-          />
+          {hasIDPlayers && (
+            <Checkbox
+              id="hideIDPlayers"
+              label="Hide IDP"
+              checked={hideIDPlayers}
+              onChange={() => setHideIDPlayers(!hideIDPlayers)}
+            />
+          )}
         </div>
 
-        <div className={styles.filterSection}>
+        {/* <div className={styles.filterSection}>
           <p>Sort By</p>
           <div className={styles.sortOptions}>
             <Chip
@@ -141,10 +139,10 @@ const PlayerSharesFilters: React.FC = () => {
               size="large"
             />
           </div>
-        </div>
+        </div> */}
       </div>
 
-      <Collapsible
+      {/* <Collapsible
         title={getTeamsDisplayText()}
         showClear={selectedTeams.length > 0}
         onClear={() => setSelectedTeams([])}
@@ -162,9 +160,9 @@ const PlayerSharesFilters: React.FC = () => {
             />
           ))}
         </div>
-      </Collapsible>
+      </Collapsible> */}
 
-      <Collapsible
+      {/* <Collapsible
         title={getPositionsDisplayText()}
         showClear={selectedPositions.length > 0}
         onClear={() => setSelectedPositions([])}
@@ -191,7 +189,7 @@ const PlayerSharesFilters: React.FC = () => {
             />
           ))}
         </div>
-      </Collapsible>
+      </Collapsible> */}
 
       <div className={styles.filterSection}>
         <Checkbox
@@ -204,13 +202,13 @@ const PlayerSharesFilters: React.FC = () => {
         />
       </div>
 
-      {hasActiveFilters && (
+      {/* {hasActiveFilters && (
         <div className={styles.filterSection}>
           <button className={styles.clearAllButton} onClick={clearAllFilters}>
             Clear All Filters
           </button>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

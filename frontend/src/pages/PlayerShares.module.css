@@ -94,6 +94,13 @@
   font-weight: 600;
 }
 
+.filtersContainer {
+  margin-bottom: var(--size2);
+  display: flex;
+  flex-direction: row;
+  gap: var(--size1);
+}
+
 @media (max-width: 768px) {
   .summaryStats {
     flex-direction: column;
