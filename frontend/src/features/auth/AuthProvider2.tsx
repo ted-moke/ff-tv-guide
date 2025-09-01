@@ -77,7 +77,6 @@ export const AuthProvider2 = ({ children }: { children: React.ReactNode }) => {
   };
 
   const loginWithFirebaseUser = useCallback(async (user: User) => {
-    console.log("logging in with firebase user");
     const idToken = await user.getIdToken();
     const response = await fetch(`${API_URL}/users/login`, {
       method: "POST",
@@ -115,7 +114,6 @@ export const AuthProvider2 = ({ children }: { children: React.ReactNode }) => {
       try {
 
         setUser(currentUser);
-        console.log("currentUser on auth state changed", currentUser);
         setIsAuthInitializing(true);
         if (currentUser) {
           const backendUserData = await loginWithFirebaseUser(currentUser);

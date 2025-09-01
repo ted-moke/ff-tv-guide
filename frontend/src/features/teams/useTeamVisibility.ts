@@ -32,16 +32,11 @@ export const useTeamVisibility = ({
       []
     );
 
-    console.log("storedHiddenTeams", storedHiddenTeams);
-    console.log("storedHiddenOpponentTeams", storedHiddenOpponentTeams);
-
     setHiddenTeams(new Set(storedHiddenTeams));
     setHiddenOpponentTeams(new Set(storedHiddenOpponentTeams));
     isInitialized.current = true;
   }, []);
 
-  // console.log("hiddenTeams", hiddenTeams);
-  // console.log("hiddenOpponentTeams", hiddenOpponentTeams);
 
   // Update localStorage whenever hidden teams change (but not during initialization)
   // useEffect(() => {
