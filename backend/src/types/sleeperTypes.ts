@@ -18,6 +18,7 @@ export type SleeperMatchup = {
   matchup_id?: number | null;
   players: string[];
   starters: string[] | null;
+  points: number;
 };
 
 export type SleeperTradedPick = {

@@ -214,6 +214,7 @@ export class SleeperService {
       name: `Team ${rosterInfo.roster_id}`,
       externalUsername: "",
       externalUserId: rosterInfo.owner_id || "",
+      points: matchup?.points ?? 0,
       opponentId: opponentId ?? null,
       coOwners: rosterInfo.co_owners ?? [],
       playerData: matchup
@@ -306,6 +307,7 @@ export class SleeperService {
         matchup_id: z.number().nullable().optional(),
         players: z.array(z.string()),
         starters: z.array(z.string()).nullable(),
+        points: z.number(),
       }),
     );
 

@@ -28,6 +28,7 @@ export interface Team {
   externalUsername?: string;
   externalUserId?: string;
   platformId: string;
+  points: number;
   opponentId: string | null;
   coOwners: string[];
   playerData: Player[];

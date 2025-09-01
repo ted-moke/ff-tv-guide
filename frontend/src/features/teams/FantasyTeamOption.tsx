@@ -4,6 +4,8 @@ import { FantasyTeam } from "./teamTypes";
 import RadioButton from "../../components/ui/RadioButton";
 import styles from "./FantasyTeamOption.module.css";
 
+const isDev = process.env.NODE_ENV === "development";
+
 export const FantasyTeamOption = ({
   team,
   isVisible,
@@ -32,9 +34,15 @@ export const FantasyTeamOption = ({
 
   if (!selected) {
     return (
-      <div className={styles["fantasy-team-item"]} onClick={handleToggleLeagueSelected}>
-        <Stack direction="row" align="center">
-          <p>{team.leagueName}</p>
+      <div
+        className={styles["fantasy-team-item"]}
+        onClick={handleToggleLeagueSelected}
+      >
+        <Stack direction="row" align="center" justify="between">
+          <Stack direction="row" align="center">
+            <p>{team.leagueName}</p>
+            {isDev && <small className="muted">{team.points?.toFixed(2)}</small>}
+          </Stack>
           {allHidden && <small className="muted">Hidden</small>}
           {opponentOnly && <small className="muted">Opponent Only</small>}
           {opponentHidden && <small className="muted">Team Only</small>}
