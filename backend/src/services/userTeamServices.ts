@@ -5,7 +5,8 @@ import { Team } from "../models/team";
 import { z } from "zod";
 import { getCurrentSeason } from "../utils/getCurrentSeason";
 
-const TIME_TO_TEAM_STALE = 120 * 60 * 1000; // 2 hours
+// const TIME_TO_TEAM_STALE = 120 * 60 * 1000; // 2 hours
+const TIME_TO_TEAM_STALE = 5 * 60 * 1000; // 5 minute
 
 // Define Zod schemas for Date and Timestamp
 const dateSchema = z.instanceof(Date);
@@ -47,12 +48,9 @@ export const fetchUserTeamsWithNeedsUpdate = async (
         needsUpdate = true;
       }
 
-      const needsMigrate = team.season == null || team.leagueMasterId == null;
-
       return {
         ...team,
         needsUpdate,
-        needsMigrate,
       } as Team;
     });
 

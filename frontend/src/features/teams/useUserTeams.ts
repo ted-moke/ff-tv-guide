@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useAuthContext } from "../auth/AuthProvider2"; 
+import { useAuthContext } from "../auth/AuthProvider2";
 import { FantasyTeam } from "./teamTypes";
 import { API_URL } from "../../config";
 import { CURRENT_SEASON } from "../../constants";
@@ -46,13 +46,11 @@ export const useUserTeams = ({
   const { data, isLoading, isPending, error } = useQuery<{
     teamsBySeason: Record<number, FantasyTeam[]>;
     teamsNeedingUpdate: FantasyTeam[];
-    teamsNeedingMigrate: FantasyTeam[];
   }>({
     queryKey: ["userTeams", backendUser?.uid],
     queryFn: async (): Promise<{
       teamsBySeason: Record<number, FantasyTeam[]>;
       teamsNeedingUpdate: FantasyTeam[];
-      teamsNeedingMigrate: FantasyTeam[];
     }> => {
       try {
         if (!backendUser) throw new Error("User not authenticated");
@@ -60,7 +58,9 @@ export const useUserTeams = ({
         const idToken = await user?.getIdToken();
 
         const response = await fetch(
-          `${API_URL}/users/${backendUser.uid}/teams?seasonStart=${seasonStart}&seasonEnd=${seasonEnd}&_t=${Date.now()}`,
+          `${API_URL}/users/${
+            backendUser.uid
+          }/teams?seasonStart=${seasonStart}&seasonEnd=${seasonEnd}&_t=${Date.now()}`,
           {
             method: "GET",
             headers: {
@@ -78,23 +78,18 @@ export const useUserTeams = ({
         const data: {
           teamsBySeason: Record<number, FantasyTeam[]>;
           teamsNeedingUpdate: FantasyTeam[];
-          teamsNeedingMigrate: FantasyTeam[];
         } = await response.json();
         const teamsBySeason = data.teamsBySeason;
         const teamsNeedingUpdate = data.teamsNeedingUpdate;
-        const teamsNeedingMigrate = data.teamsNeedingMigrate;
 
         hasTeamsToUpdate = teamsNeedingUpdate.length > 0;
-        hasTeamsToMigrate = teamsNeedingMigrate.length > 0;
 
-        // Call the abstracted updateStaleTeams function
+        console.log("teamsNeedingUpdate", teamsNeedingUpdate);
+
+        // Call the abstracted updateStaleTeams function in the background
         updateStaleTeams(teamsNeedingUpdate, queryClient);
 
-        // // Migrate teams
-        // await updateStaleTeams(teamsNeedingMigrate, queryClient);
-
-        // Might not need to return teams needing update and migrate
-        return { teamsBySeason, teamsNeedingUpdate, teamsNeedingMigrate };
+        return { teamsBySeason, teamsNeedingUpdate };
       } catch (error) {
         console.error("Error fetching user teams:", error);
         throw error;
@@ -136,13 +131,16 @@ export const useOpponentTeams = ({
     queryFn: async (): Promise<FantasyTeam[]> => {
       if (!user) throw new Error("User not authenticated");
       const idToken = await user?.getIdToken();
-      const response = await fetch(`${API_URL}/users/${user.uid}/opponents?_t=${Date.now()}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${idToken}`,
-        },
-      });
+      const response = await fetch(
+        `${API_URL}/users/${user.uid}/opponents?_t=${Date.now()}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${idToken}`,
+          },
+        }
+      );
       if (!response.ok) {
         const errorText = await response.text();
         console.error("Failed to fetch opponent teams:", errorText);

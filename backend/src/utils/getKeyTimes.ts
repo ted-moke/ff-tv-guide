@@ -19,7 +19,11 @@ export function getMostRecentKeyTime(): Date | null {
       { day: 6, time: "14:00" },
       { day: 6, time: "23:00" },
       { day: 0, time: "07:00" }, // Sunday
+      { day: 0, time: "08:00" },
+      { day: 0, time: "09:00" },
       { day: 0, time: "10:00" },
+      { day: 0, time: "11:00" },
+      { day: 0, time: "12:00" },
       { day: 0, time: "13:00" },
       { day: 0, time: "14:00" },
       { day: 0, time: "15:00" },

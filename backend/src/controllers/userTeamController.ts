@@ -26,17 +26,20 @@ export const getUserTeams = async (req: Request, res: Response) => {
       );
       console.log("Trying prior season");
       const priorYear = (parseInt(seasonStart) - 1).toString();
-      const { teams: localpriorYearTeams, seasonsPresent: localpriorYearSeasons } = await fetchUserTeamsWithNeedsUpdate(
-        uid,
-        priorYear,
-        priorYear,
-      );
+      const {
+        teams: localpriorYearTeams,
+        seasonsPresent: localpriorYearSeasons,
+      } = await fetchUserTeamsWithNeedsUpdate(uid, priorYear, priorYear);
       priorYearTeams = localpriorYearTeams;
       priorYearSeasons = localpriorYearSeasons;
 
       if (priorYearTeams.length === 0) {
-        console.log(`No teams found for user for ${uid} and season ${priorYear}`);
-        return res.status(200).json({ teamsBySeason: {}, teamsNeedingUpdate: [], teamsNeedingMigrate: [] });
+        console.log(
+          `No teams found for user for ${uid} and season ${priorYear}`,
+        );
+        return res
+          .status(200)
+          .json({ teamsBySeason: {}, teamsNeedingUpdate: [] });
       }
     }
 
@@ -54,14 +57,11 @@ export const getUserTeams = async (req: Request, res: Response) => {
     }
 
     const teamsNeedingUpdate = allTeams.filter((team) => team.needsUpdate);
-    const teamsNeedingMigrate = allTeams.filter((team) => team.needsMigrate);
-    
 
-    res.status(200).json({ 
-      teamsBySeason, 
-      teamsNeedingUpdate, 
-      teamsNeedingMigrate,
-      timestamp: Date.now() // Add timestamp for cache busting
+    res.status(200).json({
+      teamsBySeason,
+      teamsNeedingUpdate,
+      timestamp: Date.now(), // Add timestamp for cache busting
     });
   } catch (error) {
     console.error("Error fetching user teams:", error);
@@ -191,9 +191,9 @@ export const getOpponentTeams = async (req: Request, res: Response) => {
       }),
     );
 
-    res.status(200).json({ 
+    res.status(200).json({
       opponents,
-      timestamp: Date.now() // Add timestamp for cache busting
+      timestamp: Date.now(), // Add timestamp for cache busting
     });
   } catch (error) {
     console.error("Error fetching opponent teams:", error);
@@ -258,7 +258,7 @@ export const getAllUserTeamsPaginated = async (req: Request, res: Response) => {
       teams: userTeams,
       nextStartAfter: lastDoc?.id || null,
       prevEndBefore: firstDoc?.id || null,
-      timestamp: Date.now() // Add timestamp for cache busting
+      timestamp: Date.now(), // Add timestamp for cache busting
     });
   } catch (error) {
     console.error("Error fetching user teams:", error);

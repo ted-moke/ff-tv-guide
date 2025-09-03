@@ -15,8 +15,6 @@ import { getCurrentWeek } from "../../utils/getCurrentWeek";
 import { ApiTrackingService } from "../apiTrackingService";
 import fetchFromUrl from "../../utils/fetchFromUrl";
 import z from "zod";
-import { Filter } from "firebase-admin/firestore";
-// import { migrateSingleLeague } from "../../../scripts/migrateToLeagueMaster";
 import { getCurrentSeason } from "../../utils/getCurrentSeason";
 
 export class FleaflickerService {
@@ -62,31 +60,6 @@ export class FleaflickerService {
       const existingLeagueDoc = existingLeagueQuery.docs[0];
       return existingLeagueDoc.data() as League;
     }
-
-    // // Check if the last year's league exists with missing migration data
-    // const existingLeagueWithMissingMigrationData = await leaguesCollection
-    //   .where("externalLeagueId", "==", externalLeagueId)
-    //   .where(
-    //     Filter.or(
-    //       Filter.where("season", "==", null),
-    //       Filter.where("leagueMasterId", "==", null),
-    //     ),
-    //   )
-    //   .limit(1)
-    //   .get();
-
-    // // If the last year's league exists with missing migration data, migrate it
-    // if (!existingLeagueWithMissingMigrationData.empty) {
-    //   console.log("Migrating last year's league");
-    //   const localLeagueId = existingLeagueWithMissingMigrationData.docs[0].id;
-    //   const migrationStats = await migrateSingleLeague({
-    //     leagueId: localLeagueId,
-    //     season: season - 1,
-    //   });
-    //   console.log(
-    //     `Migrated last year's league for ${localLeagueId}: ${JSON.stringify(migrationStats)}`,
-    //   );
-    // }
 
     console.log("League does not exist");
     const newLeagueData: League = {
