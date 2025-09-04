@@ -37,83 +37,70 @@ export const useTeamVisibility = ({
     isInitialized.current = true;
   }, []);
 
-
-  // Update localStorage whenever hidden teams change (but not during initialization)
-  // useEffect(() => {
-  //   if (isInitialized.current === true) {
-  //     setLocalStorageItem(HIDDEN_TEAMS_KEY, Array.from(hiddenTeams));
-  //   }
-  // }, [hiddenTeams]);
-
-  // useEffect(() => {
-  //   if (isInitialized.current === true) {
-  //     console.log("updating localStorage for hidden opponent teams", hiddenOpponentTeams);
-  //     setLocalStorageItem(HIDDEN_OPPONENT_TEAMS_KEY, Array.from(hiddenOpponentTeams));
-  //   }
-  // }, [hiddenOpponentTeams]);
-
   const hideTeam = (leagueId: string) => {
-    let newSet;
+    let newSet: Set<string>;
     setHiddenTeams((prev) => {
       newSet = new Set(prev);
       newSet.add(leagueId);
+      setLocalStorageItem(HIDDEN_TEAMS_KEY, Array.from(newSet));
       return newSet;
     });
-
-    if (newSet) {
-      setLocalStorageItem(HIDDEN_TEAMS_KEY, Array.from(newSet));
-    } else {
-      console.log("newSet is undefined");
-    }
   };
 
   const showTeam = (leagueId: string) => {
-    let newSet;
+    let newSet: Set<string>;
     setHiddenTeams((prev) => {
       newSet = new Set(prev);
       newSet.delete(leagueId);
+      setLocalStorageItem(HIDDEN_TEAMS_KEY, Array.from(newSet));
       return newSet;
     });
-
-    if (newSet) {
-      setLocalStorageItem(HIDDEN_TEAMS_KEY, Array.from(newSet));
-    }
   };
 
   const hideOpponentTeam = (leagueId: string) => {
-    let newSet;
+    let newSet: Set<string>;
     setHiddenOpponentTeams((prev) => {
       newSet = new Set(prev);
       newSet.add(leagueId);
+      setLocalStorageItem(HIDDEN_OPPONENT_TEAMS_KEY, Array.from(newSet));
       return newSet;
     });
-
-    if (newSet) {
-      setLocalStorageItem(HIDDEN_OPPONENT_TEAMS_KEY, Array.from(newSet));
-    }
   };
 
   const showOpponentTeam = (leagueId: string) => {
-    let newSet;
+    let newSet: Set<string>;
     setHiddenOpponentTeams((prev) => {
       newSet = new Set(prev);
       newSet.delete(leagueId);
+      setLocalStorageItem(HIDDEN_OPPONENT_TEAMS_KEY, Array.from(newSet));
       return newSet;
     });
-
-    if (newSet) {
-      setLocalStorageItem(HIDDEN_OPPONENT_TEAMS_KEY, Array.from(newSet));
-    }
   };
 
   const hideAllTeams = () => {
-    setHiddenTeams(new Set(userTeams.map((team) => team.leagueId)));
-    setHiddenOpponentTeams(new Set(opponentTeams.map((team) => team.leagueId)));
+    let newSetHiddenTeams = new Set(userTeams.map((team) => team.leagueId));
+    let newSetHiddenOpponentTeams = new Set(
+      opponentTeams.map((team) => team.leagueId)
+    );
+    setHiddenTeams(newSetHiddenTeams);
+    setHiddenOpponentTeams(newSetHiddenOpponentTeams);
+    setLocalStorageItem(HIDDEN_TEAMS_KEY, Array.from(newSetHiddenTeams));
+    setLocalStorageItem(
+      HIDDEN_OPPONENT_TEAMS_KEY,
+      Array.from(newSetHiddenOpponentTeams)
+    );
   };
 
   const showAllTeams = () => {
-    setHiddenTeams(new Set());
-    setHiddenOpponentTeams(new Set());
+    let newSetHiddenTeams = new Set<string>();
+    let newSetHiddenOpponentTeams = new Set<string>();
+    setHiddenTeams(newSetHiddenTeams);
+    setHiddenOpponentTeams(newSetHiddenOpponentTeams);
+    setLocalStorageItem(HIDDEN_TEAMS_KEY, Array.from(newSetHiddenTeams));
+    setLocalStorageItem(
+      HIDDEN_OPPONENT_TEAMS_KEY,
+      Array.from(newSetHiddenOpponentTeams)
+    );
   };
 
   const visibleTeams = useMemo(() => {

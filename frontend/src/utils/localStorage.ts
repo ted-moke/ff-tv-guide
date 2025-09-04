@@ -7,7 +7,8 @@ export class LocalStorageManager {
         localStorage.setItem(test, test);
         localStorage.removeItem(test);
         return true;
-      } catch {
+      } catch(error) {
+        console.log("error checking localStorage", error);
         return false;
       }
     }
@@ -22,8 +23,10 @@ export class LocalStorageManager {
         if (item === null) {
           return defaultValue;
         }
-        return JSON.parse(item);
-      } catch {
+        const parsedItem = JSON.parse(item);
+        return parsedItem;
+      } catch(error) {
+        console.log("error getting item", error);
         return defaultValue;
       }
     }

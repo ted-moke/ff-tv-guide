@@ -28,6 +28,7 @@ export const FantasyTeamOption = ({
   const allVisible = isVisible && isOpponentVisible;
   const allHidden = !isVisible && !isOpponentVisible;
   const opponentHidden = isVisible && !isOpponentVisible;
+  const opponentOnly = !isVisible && isOpponentVisible;
 
   if (!selected) {
     return (
@@ -35,6 +36,7 @@ export const FantasyTeamOption = ({
         <Stack direction="row" align="center">
           <p>{team.leagueName}</p>
           {allHidden && <small className="muted">Hidden</small>}
+          {opponentOnly && <small className="muted">Opponent Only</small>}
           {opponentHidden && <small className="muted">Team Only</small>}
         </Stack>
       </div>
@@ -42,8 +44,8 @@ export const FantasyTeamOption = ({
   }
 
   const handleShowAll = () => {
-    showTeam(team.leagueId);
     showOpponentTeam(team.leagueId);
+    showTeam(team.leagueId);
     handleToggleLeagueSelected();
   };
 
