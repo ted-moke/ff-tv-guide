@@ -127,17 +127,9 @@ export const usePlayers = ({
             });
           }
 
-          // TODO move this to backend
-          // make short league name, 4 char max, strip out leading "the", spaces, etc
-          const shortLeagueName = team.leagueName
-            .replace(/\b(the|dynasty|league|afl|nfl)\b/gi, "") // Remove 'the' and 'dynasty' (case insensitive)
-            .replace(/[^a-zA-Z]/g, "") // Remove non-letter characters
-            .toUpperCase() // Convert to lowercase
-            .slice(0, 5); // Limit to 4 characters
-
           const ownedPlayer: OwnedPlayer = {
             leagueName: team.leagueName,
-            shortLeagueName: shortLeagueName,
+            shortLeagueName: team.shortLeagueName,
             leagueId: team.leagueId,
             externalLeagueId: team.externalLeagueId,
             platformId: team.platformId,

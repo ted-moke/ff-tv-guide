@@ -7,6 +7,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { z } from "zod";
 import { SleeperMatchup, SleeperRoster } from "../../types/sleeperTypes";
+import { generateShortLeagueName } from "../../utils/generateShortLeagueName";
 
 export class SleeperService {
   private static instance: SleeperService;
@@ -213,6 +214,7 @@ export class SleeperService {
       leagueId: league.id || "",
       leagueMasterId: league.leagueMasterId,
       leagueName: league.name,
+      shortLeagueName: generateShortLeagueName(league.name),
       season: league.season,
       name: `Team ${rosterInfo.roster_id}`,
       externalUsername: "",

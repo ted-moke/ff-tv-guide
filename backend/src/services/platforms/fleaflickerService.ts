@@ -16,6 +16,7 @@ import { ApiTrackingService } from "../apiTrackingService";
 import fetchFromUrl from "../../utils/fetchFromUrl";
 import z from "zod";
 import { getCurrentSeason } from "../../utils/getCurrentSeason";
+import { generateShortLeagueName } from "../../utils/generateShortLeagueName";
 
 export class FleaflickerService {
   private static instance: FleaflickerService;
@@ -152,6 +153,7 @@ export class FleaflickerService {
           leagueId: league.id!,
           leagueMasterId: league.leagueMasterId,
           leagueName: league.name,
+          shortLeagueName: generateShortLeagueName(league.name),
           season,
           name: teamData.name,
           externalUsername: primaryOwner

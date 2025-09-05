@@ -23,6 +23,7 @@ export interface Team {
   leagueMasterId: string;
   externalLeagueId: string;
   leagueName: string;
+  shortLeagueName: string;
   season: number;
   name?: string;
   externalUsername?: string;
