@@ -1,0 +1,51 @@
+@import "../../styles/scrollbar.css"; /* Import the new scrollbar styles */
+
+
+.leagueTickerWrapper {
+    flex: 1;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    display: flex;
+    gap: var(--size2_5);
+    flex-direction: row;
+    padding: 0 var(--size1);
+    margin-left: var(--size1);
+}
+
+.leagueTickerItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--size0_5);
+    justify-content: space-between;
+}
+
+.leagueTickerItemSubContent {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--size0_5);
+}
+
+.leagueTickerItem h3 {
+    font-size: var(--font-size-medium);
+    margin: 0;
+}
+
+.leagueTickerItemSubContent span {
+    font-size: var(--font-size-small);
+    color: var(--text-color-muted);
+}
+
+.winning .weekPoints { 
+    color: var(--color-green);
+}
+
+.losing .weekPoints {
+    color: var(--color-red);
+}
+
+.tied .weekPoints {
+    color: var(--text-color-muted);
+}
