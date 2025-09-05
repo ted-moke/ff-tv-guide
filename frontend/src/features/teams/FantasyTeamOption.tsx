@@ -39,10 +39,7 @@ export const FantasyTeamOption = ({
         onClick={handleToggleLeagueSelected}
       >
         <Stack direction="row" align="center" justify="between">
-          <Stack direction="row" align="center">
             <p>{team.leagueName}</p>
-            {isDev && <small className="muted">{team.weekPoints?.toFixed(2)} to {team.weekPointsAgainst?.toFixed(2)}</small>}
-          </Stack>
           {allHidden && <small className="muted">Hidden</small>}
           {opponentOnly && <small className="muted">Opponent Only</small>}
           {opponentHidden && <small className="muted">Team Only</small>}

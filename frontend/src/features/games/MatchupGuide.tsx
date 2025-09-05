@@ -7,6 +7,8 @@ import { Navigate } from "react-router-dom";
 import { useAuthContext } from "../auth/AuthProvider2";
 import MatchupCarousel from "./MatchupCarousel";
 import { useNeedsResources } from "../teams/useNeedsResources";
+import { useView } from "../view/ViewContext";
+import { LeagueTicker } from "../league/LeagueTicker";
 
 interface MatchupGuideProps {
   selectedWeek: number;
@@ -16,8 +18,13 @@ interface MatchupGuideProps {
 // const hideAlertOnLoad = localStorage.getItem("hideAlertShip24") === "true";
 
 const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
+  const { isMobile } = useView();
   const { isLoading: isAuthLoading } = useAuthContext();
-  const { isLoading: needsConnectLoading, needsConnect, needsAccount } = useNeedsResources();
+  const {
+    isLoading: needsConnectLoading,
+    needsConnect,
+    needsAccount,
+  } = useNeedsResources();
   const { matchupPlayers, isLoading, initialized, error } =
     useMatchupPlayers(selectedWeek);
   // const [hideAlert, setHideAlert] = useState(hideAlertOnLoad);
@@ -47,16 +54,11 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
 
   return (
     <div className={`${styles["matchup-guide"]} page-container`}>
-      {matchupPlayers && (
-        <div className={styles.header}>
-          <MatchupCarousel
-            games={Object.values(matchupPlayers.games)
-              .flat()
-              .flatMap((bucket) => bucket.games)}
-          />
+      {!isMobile && (
+        <div className={styles.leagueTickerWrapper}>
+          <LeagueTicker />
         </div>
       )}
-
       {matchupPlayers && (
         <div className={`${styles.gameBucketGroups} ${styles.scrollbar}`}>
           {/* {!hideAlert && (
@@ -93,6 +95,15 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
               gameBuckets={matchupPlayers.games.completed}
             />
           )}
+        </div>
+      )}
+      {matchupPlayers && (
+        <div className={styles.header}>
+          <MatchupCarousel
+            games={Object.values(matchupPlayers.games)
+              .flat()
+              .flatMap((bucket) => bucket.games)}
+          />
         </div>
       )}
     </div>
