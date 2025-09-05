@@ -22,6 +22,8 @@ export interface FleaflickerTeam {
     value: number;
     formatted: string;
   };
+  weekPoints: number;
+  weekPointsAgainst: number;
 }
 
 export interface RecordOverall {

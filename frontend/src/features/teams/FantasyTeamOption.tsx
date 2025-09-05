@@ -41,7 +41,7 @@ export const FantasyTeamOption = ({
         <Stack direction="row" align="center" justify="between">
           <Stack direction="row" align="center">
             <p>{team.leagueName}</p>
-            {isDev && <small className="muted">{team.points?.toFixed(2)}</small>}
+            {isDev && <small className="muted">{team.weekPoints?.toFixed(2)} to {team.weekPointsAgainst?.toFixed(2)}</small>}
           </Stack>
           {allHidden && <small className="muted">Hidden</small>}
           {opponentOnly && <small className="muted">Opponent Only</small>}

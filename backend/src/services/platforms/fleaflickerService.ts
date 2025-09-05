@@ -172,6 +172,8 @@ export class FleaflickerService {
           },
           lastSynced: new Date(),
           lastFetched: new Date(),
+          weekPoints: teamData.weekPoints ?? 0,
+          weekPointsAgainst: teamData.weekPointsAgainst ?? 0,
         };
 
         // Instead of using externalTeamId as the document ID, let's query for an existing team
@@ -198,9 +200,17 @@ export class FleaflickerService {
       }
       for (const matchup of matchups) {
         // Convert FleaflickerGame to FleaflickerTeam format
-        const awayTeam = this.convertGameTeamToFleaflickerTeam(matchup.away);
+        const awayTeam = this.convertGameTeamToFleaflickerTeam(
+          matchup.away,
+          matchup.awayScore?.score.value ?? 0,
+          matchup.homeScore?.score.value ?? 0,
+        );
         const homeTeam = matchup.home
-          ? this.convertGameTeamToFleaflickerTeam(matchup.home)
+          ? this.convertGameTeamToFleaflickerTeam(
+              matchup.home,
+              matchup.homeScore?.score.value ?? 0,
+              matchup.awayScore?.score.value ?? 0,
+            )
           : null;
 
         await addAndUpdateTeam(awayTeam, homeTeam?.id.toString() || "");
@@ -355,6 +365,8 @@ export class FleaflickerService {
 
   private convertGameTeamToFleaflickerTeam(
     gameTeam: FleaflickerGameTeam,
+    weekPoints: number,
+    weekPointsAgainst: number,
   ): FleaflickerTeam {
     return {
       id: gameTeam.id,
@@ -393,6 +405,8 @@ export class FleaflickerService {
           }
         : { value: 0, formatted: "0" },
       owners: [], // Game teams don't include owner info, so we'll use empty array
+      weekPoints,
+      weekPointsAgainst,
     };
   }
 }

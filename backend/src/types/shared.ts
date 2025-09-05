@@ -35,7 +35,8 @@ export interface Team {
   lastSynced: Date;
   lastFetched: Date;
   needsUpdate?: boolean;
-  points?: number;
+  weekPoints?: number;
+  weekPointsAgainst?: number;
 }
 
 export interface League {

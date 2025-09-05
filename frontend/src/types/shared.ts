@@ -35,7 +35,10 @@ export interface Team {
   stats: TeamStats;
   lastSynced: Date;
   lastFetched: Date;
+  weekPoints?: number;
+  weekPointsAgainst?: number;
 }
+
 
 export interface League {
   id?: string;

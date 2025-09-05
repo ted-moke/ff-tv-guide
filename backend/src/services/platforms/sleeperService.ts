@@ -74,7 +74,6 @@ export class SleeperService {
     }
 
     // Check if the last year's league exists with missing migration data
-    
 
     const leagueData: League = {
       leagueMasterId,
@@ -141,13 +140,14 @@ export class SleeperService {
           ? pairedMatchups.get(matchupId.toString())
           : null;
 
-        const opponentId = matchup
-          ? matchup
-              .find(
-                (matchup: any) => matchup.roster_id !== teamInLoop.roster_id,
-              )
-              ?.roster_id.toString()
+        const opponentTeam = matchup
+          ? matchup.find(
+              (matchup: any) => matchup.roster_id !== teamInLoop.roster_id,
+            )
           : undefined;
+
+        const opponentId = opponentTeam?.roster_id.toString();
+        const opponentPoints = opponentTeam?.points;
 
         const teamInMatchup = matchup?.find(
           (matchup: any) => matchup.roster_id === teamInLoop.roster_id,
@@ -157,6 +157,7 @@ export class SleeperService {
         const team = this.createTeamObject({
           matchup: teamInMatchup,
           opponentId,
+          opponentPoints,
           rosterInfo: teamInLoop,
           league,
         });
@@ -192,11 +193,13 @@ export class SleeperService {
     rosterInfo,
     league,
     opponentId,
+    opponentPoints,
   }: {
     matchup?: SleeperMatchup;
     rosterInfo: SleeperRoster;
     league: League;
     opponentId?: string;
+    opponentPoints?: number;
   }): Team | null {
     if (!rosterInfo) {
       console.error("No roster info found for team");
@@ -214,7 +217,8 @@ export class SleeperService {
       name: `Team ${rosterInfo.roster_id}`,
       externalUsername: "",
       externalUserId: rosterInfo.owner_id || "",
-      points: matchup?.points ?? 0,
+      weekPoints: matchup?.points ?? 0,
+      weekPointsAgainst: opponentPoints ?? 0,
       opponentId: opponentId ?? null,
       coOwners: rosterInfo.co_owners ?? [],
       playerData: matchup

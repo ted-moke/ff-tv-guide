@@ -49,10 +49,16 @@ export const fleaflickerGameTeamSchema = z.object({
   points_against: fleaflickerGamePointsSchema.optional(),
 });
 
+export const fleaflickerGameScoreSchema = z.object({
+  score: fleaflickerGamePointsSchema,
+});
+
 export const fleaflickerGameSchema = z.object({
   id: z.string(), // int64 as string
   away: fleaflickerGameTeamSchema,
   home: fleaflickerGameTeamSchema.optional(),
+  homeScore: fleaflickerGameScoreSchema.optional(),
+  awayScore: fleaflickerGameScoreSchema.optional(),
 });
 
 // Main scoreboard response schema - more flexible to handle actual API response
