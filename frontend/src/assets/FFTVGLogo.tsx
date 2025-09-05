@@ -3,6 +3,10 @@ import styles from "./FFTVGLogo.module.css";
 import { Link } from "react-router-dom";
 
 const sizeMap = {
+  xsmall: {
+    logoFontSize: 38,
+    className: styles.xsmall,
+  },
   small: {
     logoFontSize: 46,
     className: styles.small,
@@ -17,7 +21,7 @@ const FFTVGLogo = ({
   size = "small",
   withText = false,
 }: {
-  size?: "small" | "large";
+  size?: "xsmall" | "small" | "large";
   withText?: boolean;
 }) => {
   const logoFontSize = sizeMap[size].logoFontSize;

@@ -17,12 +17,12 @@ const Navigation: React.FC = () => {
 
   return (
     <nav className={styles.navigation}>
-      <div className={styles.branding}>
-        <FFTVGLogo withText />
-      </div>
 
       <div className={styles.mobileMenuIcon} onClick={toggleMenu}>
-        {isMenuOpen ? <Close /> : <Menu color="var(--text-color)" />}
+        {isMenuOpen ? <Close size={20} /> : <Menu size={20} color="var(--text-color)" />}
+      </div>
+      <div className={styles.branding}>
+        <FFTVGLogo size="xsmall" />
       </div>
 
       {/* Desktop menu */}

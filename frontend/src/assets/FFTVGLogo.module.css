@@ -23,6 +23,10 @@
   margin: 0; 
 }
 
+.xsmall h1 {
+  font-size: var(--size2);
+}
+
 .large h1 {
   font-size: var(--size4);
 }

@@ -1,8 +1,8 @@
 .navigation {
   background-color: var(--background-color-offset);
-  padding: var(--size1) var(--size1_5);
+  padding: var(--size0_5) var(--size1_5);
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   align-items: center;
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.8);
 }
@@ -64,12 +64,12 @@
 
   .mobileMenuIcon {
     display: flex;
-    width: var(--size5);
-    height: var(--size5);
+    width: var(--size4);
+    height: var(--size4);
     align-items: center;
     justify-content: center;
     border-radius: var(--border-radius-medium);
-    border: 1px solid var(--background-color-offset-2);
+    /* border: 1px solid var(--background-color-offset-2); */
   }
 
 }
