@@ -59,7 +59,6 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
           <LeagueTicker />
         </div>
       )}
-      <small className={`muted ${styles.scoreUpdateNotice}`}>Scores updated every 5 minutes</small>
       {matchupPlayers && (
         <div className={`${styles.gameBucketGroups} ${styles.scrollbar}`}>
           {/* {!hideAlert && (
