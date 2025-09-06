@@ -4,8 +4,6 @@ import { FantasyTeam } from "./teamTypes";
 import RadioButton from "../../components/ui/RadioButton";
 import styles from "./FantasyTeamOption.module.css";
 
-const isDev = process.env.NODE_ENV === "development";
-
 export const FantasyTeamOption = ({
   team,
   isVisible,

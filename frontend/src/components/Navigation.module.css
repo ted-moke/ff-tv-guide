@@ -2,8 +2,8 @@
   background-color: var(--background-color-offset);
   padding: var(--size0_5) var(--size1_5);
   display: flex;
-  /* justify-content: space-between; */
   align-items: center;
+  gap: var(--size1);
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.8);
 }
 

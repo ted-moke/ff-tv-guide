@@ -35,6 +35,9 @@
   background-color: rgba(155, 155, 155, 0.8);
 }
 
+.scrollContainer {
+  position: relative;
+}
 
 .scrollContainer.withGradient::before,
 .scrollContainer.withGradient::after {
@@ -42,9 +45,13 @@
   position: absolute;
   top: 0;
   bottom: 0;
-  width: var(--size3); /* Adjust the width of the gradient as needed */
+  width: var(--size6); /* Adjust the width of the gradient as needed */
   pointer-events: none; /* Ensure the gradients do not interfere with user interactions */
   z-index: 1; /* Ensure the gradients are above the carousel content */
+}
+
+.scrollContainer.withGradient::before {
+  width: var(--size1_75);
 }
 
 .scrollContainer.withGradient::before {
