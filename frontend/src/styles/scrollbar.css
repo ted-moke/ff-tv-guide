@@ -35,6 +35,36 @@
   background-color: rgba(155, 155, 155, 0.8);
 }
 
+
+.scrollContainer.withGradient::before,
+.scrollContainer.withGradient::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--size3); /* Adjust the width of the gradient as needed */
+  pointer-events: none; /* Ensure the gradients do not interfere with user interactions */
+  z-index: 1; /* Ensure the gradients are above the carousel content */
+}
+
+.scrollContainer.withGradient::before {
+  left: 0px;
+  background: linear-gradient(
+    to right,
+    rgba(26, 26, 26, 1),
+    rgba(26, 26, 26, 0)
+  ); /* Adjust colors as needed */
+}
+
+.scrollContainer.withGradient::after {
+  right: 0px;
+  background: linear-gradient(
+    to left,
+    rgba(26, 26, 26, 1),
+    rgba(26, 26, 26, 0)
+  ); /* Adjust colors as needed */
+}
+
 /* For Firefox */
 @supports (scrollbar-color: auto) {
   .scrollbar {

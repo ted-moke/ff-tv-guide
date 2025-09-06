@@ -1,7 +1,10 @@
 @import "../../styles/scrollbar.css"; /* Import the new scrollbar styles */
 
-
 .leagueTickerWrapper {
+    padding-left: var(--size1);
+}
+
+.leagueTickerContainer {
     flex: 1;
     max-width: 100%;
     overflow-x: auto;
@@ -9,8 +12,7 @@
     display: flex;
     gap: var(--size2_5);
     flex-direction: row;
-    padding: 0 var(--size1);
-    margin-left: var(--size1);
+    padding: 0 var(--size1_5);
 }
 
 .leagueTickerItem {
