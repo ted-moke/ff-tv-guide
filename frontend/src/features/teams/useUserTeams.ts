@@ -47,6 +47,8 @@ export const useUserTeams = ({
     teamsBySeason: Record<number, FantasyTeam[]>;
     teamsNeedingUpdate: FantasyTeam[];
   }>({
+    refetchInterval: (query) => (query.state.fetchStatus === 'fetching' ? false : 60_000),
+    refetchIntervalInBackground: false,
     queryKey: ["userTeams", backendUser?.uid],
     queryFn: async (): Promise<{
       teamsBySeason: Record<number, FantasyTeam[]>;
@@ -98,12 +100,12 @@ export const useUserTeams = ({
     enabled: !!backendUser, // Only run the query if there's a user
   });
 
-  const { teamsBySeason } = data || {};
+  const { teamsBySeason } = data || { teamsBySeason: {} };
 
   let teamMap: UserTeams = {};
   if (teamsBySeason) {
     for (let [season, teams] of Object.entries(teamsBySeason)) {
-      teamMap[season] = teams.reduce((acc, team) => {
+      teamMap[season] = (teams as FantasyTeam[]).reduce((acc: Record<string, FantasyTeam>, team: FantasyTeam) => {
         acc[team.leagueId] = team;
         return acc;
       }, {} as Record<string, FantasyTeam>);

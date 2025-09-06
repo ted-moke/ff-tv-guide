@@ -59,15 +59,6 @@
   margin: auto;
 }
 
-@media (max-width: 768px) {
-  .game-group-content {
-    grid-template-columns: 1fr; /* Stack items vertically on smaller screens */
-    display: flex;
-    flex-direction: column;
-    gap: var(--size2);
-  }
-}
-
 .bucket-header {
   display: flex;
   justify-content: space-between;
@@ -111,7 +102,19 @@
   max-width: calc(100vw - var(--sidebar-width) - 50px);
 }
 
+.scoreUpdateNotice {
+  align-self: flex-end;
+  padding-bottom: var(--size1);
+}
+
 @media (max-width: 768px) {
+  .game-group-content {
+    grid-template-columns: 1fr; /* Stack items vertically on smaller screens */
+    display: flex;
+    flex-direction: column;
+    gap: var(--size2);
+  }
+
   .gameBucketGroups {
     max-height: calc(100vh - 212px);
   }

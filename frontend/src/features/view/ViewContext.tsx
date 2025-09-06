@@ -228,7 +228,7 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     hideOpponentTeam,
     showOpponentTeam,
   } = useTeamVisibility({
-    userTeams: fetchedUserTeams?.teamsBySeason[CURRENT_SEASON] || [],
+    userTeams: fetchedUserTeams?.teamsBySeason?.[CURRENT_SEASON] || [],
     opponentTeams: fetchedOpponentTeams || [],
   });
 

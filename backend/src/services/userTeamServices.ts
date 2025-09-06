@@ -6,7 +6,7 @@ import { z } from "zod";
 import { getCurrentSeason } from "../utils/getCurrentSeason";
 
 // const TIME_TO_TEAM_STALE = 120 * 60 * 1000; // 2 hours
-const TIME_TO_TEAM_STALE = 5 * 60 * 1000; // 5 minute
+const TIME_TO_TEAM_STALE = 4 * 60 * 1000; // 4 minutes
 
 // Define Zod schemas for Date and Timestamp
 const dateSchema = z.instanceof(Date);
