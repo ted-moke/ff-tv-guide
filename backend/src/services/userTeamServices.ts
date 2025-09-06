@@ -6,7 +6,7 @@ import { z } from "zod";
 import { getCurrentSeason } from "../utils/getCurrentSeason";
 
 // const TIME_TO_TEAM_STALE = 120 * 60 * 1000; // 2 hours
-const TIME_TO_TEAM_STALE = 4 * 60 * 1000; // 4 minutes
+const TIME_TO_TEAM_STALE = 1 * 60 * 1000; // 1 minutes
 
 // Define Zod schemas for Date and Timestamp
 const dateSchema = z.instanceof(Date);
@@ -38,6 +38,8 @@ export const fetchUserTeamsWithNeedsUpdate = async (
             : null;
 
       let needsUpdate = false;
+      // TODO optimize to have an in window stale time, and out of window stale time
+      // So we fetch less outside of games
       if (
         team.season === currentSeason &&
         (lastFetchedDate == null ||
