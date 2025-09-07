@@ -11,10 +11,10 @@ export const LeagueCardMobile: React.FC<LeagueCardMobileProps> = ({
   cardData,
   onToggleExpansion,
 }) => {
-  const { team, isExpanded, winning, losing, tied } = cardData;
+  const { team, isExpanded, winning, losing } = cardData;
 
   const handleCardClick = () => {
-    onToggleExpansion(team.id);
+    onToggleExpansion(team.id || "");
   };
 
   return (
@@ -48,28 +48,28 @@ export const LeagueCardMobile: React.FC<LeagueCardMobileProps> = ({
               <div className={styles.statItem}>
                 <span className={styles.statLabel}>Record</span>
                 <span className={styles.statValue}>
-                  {team.wins || 0}-{team.losses || 0}
-                  {team.ties ? `-${team.ties}` : ""}
+                  {team.stats.wins || 0}-{team.stats.losses || 0}
+                  {team.stats.ties ? `-${team.stats.ties}` : ""}
                 </span>
               </div>
               <div className={styles.statItem}>
                 <span className={styles.statLabel}>Points For</span>
                 <span className={styles.statValue}>
-                  {team.pointsFor?.toFixed(1) || "0.0"}
+                  {team.stats.pointsFor?.toFixed(1) || "0.0"}
                 </span>
               </div>
               <div className={styles.statItem}>
                 <span className={styles.statLabel}>Points Against</span>
                 <span className={styles.statValue}>
-                  {team.pointsAgainst?.toFixed(1) || "0.0"}
+                  {team.stats.pointsAgainst?.toFixed(1) || "0.0"}
                 </span>
               </div>
-              <div className={styles.statItem}>
+              {/* <div className={styles.statItem}>
                 <span className={styles.statLabel}>Avg Points</span>
                 <span className={styles.statValue}>
-                  {team.averagePointsFor?.toFixed(1) || "0.0"}
+                  {team.stats.averagePointsFor?.toFixed(1) || "0.0"}
                 </span>
-              </div>
+              </div> */}
             </div>
 
             {/* <div className={styles.leagueActions}>
