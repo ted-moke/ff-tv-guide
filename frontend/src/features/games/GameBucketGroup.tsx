@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "./MatchupGuide.module.css";
+import styles from "./GameBucketGroup.module.css";
 import GameMatchup from "./GameMatchup";
 import { ProcessedGameBucket } from "../../hooks/useProcessedSchedule";
 import { LuChevronDown } from "react-icons/lu"; // Example icons

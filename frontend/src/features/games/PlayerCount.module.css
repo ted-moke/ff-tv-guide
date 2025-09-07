@@ -1,0 +1,40 @@
+@import "../../styles/variables.css";
+@import "../../styles/utils.css";
+
+.player-count {
+  text-align: center;
+  font-size: var(--size2);
+  color: var(--text-color-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--size1);
+}
+
+.player-count h4 {
+  margin: 0;
+  line-height: 1;
+}
+
+.top-game {
+  color: var(--color-yellow);
+}
+
+.top-game .vs {
+  color: var(--color-yellow);
+}
+
+.starters {
+  font-size: var(--font-size-xl);
+  font-weight: bold;
+  line-height: 1;
+  margin-bottom: 1px;
+}
+
+.starters-none {
+  color: var(--text-color-muted);
+}
+
+.collapsed h4 {
+  font-size: var(--font-size-medium);
+}

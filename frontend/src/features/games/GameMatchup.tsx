@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styles from "./GameMatchup.module.css";
 import PlayerCondensed from "../players/PlayerCondensed";
+import PlayerCount from "./PlayerCount";
 import { ProcessedGame } from "../../hooks/useProcessedSchedule";
 import { Player } from "../nfl/nflTypes";
 import LinkButton, { LinkButtonColor } from "../../components/ui/LinkButton";
@@ -19,7 +20,7 @@ interface GameMatchupProps {
 
 const GameMatchup: React.FC<GameMatchupProps> = ({ game, id }) => {
   const [isBenchExpanded, setIsBenchExpanded] = useState(false);
-  const [isMatchupExpanded, setIsMatchupExpanded] = useState(true);
+  const [isMatchupExpanded, setIsMatchupExpanded] = useState(false);
 
   const toggleBench = () => {
     setIsBenchExpanded(!isBenchExpanded);
@@ -66,33 +67,13 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game, id }) => {
               )}
             </div>
           </div>
-          {isMatchupExpanded && (
+          {isMatchupExpanded ? (
             <div className={styles["matchup-subheader"]}>
-              {game.hasPlayers ? (
-                <div
-                  className={`${styles["player-count"]} ${
-                    game.isTopGame ? styles["top-game"] : ""
-                  }`}
-                >
-                  <h4>You:</h4>
-                  <div
-                    className={`${styles["starters"]} ${
-                      game.starters.length === 0 ? styles["starters-none"] : ""
-                    }`}
-                  >
-                    {game.totals.self.starters}
-                  </div>
-                  <h4 className={styles["vs"]}>vs</h4>
-                  <div
-                    className={`${styles["starters"]} ${
-                      game.starters.length === 0 ? styles["starters-none"] : ""
-                    }`}
-                  >
-                    {game.totals.opponent.starters}
-                  </div>
-                  <h4>Opponent</h4>
-                </div>
-              ) : null}
+              {game.hasPlayers ? <PlayerCount game={game} /> : null}
+            </div>
+          ) : (
+            <div className={styles["matchup-subheader"]}>
+              {game.hasPlayers ? <PlayerCount game={game} variant="collapsed" /> : null}
             </div>
           )}
         </div>
