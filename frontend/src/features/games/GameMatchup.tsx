@@ -16,9 +16,16 @@ import IconButton from "../../components/IconButton";
 interface GameMatchupProps {
   game: ProcessedGame;
   id: string;
+  onExpansionChange?: (expanded: boolean) => void;
+  forceExpanded?: boolean;
 }
 
-const GameMatchup: React.FC<GameMatchupProps> = ({ game, id }) => {
+const GameMatchup: React.FC<GameMatchupProps> = ({ 
+  game, 
+  id, 
+  onExpansionChange, 
+  forceExpanded 
+}) => {
   const [isBenchExpanded, setIsBenchExpanded] = useState(false);
   const [isMatchupExpanded, setIsMatchupExpanded] = useState(false);
 
@@ -27,8 +34,13 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game, id }) => {
   };
 
   const toggleMatchup = () => {
-    setIsMatchupExpanded(!isMatchupExpanded);
+    const newExpandedState = !isMatchupExpanded;
+    setIsMatchupExpanded(newExpandedState);
+    onExpansionChange?.(newExpandedState);
   };
+
+  // Use forceExpanded if provided (for mobile), otherwise use local state
+  const actualExpandedState = forceExpanded !== undefined ? forceExpanded : isMatchupExpanded;
 
   // take date and time from bucket, assume the listed time is in EDT, and format it in the users time zone like "12:00 PM"
   const formattedDate = new Date(`${game.date}T${game.time}`).toLocaleString(
@@ -44,7 +56,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game, id }) => {
   return (
     <div
       className={`${styles.matchup} ${
-        isMatchupExpanded ? "" : styles["collapsed"]
+        actualExpandedState ? "" : styles["collapsed"]
       }`}
       id={id}
     >
@@ -52,7 +64,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game, id }) => {
         className={styles["matchup-header"]}
         role="button"
         onClick={toggleMatchup}
-        aria-expanded={isMatchupExpanded}
+        aria-expanded={actualExpandedState}
       >
         <div className={styles["matchup-header-left"]}>
           <div className={styles["team-names"]}>
@@ -67,7 +79,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game, id }) => {
               )}
             </div>
           </div>
-          {isMatchupExpanded ? (
+          {actualExpandedState ? (
             <div className={styles["matchup-subheader"]}>
               {game.hasPlayers ? <PlayerCount game={game} /> : null}
             </div>
@@ -80,11 +92,11 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game, id }) => {
         <div className={styles["matchup-header-right"]}>
           <div className={styles["schedule-info"]}>
             <IconButton
-              icon={isMatchupExpanded ? <ChevronUp /> : <ChevronDown />}
+              icon={actualExpandedState ? <ChevronUp /> : <ChevronDown />}
               onClick={toggleMatchup}
               color="clear"
             />
-            {isMatchupExpanded && (
+            {actualExpandedState && (
               <>
                 <p className={styles.channel}>{game.channel}</p>
                 <p className={styles.date}>{formattedDate}</p>
@@ -93,7 +105,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game, id }) => {
           </div>
         </div>
       </div>
-      {isMatchupExpanded && (
+      {actualExpandedState && (
         <>
           <hr className={styles["divider"]} />
           {game.hasPlayers ? (
