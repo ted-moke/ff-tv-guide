@@ -52,7 +52,7 @@ const PlayerSharesCard: React.FC<PlayerSharesCardProps> = ({
             <PlayerCondensed
               key={`${player.name}-${player.team}`}
               player={player}
-              slotType="both"
+              slotTypes={["start", "bestBall", "bench"]}
             />
           ))}
         </div>

@@ -132,7 +132,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game, id }) => {
                     <PlayerCondensed
                       key={`${player.name}-${player.team}`}
                       player={player}
-                      slotType="start"
+                      slotTypes={["start", "bestBall"]}
                     />
                   ))}
                 </div>
@@ -152,7 +152,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game, id }) => {
                     <PlayerCondensed
                       key={`${player.name}-${player.team}-${player.position}`}
                       player={player}
-                      slotType="start"
+                      slotTypes={["start", "bestBall"]}
                     />
                   ))}
                 </div>
@@ -189,7 +189,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game, id }) => {
                             <PlayerCondensed
                               key={`${player.name}-${player.team}`}
                               player={player}
-                              slotType="bench"
+                              slotTypes={["bench"]}
                             />
                           ))}
                         </div>
@@ -210,7 +210,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game, id }) => {
                             <PlayerCondensed
                               key={`${player.name}-${player.team}`}
                               player={player}
-                              slotType="bench"
+                              slotTypes={["bench"]}
                             />
                           ))}
                         </div>
@@ -219,6 +219,9 @@ const GameMatchup: React.FC<GameMatchupProps> = ({ game, id }) => {
                   )}
                 </>
               )}
+              <div className={styles.cardFooter}>
+                <small>* Best Ball</small>
+              </div>
             </div>
           ) : (
             <p className={styles["no-players"]}>No fantasy players</p>

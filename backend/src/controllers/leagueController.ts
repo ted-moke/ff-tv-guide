@@ -361,6 +361,13 @@ async function updateLeaguesByIds(
     const platformService = PlatformServiceFactory.getService(
       leagueData.platform.name
     );
+    // if the platform service has a upsertLeagueSettings method, call it
+    if ('upsertLeagueSettings' in platformService && typeof platformService.upsertLeagueSettings === 'function') {
+      console.log(`Upserting league settings for ${leagueData.platform.name}`);
+      await (platformService as any).upsertLeagueSettings(leagueData.id);
+    } else {
+      console.log(`Platform service ${leagueData.platform.name} does not have a upsertLeagueSettings method`);
+    }
     await platformService.upsertTeams(leagueData);
 
     // Update lastModified

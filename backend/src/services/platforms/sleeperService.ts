@@ -71,10 +71,29 @@ export class SleeperService {
 
     if (!existingLeagueQuery.empty) {
       const existingLeagueDoc = existingLeagueQuery.docs[0];
-      return existingLeagueDoc.data() as League;
+      const existingLeagueData = existingLeagueDoc.data() as League;
+
+      // If the league has no settings, fetch the league data from sleeper and set the settings
+      if (existingLeagueData.settings == null) {
+        console.log("League has no settings, fetching from sleeper");
+        const sleeperLeagueData = await fetchSleeperLeague(externalLeagueId);
+        const isBestBall = sleeperLeagueData.settings?.best_ball === 1;
+        existingLeagueData.settings = {
+          isBestBall: !!isBestBall,
+        };
+        await existingLeagueDoc.ref.update({
+          settings: existingLeagueData.settings,
+        });
+      } else {
+        console.log("League has settings, skipping fetch from sleeper");
+        console.log("Existing league data", existingLeagueData);
+      }
+
+      return existingLeagueData;
     }
 
-    // Check if the last year's league exists with missing migration data
+    const sleeperLeagueData = await fetchSleeperLeague(externalLeagueId);
+    const isBestBall = sleeperLeagueData.settings?.best_ball === 1;
 
     const leagueData: League = {
       leagueMasterId,
@@ -83,6 +102,9 @@ export class SleeperService {
       externalLeagueId,
       season,
       lastModified: new Date(),
+      settings: {
+        isBestBall: !!isBestBall,
+      },
     };
     const newLeagueRef = await leaguesCollection.add(leagueData);
     const finalLeagueData = { ...leagueData, id: newLeagueRef.id };
@@ -223,9 +245,7 @@ export class SleeperService {
       weekPointsAgainst: opponentPoints ?? 0,
       opponentId: opponentId ?? null,
       coOwners: rosterInfo.co_owners ?? [],
-      playerData: matchup
-        ? this.processPlayerData(matchup.players, matchup.starters ?? null)
-        : [],
+      playerData: matchup ? this.processPlayerData({ matchup, league }) : [],
       stats: {
         wins: rosterInfo.settings.wins ?? 0,
         losses: rosterInfo.settings.losses ?? 0,
@@ -375,13 +395,16 @@ export class SleeperService {
     }
   }
 
-  private processPlayerData(
-    players: string[] | null,
-    starters: string[] | null,
-  ): Player[] {
-    if (!players) return [];
+  private processPlayerData({
+    matchup,
+    league,
+  }: {
+    matchup: SleeperMatchup;
+    league: League;
+  }): Player[] {
+    if (!matchup.players) return [];
 
-    return players
+    return matchup.players
       .map((playerId) => {
         try {
           const playerInfo = this.nflPlayers[playerId];
@@ -399,15 +422,20 @@ export class SleeperService {
             logicalName = playerInfo.player_id.toLowerCase().replace(/\s/g, "");
           }
 
+          let rosterSlotType = "bench";
+          if (matchup.starters == null || matchup.starters.includes(playerId)) {
+            rosterSlotType = "start";
+          }
+          if (league.settings?.isBestBall) {
+            rosterSlotType = "bestBall";
+          }
+
           return {
             name: fullName,
             logicalName: logicalName,
             team: playerInfo.team,
             position: playerInfo.position,
-            rosterSlotType:
-              starters == null || starters.includes(playerId)
-                ? "start"
-                : "bench",
+            rosterSlotType,
           };
         } catch (error) {
           console.error(`Error processing player with ID ${playerId}:`, error);
@@ -422,6 +450,27 @@ export class SleeperService {
       ...matchup,
       players: matchup.players || [],
     }));
+  }
+
+  async upsertLeagueSettings(leagueId: string) {
+    const db = await getDb();
+    const leagueRef = db.collection("leagues").doc(leagueId);
+    const leagueDoc = await leagueRef.get();
+    if (!leagueDoc.exists) {
+      throw new Error(`League with ID ${leagueId} not found`);
+    }
+    const leagueData = leagueDoc.data() as League;
+    if (leagueData.settings != null) {
+      console.log(`League settings already exist for ${leagueData.platform.name}`);
+      return;
+    }
+
+    const sleeperLeagueData = await fetchSleeperLeague(
+      leagueData.externalLeagueId,
+    );
+    const isBestBall = sleeperLeagueData.settings?.best_ball === 1;
+    leagueData.settings = { isBestBall: !!isBestBall };
+    await leagueRef.update({ settings: leagueData.settings });
   }
 }
 
@@ -438,4 +487,11 @@ export const fetchSleeperUserLeagues = async (
     id: league.league_id, // Sleeper uses 'league_id'
   }));
   return leagues;
+};
+
+export const fetchSleeperLeague = async (externalLeagueId: string) => {
+  const data = await fetchFromUrl(
+    `https://api.sleeper.app/v1/league/${externalLeagueId}`,
+  );
+  return data;
 };

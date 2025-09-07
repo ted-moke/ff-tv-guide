@@ -10,6 +10,7 @@ export const useMatchupPlayers = (selectedWeek: number) => {
   } = usePlayers({
     hideHiddenTeams: true,
   });
+  console.log("players", players);
   const weeklySchedule = useWeeklySchedule(selectedWeek);
   const isLoading = playersLoading || !weeklySchedule;
   const error =

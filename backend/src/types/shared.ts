@@ -48,6 +48,9 @@ export interface League {
   externalLeagueId: string;
   season: number;
   lastModified: Date;
+  settings?: {
+    isBestBall?: boolean;
+  }
 }
 
 export interface LeagueMaster {

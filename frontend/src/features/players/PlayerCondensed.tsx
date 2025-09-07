@@ -9,7 +9,7 @@ import { CURRENT_SEASON } from "../../constants";
 
 interface PlayerProps {
   player: PlayerType;
-  slotType: "start" | "bench" | "both";
+  slotTypes: ("start" | "bench" | "both" | "bestBall")[];
 }
 
 const generateLeagueUrl = (leagueId: string, platformId: string) => {
@@ -23,7 +23,7 @@ const generateLeagueUrl = (leagueId: string, platformId: string) => {
   }
 };
 
-const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotType }) => {
+const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotTypes }) => {
   const { isMobile, leagueStats } = useView(); // Get isMobile from the context
   const [selectedCopy, setSelectedCopy] = useState<OwnedPlayer | null>(null);
   const [popupPosition, setPopupPosition] = useState<{
@@ -88,10 +88,10 @@ const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotType }) => {
       <div className={styles["player-user-teams-chips"]}>
         {userCopies.map(
           (copy, index) =>
-            (slotType === "both" || copy.rosterSlotType === slotType) && (
+            (slotTypes.includes(copy.rosterSlotType)) && (
               <Chip
                 key={`${player.name}-${copy.leagueId}-${index}`}
-                label={copy.shortLeagueName}
+                label={`${copy.shortLeagueName}${copy.rosterSlotType === "bestBall" ? "*" : ""}`}
                 onClick={(event: React.MouseEvent<HTMLElement>) =>
                   handlePopup(copy, event)
                 }
@@ -104,10 +104,10 @@ const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotType }) => {
       >
         {opponentCopies.map(
           (copy, index) =>
-            (slotType === "both" || copy.rosterSlotType === slotType) && (
+            (slotTypes.includes(copy.rosterSlotType)) && (
               <Chip
                 key={`${player.name}-${copy.leagueId}-${index}`}
-                label={copy.shortLeagueName}
+                label={`${copy.shortLeagueName}${copy.rosterSlotType === "bestBall" ? "*" : ""}`}
                 variant="muted"
                 onClick={(event: React.MouseEvent<HTMLElement>) =>
                   handlePopup(copy, event)

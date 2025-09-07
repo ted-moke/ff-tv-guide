@@ -5,7 +5,7 @@ export interface Player {
   logicalName: string;
   team: string;
   position: string;
-  rosterSlotType: "start" | "bench" | "ir" | "taxi" | "reserve";
+  rosterSlotType: "start" | "bench" | "ir" | "taxi" | "reserve" | "bestBall";
 }
 
 export interface TeamStats {
@@ -38,6 +38,7 @@ export interface Team {
   lastFetched: Date;
   weekPoints?: number;
   weekPointsAgainst?: number;
+  isBestBall?: boolean;
 }
 
 
@@ -49,6 +50,9 @@ export interface League {
   externalLeagueId: string;
   season: number;
   lastModified: Date;
+  settings?: {
+    isBestBall?: boolean;
+  }
 }
 
 export interface LeagueMaster {

@@ -4,7 +4,7 @@
 .matchup {
   background-color: var(--background-color-offset);
   border-radius: var(--size0_5);
-  padding: var(--size2);
+  padding: var(--size2) var(--size2) var(--size1);
   display: flex;
   flex-direction: column;
 }
@@ -210,6 +210,12 @@
   margin: 0;
 }
 
+.cardFooter {
+  align-self: flex-end;
+  color: var(--text-color-muted);
+}
+
+
 @media (max-width: 768px) {
   .team-players-header {
     grid-template-columns: 30px 2fr 1fr 1fr;
@@ -229,6 +235,6 @@
   }
 
   .matchup {
-    padding: var(--size1_5);
+    padding: var(--size1_5) var(--size1_5) var(--size1);
   }
 }

@@ -126,6 +126,7 @@ export const usePlayers = ({
               copies: [],
             });
           }
+          
 
           const ownedPlayer: OwnedPlayer = {
             leagueName: team.leagueName,
@@ -194,23 +195,23 @@ export const getPlayersByTeam = (teamCodes: string[], players: Player[]) => {
 
   const filteredStarters = teamPlayers
     .filter((player) =>
-      player.copies.some((copy) => copy.rosterSlotType === "start")
+      player.copies.some((copy) => copy.rosterSlotType === "start" || copy.rosterSlotType === "bestBall")
     )
     .map((player) => ({
       ...player,
-      copies: player.copies.filter((copy) => copy.rosterSlotType === "start"),
+      copies: player.copies.filter((copy) => copy.rosterSlotType === "start" || copy.rosterSlotType === "bestBall"),
     }));
 
   const filteredOthers = teamPlayers
     .filter(
       (player) =>
-        player.copies.some((copy) => copy.rosterSlotType !== "start") &&
+        player.copies.some((copy) => copy.rosterSlotType !== "start" && copy.rosterSlotType !== "bestBall") &&
         player.copies.some((copy) => copy.team === "self")
     )
     .map((player) => ({
       ...player,
       copies: player.copies.filter(
-        (copy) => copy.rosterSlotType !== "start" && copy.team === "self"
+        (copy) => copy.rosterSlotType !== "start" && copy.rosterSlotType !== "bestBall"
       ),
     }));
 
