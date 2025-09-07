@@ -1,5 +1,18 @@
 @import "../../styles/scrollbar.css"; /* Import the new scrollbar styles */
 
+.leagueTickerWrapper {
+  width: 100%;
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .leagueTickerWrapper {
+    padding-top: var(--size1); /* More top padding on desktop */
+  }
+}
+
 .leagueTickerContainer {
     flex: 1;
     max-width: 100%;

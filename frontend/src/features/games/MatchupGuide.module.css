@@ -48,6 +48,17 @@
 
 .leagueTickerWrapper {
   padding-bottom: var(--size1);
-  max-width: calc(100vw - var(--sidebar-width) - 50px);
+  max-width: calc(100vw - var(--sidebar-width));
+}
+
+.leagueTickerWrapper.fixed {
+  position: fixed;
+  top: 0;
+  left: var(--sidebar-width);
+  right: 0;
+  z-index: 1000;
+  background-color: var(--background-color);
+  border-bottom: 1px solid var(--background-color-offset-2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 

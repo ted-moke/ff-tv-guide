@@ -30,7 +30,7 @@ const Layout = ({ isAuthBlocking = true, children }: { isAuthBlocking?: boolean,
       <div className={styles["sidebar-container"]}>
         <Sidebar />
       </div>
-      <div className={styles["content"]}>{children}</div>
+      <div id="layout-content" className={styles["content"]}>{children}</div>
     </div>
   );
 };

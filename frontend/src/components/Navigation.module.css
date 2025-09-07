@@ -5,6 +5,7 @@
   align-items: center;
   gap: var(--size1);
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.8);
+  min-height: var(--size6); /* Ensure consistent height */
 }
 
 .navigation ul {
@@ -26,6 +27,7 @@
 .branding {
   display: flex;
   align-items: center;
+  flex-shrink: 0; /* Prevent logo from shrinking */
 }
 
 .logo {
@@ -69,6 +71,7 @@
     align-items: center;
     justify-content: center;
     border-radius: var(--border-radius-medium);
+    flex-shrink: 0; /* Prevent hamburger from shrinking */
     /* border: 1px solid var(--background-color-offset-2); */
   }
 

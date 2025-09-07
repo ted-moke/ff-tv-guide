@@ -14,7 +14,7 @@ export const LeagueCardsSection: React.FC = () => {
   }
 
   return (
-    <div className={styles.leagueCardsSection}>
+    <div className={styles.leagueCardsSection} data-section="league-cards">
       <h2 className={styles.sectionTitle}>My Leagues</h2>
       <div className={styles.leagueCardsGrid}>
         {leagueCardsData.map((cardData) => (

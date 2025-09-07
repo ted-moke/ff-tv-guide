@@ -9,6 +9,7 @@ import { useNeedsResources } from "../teams/useNeedsResources";
 import { useView } from "../view/ViewContext";
 import { LeagueTicker } from "../league/LeagueTicker";
 import { LeagueCardsSection } from "../league/LeagueCardsSection";
+import { useLeagueTickerVisibility } from "../league/useLeagueTickerVisibility";
 
 interface MatchupGuideProps {
   selectedWeek: number;
@@ -19,6 +20,7 @@ interface MatchupGuideProps {
 
 const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
   const { isMobile } = useView();
+  const isTickerVisible = useLeagueTickerVisibility();
   const { isLoading: isAuthLoading } = useAuthContext();
   const {
     isLoading: needsConnectLoading,
@@ -54,8 +56,8 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
 
   return (
     <div className={`${styles["matchup-guide"]} page-container`}>
-      {!isMobile && (
-        <div className={styles.leagueTickerWrapper}>
+      {!isMobile && isTickerVisible && (
+        <div className={`${styles.leagueTickerWrapper} ${styles.fixed}`}>
           <LeagueTicker />
         </div>
       )}

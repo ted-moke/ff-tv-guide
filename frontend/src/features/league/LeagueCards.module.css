@@ -3,6 +3,7 @@
 
 .leagueCardsSection {
   margin-bottom: var(--size3);
+  padding-bottom: var(--size1); /* Add padding to the section */
 }
 
 .leagueCardsGrid {
@@ -175,6 +176,7 @@
 .sectionTitle {
   font-size: var(--font-size-large);
   font-weight: bold;
-  margin: 0 0 var(--size2) 0;
+  margin: 0;
+  padding-bottom: var(--size2); /* Use padding instead of margin */
   color: var(--text-color);
 }
