@@ -72,14 +72,14 @@ export const LeagueCardMobile: React.FC<LeagueCardMobileProps> = ({
               </div>
             </div>
 
-            <div className={styles.leagueActions}>
+            {/* <div className={styles.leagueActions}>
               <button className={styles.actionButton}>
                 View Details
               </button>
               <button className={styles.actionButton}>
                 League Settings
               </button>
-            </div>
+            </div> */}
           </div>
         </>
       )}

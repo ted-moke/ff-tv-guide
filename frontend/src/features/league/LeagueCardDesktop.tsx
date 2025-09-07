@@ -81,7 +81,7 @@ export const LeagueCardDesktop: React.FC<LeagueCardDesktopProps> = ({
                 </span>
               </div>
             </div>
-
+{/* 
             <div className={styles.leagueActions}>
               <button className={styles.actionButton}>
                 View Details
@@ -89,7 +89,7 @@ export const LeagueCardDesktop: React.FC<LeagueCardDesktopProps> = ({
               <button className={styles.actionButton}>
                 League Settings
               </button>
-            </div>
+            </div> */}
           </div>
         </>
       )}
