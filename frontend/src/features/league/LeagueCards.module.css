@@ -7,7 +7,7 @@
 
 .leagueCardsGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: var(--size2);
   margin-bottom: var(--size2);
 }
@@ -40,6 +40,42 @@
   flex-direction: column;
   gap: var(--size0_25);
   width: 100%;
+}
+
+/* Mobile-specific alignment */
+@media (max-width: 768px) {
+  .leagueCardContent {
+    align-items: flex-end;
+  }
+  
+  .leagueName {
+    align-self: flex-start;
+  }
+}
+
+/* Desktop-specific styles */
+.leagueCardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.leagueCardLeft {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size0_25);
+}
+
+.leagueScores {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--size0_25);
+}
+
+.leagueRecord {
+  font-size: var(--font-size-small);
+  color: var(--text-color-muted);
 }
 
 .leagueName {

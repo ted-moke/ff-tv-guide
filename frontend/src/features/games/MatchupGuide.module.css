@@ -32,7 +32,6 @@
 
 .gameBucketGroups {
   padding-right: var(--size1);
-  max-height: calc(100vh - 158px);
 }
 
 .userTeams {
@@ -52,8 +51,3 @@
   max-width: calc(100vw - var(--sidebar-width) - 50px);
 }
 
-@media (max-width: 768px) {
-  .gameBucketGroups {
-    max-height: calc(100vh - 212px);
-  }
-}

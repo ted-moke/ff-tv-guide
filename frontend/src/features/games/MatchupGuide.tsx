@@ -61,7 +61,7 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
       )}
       <LeagueCardsSection />
       {matchupPlayers && (
-        <div className={`${styles.gameBucketGroups} ${styles.scrollbar}`}>
+        <div className={styles.gameBucketGroups}>
           {/* {!hideAlert && (
             <div className={styles.alertContainer}>
               <Alert
