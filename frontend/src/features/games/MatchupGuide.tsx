@@ -5,10 +5,10 @@ import GameBucketGroup from "./GameBucketGroup";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
 import { Navigate } from "react-router-dom";
 import { useAuthContext } from "../auth/AuthProvider2";
-import MatchupCarousel from "./MatchupCarousel";
 import { useNeedsResources } from "../teams/useNeedsResources";
 import { useView } from "../view/ViewContext";
 import { LeagueTicker } from "../league/LeagueTicker";
+import { LeagueCardsSection } from "../league/LeagueCardsSection";
 
 interface MatchupGuideProps {
   selectedWeek: number;
@@ -59,6 +59,7 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
           <LeagueTicker />
         </div>
       )}
+      <LeagueCardsSection />
       {matchupPlayers && (
         <div className={`${styles.gameBucketGroups} ${styles.scrollbar}`}>
           {/* {!hideAlert && (
@@ -95,15 +96,6 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
               gameBuckets={matchupPlayers.games.completed}
             />
           )}
-        </div>
-      )}
-      {matchupPlayers && (
-        <div className={styles.header}>
-          <MatchupCarousel
-            games={Object.values(matchupPlayers.games)
-              .flat()
-              .flatMap((bucket) => bucket.games)}
-          />
         </div>
       )}
     </div>

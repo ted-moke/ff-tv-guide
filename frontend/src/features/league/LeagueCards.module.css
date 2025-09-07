@@ -1,0 +1,144 @@
+@import "../../styles/variables.css";
+@import "../../styles/utils.css";
+
+.leagueCardsSection {
+  margin-bottom: var(--size3);
+}
+
+.leagueCardsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--size2);
+  margin-bottom: var(--size2);
+}
+
+@media (max-width: 768px) {
+  .leagueCardsGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--size1);
+  }
+}
+
+.leagueCard {
+  background-color: var(--background-color-offset);
+  border-radius: var(--size0_5);
+  padding: var(--size1);
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.leagueCardHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--size1);
+  cursor: pointer;
+}
+
+.leagueCardContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size0_25);
+  width: 100%;
+}
+
+.leagueName {
+  font-size: var(--font-size-medium);
+  font-weight: bold;
+  margin: 0;
+  color: var(--text-color);
+}
+
+.expandIcon {
+  color: var(--text-color-muted);
+  transition: transform 0.2s ease;
+  font-size: var(--font-size-medium);
+}
+
+.leagueCard.expanded .expandIcon {
+  transform: rotate(180deg);
+}
+
+.weekPoints {
+  font-size: var(--font-size-large);
+  font-weight: bold;
+  margin: 0;
+}
+
+.weekPointsAgainst {
+  font-size: var(--font-size-small);
+  font-weight: bold;
+  margin: 0;
+  color: var(--text-color-muted);
+}
+
+.winning .weekPoints {
+  color: var(--color-green);
+}
+
+.losing .weekPoints {
+  color: var(--color-red);
+}
+
+.tied .weekPoints {
+  color: var(--text-color-muted);
+}
+
+.expandedContent {
+  margin-top: var(--size1);
+}
+
+.expandedStats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--size1);
+  margin-bottom: var(--size1);
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.statLabel {
+  font-size: var(--font-size-small);
+  color: var(--text-color-muted);
+  margin-bottom: var(--size0_5);
+}
+
+.statValue {
+  font-size: var(--font-size-medium);
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+.leagueActions {
+  display: flex;
+  gap: var(--size1);
+  justify-content: center;
+}
+
+.actionButton {
+  padding: var(--size0_75) var(--size1_5);
+  border: 1px solid var(--background-color-offset-2);
+  background: transparent;
+  color: var(--text-color-muted);
+  border-radius: var(--border-radius-small);
+  font-size: var(--font-size-small);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.actionButton:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.sectionTitle {
+  font-size: var(--font-size-large);
+  font-weight: bold;
+  margin: 0 0 var(--size2) 0;
+  color: var(--text-color);
+}
