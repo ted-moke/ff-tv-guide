@@ -4,12 +4,15 @@ export const useLeagueTickerVisibility = () => {
   const [isTickerVisible, setIsTickerVisible] = useState(false);
 
   useEffect(() => {
-    let timeoutId: NodeJS.Timeout;
+    let lastExecuted = 0;
+    const throttleDelay = 16; // ~60fps
     
     const handleScroll = (event?: Event) => {
-      // Throttle scroll events
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
+      const now = Date.now();
+      
+      // Throttle: only execute if enough time has passed since last execution
+      if (now - lastExecuted >= throttleDelay) {
+        lastExecuted = now;
         console.log('🔄 Scroll event triggered!', {
           target: event?.target,
           currentTarget: event?.currentTarget,
@@ -47,7 +50,7 @@ export const useLeagueTickerVisibility = () => {
         });
         
         setIsTickerVisible(shouldShowTicker);
-      }, 16); // ~60fps throttling
+      }
     };
 
     // Initial check with a small delay to ensure DOM is rendered
