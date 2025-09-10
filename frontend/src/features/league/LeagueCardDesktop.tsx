@@ -44,7 +44,7 @@ export const LeagueCardDesktop: React.FC<LeagueCardDesktopProps> = ({
                 {team.weekPoints?.toFixed(2) || "0.00"}
               </p>
               <p className={styles.weekPointsAgainst}>
-                {team.weekPointsAgainst?.toFixed(2) || "0.00"}
+                vs. {team.weekPointsAgainst?.toFixed(2) || "0.00"}
               </p>
             </div>
           </div>

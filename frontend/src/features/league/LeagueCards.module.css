@@ -13,13 +13,6 @@
   margin-bottom: var(--size2);
 }
 
-@media (max-width: 768px) {
-  .leagueCardsGrid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--size1);
-  }
-}
-
 .leagueCard {
   background-color: var(--background-color-offset);
   border-radius: var(--size0_5);
@@ -39,44 +32,42 @@
 .leagueCardContent {
   display: flex;
   flex-direction: column;
-  gap: var(--size0_25);
+  gap: var(--size0_5);
   width: 100%;
-}
-
-/* Mobile-specific alignment */
-@media (max-width: 768px) {
-  .leagueCardContent {
-    align-items: flex-end;
-  }
-  
-  .leagueName {
-    align-self: flex-start;
-  }
 }
 
 /* Desktop-specific styles */
 .leagueCardTop {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: center;
 }
 
 .leagueCardLeft {
   display: flex;
   flex-direction: column;
-  gap: var(--size0_25);
+  justify-content: space-between;
+  height: 100%;
+  gap: var(--size0_5);
 }
 
 .leagueScores {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: var(--size0_25);
+  gap: var(--size0_75);
+}
+
+.leagueScores > * {
+  line-height: 1;
 }
 
 .leagueRecord {
-  font-size: var(--font-size-small);
+  font-size: var(--font-size-medium);
+  font-weight: bold;
   color: var(--text-color-muted);
+  line-height: 1;
+  margin: 0;
 }
 
 .leagueName {
@@ -179,4 +170,46 @@
   margin: 0;
   padding-bottom: var(--size2); /* Use padding instead of margin */
   color: var(--text-color);
+}
+
+@media (max-width: 768px) {
+  .leagueCardsGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--size1);
+  }
+
+  .leagueCardContent {
+    align-items: flex-end;
+  }
+  
+  .leagueName {
+    align-self: flex-start;
+  }
+
+  .leagueCardTop {
+    width: 100%;
+    justify-content: space-between;
+
+  }
+
+  .leagueRecord {
+    font-size: var(--font-size-small);
+  }
+
+  .leagueCardBottom {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    gap: var(--size0_5);
+  }
+
+  .weekPoints, .weekPointsAgainst, .weekPointsSeparator {
+    line-height: 1;
+  }
+
+  .weekPointsSeparator {
+    font-size: var(--font-size-small);
+    color: var(--text-color-muted);
+    font-weight: bold;
+  }
 }

@@ -19,9 +19,9 @@ export const LeagueCardMobile: React.FC<LeagueCardMobileProps> = ({
 
   return (
     <div
-      className={`${styles.leagueCard} ${
-        isExpanded ? styles.expanded : ""
-      } ${winning ? styles.winning : losing ? styles.losing : styles.tied}`}
+      className={`${styles.leagueCard} ${isExpanded ? styles.expanded : ""} ${
+        winning ? styles.winning : losing ? styles.losing : styles.tied
+      }`}
       id={`league-${team.id}`}
     >
       <div
@@ -31,13 +31,22 @@ export const LeagueCardMobile: React.FC<LeagueCardMobileProps> = ({
         aria-expanded={isExpanded}
       >
         <div className={styles.leagueCardContent}>
-          <h3 className={styles.leagueName}>{team.shortLeagueName}</h3>
-          <p className={styles.weekPoints}>
-            {team.weekPoints?.toFixed(2) || "0.00"}
-          </p>
-          <p className={styles.weekPointsAgainst}>
-            {team.weekPointsAgainst?.toFixed(2) || "0.00"}
-          </p>
+          <div className={styles.leagueCardTop}>
+            <h3 className={styles.leagueName}>{team.shortLeagueName}</h3>
+            <h3 className={styles.leagueRecord}>
+              {team.stats.wins || 0}-{team.stats.losses || 0}
+              {team.stats.ties ? `-${team.stats.ties}` : ""}
+            </h3>
+          </div>
+          <div className={styles.leagueCardBottom}>
+            <p className={styles.weekPoints}>
+              {team.weekPoints?.toFixed(1) || "0.0"}
+            </p>
+            <span className={styles.weekPointsSeparator}>v</span>
+            <p className={styles.weekPointsAgainst}>
+              {team.weekPointsAgainst?.toFixed(1) || "0.0"}
+            </p>
+          </div>
         </div>
       </div>
       {isExpanded && (
