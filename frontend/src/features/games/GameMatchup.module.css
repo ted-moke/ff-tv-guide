@@ -205,4 +205,8 @@
   .matchup {
     padding: var(--size1_5) var(--size1_5) var(--size1);
   }
+
+  .matchup-header-right {
+    display: none;
+  }
 }
