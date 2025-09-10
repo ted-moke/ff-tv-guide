@@ -51,7 +51,7 @@ export const useLeagueTickerVisibility = () => {
     };
 
     // Initial check with a small delay to ensure DOM is rendered
-    setTimeout(handleScroll, 100);
+    setTimeout(handleScroll, 500);
 
     // Add scroll listeners to both window and content area
     const contentArea = document.getElementById('layout-content');
