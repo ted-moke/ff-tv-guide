@@ -94,7 +94,7 @@ const getCurrentWeek = () => {
   const easternTime = new Date(
     now.toLocaleString("en-US", { timeZone: "America/New_York" })
   );
-  const seasonStart = new Date("2025-09-03T00:00:00-04:00"); // First game of 2025 season
+  const seasonStart = new Date("2025-09-01T00:00:00-04:00"); // First game of 2025 season
   const THREE_DAYS = 3 * 24 * 60 * 60 * 1000;
 
   // If the current date is more than 3 days before the season start, return null
