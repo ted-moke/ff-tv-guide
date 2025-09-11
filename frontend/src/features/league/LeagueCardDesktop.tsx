@@ -63,23 +63,23 @@ export const LeagueCardDesktop: React.FC<LeagueCardDesktopProps> = ({
                 </span>
               </div>
               <div className={styles.statItem}>
-                <span className={styles.statLabel}>Points For</span>
+                <span className={styles.statLabel}>Avg Pts</span>
+                <span className={styles.statValue}>
+                  {team.stats.averagePointsFor?.toFixed(1) || "0.0"}
+                </span>
+              </div>
+              <div className={styles.statItem}>
+                <span className={styles.statLabel}>Pts For</span>
                 <span className={styles.statValue}>
                   {team.stats.pointsFor?.toFixed(1) || "0.0"}
                 </span>
               </div>
               <div className={styles.statItem}>
-                <span className={styles.statLabel}>Points Against</span>
+                <span className={styles.statLabel}>Pts Against</span>
                 <span className={styles.statValue}>
                   {team.stats.pointsAgainst?.toFixed(1) || "0.0"}
                 </span>
               </div>
-              {/* <div className={styles.statItem}>
-                <span className={styles.statLabel}>Avg Points</span>
-                <span className={styles.statValue}>
-                  {team.stats.averagePointsFor?.toFixed(1) || "0.0"}
-                </span>
-              </div> */}
             </div>
 {/* 
             <div className={styles.leagueActions}>

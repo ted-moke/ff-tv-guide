@@ -13,18 +13,18 @@ export const useLeagueTickerVisibility = () => {
       // Throttle: only execute if enough time has passed since last execution
       if (now - lastExecuted >= throttleDelay) {
         lastExecuted = now;
-        console.log('🔄 Scroll event triggered!', {
-          target: event?.target,
-          currentTarget: event?.currentTarget,
-          scrollY: window.scrollY,
-          scrollTop: (event?.target as Element)?.scrollTop
-        });
+        // console.log('🔄 Scroll event triggered!', {
+        //   target: event?.target,
+        //   currentTarget: event?.currentTarget,
+        //   scrollY: window.scrollY,
+        //   scrollTop: (event?.target as Element)?.scrollTop
+        // });
         
         const leagueCardsSection = document.querySelector('[data-section="league-cards"]') || 
                                    document.querySelector('.leagueCardsSection');
         
         if (!leagueCardsSection) {
-          console.log('❌ League cards section not found, showing ticker');
+          // console.log('❌ League cards section not found, showing ticker');
           setIsTickerVisible(true);
           return;
         }
@@ -38,16 +38,16 @@ export const useLeagueTickerVisibility = () => {
         // If the league cards section is still visible in the viewport, hide ticker
         const shouldShowTicker = rect.bottom < 100;
         
-        console.log('📊 Scroll check:', {
-          rectTop: rect.top,
-          rectBottom: rect.bottom,
-          rectHeight: rect.height,
-          windowHeight,
-          threshold: 100,
-          shouldShowTicker,
-          currentTickerVisible: isTickerVisible,
-          scrollTop: contentArea?.scrollTop || 0
-        });
+        // console.log('📊 Scroll check:', {
+        //   rectTop: rect.top,
+        //   rectBottom: rect.bottom,
+        //   rectHeight: rect.height,
+        //   windowHeight,
+        //   threshold: 100,
+        //   shouldShowTicker,
+        //   currentTickerVisible: isTickerVisible,
+        //   scrollTop: contentArea?.scrollTop || 0
+        // });
         
         setIsTickerVisible(shouldShowTicker);
       }
@@ -61,10 +61,10 @@ export const useLeagueTickerVisibility = () => {
     
     // Listen to content area scroll (this is the main scrolling container)
     if (contentArea) {
-      console.log('✅ Found content area, adding scroll listener');
+      // console.log('✅ Found content area, adding scroll listener');
       contentArea.addEventListener('scroll', handleScroll, { passive: true });
     } else {
-      console.log('❌ Content area not found, falling back to window scroll');
+      // console.log('❌ Content area not found, falling back to window scroll');
       window.addEventListener('scroll', handleScroll, { passive: true });
     }
     
@@ -75,7 +75,7 @@ export const useLeagueTickerVisibility = () => {
     let mutationObserver: MutationObserver | null = null;
     if (leagueCardsSection) {
       mutationObserver = new MutationObserver(() => {
-        console.log('🔍 League cards section changed, rechecking visibility');
+        // console.log('🔍 League cards section changed, rechecking visibility');
         handleScroll();
       });
       

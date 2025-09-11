@@ -103,20 +103,33 @@ export class FleaflickerService {
           ties: number;
           pointsFor: number;
           pointsAgainst: number;
+          averagePointsFor: number;
         }
       >(
         leagueStandings.divisions.flatMap((division) =>
           division?.teams
-            ? division.teams.map((team) => [
-                team.id.toString(),
-                {
-                  wins: team.recordOverall?.wins ?? 0,
-                  losses: team.recordOverall?.losses ?? 0,
-                  ties: team.recordOverall?.ties ?? 0,
-                  pointsFor: team?.pointsFor.value ?? 0,
-                  pointsAgainst: team?.pointsAgainst.value ?? 0,
-                },
-              ])
+            ? division.teams.map((team) => {
+                const wins = team?.recordOverall?.wins ?? 0;
+                const losses = team?.recordOverall?.losses ?? 0;
+                const ties = team?.recordOverall?.ties ?? 0;
+                const pointsFor = team?.pointsFor.value ?? 0;
+                const pointsAgainst = team?.pointsAgainst.value ?? 0;
+                const totalGames = wins + losses + ties;
+                const averagePointsFor =
+                  totalGames > 0 ? team?.pointsFor.value / totalGames : 0;
+
+                return [
+                  team.id.toString(),
+                  {
+                    wins,
+                    losses,
+                    ties,
+                    pointsFor,
+                    pointsAgainst,
+                    averagePointsFor,
+                  },
+                ];
+              })
             : [],
         ),
       );
@@ -171,6 +184,7 @@ export class FleaflickerService {
             ties: currentRoster?.ties ?? 0,
             pointsFor: currentRoster?.pointsFor ?? 0,
             pointsAgainst: currentRoster?.pointsAgainst ?? 0,
+            averagePointsFor: currentRoster?.averagePointsFor ?? 0,
           },
           lastSynced: new Date(),
           lastFetched: new Date(),

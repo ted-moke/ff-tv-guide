@@ -13,6 +13,7 @@ export interface TeamStats {
   losses: number;
   ties: number;
   pointsFor: number;
+  averagePointsFor: number;
   pointsAgainst: number;
 }
 

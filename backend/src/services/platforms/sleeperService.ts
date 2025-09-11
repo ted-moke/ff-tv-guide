@@ -229,6 +229,22 @@ export class SleeperService {
       return null;
     }
 
+    const wins = rosterInfo.settings.wins ?? 0;
+    const losses = rosterInfo.settings.losses ?? 0;
+    const ties = rosterInfo.settings.ties ?? 0;
+    const pointsFor = rosterInfo.settings.fpts
+      ? parseFloat(
+          `${rosterInfo.settings.fpts}.${rosterInfo.settings.fpts_decimal}`,
+        )
+      : 0;
+    const pointsAgainst = rosterInfo.settings.fpts_against
+      ? parseFloat(
+          `${rosterInfo.settings.fpts_against}.${rosterInfo.settings.fpts_against_decimal}`,
+        )
+      : 0;
+    const totalGames = wins + losses + ties;
+    const averagePointsFor = totalGames > 0 ? pointsFor / totalGames : 0;
+
     return {
       externalLeagueId: league.externalLeagueId,
       externalTeamId: rosterInfo.roster_id.toString(),
@@ -247,19 +263,12 @@ export class SleeperService {
       coOwners: rosterInfo.co_owners ?? [],
       playerData: matchup ? this.processPlayerData({ matchup, league }) : [],
       stats: {
-        wins: rosterInfo.settings.wins ?? 0,
-        losses: rosterInfo.settings.losses ?? 0,
-        ties: rosterInfo.settings.ties ?? 0,
-        pointsFor: rosterInfo.settings.fpts
-          ? parseFloat(
-              `${rosterInfo.settings.fpts}.${rosterInfo.settings.fpts_decimal}`,
-            )
-          : 0,
-        pointsAgainst: rosterInfo.settings.fpts_against
-          ? parseFloat(
-              `${rosterInfo.settings.fpts_against}.${rosterInfo.settings.fpts_against_decimal}`,
-            )
-          : 0,
+        wins,
+        losses,
+        ties,
+        pointsFor,
+        pointsAgainst,
+        averagePointsFor,
       },
       lastSynced: new Date(),
       lastFetched: new Date(),
@@ -461,7 +470,9 @@ export class SleeperService {
     }
     const leagueData = leagueDoc.data() as League;
     if (leagueData.settings != null) {
-      console.log(`League settings already exist for ${leagueData.platform.name}`);
+      console.log(
+        `League settings already exist for ${leagueData.platform.name}`,
+      );
       return;
     }
 

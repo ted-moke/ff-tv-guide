@@ -14,6 +14,7 @@ export interface TeamStats {
   ties: number;
   pointsFor: number;
   pointsAgainst: number;
+  averagePointsFor: number;
 }
 
 export interface Team {

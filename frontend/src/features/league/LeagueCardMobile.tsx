@@ -17,6 +17,16 @@ export const LeagueCardMobile: React.FC<LeagueCardMobileProps> = ({
     onToggleExpansion(team.id || "");
   };
 
+  const wins = team.stats.wins || 0;
+  const losses = team.stats.losses || 0;
+  const ties = team.stats.ties || 0;
+  const totalGames = wins + losses + ties;
+  const pointsFor = team.stats.pointsFor || 0;
+  const pointsAgainst = team.stats.pointsAgainst || 0;
+  const averagePointsFor = totalGames > 0 ? pointsFor / totalGames : 0;
+
+  const winPercentage = totalGames > 0 ? wins / totalGames : 0;
+
   return (
     <div
       className={`${styles.leagueCard} ${isExpanded ? styles.expanded : ""} ${
@@ -34,7 +44,7 @@ export const LeagueCardMobile: React.FC<LeagueCardMobileProps> = ({
           <div className={styles.leagueCardTop}>
             <h3 className={styles.leagueName}>{team.shortLeagueName}</h3>
             <h3 className={styles.leagueRecord}>
-              {team.stats.wins || 0}-{team.stats.losses || 0}
+              {wins}-{losses}
               {team.stats.ties ? `-${team.stats.ties}` : ""}
             </h3>
           </div>
@@ -56,21 +66,35 @@ export const LeagueCardMobile: React.FC<LeagueCardMobileProps> = ({
             <div className={styles.expandedStats}>
               <div className={styles.statItem}>
                 <span className={styles.statLabel}>Record</span>
-                <span className={styles.statValue}>
-                  {team.stats.wins || 0}-{team.stats.losses || 0}
+                <span
+                  className={`${styles.statValue} ${
+                    winPercentage > 0.5
+                      ? styles.winPercentageGood
+                      : winPercentage < 0.5
+                      ? styles.winPercentageBad
+                      : styles.winPercentageNeutral
+                  }`}
+                >
+                  {wins}-{losses}
                   {team.stats.ties ? `-${team.stats.ties}` : ""}
                 </span>
               </div>
               <div className={styles.statItem}>
-                <span className={styles.statLabel}>Points For</span>
+                <span className={styles.statLabel}>Avg Pts</span>
                 <span className={styles.statValue}>
-                  {team.stats.pointsFor?.toFixed(1) || "0.0"}
+                  {averagePointsFor?.toFixed(1) || "0.0"}
                 </span>
               </div>
               <div className={styles.statItem}>
-                <span className={styles.statLabel}>Points Against</span>
+                <span className={styles.statLabel}>Pts For</span>
                 <span className={styles.statValue}>
-                  {team.stats.pointsAgainst?.toFixed(1) || "0.0"}
+                  {pointsFor?.toFixed(1) || "0.0"}
+                </span>
+              </div>
+              <div className={styles.statItem}>
+                <span className={styles.statLabel}>Pts Against</span>
+                <span className={styles.statValue}>
+                  {pointsAgainst?.toFixed(1) || "0.0"}
                 </span>
               </div>
               {/* <div className={styles.statItem}>

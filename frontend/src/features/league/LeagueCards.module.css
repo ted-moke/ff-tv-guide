@@ -172,6 +172,15 @@
   color: var(--text-color);
 }
 
+.winPercentageGood {
+  color: var(--secondary-color);
+}
+
+.winPercentageBad {
+  color: var(--color-red);
+}
+
+
 @media (max-width: 768px) {
   .leagueCardsGrid {
     grid-template-columns: repeat(3, 1fr);
