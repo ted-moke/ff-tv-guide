@@ -49,23 +49,41 @@ export const LeagueCardDesktop: React.FC<LeagueCardDesktopProps> = ({
         aria-expanded={isExpanded}
       >
         <div className={styles.leagueCardContent}>
-          <div className={styles.leagueCardTop}>
-            <div className={styles.leagueCardLeft}>
-              <h3 className={styles.leagueName}>{team.shortLeagueName}</h3>
-              <div className={styles.leagueRecord}>
-                {wins}-{losses}
-                {ties ? `-${ties}` : ""}
+          {hasWeekStarted ? (
+            <div className={`${styles.leagueCardTop} ${styles.leagueCardTopWeekStarted}`}>
+              <div className={styles.leagueCardLeft}>
+                <h3 className={styles.leagueName}>{team.shortLeagueName}</h3>
+                <div className={styles.leagueRecord}>
+                  {wins}-{losses}
+                  {ties ? `-${ties}` : ""}
+                </div>
+              </div>
+              <div className={styles.leagueScores}>
+                <p className={styles.weekPoints}>
+                  {team.weekPoints?.toFixed(2) || "0.00"}
+                </p>
+                <p className={styles.weekPointsAgainst}>
+                  vs. {team.weekPointsAgainst?.toFixed(2) || "0.00"}
+                </p>
               </div>
             </div>
-            <div className={styles.leagueScores}>
-              <p className={styles.weekPoints}>
-                {team.weekPoints?.toFixed(2) || "0.00"}
-              </p>
-              <p className={styles.weekPointsAgainst}>
-                vs. {team.weekPointsAgainst?.toFixed(2) || "0.00"}
-              </p>
+          ) : (
+            <div className={`${styles.leagueCardTop} ${styles.leagueCardTopNoWeekStarted}`}>
+              <div className={styles.leagueCardLeft}>
+                <h3 className={styles.leagueName}>{team.shortLeagueName}</h3>
+                <div className={styles.leagueRecord}>
+                  {wins}-{losses}
+                  {ties ? `-${ties}` : ""}
+                </div>
+              </div>
+              <div className={styles.leagueScores}>
+                <p className={styles.avgPointsLabel}>Avg</p>
+                <p className={styles.avgPoints}>
+                  {team.stats.averagePointsFor?.toFixed(2) || "0.00"}
+                </p>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
       {isExpanded && (

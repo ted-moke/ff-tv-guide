@@ -5,11 +5,13 @@ import { LeagueCardData } from "../useLeagueCards";
 interface LeagueCardMobileProps {
   cardData: LeagueCardData;
   onToggleExpansion: (teamId: string) => void;
+  hasWeekStarted: boolean;
 }
 
 export const LeagueCardMobile: React.FC<LeagueCardMobileProps> = ({
   cardData,
   onToggleExpansion,
+  hasWeekStarted,
 }) => {
   const { team, isExpanded, winning, losing } = cardData;
 
@@ -31,6 +33,12 @@ export const LeagueCardMobile: React.FC<LeagueCardMobileProps> = ({
     <div
       className={`${styles.leagueCard} ${isExpanded ? styles.expanded : ""} ${
         winning ? styles.winning : losing ? styles.losing : styles.tied
+      } ${
+        winPercentage > 0.5
+          ? styles.winPercentageGood
+          : winPercentage < 0.5
+          ? styles.winPercentageBad
+          : styles.winPercentageNeutral
       }`}
       id={`league-${team.id}`}
     >
@@ -40,23 +48,49 @@ export const LeagueCardMobile: React.FC<LeagueCardMobileProps> = ({
         onClick={handleCardClick}
         aria-expanded={isExpanded}
       >
-        <div className={styles.leagueCardContent}>
-          <div className={styles.leagueCardTop}>
-            <h3 className={styles.leagueName}>{team.shortLeagueName}</h3>
-            <h3 className={styles.leagueRecord}>
-              {wins}-{losses}
-              {team.stats.ties ? `-${team.stats.ties}` : ""}
-            </h3>
-          </div>
-          <div className={styles.leagueCardBottom}>
-            <p className={styles.weekPoints}>
-              {team.weekPoints?.toFixed(1) || "0.0"}
-            </p>
-            <span className={styles.weekPointsSeparator}>v</span>
-            <p className={styles.weekPointsAgainst}>
-              {team.weekPointsAgainst?.toFixed(1) || "0.0"}
-            </p>
-          </div>
+        <div className={styles.leagueCardWrapper}>
+          {hasWeekStarted ? (
+            <div
+              className={`${styles.leagueCardContent} ${styles.leagueCardContentWeekStarted}`}
+            >
+              <div
+                className={`${styles.leagueCardTop} ${styles.leagueCardTopWeekStarted}`}
+              >
+                <h3 className={styles.leagueName}>{team.shortLeagueName}</h3>
+                <h3 className={styles.leagueRecord}>
+                  {wins}-{losses}
+                  {team.stats.ties ? `-${team.stats.ties}` : ""}
+                </h3>
+              </div>
+              <div className={styles.leagueCardBottom}>
+                <p className={styles.weekPoints}>
+                  {team.weekPoints?.toFixed(1) || "0.0"}
+                </p>
+                <span className={styles.weekPointsSeparator}>v</span>
+                <p className={styles.weekPointsAgainst}>
+                  {team.weekPointsAgainst?.toFixed(1) || "0.0"}
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div
+              className={`${styles.leagueCardContent} ${styles.leagueCardContentNoWeekStarted}`}
+            >
+              <div className={styles.leagueCardTop}>
+                <h3 className={styles.leagueName}>{team.shortLeagueName}</h3>
+                <h3 className={styles.leagueRecord}>
+                  {wins}-{losses}
+                  {team.stats.ties ? `-${team.stats.ties}` : ""}
+                </h3>
+              </div>
+              <div className={styles.leagueCardBottom}>
+                <p className={styles.avgPointsLabel}>Avg</p>
+                <p className={styles.avgPoints}>
+                  {team.stats.averagePointsFor?.toFixed(2) || "0.00"}
+                </p>
+              </div>
+            </div>
+          )}
         </div>
       </div>
       {isExpanded && (
@@ -64,16 +98,10 @@ export const LeagueCardMobile: React.FC<LeagueCardMobileProps> = ({
           <hr className={styles.divider} />
           <div className={styles.expandedContent}>
             <div className={styles.expandedStats}>
-              <div className={styles.statItem}>
+              <div className={`${styles.statItem} ${styles.recordItem}`}>
                 <span className={styles.statLabel}>Record</span>
                 <span
-                  className={`${styles.statValue} ${
-                    winPercentage > 0.5
-                      ? styles.winPercentageGood
-                      : winPercentage < 0.5
-                      ? styles.winPercentageBad
-                      : styles.winPercentageNeutral
-                  }`}
+                  className={styles.statValue}
                 >
                   {wins}-{losses}
                   {team.stats.ties ? `-${team.stats.ties}` : ""}

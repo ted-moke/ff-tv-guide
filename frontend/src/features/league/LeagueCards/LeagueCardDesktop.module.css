@@ -113,6 +113,17 @@
   align-items: center;
 }
 
+.leagueCardTopNoWeekStarted .avgPointsLabel {
+  font-size: var(--font-size-small);
+  /* font-weight: bold; */
+  color: var(--text-color-muted);
+}
+
+.leagueCardTopNoWeekStarted .avgPoints {
+  font-size: var(--font-size-m_l);
+  font-weight: bold;
+}
+
 .leagueCardLeft {
   display: flex;
   flex-direction: column;
@@ -164,26 +175,17 @@
   color: var(--primary-color);
 }
 
-.winPercentageGood {
+.winPercentageGood .expandedStats .recordItem .statValue,
+.winPercentageGood .leagueCardTopNoWeekStarted .leagueCardLeft .leagueRecord {
   color: var(--secondary-color);
 }
 
-.winPercentageBad {
+.winPercentageBad .expandedStats .recordItem .statValue,
+.winPercentageBad .leagueCardTopNoWeekStarted .leagueCardLeft .leagueRecord {
   color: var(--color-red);
 }
 
-.winPercentageNeutral {
-  color: var(--text-color);
-}
-
-.winPercentageGood .expandedStats .recordItem .statValue {
-  color: var(--secondary-color);
-}
-
-.winPercentageBad .expandedStats .recordItem .statValue {
-  color: var(--color-red);
-}
-
-.winPercentageNeutral .expandedStats .recordItem .statValue {
+.winPercentageNeutral .expandedStats .recordItem .statValue,
+.winPercentageNeutral .leagueCardTopNoWeekStarted .leagueCardLeft .leagueRecord {
   color: var(--text-color-muted);
 }
