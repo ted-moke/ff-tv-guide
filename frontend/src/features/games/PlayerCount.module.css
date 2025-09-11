@@ -4,7 +4,7 @@
 .player-count {
   text-align: center;
   font-size: var(--size2);
-  color: var(--text-color-secondary);
+  color: var(--text-color);
   display: flex;
   align-items: center;
   justify-content: center;
