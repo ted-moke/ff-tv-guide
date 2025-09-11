@@ -1,18 +1,7 @@
 @import "../../styles/variables.css";
 @import "../../styles/utils.css";
 
-.leagueCardsSection {
-  margin-bottom: var(--size3);
-  padding-bottom: var(--size1); /* Add padding to the section */
-}
-
-.leagueCardsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: var(--size2);
-  margin-bottom: var(--size2);
-}
-
+/* Base card styles */
 .leagueCard {
   background-color: var(--background-color-offset);
   border-radius: var(--size0_5);
@@ -36,30 +25,11 @@
   width: 100%;
 }
 
-/* Desktop-specific styles */
-.leagueCardTop {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.leagueCardLeft {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  height: 100%;
-  gap: var(--size0_5);
-}
-
-.leagueScores {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: var(--size0_75);
-}
-
-.leagueScores > * {
-  line-height: 1;
+.leagueName {
+  font-size: var(--font-size-medium);
+  font-weight: bold;
+  margin: 0;
+  color: var(--text-color);
 }
 
 .leagueRecord {
@@ -68,23 +38,6 @@
   color: var(--text-color-muted);
   line-height: 1;
   margin: 0;
-}
-
-.leagueName {
-  font-size: var(--font-size-medium);
-  font-weight: bold;
-  margin: 0;
-  color: var(--text-color);
-}
-
-.expandIcon {
-  color: var(--text-color-muted);
-  transition: transform 0.2s ease;
-  font-size: var(--font-size-medium);
-}
-
-.leagueCard.expanded .expandIcon {
-  transform: rotate(180deg);
 }
 
 .weekPoints {
@@ -130,6 +83,10 @@
   text-align: center;
 }
 
+.recordItem {
+  /* Additional styling for record item if needed */
+}
+
 .statLabel {
   font-size: var(--font-size-small);
   color: var(--text-color-muted);
@@ -140,6 +97,49 @@
   font-size: var(--font-size-medium);
   font-weight: bold;
   color: var(--text-color);
+}
+
+.divider {
+  border: none;
+  height: 1px;
+  background-color: var(--background-color-offset-2);
+  margin: var(--size1) 0;
+}
+
+/* Desktop-specific styles */
+.leagueCardTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.leagueCardLeft {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  gap: var(--size0_5);
+}
+
+.leagueScores {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--size0_75);
+}
+
+.leagueScores > * {
+  line-height: 1;
+}
+
+.expandIcon {
+  color: var(--text-color-muted);
+  transition: transform 0.2s ease;
+  font-size: var(--font-size-medium);
+}
+
+.leagueCard.expanded .expandIcon {
+  transform: rotate(180deg);
 }
 
 .leagueActions {
@@ -164,14 +164,6 @@
   color: var(--primary-color);
 }
 
-.sectionTitle {
-  font-size: var(--font-size-large);
-  font-weight: bold;
-  margin: 0;
-  padding-bottom: var(--size2); /* Use padding instead of margin */
-  color: var(--text-color);
-}
-
 .winPercentageGood {
   color: var(--secondary-color);
 }
@@ -180,45 +172,18 @@
   color: var(--color-red);
 }
 
+.winPercentageNeutral {
+  color: var(--text-color);
+}
 
-@media (max-width: 768px) {
-  .leagueCardsGrid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--size1);
-  }
+.winPercentageGood .expandedStats .recordItem .statValue {
+  color: var(--secondary-color);
+}
 
-  .leagueCardContent {
-    align-items: flex-end;
-  }
-  
-  .leagueName {
-    align-self: flex-start;
-  }
+.winPercentageBad .expandedStats .recordItem .statValue {
+  color: var(--color-red);
+}
 
-  .leagueCardTop {
-    width: 100%;
-    justify-content: space-between;
-
-  }
-
-  .leagueRecord {
-    font-size: var(--font-size-small);
-  }
-
-  .leagueCardBottom {
-    display: flex;
-    flex-direction: row;
-    align-items: baseline;
-    gap: var(--size0_5);
-  }
-
-  .weekPoints, .weekPointsAgainst, .weekPointsSeparator {
-    line-height: 1;
-  }
-
-  .weekPointsSeparator {
-    font-size: var(--font-size-small);
-    color: var(--text-color-muted);
-    font-weight: bold;
-  }
+.winPercentageNeutral .expandedStats .recordItem .statValue {
+  color: var(--text-color-muted);
 }

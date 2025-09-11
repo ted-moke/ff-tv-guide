@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./LeagueCards.module.css";
+import styles from "./LeagueCardsSection.module.css";
 import { LeagueCard } from "./LeagueCard";
 import { useLeagueCards } from "./useLeagueCards";
 import { useView } from "../view/ViewContext";

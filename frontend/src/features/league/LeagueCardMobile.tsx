@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./LeagueCards.module.css";
+import styles from "./LeagueCardMobile.module.css";
 import { LeagueCardData } from "./useLeagueCards";
 
 interface LeagueCardMobileProps {

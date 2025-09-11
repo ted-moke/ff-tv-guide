@@ -1,0 +1,29 @@
+@import "../../styles/variables.css";
+@import "../../styles/utils.css";
+
+.leagueCardsSection {
+  margin-bottom: var(--size3);
+  padding-bottom: var(--size1);
+}
+
+.leagueCardsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: var(--size2);
+  margin-bottom: var(--size2);
+}
+
+.sectionTitle {
+  font-size: var(--font-size-large);
+  font-weight: bold;
+  margin: 0;
+  padding-bottom: var(--size2);
+  color: var(--text-color);
+}
+
+@media (max-width: 768px) {
+  .leagueCardsGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--size1);
+  }
+}

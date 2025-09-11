@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./LeagueCards.module.css";
+import styles from "./LeagueCardDesktop.module.css";
 import { LeagueCardData } from "./useLeagueCards";
 
 interface LeagueCardDesktopProps {
@@ -17,11 +17,27 @@ export const LeagueCardDesktop: React.FC<LeagueCardDesktopProps> = ({
     onToggleExpansion(team.id || "");
   };
 
+  const wins = team.stats.wins || 0;
+  const losses = team.stats.losses || 0;
+  const ties = team.stats.ties || 0;
+  const totalGames = wins + losses + ties;
+  const pointsFor = team.stats.pointsFor || 0;
+  const pointsAgainst = team.stats.pointsAgainst || 0;
+  const averagePointsFor = totalGames > 0 ? pointsFor / totalGames : 0;
+
+  const winPercentage = totalGames > 0 ? wins / totalGames : 0;
+
   return (
     <div
-      className={`${styles.leagueCard} ${
-        isExpanded ? styles.expanded : ""
-      } ${winning ? styles.winning : losing ? styles.losing : styles.tied}`}
+      className={`${styles.leagueCard} ${isExpanded ? styles.expanded : ""} ${
+        winning ? styles.winning : losing ? styles.losing : styles.tied
+      } ${
+        winPercentage > 0.5
+          ? styles.winPercentageGood
+          : winPercentage < 0.5
+          ? styles.winPercentageBad
+          : styles.winPercentageNeutral
+      }`}
       id={`league-${team.id}`}
     >
       <div
@@ -35,8 +51,8 @@ export const LeagueCardDesktop: React.FC<LeagueCardDesktopProps> = ({
             <div className={styles.leagueCardLeft}>
               <h3 className={styles.leagueName}>{team.shortLeagueName}</h3>
               <div className={styles.leagueRecord}>
-                {team.stats.wins || 0}-{team.stats.losses || 0}
-                {team.stats.ties ? `-${team.stats.ties}` : ""}
+                {wins}-{losses}
+                {ties ? `-${ties}` : ""}
               </div>
             </div>
             <div className={styles.leagueScores}>
@@ -55,33 +71,33 @@ export const LeagueCardDesktop: React.FC<LeagueCardDesktopProps> = ({
           <hr className={styles.divider} />
           <div className={styles.expandedContent}>
             <div className={styles.expandedStats}>
-              <div className={styles.statItem}>
+              <div className={`${styles.statItem} ${styles.recordItem}`}>
                 <span className={styles.statLabel}>Record</span>
                 <span className={styles.statValue}>
-                  {team.stats.wins || 0}-{team.stats.losses || 0}
-                  {team.stats.ties ? `-${team.stats.ties}` : ""}
+                  {wins}-{losses}
+                  {ties ? `-${ties}` : ""}
                 </span>
               </div>
               <div className={styles.statItem}>
                 <span className={styles.statLabel}>Avg Pts</span>
                 <span className={styles.statValue}>
-                  {team.stats.averagePointsFor?.toFixed(1) || "0.0"}
+                  {averagePointsFor?.toFixed(1) || "0.0"}
                 </span>
               </div>
               <div className={styles.statItem}>
                 <span className={styles.statLabel}>Pts For</span>
                 <span className={styles.statValue}>
-                  {team.stats.pointsFor?.toFixed(1) || "0.0"}
+                  {pointsFor?.toFixed(1) || "0.0"}
                 </span>
               </div>
               <div className={styles.statItem}>
                 <span className={styles.statLabel}>Pts Against</span>
                 <span className={styles.statValue}>
-                  {team.stats.pointsAgainst?.toFixed(1) || "0.0"}
+                  {pointsAgainst?.toFixed(1) || "0.0"}
                 </span>
               </div>
             </div>
-{/* 
+            {/* 
             <div className={styles.leagueActions}>
               <button className={styles.actionButton}>
                 View Details
