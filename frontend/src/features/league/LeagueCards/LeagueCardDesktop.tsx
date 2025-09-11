@@ -1,15 +1,17 @@
 import React from "react";
 import styles from "./LeagueCardDesktop.module.css";
-import { LeagueCardData } from "./useLeagueCards";
+import { LeagueCardData } from "../useLeagueCards";
 
 interface LeagueCardDesktopProps {
   cardData: LeagueCardData;
   onToggleExpansion: (teamId: string) => void;
+  hasWeekStarted: boolean;
 }
 
 export const LeagueCardDesktop: React.FC<LeagueCardDesktopProps> = ({
   cardData,
   onToggleExpansion,
+  hasWeekStarted,
 }) => {
   const { team, isExpanded, winning, losing } = cardData;
 

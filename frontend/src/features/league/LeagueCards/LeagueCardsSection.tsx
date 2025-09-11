@@ -1,15 +1,15 @@
 import React from "react";
 import styles from "./LeagueCardsSection.module.css";
 import { LeagueCard } from "./LeagueCard";
-import { useLeagueCards } from "./useLeagueCards";
-import { useView } from "../view/ViewContext";
+import { useLeagueCards } from "../useLeagueCards";
+import { useView } from "../../view/ViewContext";
 
 export const LeagueCardsSection: React.FC = () => {
   const {
     leagueCardsData,
     toggleCardExpansion,
   } = useLeagueCards();
-  const { selectedWeek } = useView();
+  const { selectedWeek, hasWeekStarted } = useView();
 
   if (!leagueCardsData || leagueCardsData.length === 0) {
     return null;
@@ -24,6 +24,7 @@ export const LeagueCardsSection: React.FC = () => {
             key={cardData.team.id}
             cardData={cardData}
             onToggleExpansion={toggleCardExpansion}
+            hasWeekStarted={hasWeekStarted}
           />
         ))}
       </div>

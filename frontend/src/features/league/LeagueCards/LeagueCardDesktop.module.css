@@ -1,5 +1,5 @@
-@import "../../styles/variables.css";
-@import "../../styles/utils.css";
+@import "../../../styles/variables.css";
+@import "../../../styles/utils.css";
 
 /* Base card styles */
 .leagueCard {
@@ -23,7 +23,6 @@
   flex-direction: column;
   gap: var(--size0_5);
   width: 100%;
-  align-items: flex-end;
 }
 
 .leagueName {
@@ -31,11 +30,10 @@
   font-weight: bold;
   margin: 0;
   color: var(--text-color);
-  align-self: flex-start;
 }
 
 .leagueRecord {
-  font-size: var(--font-size-small);
+  font-size: var(--font-size-medium);
   font-weight: bold;
   color: var(--text-color-muted);
   line-height: 1;
@@ -85,6 +83,10 @@
   text-align: center;
 }
 
+.recordItem {
+  /* Additional styling for record item if needed */
+}
+
 .statLabel {
   font-size: var(--font-size-small);
   color: var(--text-color-muted);
@@ -104,32 +106,62 @@
   margin: var(--size1) 0;
 }
 
-/* Mobile-specific styles */
+/* Desktop-specific styles */
 .leagueCardTop {
-  width: 100%;
   display: flex;
-  flex-direction: row;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
 }
 
-.leagueCardBottom {
+.leagueCardLeft {
   display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: baseline;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
   gap: var(--size0_5);
-  width: 100%;
 }
 
-.weekPoints, .weekPointsAgainst, .weekPointsSeparator {
+.leagueScores {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--size0_75);
+}
+
+.leagueScores > * {
   line-height: 1;
 }
 
-.weekPointsSeparator {
-  font-size: var(--font-size-small);
+.expandIcon {
   color: var(--text-color-muted);
-  font-weight: bold;
+  transition: transform 0.2s ease;
+  font-size: var(--font-size-medium);
+}
+
+.leagueCard.expanded .expandIcon {
+  transform: rotate(180deg);
+}
+
+.leagueActions {
+  display: flex;
+  gap: var(--size1);
+  justify-content: center;
+}
+
+.actionButton {
+  padding: var(--size0_75) var(--size1_5);
+  border: 1px solid var(--background-color-offset-2);
+  background: transparent;
+  color: var(--text-color-muted);
+  border-radius: var(--border-radius-small);
+  font-size: var(--font-size-small);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.actionButton:hover {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
 }
 
 .winPercentageGood {
@@ -142,4 +174,16 @@
 
 .winPercentageNeutral {
   color: var(--text-color);
+}
+
+.winPercentageGood .expandedStats .recordItem .statValue {
+  color: var(--secondary-color);
+}
+
+.winPercentageBad .expandedStats .recordItem .statValue {
+  color: var(--color-red);
+}
+
+.winPercentageNeutral .expandedStats .recordItem .statValue {
+  color: var(--text-color-muted);
 }

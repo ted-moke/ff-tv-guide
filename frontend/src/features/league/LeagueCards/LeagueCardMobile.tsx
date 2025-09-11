@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./LeagueCardMobile.module.css";
-import { LeagueCardData } from "./useLeagueCards";
+import { LeagueCardData } from "../useLeagueCards";
 
 interface LeagueCardMobileProps {
   cardData: LeagueCardData;

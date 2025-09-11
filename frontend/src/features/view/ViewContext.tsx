@@ -4,6 +4,7 @@ import React, {
   useContext,
   ReactNode,
   useEffect,
+  useMemo,
 } from "react";
 import { Conference } from "../nfl/nflTypes";
 import { FantasyTeam } from "../teams/teamTypes";
@@ -74,7 +75,7 @@ interface ViewContextType {
   setPlayerSharesSearchTerm: (term: string) => void;
   selectedWeek: number | null;
   setSelectedWeek: (week: number) => void;
-  hasWeekStarted: () => boolean;
+  hasWeekStarted: boolean;
   // UI Data
   isMobile: boolean;
   setIsMobile: (isMobile: boolean) => void;
@@ -293,6 +294,8 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     opponentTeams: fetchedOpponentTeams || [],
   });
 
+  const hasWeekStartedValue = useMemo(() => hasWeekStarted(), []);
+
   const value = {
     // League Stats
     leagueStats,
@@ -336,7 +339,7 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     // Selected Week
     selectedWeek,
     setSelectedWeek,
-    hasWeekStarted,
+    hasWeekStarted: hasWeekStartedValue,
     // Mobile
     isMobile,
     setIsMobile,

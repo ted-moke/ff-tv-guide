@@ -1,5 +1,5 @@
-@import "../../styles/variables.css";
-@import "../../styles/utils.css";
+@import "../../../styles/variables.css";
+@import "../../../styles/utils.css";
 
 .leagueCardsSection {
   margin-bottom: var(--size3);
