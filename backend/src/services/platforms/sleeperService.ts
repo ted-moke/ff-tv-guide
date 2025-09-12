@@ -242,8 +242,8 @@ export class SleeperService {
           `${rosterInfo.settings.fpts_against}.${rosterInfo.settings.fpts_against_decimal}`,
         )
       : 0;
-    const totalGames = wins + losses + ties;
-    const averagePointsFor = totalGames > 0 ? pointsFor / totalGames : 0;
+    const currentWeek = getCurrentWeek();
+    const averagePointsFor = currentWeek - 1 > 0 ? pointsFor / (currentWeek - 1) : 0;
 
     return {
       externalLeagueId: league.externalLeagueId,

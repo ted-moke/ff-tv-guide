@@ -91,6 +91,8 @@ export class FleaflickerService {
       );
       const teamsCollection = db.collection("teams");
 
+      const currentWeek = getCurrentWeek();
+
       // Fetch league standings to get owner IDs
       const leagueStandings = await this.fetchLeagueStandings(
         league.externalLeagueId,
@@ -114,9 +116,8 @@ export class FleaflickerService {
                 const ties = team?.recordOverall?.ties ?? 0;
                 const pointsFor = team?.pointsFor.value ?? 0;
                 const pointsAgainst = team?.pointsAgainst.value ?? 0;
-                const totalGames = wins + losses + ties;
                 const averagePointsFor =
-                  totalGames > 0 ? team?.pointsFor.value / totalGames : 0;
+                  currentWeek - 1 > 0 ? team?.pointsFor.value / (currentWeek - 1) : 0;
 
                 return [
                   team.id.toString(),
