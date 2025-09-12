@@ -22,6 +22,7 @@ export const LeagueCard: React.FC<LeagueCardProps> = ({
       <LeagueCardMobile
         cardData={cardData}
         onToggleExpansion={onToggleExpansion}
+        hasWeekStarted={hasWeekStarted}
       />
     );
   }

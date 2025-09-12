@@ -7,7 +7,8 @@ export const useLeagueTickerVisibility = () => {
     let lastExecuted = 0;
     const throttleDelay = 16; // ~60fps
     
-    const handleScroll = (event?: Event) => {
+    const handleScroll = () => {
+    // const handleScroll = (event?: Event) => {
       const now = Date.now();
       
       // Throttle: only execute if enough time has passed since last execution
@@ -30,7 +31,7 @@ export const useLeagueTickerVisibility = () => {
         }
 
         const rect = leagueCardsSection.getBoundingClientRect();
-        const windowHeight = window.innerHeight;
+        // const windowHeight = window.innerHeight;
         
         // Hide ticker when league cards are visible (within 100px of top)
         // Show ticker when user has scrolled past the league grid
