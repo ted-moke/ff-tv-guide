@@ -2,7 +2,7 @@ import React, { useMemo, useState } from "react";
 import styles from "./PlayerShares.module.css";
 import { getTeamsByConference, NFL_TEAMS } from "../features/nfl/nflTeams";
 import { Player } from "../features/nfl/nflTypes";
-import { usePlayers, getPlayersByTeam } from "../features/players/usePlayers";
+import { getPlayersByTeam } from "../features/players/usePlayers";
 import { useView } from "../features/view/ViewContext";
 import { useAuthContext } from "../features/auth/AuthProvider2";
 import { Navigate } from "react-router-dom";
@@ -18,6 +18,7 @@ import { Stack } from "../components/ui/Stack";
 import { DivisionChart } from "../features/stats/DivisionChart";
 import Checkbox from "../components/ui/Checkbox";
 import TextInput from "../components/ui/TextInput";
+import { filterCopies } from "../features/players/filterPlayers";
 interface GroupedPlayer {
   team: string;
   players: Player[];
@@ -38,14 +39,10 @@ const PlayerShares: React.FC = () => {
     playerSharesSearchTerm,
     scrollToElement,
     setPlayerSharesSearchTerm,
+    players: rawPlayers,
   } = useView();
-  const { players, isLoading, error, hasIDPlayers } = usePlayers({
-    includeOpponents: false,
-    hideHiddenTeams: true,
-    hideBenchPlayers,
-    hideIDPlayers,
-    // hideBestBallPlayers,
-  });
+
+  const players = filterCopies(rawPlayers, { hideBenchPlayers, hideIDPlayers });
   const { isLoading: isAuthLoading } = useAuthContext();
   const {
     isLoading: needsConnectLoading,
@@ -53,7 +50,6 @@ const PlayerShares: React.FC = () => {
     needsAccount,
   } = useNeedsResources();
 
-  let allPlayers: Player[] = players ?? [];
 
   const sortedGroupedPlayers = useMemo<GroupedPlayer[]>(() => {
     const teams =
@@ -62,7 +58,7 @@ const PlayerShares: React.FC = () => {
         : getTeamsByConference(activeConference);
 
     const groupedPlayers: GroupedPlayer[] = teams.map((team) => {
-      const teamPlayers = getPlayersByTeam(team.codes, allPlayers);
+      const teamPlayers = getPlayersByTeam(team.codes, players);
       return {
         team: team.name,
         players: teamPlayers.allSelf,
@@ -104,7 +100,7 @@ const PlayerShares: React.FC = () => {
     activeConference,
     playerSharesSortBy,
     playerSharesHideEmptyTeams,
-    allPlayers,
+    players,
     hideBenchPlayers,
   ]);
 
@@ -149,7 +145,7 @@ const PlayerShares: React.FC = () => {
         acc[team.conference][team.division] = 0;
       }
 
-      const teamPlayers = getPlayersByTeam(team.codes, allPlayers);
+      const teamPlayers = getPlayersByTeam(team.codes, players);
       const teamShares = teamPlayers.allSelf.reduce(
         (sum, player) => sum + player.copies.length,
         0
@@ -234,34 +230,21 @@ const PlayerShares: React.FC = () => {
     return <Navigate to="/connect-team" />;
   }
 
-  if (isLoading) return <LoadingSpinner />;
-
-  if (error) {
-    console.error("Error in PlayerShares:", error);
-    return (
-      <div className={`${styles.playerShares} page-container`}>
-        <h1>Player Shares</h1>
-        <div className={styles.errorContainer}>
-          <p>Error loading players: {(error as Error).message}</p>
-          <p>Please try refreshing the page or check your connection.</p>
-        </div>
-      </div>
-    );
-  }
+  if (!players) return <LoadingSpinner />;
 
   return (
     <div className={`${styles.playerShares} page-container`}>
       <h1>Player Shares</h1>
-        <TextInput
-          type="text"
-          id="player-search"
-          placeholder="Search players..."
-          value={playerSharesSearchTerm}
-          onChange={(e) => setPlayerSharesSearchTerm(e.target.value)}
-          outline
-          icon={<LuSearch />}
-          iconPosition="right"
-        />
+      <TextInput
+        type="text"
+        id="player-search"
+        placeholder="Search players..."
+        value={playerSharesSearchTerm}
+        onChange={(e) => setPlayerSharesSearchTerm(e.target.value)}
+        outline
+        icon={<LuSearch />}
+        iconPosition="right"
+      />
       <div className={styles.filtersContainer}>
         <Checkbox
           id="hideBenchPlayers"
@@ -275,25 +258,24 @@ const PlayerShares: React.FC = () => {
           checked={hideBestBallPlayers}
           onChange={() => setHideBestBallPlayers(!hideBestBallPlayers)}
         /> */}
-      <Collapsible
-        title="More Filters"
-        defaultCollapsed={true}
-        onClear={() => {}}
-        showClear={false}
-        clearLabel="Clear"
-        className={styles.filtersCollapsible}
-        icon={<LuFilter />}
-      >
-        <PlayerSharesFilters
-          hasIDPlayers={hasIDPlayers}
-          hideIDPlayers={hideIDPlayers}
-          setHideIDPlayers={setHideIDPlayers}
-        />
-      </Collapsible>
+        <Collapsible
+          title="More Filters"
+          defaultCollapsed={true}
+          onClear={() => {}}
+          showClear={false}
+          clearLabel="Clear"
+          className={styles.filtersCollapsible}
+          icon={<LuFilter />}
+        >
+          <PlayerSharesFilters
+            hasIDPlayers={true}
+            hideIDPlayers={hideIDPlayers}
+            setHideIDPlayers={setHideIDPlayers}
+          />
+        </Collapsible>
       </div>
 
       {/* <label>Showing {numberOfSelectedTeams} teams</label> */}
-
 
       {(!playerSharesSearchTerm || playerSharesSearchTerm.length === 0) && (
         <>

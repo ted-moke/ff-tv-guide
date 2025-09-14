@@ -1,10 +1,8 @@
 import { useMemo } from "react";
 import { Player, OwnedPlayer } from "../nfl/nflTypes";
 import { FantasyTeam } from "../teams/teamTypes";
-import { useView } from "../view/ViewContext";
-import { getCurrentSeason } from "../../utils/seasonUtils";
 
-const IDPPositions = ["DB", "S", "CB", "DE", "EDR", "DL", "IL", "LB"];
+export const IDPPositions = ["DB", "S", "CB", "DE", "EDR", "DL", "IL", "LB"];
 
 // Define the order of positions
 const positionOrder = ["QB", "RB", "WR", "TE", "K", "DEF", ...IDPPositions];
@@ -56,48 +54,37 @@ const sortCopies = (a: OwnedPlayer, b: OwnedPlayer): number => {
   return a.leagueName.localeCompare(b.leagueName);
 };
 
-export const usePlayers = ({
-  includeOpponents = true,
-  hideHiddenTeams = false,
-  hideBenchPlayers = false,
-  hideIDPlayers = false,
-}: {
-  includeOpponents?: boolean;
-  hideHiddenTeams?: boolean;
+export type UsePlayerOptions = {
   hideBenchPlayers?: boolean;
   hideIDPlayers?: boolean;
-} = {}) => {
-  const {
-    userTeams,
-    userTeamsLoading,
-    userTeamsError,
-    opponentTeams,
-    opponentTeamsLoading,
-    opponentTeamsError,
-    visibleTeams,
-    visibleOpponentTeams,
-  } = useView();
+};
 
-  const teamsToUse = useMemo(() => {
-    if (hideHiddenTeams) {
-      return visibleTeams;
-    }
-    const currentSeason = getCurrentSeason();
-    return Object.values(userTeams[currentSeason]);
-  }, [visibleTeams, userTeams, hideHiddenTeams]);
+type UsePlayerProps = {
+  selfTeams: FantasyTeam[];
+  opponentTeams?: FantasyTeam[];
+  options?: UsePlayerOptions;
+};
 
-  const opponentTeamsToUse = useMemo(() => {
-    if (hideHiddenTeams) {
-      return visibleOpponentTeams;
-    }
-    return opponentTeams;
-  }, [visibleOpponentTeams, opponentTeams, hideHiddenTeams]);
+export const usePlayers = ({
+  options,
+  selfTeams,
+  opponentTeams,
+}: UsePlayerProps) => {
+  if (!options) {
+    options = {};
+  }
+  if (!options.hideBenchPlayers) {
+    options.hideBenchPlayers = false;
+  }
+  if (!options.hideIDPlayers) {
+    options.hideIDPlayers = false;
+  }
 
   let hasIDPlayers = false;
 
   const players: Player[] | null = useMemo(() => {
-    if (!teamsToUse || (includeOpponents && !opponentTeamsToUse)) {
-      return null;
+    if (!selfTeams) {
+      return [];
     }
 
     const playerMap = new Map<string, Player>();
@@ -111,7 +98,7 @@ export const usePlayers = ({
           if (IDPPositions.includes(player.position)) {
             hasIDPlayers = true;
 
-            if (hideIDPlayers) {
+            if (options.hideIDPlayers) {
               return;
             }
           }
@@ -126,7 +113,6 @@ export const usePlayers = ({
               copies: [],
             });
           }
-          
 
           const ownedPlayer: OwnedPlayer = {
             leagueName: team.leagueName,
@@ -140,7 +126,10 @@ export const usePlayers = ({
               | "bestBall",
             team: teamType,
           };
-          if (hideBenchPlayers && ownedPlayer.rosterSlotType === "bench") {
+          if (
+            options.hideBenchPlayers &&
+            ownedPlayer.rosterSlotType === "bench"
+          ) {
             return;
           }
           playerMap.get(key)!.copies.push(ownedPlayer);
@@ -148,12 +137,10 @@ export const usePlayers = ({
       });
     };
 
-    if (teamsToUse) {
-      processTeams(teamsToUse, "self");
-    }
+    processTeams(selfTeams, "self");
 
-    if (includeOpponents && opponentTeamsToUse) {
-      processTeams(opponentTeamsToUse, "opponent");
+    if (opponentTeams) {
+      processTeams(opponentTeams, "opponent");
     }
 
     // Sort copies for each player
@@ -163,18 +150,15 @@ export const usePlayers = ({
 
     return Array.from(playerMap.values()).sort(sortPlayers);
   }, [
-    teamsToUse,
-    opponentTeamsToUse,
-    hideHiddenTeams,
-    hideBenchPlayers,
-    hideIDPlayers,
+    selfTeams,
+    opponentTeams,
+    options.hideBenchPlayers,
+    options.hideIDPlayers,
     hasIDPlayers,
   ]);
 
   return {
     players,
-    isLoading: userTeamsLoading || opponentTeamsLoading,
-    error: userTeamsError || opponentTeamsError,
     hasIDPlayers,
   };
 };
@@ -195,23 +179,33 @@ export const getPlayersByTeam = (teamCodes: string[], players: Player[]) => {
 
   const filteredStarters = teamPlayers
     .filter((player) =>
-      player.copies.some((copy) => copy.rosterSlotType === "start" || copy.rosterSlotType === "bestBall")
+      player.copies.some(
+        (copy) =>
+          copy.rosterSlotType === "start" || copy.rosterSlotType === "bestBall"
+      )
     )
     .map((player) => ({
       ...player,
-      copies: player.copies.filter((copy) => copy.rosterSlotType === "start" || copy.rosterSlotType === "bestBall"),
+      copies: player.copies.filter(
+        (copy) =>
+          copy.rosterSlotType === "start" || copy.rosterSlotType === "bestBall"
+      ),
     }));
 
   const filteredOthers = teamPlayers
     .filter(
       (player) =>
-        player.copies.some((copy) => copy.rosterSlotType !== "start" && copy.rosterSlotType !== "bestBall") &&
-        player.copies.some((copy) => copy.team === "self")
+        player.copies.some(
+          (copy) =>
+            copy.rosterSlotType !== "start" &&
+            copy.rosterSlotType !== "bestBall"
+        ) && player.copies.some((copy) => copy.team === "self")
     )
     .map((player) => ({
       ...player,
       copies: player.copies.filter(
-        (copy) => copy.rosterSlotType !== "start" && copy.rosterSlotType !== "bestBall"
+        (copy) =>
+          copy.rosterSlotType !== "start" && copy.rosterSlotType !== "bestBall"
       ),
     }));
 

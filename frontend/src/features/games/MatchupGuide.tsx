@@ -1,6 +1,4 @@
-import React from "react";
 import styles from "./MatchupGuide.module.css";
-import { useMatchupPlayers } from "../players/useMatchupPlayers";
 import GameBucketGroup from "./GameBucketGroup";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
 import { Navigate } from "react-router-dom";
@@ -11,15 +9,17 @@ import { LeagueTicker } from "../league/LeagueTicker";
 import { LeagueCardsSection } from "../league/LeagueCards/LeagueCardsSection";
 import { useLeagueTickerVisibility } from "../league/useLeagueTickerVisibility";
 
-interface MatchupGuideProps {
-  selectedWeek: number;
-  setSelectedWeek: (week: number) => void;
-}
 
 // const hideAlertOnLoad = localStorage.getItem("hideAlertShip24") === "true";
 
-const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
-  const { isMobile } = useView();
+const MatchupGuide = () => {
+  const {
+    isMobile,
+    matchupPlayers,
+    matchupPlayersLoading,
+    matchupPlayersInitialized,
+    matchupPlayersError,
+  } = useView();
   const isTickerVisible = useLeagueTickerVisibility();
   const { isLoading: isAuthLoading } = useAuthContext();
   const {
@@ -27,20 +27,22 @@ const MatchupGuide: React.FC<MatchupGuideProps> = ({ selectedWeek }) => {
     needsConnect,
     needsAccount,
   } = useNeedsResources();
-  const { matchupPlayers, isLoading, initialized, error } =
-    useMatchupPlayers(selectedWeek);
   // const [hideAlert, setHideAlert] = useState(hideAlertOnLoad);
 
-  if (isLoading || needsConnectLoading || isAuthLoading) {
+  if (matchupPlayersLoading || needsConnectLoading || isAuthLoading) {
     return <LoadingSpinner />;
   }
 
-  if (error) {
-    console.error("Error in MatchupGuide:", error);
-    return <div>Error loading user teams: {(error as Error).message}</div>;
+  if (matchupPlayersError) {
+    console.error("Error in MatchupGuide:", matchupPlayersError);
+    return (
+      <div>
+        Error loading user teams: {(matchupPlayersError as Error).message}
+      </div>
+    );
   }
 
-  if (!matchupPlayers && initialized) {
+  if (!matchupPlayers && matchupPlayersInitialized) {
     return <div>No games scheduled for this week.</div>;
   }
 

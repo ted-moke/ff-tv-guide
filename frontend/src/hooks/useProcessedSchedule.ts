@@ -39,7 +39,7 @@ export interface ProcessedGameBucket {
   games: ProcessedGame[];
 }
 
-interface ProcessedGames {
+export interface ProcessedGames {
   weekNumber: number;
   games: {
     upcoming: ProcessedGameBucket[];

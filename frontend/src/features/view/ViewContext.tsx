@@ -14,6 +14,10 @@ import { useTeamVisibility } from "../teams/useTeamVisibility";
 import { CURRENT_SEASON } from "../../constants";
 import { useLeagueStats } from "../league/useLeagueStats";
 import nflSchedule from "../../assets/nfl-schedule-2025.json";
+import { useMatchupPlayers } from "../players/useMatchupPlayers";
+import { ProcessedGames } from "../../hooks/useProcessedSchedule";
+import { usePlayers } from "../players/usePlayers";
+import { Player } from "../nfl/nflTypes";
 
 export type ViewMode = "overview" | "matchup";
 export type SortOption = "division" | "players" | "name";
@@ -43,6 +47,12 @@ interface ViewContextType {
   opponentTeamsError: Error | null;
   userTeams: UserTeams;
   opponentTeams: FantasyTeam[];
+  // Players
+  players: Player[];
+  matchupPlayers: ProcessedGames | null;
+  matchupPlayersLoading: boolean;
+  matchupPlayersInitialized: boolean;
+  matchupPlayersError: Error | null;
   // Team Visibility
   visibleTeams: FantasyTeam[];
   visibleOpponentTeams: FantasyTeam[];
@@ -129,7 +139,7 @@ const parseGameTime = (date: string, time: string): Date => {
 
 // Helper function to find the first game of a given week
 const getFirstGameOfWeek = (weekNumber: number): Date | null => {
-  const week = nflSchedule.weeks.find(w => w.weekNumber === weekNumber);
+  const week = nflSchedule.weeks.find((w) => w.weekNumber === weekNumber);
   if (!week || !week.games.length) {
     return null;
   }
@@ -178,7 +188,6 @@ const hasWeekStarted = () => {
   return true;
 };
 
-
 export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedConference, setSelectedConference] = useState<string | null>(
@@ -218,6 +227,35 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     userTeams: teamMap,
   });
 
+  const {
+    visibleTeams,
+    visibleOpponentTeams,
+    hideTeam,
+    showTeam,
+    hideAllTeams,
+    showAllTeams,
+    hideOpponentTeam,
+    showOpponentTeam,
+  } = useTeamVisibility({
+    userTeams: fetchedUserTeams?.teamsBySeason?.[CURRENT_SEASON] || [],
+    opponentTeams: fetchedOpponentTeams || [],
+  });
+
+  const { players } = usePlayers({
+    selfTeams: visibleTeams,
+    opponentTeams: visibleOpponentTeams,
+  });
+
+  const {
+    matchupPlayers,
+    isLoading: matchupPlayersLoading,
+    initialized: matchupPlayersInitialized,
+    error: matchupPlayersError,
+  } = useMatchupPlayers({
+    selectedWeek: selectedWeek || 0,
+    players: players || [],
+  });
+
   const scrollToElement = (elementId: string, highlight = false) => {
     const element = document.getElementById(elementId);
 
@@ -233,27 +271,6 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     }
   };
 
-  // const addTeamMetadata = useCallback(
-  //   (teams: FantasyTeam[], isUserTeams = true): FantasyTeam[] => {
-  //     const storedTeams: FantasyTeam[] = JSON.parse(
-  //       localStorage.getItem(isUserTeams ? "userTeams" : "opponentTeams") ||
-  //         "[]"
-  //     );
-
-  //     const teamsWithMetadata: FantasyTeam[] = teams.map((team) => ({
-  //       ...team,
-  //       visibilityType:
-  //         (storedTeams &&
-  //           storedTeams.find((t) => t.leagueId === team.leagueId)
-  //             ?.visibilityType) ||
-  //         "show",
-  //     }));
-
-  //     // Add metadata to teams that aren't on the server
-  //     return teamsWithMetadata;
-  //   },
-  //   []
-  // );
 
   useEffect(() => {
     const checkScreenSize = () => {
@@ -270,29 +287,6 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
 
-  // const userTeamsWithMetadata = useMemo(() => {
-  //   if (!fetchedUserTeams) return [];
-  //   return addTeamMetadata(fetchedUserTeams);
-  // }, [fetchedUserTeams, addTeamMetadata]);
-
-  // const opponentTeamsWithMetadata = useMemo(() => {
-  //   if (!fetchedOpponentTeams) return [];
-  //   return addTeamMetadata(fetchedOpponentTeams, false);
-  // }, [fetchedOpponentTeams, addTeamMetadata]);
-
-  const {
-    visibleTeams,
-    visibleOpponentTeams,
-    hideTeam,
-    showTeam,
-    hideAllTeams,
-    showAllTeams,
-    hideOpponentTeam,
-    showOpponentTeam,
-  } = useTeamVisibility({
-    userTeams: fetchedUserTeams?.teamsBySeason?.[CURRENT_SEASON] || [],
-    opponentTeams: fetchedOpponentTeams || [],
-  });
 
   const hasWeekStartedValue = useMemo(() => hasWeekStarted(), []);
 
@@ -320,6 +314,12 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     setTeamVisibility,
     hideEmptyTeams,
     setHideEmptyTeams,
+    // Players
+    players,
+    matchupPlayers,
+    matchupPlayersLoading,
+    matchupPlayersInitialized,
+    matchupPlayersError,
     // Player Shares specific state
     playerSharesSortBy,
     setPlayerSharesSortBy,
