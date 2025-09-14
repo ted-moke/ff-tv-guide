@@ -145,7 +145,7 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     data: fetchedOpponentTeams,
     isLoading: opponentTeamsLoading,
     error: opponentTeamsError,
-  } = useOpponentTeams({ enabled: true });
+  } = useOpponentTeams({ enabled: true, teamPlayedStatusMap });
 
   const leagueStats = useLeagueStats({
     userTeams: teamMap,
