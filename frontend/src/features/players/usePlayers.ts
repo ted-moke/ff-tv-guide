@@ -1,6 +1,8 @@
 import { useMemo } from "react";
 import { Player, OwnedPlayer } from "../nfl/nflTypes";
+import { PlayedStatus } from "../../types/shared";
 import { FantasyTeam } from "../teams/teamTypes";
+import { TeamPlayedStatusMap } from "../nfl/getTeamPlayedStatusMap";
 
 export const IDPPositions = ["DB", "S", "CB", "DE", "EDR", "DL", "IL", "LB"];
 
@@ -63,12 +65,14 @@ type UsePlayerProps = {
   selfTeams: FantasyTeam[];
   opponentTeams?: FantasyTeam[];
   options?: UsePlayerOptions;
+  teamPlayedStatusMap: TeamPlayedStatusMap | null;
 };
 
 export const usePlayers = ({
   options,
   selfTeams,
   opponentTeams,
+  teamPlayedStatusMap,
 }: UsePlayerProps) => {
   if (!options) {
     options = {};
@@ -102,6 +106,18 @@ export const usePlayers = ({
               return;
             }
           }
+          let playedStatus: PlayedStatus = 'unknown';
+          if (teamPlayedStatusMap) {
+            if (teamPlayedStatusMap.completed.has(player.team)) {
+              playedStatus = 'completed';
+            } else if (teamPlayedStatusMap.inProgress.has(player.team)) {
+              playedStatus = 'inProgress';
+            }
+            if (teamPlayedStatusMap.upcoming.has(player.team)) {
+              playedStatus = 'upcoming';
+            }
+          }
+
           // if there's two players with the same name AND position, this could break
           // but it's unlikely. TODO fix this
           const key = `${player.name}-${player.position}`;
@@ -111,8 +127,10 @@ export const usePlayers = ({
               team: player.team,
               position: player.position,
               copies: [],
+              playedStatus,
             });
           }
+
 
           const ownedPlayer: OwnedPlayer = {
             leagueName: team.leagueName,

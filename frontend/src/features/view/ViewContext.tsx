@@ -18,6 +18,8 @@ import { ProcessedGames } from "../../hooks/useProcessedSchedule";
 import { usePlayers } from "../players/usePlayers";
 import { Player } from "../nfl/nflTypes";
 import { getCurrentWeek, hasWeekStarted } from "../../utils/weekUtils";
+import { useWeeklySchedule } from "../../hooks/useWeeklySchedule";
+import { getTeamPlayedStatusMap } from "../nfl/getTeamPlayedStatusMap";
 
 export type ViewMode = "overview" | "matchup";
 export type SortOption = "division" | "players" | "name";
@@ -102,7 +104,6 @@ interface ViewProviderProps {
   children: ReactNode;
 }
 
-
 export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [selectedConference, setSelectedConference] = useState<string | null>(
@@ -125,13 +126,21 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
   const [selectedWeek, setSelectedWeek] = useState(getCurrentWeek());
   const [isMobile, setIsMobile] = useState(false);
 
+  
+  
+  const weeklySchedule = useWeeklySchedule(selectedWeek || 0);
+
+  const teamPlayedStatusMap = useMemo(() => {
+    return getTeamPlayedStatusMap(weeklySchedule);
+  }, [weeklySchedule]);
+
   const {
     data: fetchedUserTeams,
     isLoading: userTeamsLoading,
     isPending: userTeamsPending,
     error: userTeamsError,
     teamMap,
-  } = useUserTeams();
+  } = useUserTeams({ teamPlayedStatusMap });
   const {
     data: fetchedOpponentTeams,
     isLoading: opponentTeamsLoading,
@@ -141,6 +150,8 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
   const leagueStats = useLeagueStats({
     userTeams: teamMap,
   });
+
+
 
   const {
     visibleTeams,
@@ -159,6 +170,7 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
   const { players } = usePlayers({
     selfTeams: visibleTeams,
     opponentTeams: visibleOpponentTeams,
+    teamPlayedStatusMap,
   });
 
   const {
@@ -167,7 +179,7 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     initialized: matchupPlayersInitialized,
     error: matchupPlayersError,
   } = useMatchupPlayers({
-    selectedWeek: selectedWeek || 0,
+    weeklySchedule,
     players: players || [],
   });
 
@@ -186,7 +198,6 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     }
   };
 
-
   useEffect(() => {
     const checkScreenSize = () => {
       setIsMobile(window.innerWidth < 768);
@@ -201,7 +212,6 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     // Cleanup the event listener on component unmount
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
-
 
   const hasWeekStartedValue = useMemo(() => hasWeekStarted(), []);
 

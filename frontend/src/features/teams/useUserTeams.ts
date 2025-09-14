@@ -4,6 +4,8 @@ import { FantasyTeam } from "./teamTypes";
 import { API_URL } from "../../config";
 import { CURRENT_SEASON } from "../../constants";
 import { UserTeams } from "../view/ViewContext";
+import { TeamPlayedStatusMap } from "../nfl/getTeamPlayedStatusMap";
+import { populatePlayerPlayedStatus } from "./populatePlayerPlayedStatus";
 
 const updateStaleTeams = async (teams: FantasyTeam[], queryClient: any) => {
   const teamsToUpdate = teams.filter((team) => team.needsUpdate);
@@ -33,9 +35,11 @@ const updateStaleTeams = async (teams: FantasyTeam[], queryClient: any) => {
 export const useUserTeams = ({
   seasonStart = CURRENT_SEASON,
   seasonEnd = null,
+  teamPlayedStatusMap,
 }: {
   seasonStart?: number | null;
   seasonEnd?: number | null;
+  teamPlayedStatusMap?: TeamPlayedStatusMap | null;
 } = {}) => {
   const { backendUser, user, isLoading: isAuthLoading } = useAuthContext();
   const queryClient = useQueryClient();
@@ -47,7 +51,8 @@ export const useUserTeams = ({
     teamsBySeason: Record<number, FantasyTeam[]>;
     teamsNeedingUpdate: FantasyTeam[];
   }>({
-    refetchInterval: (query) => (query.state.fetchStatus === 'fetching' ? false : 60_000),
+    refetchInterval: (query) =>
+      query.state.fetchStatus === "fetching" ? false : 60_000,
     refetchIntervalInBackground: false,
     queryKey: ["userTeams", backendUser?.uid],
     queryFn: async (): Promise<{
@@ -87,6 +92,11 @@ export const useUserTeams = ({
         hasTeamsToUpdate = teamsNeedingUpdate.length > 0;
 
         console.log("teamsNeedingUpdate", teamsNeedingUpdate);
+        if (teamPlayedStatusMap) {
+          teamsBySeason[CURRENT_SEASON] = teamsBySeason[CURRENT_SEASON].map(
+            (team) => populatePlayerPlayedStatus(team, teamPlayedStatusMap)
+          );
+        }
 
         // Call the abstracted updateStaleTeams function in the background
         updateStaleTeams(teamsNeedingUpdate, queryClient);
@@ -105,10 +115,13 @@ export const useUserTeams = ({
   let teamMap: UserTeams = {};
   if (teamsBySeason) {
     for (let [season, teams] of Object.entries(teamsBySeason)) {
-      teamMap[season] = (teams as FantasyTeam[]).reduce((acc: Record<string, FantasyTeam>, team: FantasyTeam) => {
-        acc[team.leagueId] = team;
-        return acc;
-      }, {} as Record<string, FantasyTeam>);
+      teamMap[season] = (teams as FantasyTeam[]).reduce(
+        (acc: Record<string, FantasyTeam>, team: FantasyTeam) => {
+          acc[team.leagueId] = team;
+          return acc;
+        },
+        {} as Record<string, FantasyTeam>
+      );
     }
   }
 
@@ -125,7 +138,8 @@ export const useUserTeams = ({
 
 export const useOpponentTeams = ({
   enabled = true,
-}: { enabled?: boolean } = {}) => {
+  teamPlayedStatusMap,
+}: { enabled?: boolean; teamPlayedStatusMap?: TeamPlayedStatusMap | null } = {}) => {
   const { user } = useAuthContext();
 
   return useQuery<FantasyTeam[]>({
@@ -149,6 +163,9 @@ export const useOpponentTeams = ({
         throw new Error(`Failed to fetch opponent teams: ${errorText}`);
       }
       const data = await response.json();
+      if (teamPlayedStatusMap) {
+        data.opponents = data.opponents.map((team: FantasyTeam) => populatePlayerPlayedStatus(team, teamPlayedStatusMap));
+      }
       return data.opponents;
     },
     enabled: enabled && !!user, // Only run the query if there's a user

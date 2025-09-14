@@ -1,18 +1,23 @@
 import { Player } from "../nfl/nflTypes";
-import { useWeeklySchedule } from "../../hooks/useWeeklySchedule";
+import {
+  BucketedGames,
+} from "../../hooks/useWeeklySchedule";
 import { useProcessedSchedule } from "../../hooks/useProcessedSchedule";
 
 export const useMatchupPlayers = ({
-  selectedWeek,
   players,
+  weeklySchedule,
 }: {
-  selectedWeek: number;
   players: Player[];
+  weeklySchedule: BucketedGames | null;
 }) => {
-  const weeklySchedule = useWeeklySchedule(selectedWeek);
   const isLoading = !players || !weeklySchedule;
-  const error =
-    !weeklySchedule && !isLoading ? new Error("Failed to load schedule") : null;
+
+  let error = null;
+
+  if (!weeklySchedule && !isLoading) {
+    error = new Error("Failed to load schedule");
+  }
 
   const processedSchedule = useProcessedSchedule(weeklySchedule, players);
 

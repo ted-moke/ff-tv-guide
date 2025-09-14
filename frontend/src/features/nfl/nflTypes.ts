@@ -1,3 +1,4 @@
+import { PlayedStatus } from "../../types/shared";
 export interface NFLGame {
   date: string;
   time: string;
@@ -23,10 +24,12 @@ export interface OwnedPlayer {
   rosterSlotType: 'start' | 'bench' | 'bestBall';
   team: 'self' | 'opponent';
 }
+
 export interface Player {
   name: string;
   team: string;
   position: string;
+  playedStatus: PlayedStatus;
   copies: OwnedPlayer[];
 }
 

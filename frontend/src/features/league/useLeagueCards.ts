@@ -1,6 +1,5 @@
 import { useState, useMemo } from "react";
 import { useView } from "../view/ViewContext";
-import { CURRENT_SEASON } from "../../constants";
 import { FantasyTeam } from "../teams/teamTypes";
 
 export interface LeagueCardData {
@@ -9,18 +8,19 @@ export interface LeagueCardData {
   winning: boolean;
   losing: boolean;
   tied: boolean;
+  opponent: FantasyTeam | null;
 }
 
 export const useLeagueCards = () => {
-  const { userTeams } = useView();
+  const { visibleTeams, visibleOpponentTeams, matchupPlayers } = useView();
   const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
 
   const leagueCardsData = useMemo((): LeagueCardData[] => {
-    if (!userTeams || !userTeams[CURRENT_SEASON]) {
+    if (!matchupPlayers) {
       return [];
     }
 
-    return Object.values(userTeams[CURRENT_SEASON]).map((team) => {
+    return Object.values(visibleTeams).map((team) => {
       const winning =
         team.weekPoints != null &&
         team.weekPointsAgainst != null &&
@@ -37,9 +37,13 @@ export const useLeagueCards = () => {
         winning,
         losing,
         tied,
+        opponent:
+          visibleOpponentTeams.find(
+            (opponent) => opponent.leagueMasterId === team.leagueMasterId
+          ) || null,
       };
     });
-  }, [userTeams, expandedCardId]);
+  }, [visibleTeams, expandedCardId, visibleOpponentTeams]);
 
   const toggleCardExpansion = (teamId: string) => {
     setExpandedCardId((prev) => (prev === teamId ? null : teamId));

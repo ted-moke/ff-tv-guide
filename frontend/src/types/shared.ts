@@ -1,4 +1,4 @@
-// Shared types that can be used across frontend and backend
+  // Shared types that can be used across frontend and backend
 
 export interface Player {
   name: string;
@@ -6,7 +6,10 @@ export interface Player {
   team: string;
   position: string;
   rosterSlotType: "start" | "bench" | "ir" | "taxi" | "reserve" | "bestBall";
+  playedStatus: PlayedStatus;
 }
+
+export type PlayedStatus = 'completed' | 'inProgress' | 'upcoming' | 'unknown';
 
 export interface TeamStats {
   wins: number;
@@ -15,6 +18,7 @@ export interface TeamStats {
   pointsFor: number;
   averagePointsFor: number;
   pointsAgainst: number;
+  playerStatusCount?: Record<PlayedStatus, number>;
 }
 
 export interface Team {
@@ -77,6 +81,7 @@ export interface UserTeam {
 export interface FantasyTeam extends Team {
   needsUpdate: boolean; // Frontend schema only
   visibilityType: "show" | "hide" | "archive";
+  playedStatus: PlayedStatus;
 }
 
 export interface TeamHistoryData {
