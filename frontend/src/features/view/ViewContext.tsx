@@ -13,11 +13,11 @@ import { useUserTeams } from "../teams/useUserTeams";
 import { useTeamVisibility } from "../teams/useTeamVisibility";
 import { CURRENT_SEASON } from "../../constants";
 import { useLeagueStats } from "../league/useLeagueStats";
-import nflSchedule from "../../assets/nfl-schedule-2025.json";
 import { useMatchupPlayers } from "../players/useMatchupPlayers";
 import { ProcessedGames } from "../../hooks/useProcessedSchedule";
 import { usePlayers } from "../players/usePlayers";
 import { Player } from "../nfl/nflTypes";
+import { getCurrentWeek, hasWeekStarted } from "../../utils/weekUtils";
 
 export type ViewMode = "overview" | "matchup";
 export type SortOption = "division" | "players" | "name";
@@ -102,91 +102,6 @@ interface ViewProviderProps {
   children: ReactNode;
 }
 
-const getCurrentWeek = () => {
-  const now = new Date();
-  const easternTime = new Date(
-    now.toLocaleString("en-US", { timeZone: "America/New_York" })
-  );
-  const seasonStart = new Date("2025-09-01T00:00:00-04:00"); // First game of 2025 season
-  const THREE_DAYS = 3 * 24 * 60 * 60 * 1000;
-
-  // If the current date is more than 3 days before the season start, return null
-  if (easternTime < new Date(seasonStart.getTime() - THREE_DAYS)) {
-    return null;
-  }
-
-  if (easternTime < seasonStart) {
-    return 1;
-  }
-
-  const weeksPassed = Math.floor(
-    (easternTime.getTime() - seasonStart.getTime()) / (7 * 24 * 60 * 60 * 1000)
-  );
-
-  if (weeksPassed >= 19) {
-    return null;
-  }
-
-  return Math.min(Math.max(weeksPassed + 1, 1), 18); // Ensure week is between 1 and 18
-};
-
-// Helper function to parse game time from schedule data
-const parseGameTime = (date: string, time: string): Date => {
-  // Create date in Eastern timezone
-  const gameDate = new Date(`${date}T${time}:00-04:00`);
-  return gameDate;
-};
-
-// Helper function to find the first game of a given week
-const getFirstGameOfWeek = (weekNumber: number): Date | null => {
-  const week = nflSchedule.weeks.find((w) => w.weekNumber === weekNumber);
-  if (!week || !week.games.length) {
-    return null;
-  }
-
-  // Find the earliest game of the week
-  let earliestGame = week.games[0];
-  for (const game of week.games) {
-    const gameTime = parseGameTime(game.date, game.time);
-    const earliestTime = parseGameTime(earliestGame.date, earliestGame.time);
-    if (gameTime < earliestTime) {
-      earliestGame = game;
-    }
-  }
-
-  return parseGameTime(earliestGame.date, earliestGame.time);
-};
-
-const hasWeekStarted = () => {
-  const now = new Date();
-  const easternTime = new Date(
-    now.toLocaleString("en-US", { timeZone: "America/New_York" })
-  );
-  const day = easternTime.getDay();
-
-  // If it's Tuesday (2) or Wednesday (3), the new week hasn't started yet
-  if (day === 2 || day === 3) {
-    return false;
-  }
-
-  // If it's Thursday (4), check if the first game of the current week has started
-  if (day === 4) {
-    const currentWeek = getCurrentWeek();
-    if (!currentWeek) {
-      return false;
-    }
-
-    const firstGameTime = getFirstGameOfWeek(currentWeek);
-    if (!firstGameTime) {
-      return false;
-    }
-
-    return easternTime >= firstGameTime;
-  }
-
-  // For all other days (Friday-Sunday), the week has started
-  return true;
-};
 
 export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
