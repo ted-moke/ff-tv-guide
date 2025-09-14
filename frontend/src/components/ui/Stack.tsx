@@ -12,7 +12,7 @@ export const Stack = ({
   children: React.ReactNode;
   direction?: "column" | "row";
   gap?: number;
-  align?: "start" | "center" | "end";
+  align?: "start" | "center" | "end" | "baseline";
   justify?: "start" | "center" | "end" | "between" | "around" | "evenly";
   className?: string;
   onClick?: () => void;

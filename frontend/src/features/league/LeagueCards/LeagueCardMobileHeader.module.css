@@ -1,0 +1,115 @@
+@import "../../../styles/variables.css";
+@import "../../../styles/utils.css";
+
+/* Header wrapper styles */
+.leagueCardWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size0_5);
+  width: 100%;
+  align-items: flex-end;
+}
+
+/* Content container styles */
+.leagueCardContent {
+  width: 100%;
+}
+
+/* Top section styles */
+.leagueCardTop {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.leagueCardTop h3 { 
+    margin: 0;
+}
+
+/* Text styles */
+.leagueName {
+  font-size: var(--font-size-medium);
+  font-weight: bold;
+  margin: 0;
+  color: var(--text-color);
+  align-self: flex-start;
+}
+
+.leagueRecord {
+  font-size: var(--font-size-small);
+  font-weight: bold;
+  color: var(--text-color-muted);
+  line-height: 1;
+  margin: 0;
+}
+
+/* Bottom section styles */
+.leagueCardBottom {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--size0_5);
+  width: 100%;
+}
+
+
+/* Points display styles */
+.weekPoints {
+  font-size: var(--font-size-large);
+  font-weight: bold;
+  margin: 0;
+  line-height: 1;
+}
+
+.weekPointsAgainst {
+  font-size: var(--font-size-medium);
+  font-weight: bold;
+  margin: 0;
+  color: var(--text-color-muted);
+  line-height: 1;
+}
+
+.weekPointsSeparator {
+  font-size: var(--font-size-small);
+  color: var(--text-color-muted);
+  font-weight: bold;
+  line-height: 1;
+}
+
+/* Average points styles */
+.avgPointsLabel {
+  font-size: var(--font-size-small);
+  color: var(--text-color-muted);
+  font-weight: bold;
+}
+
+.avgPoints {
+  font-size: var(--font-size-medium);
+  font-weight: bold;
+  color: var(--text-color);
+}
+
+.avgPointsHeader {
+    font-size: var(--font-size-small);
+    color: var(--text-color-muted);
+    font-weight: normal;
+}
+
+/* Win percentage color styles for header */
+.winPercentageGood .leagueCardContentNoWeekStarted .leagueRecord,
+.winning .weekPoints {
+  color: var(--secondary-color);
+}
+
+.winPercentageBad .leagueCardContentNoWeekStarted .leagueRecord,
+.losing .weekPoints {
+  color: var(--color-red);
+}
+
+.winPercentageNeutral .leagueCardContentNoWeekStarted .leagueRecord,
+.tied .weekPoints {
+  color: var(--text-color-muted);
+}

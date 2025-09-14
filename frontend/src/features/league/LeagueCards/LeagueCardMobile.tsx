@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./LeagueCardMobile.module.css";
 import { LeagueCardData } from "../useLeagueCards";
+import { LeagueCardMobileHeader } from "./LeagueCardMobileHeader";
 
 interface LeagueCardMobileProps {
   cardData: LeagueCardData;
@@ -28,17 +29,23 @@ export const LeagueCardMobile: React.FC<LeagueCardMobileProps> = ({
   const averagePointsFor = team.stats.averagePointsFor || 0;
   const winPercentage = totalGames > 0 ? wins / totalGames : 0;
 
+  console.log(cardData);
+
+  const recordStr = `${wins}-${losses}${ties ? `-${ties}` : ""}`;
+
+  const winPctEval =
+    winPercentage > 0.5
+      ? "winPercentageGood"
+      : winPercentage < 0.5
+      ? "winPercentageBad"
+      : "winPercentageNeutral";
+
+  const winningEval = winning ? "winning" : losing ? "losing" : "tied";
   return (
     <div
       className={`${styles.leagueCard} ${isExpanded ? styles.expanded : ""} ${
-        winning ? styles.winning : losing ? styles.losing : styles.tied
-      } ${
-        winPercentage > 0.5
-          ? styles.winPercentageGood
-          : winPercentage < 0.5
-          ? styles.winPercentageBad
-          : styles.winPercentageNeutral
-      }`}
+        styles[winningEval]
+      } ${styles[winPctEval]}`}
       id={`league-${team.id}`}
     >
       <div
@@ -47,50 +54,14 @@ export const LeagueCardMobile: React.FC<LeagueCardMobileProps> = ({
         onClick={handleCardClick}
         aria-expanded={isExpanded}
       >
-        <div className={styles.leagueCardWrapper}>
-          {hasWeekStarted ? (
-            <div
-              className={`${styles.leagueCardContent} ${styles.leagueCardContentWeekStarted}`}
-            >
-              <div
-                className={`${styles.leagueCardTop} ${styles.leagueCardTopWeekStarted}`}
-              >
-                <h3 className={styles.leagueName}>{team.shortLeagueName}</h3>
-                <h3 className={styles.leagueRecord}>
-                  {wins}-{losses}
-                  {team.stats.ties ? `-${team.stats.ties}` : ""}
-                </h3>
-              </div>
-              <div className={styles.leagueCardBottom}>
-                <p className={styles.weekPoints}>
-                  {team.weekPoints?.toFixed(1) || "0.0"}
-                </p>
-                <span className={styles.weekPointsSeparator}>v</span>
-                <p className={styles.weekPointsAgainst}>
-                  {team.weekPointsAgainst?.toFixed(1) || "0.0"}
-                </p>
-              </div>
-            </div>
-          ) : (
-            <div
-              className={`${styles.leagueCardContent} ${styles.leagueCardContentNoWeekStarted}`}
-            >
-              <div className={styles.leagueCardTop}>
-                <h3 className={styles.leagueName}>{team.shortLeagueName}</h3>
-                <h3 className={styles.leagueRecord}>
-                  {wins}-{losses}
-                  {team.stats.ties ? `-${team.stats.ties}` : ""}
-                </h3>
-              </div>
-              <div className={styles.leagueCardBottom}>
-                <p className={styles.avgPointsLabel}>Avg</p>
-                <p className={styles.avgPoints}>
-                  {team.stats.averagePointsFor?.toFixed(2) || "0.00"}
-                </p>
-              </div>
-            </div>
-          )}
-        </div>
+        <LeagueCardMobileHeader
+          hasWeekStarted={hasWeekStarted}
+          isCollapsed={isExpanded}
+          team={team}
+          recordStr={recordStr}
+          winPctEval={winPctEval}
+          winningEval={winningEval}
+        />
       </div>
       {isExpanded && (
         <>
@@ -99,12 +70,7 @@ export const LeagueCardMobile: React.FC<LeagueCardMobileProps> = ({
             <div className={styles.expandedStats}>
               <div className={`${styles.statItem} ${styles.recordItem}`}>
                 <span className={styles.statLabel}>Record</span>
-                <span
-                  className={styles.statValue}
-                >
-                  {wins}-{losses}
-                  {team.stats.ties ? `-${team.stats.ties}` : ""}
-                </span>
+                <span className={styles.statValue}>{recordStr}</span>
               </div>
               <div className={styles.statItem}>
                 <span className={styles.statLabel}>Avg Pts</span>

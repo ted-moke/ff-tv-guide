@@ -18,50 +18,10 @@
   cursor: pointer;
 }
 
-.leagueCardWrapper {
-  display: flex;
-  flex-direction: column;
-  gap: var(--size0_5);
-  width: 100%;
-  align-items: flex-end;
-}
-
-.leagueCardContent {
-  display: flex;
-  flex-direction: column;
-  gap: var(--size0_5);
-  width: 100%;
-  align-items: flex-end;
-}
-
-
-.leagueName {
-  font-size: var(--font-size-medium);
-  font-weight: bold;
-  margin: 0;
-  color: var(--text-color);
-  align-self: flex-start;
-}
-
-.leagueRecord {
-  font-size: var(--font-size-small);
-  font-weight: bold;
-  color: var(--text-color-muted);
-  line-height: 1;
-  margin: 0;
-}
-
 .weekPoints {
   font-size: var(--font-size-large);
   font-weight: bold;
   margin: 0;
-}
-
-.weekPointsAgainst {
-  font-size: var(--font-size-small);
-  font-weight: bold;
-  margin: 0;
-  color: var(--text-color-muted);
 }
 
 .winning .weekPoints {
@@ -114,57 +74,40 @@
 }
 
 /* Mobile-specific styles */
-.leagueCardTop {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.leagueCardBottom {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: baseline;
-  gap: var(--size0_5);
-  width: 100%;
-}
-
-.weekPoints, .weekPointsAgainst, .weekPointsSeparator {
-  line-height: 1;
-}
-
-.weekPointsSeparator {
-  font-size: var(--font-size-small);
-  color: var(--text-color-muted);
-  font-weight: bold;
-}
-
-.avgPointsLabel {
-  font-size: var(--font-size-small);
-  color: var(--text-color-muted);
-  font-weight: bold;
-}
-
-.avgPoints {
-  font-size: var(--font-size-medium);
-  font-weight: bold;
-  color: var(--text-color);
-}
 
 
-.winPercentageGood .expandedStats .recordItem .statValue,
-.winPercentageGood  .leagueCardContentNoWeekStarted .leagueRecord {
+.winPercentageGood .expandedStats .recordItem .statValue {
   color: var(--secondary-color);
 }
 
-.winPercentageBad .expandedStats .recordItem .statValue,
-.winPercentageBad .leagueCardContentNoWeekStarted .leagueRecord {
+.winPercentageBad .expandedStats .recordItem .statValue {
   color: var(--color-red);
 }
 
-.winPercentageNeutral .expandedStats .recordItem .statValue,
-.winPercentageNeutral .leagueCardContentNoWeekStarted .leagueRecord {
+.winPercentageNeutral .expandedStats .recordItem .statValue {
   color: var(--text-color-muted);
+}
+
+/* Additional component styles */
+
+/* Action buttons (commented out in component but may be used later) */
+.leagueActions {
+  display: flex;
+  gap: var(--size1);
+  margin-top: var(--size1);
+}
+
+.actionButton {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--size0_5);
+  padding: var(--size0_5) var(--size1);
+  font-size: var(--font-size-small);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.actionButton:hover {
+  background-color: var(--primary-color-dark);
 }
