@@ -5,7 +5,7 @@
 .leagueCard {
   background-color: var(--background-color-offset);
   border-radius: var(--size0_5);
-  padding: var(--size1);
+  padding: var(--size0_5) var(--size1);
   display: flex;
   flex-direction: column;
   cursor: pointer;

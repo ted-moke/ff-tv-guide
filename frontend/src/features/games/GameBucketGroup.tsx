@@ -58,7 +58,7 @@ const GameBucketGroup: React.FC<GameBucketGroupProps> = ({
             aria-label={`Toggle ${bucket.day} ${bucket.startingHour} games`}
           >
             <h4>
-              {bucket.day} {bucket.startingHour}
+              {bucket.day} {bucket.startingHour} {bucket.games.length > 1 ? "- " + bucket.games.length + " games" : ""}
             </h4>
             <LuChevronDown
               color="var(--text-color)"

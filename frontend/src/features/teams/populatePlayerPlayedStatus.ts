@@ -19,6 +19,9 @@ export const populatePlayerPlayedStatus = (
     unknown: 0,
   };
   team.playerData.forEach((player) => {
+    if (player.rosterSlotType === "bench") {
+      return;
+    }
     if (teamPlayedStatusMap.completed.has(player.team)) {
       team.stats.playerStatusCount!.completed++;
       player.playedStatus = "completed";
