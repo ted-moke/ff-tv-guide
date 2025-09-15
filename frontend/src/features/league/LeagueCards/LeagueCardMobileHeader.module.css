@@ -45,6 +45,10 @@
   margin: 0;
 }
 
+.leagueCardCenter {
+  flex: 2;
+}
+
 /* Bottom section styles */
 .leagueCardBottom {
   display: flex;
@@ -55,17 +59,21 @@
   width: 100%;
 }
 
+.leagueCardSide {
+  padding-top: var(--size0_25)
+}
+
 
 /* Points display styles */
 .weekPoints {
-  font-size: var(--font-size-m_l);
+  font-size: var(--font-size-large);
   font-weight: bold;
   margin: 0;
   line-height: 1;
 }
 
 .weekPointsAgainst {
-  font-size: var(--font-size-medium);
+  font-size: var(--font-size-m_l);
   font-weight: bold;
   margin: 0;
   color: var(--text-color-muted);
@@ -80,6 +88,7 @@
 }
 
 .playerCountWrapper p {
+  font-size: var(--font-size-medium);
   color: var(--text-color-muted);
 }
 
