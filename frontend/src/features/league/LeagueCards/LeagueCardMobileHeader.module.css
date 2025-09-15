@@ -73,7 +73,7 @@
 }
 
 .weekPointsAgainst {
-  font-size: var(--font-size-m_l);
+  font-size: var(--font-size-medium);
   font-weight: bold;
   margin: 0;
   color: var(--text-color-muted);
@@ -83,7 +83,7 @@
 .weekPointsSeparator {
   font-size: var(--font-size-small);
   color: var(--text-color-muted);
-  font-weight: bold;
+  /* font-weight: bold; */
   line-height: 1;
 }
 
@@ -124,5 +124,17 @@
 
 .winPercentageNeutral .leagueCardContentNoWeekStarted .leagueRecord,
 .tied .weekPoints {
+  color: var(--text-color-muted);
+}
+
+.statusCountUpcoming p {
+  color: var(--primary-color);
+}
+
+.statusCountInProgress p {
+  color: var(--primary-color);
+}
+
+.statusCountCompleted p {
   color: var(--text-color-muted);
 }

@@ -36,7 +36,7 @@ export const FantasyTeamOption = ({
         className={styles["fantasy-team-item"]}
         onClick={handleToggleLeagueSelected}
       >
-        <Stack direction="row" align="center" justify="between">
+        <Stack direction="row" align="center" justify="space-between">
             <p>{team.leagueName}</p>
           {allHidden && <small className="muted">Hidden</small>}
           {opponentOnly && <small className="muted">Opponent Only</small>}
