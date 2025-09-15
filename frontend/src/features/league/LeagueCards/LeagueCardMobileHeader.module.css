@@ -58,7 +58,7 @@
 
 /* Points display styles */
 .weekPoints {
-  font-size: var(--font-size-large);
+  font-size: var(--font-size-m_l);
   font-weight: bold;
   margin: 0;
   line-height: 1;
@@ -77,6 +77,10 @@
   color: var(--text-color-muted);
   font-weight: bold;
   line-height: 1;
+}
+
+.playerCountWrapper p {
+  color: var(--text-color-muted);
 }
 
 /* Average points styles */

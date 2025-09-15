@@ -8,6 +8,7 @@ export const LeagueCardMobileHeader = ({
   hasWeekStarted,
   isCollapsed,
   team,
+  opponent,
   recordStr,
   winPctEval,
   winningEval,
@@ -15,6 +16,7 @@ export const LeagueCardMobileHeader = ({
   hasWeekStarted: boolean;
   isCollapsed: boolean;
   team: FantasyTeam;
+  opponent: FantasyTeam;
   recordStr: string;
   winPctEval: string;
   winningEval: string;
@@ -28,26 +30,27 @@ export const LeagueCardMobileHeader = ({
       {hasWeekStarted ? (
         <Stack
           direction="row"
-          justify="between"
+          justify="space-between"
+          align="center"
           className={`${styles.leagueCardContent} ${styles.leagueCardContentWeekStarted}`}
         >
           <Stack
-            className={styles.leagueCardLeft}
+            className={`${styles.leagueCardSide} ${styles.playerCountWrapper}`}
             direction="row"
             align="center"
             justify="center"
           >
             <Stack align="center" justify="center" gap={0.25}>
-              <p>{team.stats.playerStatusCount?.completed}</p>
-              <FaFootball size={12} />
-            </Stack>
-            <Stack align="center" justify="center" gap={0.25}>
+              <FaFootball color="#6e6e6e" size={11} />
               <p>{team.stats.playerStatusCount?.inProgress}</p>
-              <LuClock size={12} />
             </Stack>
             <Stack align="center" justify="center" gap={0.25}>
+              <LuClock color="#6e6e6e" size={11} />
               <p>{team.stats.playerStatusCount?.upcoming}</p>
-              <LuCheckCheck size={12} />
+            </Stack>
+            <Stack align="center" justify="center" gap={0.25}>
+              <LuCheckCheck size={11} />
+              <p>{team.stats.playerStatusCount?.completed}</p>
             </Stack>
           </Stack>
 
@@ -55,6 +58,7 @@ export const LeagueCardMobileHeader = ({
             className={styles.leagueCardCenter}
             align="baseline"
             justify="center"
+            gap={0.25}
           >
             <Stack direction="row" align="center">
               <h3 className={styles.leagueName}>{team.shortLeagueName}</h3>
@@ -72,22 +76,22 @@ export const LeagueCardMobileHeader = ({
           </Stack>
 
           <Stack
-            className={styles.leagueCardBottomLeft}
+            className={`${styles.leagueCardSide} ${styles.playerCountWrapper}`}
             direction="row"
             align="center"
             justify="center"
           >
             <Stack align="center" justify="center" gap={0.25}>
-              <p>{team.stats.playerStatusCount?.completed}</p>
-              <FaFootball size={12} />
+              <FaFootball color="#6e6e6e" size={11} />
+              <p>{opponent.stats.playerStatusCount?.inProgress}</p>
             </Stack>
             <Stack align="center" justify="center" gap={0.25}>
-              <p>{team.stats.playerStatusCount?.inProgress}</p>
-              <LuClock size={12} />
+              <LuClock color="#6e6e6e" size={11} />
+              <p>{opponent.stats.playerStatusCount?.upcoming}</p>
             </Stack>
             <Stack align="center" justify="center" gap={0.25}>
-              <p>{team.stats.playerStatusCount?.upcoming}</p>
-              <LuCheckCheck size={12} />
+              <LuCheckCheck size={11} />
+              <p>{opponent.stats.playerStatusCount?.completed}</p>
             </Stack>
           </Stack>
         </Stack>
@@ -96,7 +100,7 @@ export const LeagueCardMobileHeader = ({
           className={`${styles.leagueCardContent} ${styles.leagueCardContentNoWeekStarted}`}
         >
           <div className={styles.leagueCardTop}>
-            <h3 className={styles.leagueName}>{team.shortLeagueName}</h3>
+            <h3 className={styles.leagueName}>{opponent.shortLeagueName}</h3>
             <h3 className={styles.leagueRecord}>{recordStr}</h3>
           </div>
           <div className={styles.leagueCardBottom}>

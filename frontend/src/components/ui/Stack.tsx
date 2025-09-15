@@ -13,7 +13,7 @@ export const Stack = ({
   direction?: "column" | "row";
   gap?: number;
   align?: "start" | "center" | "end" | "baseline";
-  justify?: "start" | "center" | "end" | "between" | "around" | "evenly";
+  justify?: "start" | "center" | "end" | "space-between" | "around" | "evenly";
   className?: string;
   onClick?: () => void;
 }) => {
