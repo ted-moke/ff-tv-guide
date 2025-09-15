@@ -75,9 +75,6 @@
   margin: var(--size1) 0;
 }
 
-/* Mobile-specific styles */
-
-
 .winPercentageGood .expandedStats .recordItem .statValue {
   color: var(--secondary-color);
 }
