@@ -58,31 +58,48 @@ const GameBucketGroup: React.FC<GameBucketGroupProps> = ({
             aria-label={`Toggle ${bucket.day} ${bucket.startingHour} games`}
           >
             <h4>
-              {bucket.day} {bucket.startingHour} {bucket.games.length > 1 ? "- " + bucket.games.length + " games" : ""}
+              NFL {bucket.day} {bucket.startingHour}{" "}
+              {bucket.games.length > 1
+                ? "- " + bucket.games.length + " games"
+                : ""}
             </h4>
             <LuChevronDown
-              color="var(--text-color)"
+              color="var(--text-color-muted)"
               className={`${styles["collapse-icon"]} ${
                 collapsedBuckets[bucketIndex] ? styles["collapsed"] : ""
               }`}
             />
           </div>
           {!collapsedBuckets[bucketIndex] && (
-            <div className={styles["game-group-content"]}>
+            <div
+              className={`${styles["game-group-content"]} ${
+                bucket.games.length === 1 ? styles["one-game"] : ""
+              }`}
+            >
               {bucket.games.map((game, gameIndex) => {
                 const gameId = `matchup-${game.awayTeam?.codes[0]}-${game.homeTeam?.codes[0]}`;
                 const isExpanded = isMobile ? expandedGameId === gameId : true;
-                const selectedIndex = isMobile && expandedGameId ? 
-                  bucket.games.findIndex(g => `matchup-${g.awayTeam?.codes[0]}-${g.homeTeam?.codes[0]}` === expandedGameId) : 
-                  null;
+                const selectedIndex =
+                  isMobile && expandedGameId
+                    ? bucket.games.findIndex(
+                        (g) =>
+                          `matchup-${g.awayTeam?.codes[0]}-${g.homeTeam?.codes[0]}` ===
+                          expandedGameId
+                      )
+                    : null;
                 const gridPosition = getGridPosition(gameIndex, selectedIndex);
-                
+
                 return (
-                  <div key={`${status}-${bucketIndex}-${gameIndex}`} className={gridPosition}>
+                  <div
+                    key={`${status}-${bucketIndex}-${gameIndex}`}
+                    className={gridPosition}
+                  >
                     <GameMatchup
                       game={game}
                       id={gameId}
-                      onExpansionChange={(expanded) => handleGameExpansion(gameId, expanded)}
+                      onExpansionChange={(expanded) =>
+                        handleGameExpansion(gameId, expanded)
+                      }
                       forceExpanded={isMobile ? isExpanded : undefined}
                     />
                   </div>

@@ -2,7 +2,9 @@
 @import "../../styles/utils.css";
 
 .game-group {
-  margin-bottom: var(--size4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--size2);
 }
 
 .game-group h3 {
@@ -12,24 +14,23 @@
 .game-bucket {
   display: flex;
   flex-direction: column;
-  gap: var(--size0_5);
-  padding-top: var(--size4);
-}
-
-.game-bucket:first-child {
-  padding-top: var(--size2);
+  gap: var(--size0_75);
 }
 
 .game-bucket h4 {
   color: var(--text-color-muted);
-  margin-bottom: var(--size1);
   text-align: center;
+  margin-bottom: 0;
 }
 
 .game-group-content {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: var(--size2);
+}
+
+.game-group-content.one-game {
+  grid-template-columns: 1fr;
 }
 
 .bucket-header {
@@ -42,6 +43,7 @@
 .bucket-header h4 {
   font-size: var(--font-size-medium);
   font-weight: normal;
+  padding-left: var(--size1_5);
 }
 
 .collapse-icon {

@@ -1,6 +1,6 @@
 import { Stack } from "../../../components/ui/Stack";
 import { FantasyTeam } from "../../teams/teamTypes";
-import styles from "./LeagueCardMobileHeader.module.css";
+import styles from "./LeagueCardHeader.module.css";
 import { LuCheck, LuClock, LuTv } from "react-icons/lu";
 
 export const LeagueCardHeader = ({

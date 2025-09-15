@@ -29,6 +29,7 @@
   font-weight: bold;
   line-height: 1;
   margin-bottom: 1px;
+  color: var(--text-color-muted);
 }
 
 .starters-none {
