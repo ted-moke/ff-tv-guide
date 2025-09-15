@@ -77,9 +77,9 @@ export const LeagueCardHeader = ({
               fullHeight
               className={styles.statusCountCompleted}
             >
-              {opponent && <p>{opponent.stats.playerStatusCount?.completed}</p>}
-              <LuCheck size={12} />
               <p>{team.stats.playerStatusCount?.completed}</p>
+              <LuCheck size={12} />
+              {opponent && <p>{opponent.stats.playerStatusCount?.completed}</p>}
             </Stack>
             <Stack
               align="center"
@@ -88,12 +88,12 @@ export const LeagueCardHeader = ({
               fullHeight
               className={styles.statusCountInProgress}
             >
+              <p>{team.stats.playerStatusCount?.inProgress}</p>
+              <LuTv size={12} color="#a0a0a0" />
               {opponent && (
                 <p>{opponent.stats.playerStatusCount?.inProgress}</p>
               )}
-              <LuTv size={12} color="#a0a0a0" />
 
-              <p>{team.stats.playerStatusCount?.inProgress}</p>
             </Stack>
             <Stack
               align="center"
@@ -102,9 +102,9 @@ export const LeagueCardHeader = ({
               fullHeight
               className={styles.statusCountUpcoming}
             >
-              {opponent && <p>{opponent.stats.playerStatusCount?.upcoming}</p>}
-              <LuClock color="#a0a0a0" size={12} />
               <p>{team.stats.playerStatusCount?.upcoming}</p>
+              <LuClock color="#a0a0a0" size={12} />
+              {opponent && <p>{opponent.stats.playerStatusCount?.upcoming}</p>}
             </Stack>
           </Stack>
         </Stack>
