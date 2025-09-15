@@ -8,8 +8,8 @@
 
 .leagueCardsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-  gap: var(--size2);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--size1);
   margin-bottom: var(--size2);
 }
 

@@ -3,7 +3,7 @@ import { FantasyTeam } from "../../teams/teamTypes";
 import styles from "./LeagueCardMobileHeader.module.css";
 import { LuCheck, LuClock, LuTv } from "react-icons/lu";
 
-export const LeagueCardMobileHeader = ({
+export const LeagueCardHeader = ({
   hasWeekStarted,
   isCollapsed,
   team,

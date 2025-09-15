@@ -1,6 +1,7 @@
 import React from "react";
 import styles from "./LeagueCardDesktop.module.css";
 import { LeagueCardData } from "../useLeagueCards";
+import { LeagueCardHeader } from "./LeagueCardHeader";
 
 interface LeagueCardDesktopProps {
   cardData: LeagueCardData;
@@ -26,8 +27,18 @@ export const LeagueCardDesktop: React.FC<LeagueCardDesktopProps> = ({
   const pointsFor = team.stats.pointsFor || 0;
   const pointsAgainst = team.stats.pointsAgainst || 0;
   const averagePointsFor = team.stats.averagePointsFor || 0;
+  const opponent = cardData.opponent;
 
   const winPercentage = totalGames > 0 ? wins / totalGames : 0;
+  const recordStr = `${wins}-${losses}${ties ? `-${ties}` : ""}`;
+  const winPctEval =
+    winPercentage > 0.5
+      ? "winPercentageGood"
+      : winPercentage < 0.5
+      ? "winPercentageBad"
+      : "winPercentageNeutral";
+
+  const winningEval = winning ? "winning" : losing ? "losing" : "tied";
 
   return (
     <div
@@ -48,47 +59,15 @@ export const LeagueCardDesktop: React.FC<LeagueCardDesktopProps> = ({
         onClick={handleCardClick}
         aria-expanded={isExpanded}
       >
-        <div className={styles.leagueCardContent}>
-          {hasWeekStarted ? (
-            <div
-              className={`${styles.leagueCardTop} ${styles.leagueCardTopWeekStarted}`}
-            >
-              <div className={styles.leagueCardLeft}>
-                <h3 className={styles.leagueName}>{team.shortLeagueName}</h3>
-                <div className={styles.leagueRecord}>
-                  {wins}-{losses}
-                  {ties ? `-${ties}` : ""}
-                </div>
-              </div>
-              <div className={styles.leagueScores}>
-                <p className={styles.weekPoints}>
-                  {team.weekPoints?.toFixed(2) || "0.00"}
-                </p>
-                <p className={styles.weekPointsAgainst}>
-                  vs. {team.weekPointsAgainst?.toFixed(2) || "0.00"}
-                </p>
-              </div>
-            </div>
-          ) : (
-            <div
-              className={`${styles.leagueCardTop} ${styles.leagueCardTopNoWeekStarted}`}
-            >
-              <div className={styles.leagueCardLeft}>
-                <h3 className={styles.leagueName}>{team.shortLeagueName}</h3>
-                <div className={styles.leagueRecord}>
-                  {wins}-{losses}
-                  {ties ? `-${ties}` : ""}
-                </div>
-              </div>
-              <div className={styles.leagueScores}>
-                <p className={styles.avgPointsLabel}>Avg</p>
-                <p className={styles.avgPoints}>
-                  {team.stats.averagePointsFor?.toFixed(2) || "0.00"}
-                </p>
-              </div>
-            </div>
-          )}
-        </div>
+          <LeagueCardHeader
+            hasWeekStarted={hasWeekStarted}
+            isCollapsed={isExpanded}
+            team={team}
+            opponent={opponent}
+            recordStr={recordStr}
+            winPctEval={winPctEval}
+            winningEval={winningEval}
+          />
       </div>
       {isExpanded && (
         <>

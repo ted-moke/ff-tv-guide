@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./LeagueCardMobile.module.css";
 import { LeagueCardData } from "../useLeagueCards";
-import { LeagueCardMobileHeader } from "./LeagueCardMobileHeader";
+import { LeagueCardHeader } from "./LeagueCardHeader";
 
 interface LeagueCardMobileProps {
   cardData: LeagueCardData;
@@ -54,7 +54,7 @@ const opponent = cardData.opponent;
         onClick={handleCardClick}
         aria-expanded={isExpanded}
       >
-        <LeagueCardMobileHeader
+        <LeagueCardHeader
           hasWeekStarted={hasWeekStarted}
           isCollapsed={isExpanded}
           team={team}
