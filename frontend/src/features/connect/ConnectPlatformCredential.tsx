@@ -95,7 +95,7 @@ const ConnectPlatformCredential: React.FC<ConnectPlatformCredentialProps> = ({
 
   return (
     <form onSubmit={handleSubmit}>
-      <h4>Connect with a Platform</h4>
+      <h4><span>Connect</span> with a platform</h4>
       <div className={styles.platformOptions}>
         {platforms?.map((platform) => (
           <div key={platform.id} className={styles.platformOption}>

@@ -235,11 +235,11 @@ const ConnectTeam: React.FC = () => {
       {isMobile && showSplash && (
         <>
         <div className={`${styles.splashImageWrapper} ${styles.splashImageWrapperMobile}`}>
-          <img src={mobileImageGuide} alt="Splash Image" />
+          <img src={splashImage} alt="Splash Image" />
         </div>
-        <div className={`${styles.splashImageWrapper} ${styles.splashImageWrapperMobile}`}>
+        {/* <div className={`${styles.splashImageWrapper} ${styles.splashImageWrapperMobile}`}>
           <img src={mobileImageShares} alt="Splash Image" />
-        </div>
+        </div> */}
         </>
       )}
     </div>
