@@ -1,10 +1,14 @@
 .connectTeamFormWrapper {
   display: flex;
   flex-direction: column;
-  gap: var(--size2);
+  gap: var(--size1);
   align-items: center;
   justify-content: center;
   width: 100%;
+  background-color: var(--background-color-offset);
+  padding: var(--size2);
+  border: 1px solid var(--background-color-offset-2);
+  border-radius: var(--border-radius-large);
 }
 
 .externalLeagueSelect h2,
@@ -19,7 +23,6 @@
 .selectButtons {
   display: flex;
   justify-content: flex-start;
-  gap: var(--size2);
 }
 
 .externalLeagueList {
@@ -52,7 +55,9 @@
 
 @media (min-width: 768px) {
   .connectTeamFormWrapper {
-    width: 350px;
+    width: 550px;
+    min-width: 0;
+    padding: var(--size4);
   }
 }
 

@@ -8,6 +8,7 @@ import styles from "./TeamSyncer.module.css";
 import { ExternalLeague } from "../features/connect/useExternalLeagues";
 import SleeperLogo from "../assets/logo-sleeper.png";
 import FFLogo from "../assets/logo-ff.png";
+import { LinkButtonColor } from "./ui/LinkButton";
 
 interface TeamSyncerProps {
   selectedCredential: PlatformCredential | null;
@@ -64,8 +65,8 @@ const TeamSyncer: React.FC<TeamSyncerProps> = ({
             <h4>Select Leagues</h4>
           </div>
           <div className={styles.selectButtons}>
-            <LinkButton onClick={handleDeselectAll}>Deselect All</LinkButton>
-            <LinkButton onClick={handleSelectAll}>Select All</LinkButton>
+            <LinkButton color={LinkButtonColor.MUTED} onClick={handleDeselectAll}>Deselect All</LinkButton>
+            <LinkButton color={LinkButtonColor.MUTED} onClick={handleSelectAll}>Select All</LinkButton>
           </div>
           <ul className={styles.externalLeagueList}>
             {externalLeagues.map((league) => (

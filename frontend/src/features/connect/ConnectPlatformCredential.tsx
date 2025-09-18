@@ -127,11 +127,10 @@ const ConnectPlatformCredential: React.FC<ConnectPlatformCredentialProps> = ({
             selectedPlatform.credentialType === "email" ? "Email:" : "Username:"
           }
           value={credential}
-          placeholder={
-            selectedPlatform.credentialType === "email" ? "Email" : "Username"
-          }
+          placeholder="Type here..."
           onChange={(e) => setCredential(e.target.value)}
           required
+          outline
         />
       )}
 
