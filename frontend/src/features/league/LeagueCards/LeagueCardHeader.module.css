@@ -101,7 +101,7 @@
 .avgPoints {
   font-size: var(--font-size-medium);
   font-weight: bold;
-  color: var(--text-color);
+  color: var(--text-color-muted);
 }
 
 .avgPointsHeader {
@@ -123,7 +123,7 @@
 
 .winPercentageNeutral .leagueCardContentNoWeekStarted .leagueRecord,
 .tied .weekPoints {
-  color: var(--text-color-muted);
+  color: var(--text-color);
 }
 
 .statusCountUpcoming p {

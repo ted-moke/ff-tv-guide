@@ -91,7 +91,6 @@ export const useUserTeams = ({
 
         hasTeamsToUpdate = teamsNeedingUpdate.length > 0;
 
-        console.log("teamsNeedingUpdate", teamsNeedingUpdate);
         if (teamPlayedStatusMap) {
           teamsBySeason[CURRENT_SEASON] = teamsBySeason[CURRENT_SEASON].map(
             (team) => populatePlayerPlayedStatus(team, teamPlayedStatusMap)

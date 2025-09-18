@@ -29,7 +29,6 @@ export const LeagueCardMobile: React.FC<LeagueCardMobileProps> = ({
   const averagePointsFor = team.stats.averagePointsFor || 0;
   const winPercentage = totalGames > 0 ? wins / totalGames : 0;
 const opponent = cardData.opponent;
-  console.log(cardData);
 
   const recordStr = `${wins}-${losses}${ties ? `-${ties}` : ""}`;
 

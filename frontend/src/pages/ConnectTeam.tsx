@@ -16,8 +16,6 @@ import FFTVGLogo from "../assets/FFTVGLogo";
 import { useView } from "../features/view/ViewContext";
 import { getCurrentSeason } from "../utils/seasonUtils";
 import splashImage from "../assets/mockups-composite.png";
-import mobileImageShares from "../assets/mockup-shares-single.png";
-import mobileImageGuide from "../assets/mockup-guide-single.png";
 import { Stack } from "../components/ui/Stack";
 
 const ConnectTeam: React.FC = () => {

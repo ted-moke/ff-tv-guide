@@ -64,8 +64,6 @@ export const FantasyTeamOption = ({
     handleToggleLeagueSelected();
   };
 
-  console.log("team", team);
-
   return (
     <Stack>
       <Stack
