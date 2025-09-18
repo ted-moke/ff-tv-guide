@@ -79,8 +79,6 @@ export const hasWeekStarted = (): boolean => {
   );
   const day = easternTime.getDay();
 
-  return true;
-
   if (day === 0 || day === 1) {
     return true;
   }
