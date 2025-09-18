@@ -53,7 +53,7 @@
 .leagueCardBottom {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   gap: var(--size0_5);
   width: 100%;
@@ -96,7 +96,6 @@
 .avgPointsLabel {
   font-size: var(--font-size-small);
   color: var(--text-color-muted);
-  font-weight: bold;
 }
 
 .avgPoints {
