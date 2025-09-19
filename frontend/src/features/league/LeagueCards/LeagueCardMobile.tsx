@@ -27,9 +27,9 @@ export const LeagueCardMobile: React.FC<LeagueCardMobileProps> = ({
   const losses = team.stats.losses || 0;
   const ties = team.stats.ties || 0;
   const totalGames = wins + losses + ties;
-  const pointsFor = team.stats.pointsFor || 0;
-  const pointsAgainst = team.stats.pointsAgainst || 0;
-  const averagePointsFor = team.stats.averagePointsFor || 0;
+  // const pointsFor = team.stats.pointsFor || 0;
+  // const pointsAgainst = team.stats.pointsAgainst || 0;
+  // const averagePointsFor = team.stats.averagePointsFor || 0;
   const winPercentage = totalGames > 0 ? wins / totalGames : 0;
   const opponent = cardData.opponent;
 
@@ -72,7 +72,7 @@ export const LeagueCardMobile: React.FC<LeagueCardMobileProps> = ({
       {isSelected && (
         <>
           <hr className={styles.divider} />
-          <LeagueCardExpanded team={team} opponent={opponent} isMobile />
+          <LeagueCardExpanded team={team} opponent={opponent} />
           {/* <div className={styles.expandedContent}>
             <div className={styles.expandedStats}>
               <div className={`${styles.statItem} ${styles.recordItem}`}>

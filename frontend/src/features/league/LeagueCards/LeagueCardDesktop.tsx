@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React from "react";
 import styles from "./LeagueCardDesktop.module.css";
 import { LeagueCardData } from "../useLeagueCards";
 import { LeagueCardHeader } from "./LeagueCardHeader";
@@ -17,7 +17,6 @@ export const LeagueCardDesktop: React.FC<LeagueCardDesktopProps> = ({
   hasWeekStarted,
   selectedTeamId,
 }) => {
-  const [isBenchExpanded, setIsBenchExpanded] = useState(false);
   const { team, winning, losing } = cardData;
 
   const handleCardClick = () => {
@@ -28,7 +27,7 @@ export const LeagueCardDesktop: React.FC<LeagueCardDesktopProps> = ({
   const losses = team.stats.losses || 0;
   const ties = team.stats.ties || 0;
   const totalGames = wins + losses + ties;
-  const averagePointsFor = team.stats.averagePointsFor || 0;
+  // const averagePointsFor = team.stats.averagePointsFor || 0;
   const opponent = cardData.opponent;
 
   const winPercentage = totalGames > 0 ? wins / totalGames : 0;

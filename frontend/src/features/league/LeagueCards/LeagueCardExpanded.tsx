@@ -7,19 +7,18 @@ import { positionOrder } from "../../players/usePlayers";
 import { FantasyTeam } from "../../teams/teamTypes";
 import styles from "./LeagueCardDesktop.module.css";
 import { LuCheck, LuClock, LuTv } from "react-icons/lu";
+import { useView } from "../../view/ViewContext";
 
 type PlayersBy = Record<RosterSlotType, Record<PlayedStatus, Player[]>>;
 
 export const LeagueCardExpanded = ({
   team,
   opponent,
-  isMobile = false,
 }: {
   team: FantasyTeam;
   opponent: FantasyTeam | null;
-  isMobile: boolean;
 }) => {
-  console.log('team', team);
+  const { isMobile } = useView();
   const { teamPlayersByStatus, opponentPlayersByStatus } = useMemo(() => {
     const playersBy: PlayersBy = {
       start: { completed: [], inProgress: [], upcoming: [], unknown: [] },

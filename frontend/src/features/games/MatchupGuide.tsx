@@ -5,7 +5,6 @@ import { Navigate } from "react-router-dom";
 import { useAuthContext } from "../auth/AuthProvider2";
 import { useNeedsResources } from "../teams/useNeedsResources";
 import { useView } from "../view/ViewContext";
-import { LeagueTicker } from "../league/LeagueTicker";
 import { LeagueCardsSection } from "../league/LeagueCards/LeagueCardsSection";
 import { useLeagueTickerVisibility } from "../league/useLeagueTickerVisibility";
 
