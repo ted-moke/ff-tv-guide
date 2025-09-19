@@ -74,6 +74,11 @@
   margin-top: var(--size1);
 }
 
+.expandedContent.mobile .expandedPlayersHeader p,
+.expandedContent.mobile h4 {
+  font-size: var(--font-size-medium);
+}
+
 .expandedStats {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -194,3 +199,4 @@
 .winPercentageNeutral .leagueCardTopNoWeekStarted .leagueCardLeft .leagueRecord {
   color: var(--text-color-muted);
 }
+

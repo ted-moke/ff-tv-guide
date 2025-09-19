@@ -19,7 +19,6 @@ export const useLeagueCards = () => {
       return [];
     }
 
-    console.log('visibleTeams', visibleTeams);
     return Object.values(visibleTeams).map((team) => {
       const winning =
         team.weekPoints != null &&
@@ -43,8 +42,6 @@ export const useLeagueCards = () => {
       };
     });
   }, [visibleTeams, selectedTeamId, visibleOpponentTeams]);
-
-  console.log('leagueCardsData', leagueCardsData);
 
   const toggleCardExpansion = (teamId: string) => {
     setselectedTeamId((prev) => (prev === teamId ? null : teamId));

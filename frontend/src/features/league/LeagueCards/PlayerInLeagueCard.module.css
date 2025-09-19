@@ -1,5 +1,5 @@
 .playerInLeagueCard {
-  padding: var(--size1) var(--size0_5);
+  padding: var(--size0_25) var(--size0_5) var(--size1);
   display: grid;
   align-items: center;
   justify-items: flex-start;
@@ -13,11 +13,26 @@
   max-width: 450px;
 }
 
+.playerInLeagueCard:last-child {
+  border-bottom: none;
+}
+
 .none {
     display: flex;
     align-items: center;
     justify-content: center;
     text-align: center;
+    border-bottom: none;
+}
+
+.mobile {
+    grid-template-columns: minmax(30px, min-content) 1fr  minmax(30px, min-content);
+    width: 100%;
+    column-gap: var(--size1);
+}
+
+.mobile p {
+    font-size: var(--font-size-small);
 }
 
 .playerPosition.QB {

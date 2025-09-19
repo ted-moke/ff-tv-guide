@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./LeagueCardMobile.module.css";
 import { LeagueCardData } from "../useLeagueCards";
 import { LeagueCardHeader } from "./LeagueCardHeader";
+import { LeagueCardExpanded } from "./LeagueCardExpanded";
 
 interface LeagueCardMobileProps {
   cardData: LeagueCardData;
@@ -71,7 +72,8 @@ export const LeagueCardMobile: React.FC<LeagueCardMobileProps> = ({
       {isSelected && (
         <>
           <hr className={styles.divider} />
-          <div className={styles.expandedContent}>
+          <LeagueCardExpanded team={team} opponent={opponent} isMobile />
+          {/* <div className={styles.expandedContent}>
             <div className={styles.expandedStats}>
               <div className={`${styles.statItem} ${styles.recordItem}`}>
                 <span className={styles.statLabel}>Record</span>
@@ -94,14 +96,14 @@ export const LeagueCardMobile: React.FC<LeagueCardMobileProps> = ({
                 <span className={styles.statValue}>
                   {pointsAgainst?.toFixed(1) || "0.0"}
                 </span>
-              </div>
+              </div> */}
               {/* <div className={styles.statItem}>
                 <span className={styles.statLabel}>Avg Points</span>
                 <span className={styles.statValue}>
                   {team.stats.averagePointsFor?.toFixed(1) || "0.0"}
                 </span>
               </div> */}
-            </div>
+            {/* </div> */}
 
             {/* <div className={styles.leagueActions}>
               <button className={styles.actionButton}>
@@ -111,7 +113,7 @@ export const LeagueCardMobile: React.FC<LeagueCardMobileProps> = ({
                 League Settings
               </button>
             </div> */}
-          </div>
+          {/* </div> */}
         </>
       )}
     </div>
