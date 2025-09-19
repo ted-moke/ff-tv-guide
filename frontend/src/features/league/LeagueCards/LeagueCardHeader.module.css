@@ -89,7 +89,6 @@
 
 .playerCountWrapper p {
   font-size: var(--font-size-medium);
-  color: var(--text-color-muted);
 }
 
 /* Average points styles */
@@ -130,10 +129,14 @@
   color: var(--text-color-muted);
 }
 
-.statusCountInProgress.hasPlayers p {
-  color: var(--primary-color);
-}
-
 .statusCountCompleted p {
   color: var(--text-color-muted);
+}
+
+.statusCountInProgress p {
+  color: var(--text-color-muted);
+}
+
+.statusCountInProgress p.hasPlayers {
+  color: var(--primary-color);
 }
