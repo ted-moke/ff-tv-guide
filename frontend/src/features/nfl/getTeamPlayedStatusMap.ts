@@ -26,40 +26,52 @@ export const getTeamPlayedStatusMap = (weeklySchedule: BucketedGames | null) => 
 
     weeklySchedule.games.completed.forEach((bucket) => {
         bucket.games.forEach((game) => {
-            const awayTeamNfl = getTeamByName(game.awayTeam)?.codes[0];
-            const homeTeamNfl = getTeamByName(game.homeTeam)?.codes[0];
+            const awayTeamNflArr = getTeamByName(game.awayTeam)?.codes;
+            const homeTeamNflArr = getTeamByName(game.homeTeam)?.codes;
 
-            if (awayTeamNfl) {
-                teamPlayedStatusMap.completed.add(awayTeamNfl);
+            if (awayTeamNflArr) {
+                awayTeamNflArr.forEach((awayTeamNfl) => {
+                    teamPlayedStatusMap.completed.add(awayTeamNfl);
+                });
             }
-            if (homeTeamNfl) {
-                teamPlayedStatusMap.completed.add(homeTeamNfl);
+            if (homeTeamNflArr) {
+                homeTeamNflArr.forEach((homeTeamNfl) => {
+                    teamPlayedStatusMap.completed.add(homeTeamNfl);
+                });
             }
         });
     });
 
     weeklySchedule.games.inProgress.forEach((bucket) => {
         bucket.games.forEach((game) => {
-            const awayTeamNfl = getTeamByName(game.awayTeam)?.codes[0];
-            const homeTeamNfl = getTeamByName(game.homeTeam)?.codes[0];
-            if (awayTeamNfl) {
-                teamPlayedStatusMap.inProgress.add(awayTeamNfl);
+            const awayTeamNflArr = getTeamByName(game.awayTeam)?.codes;
+            const homeTeamNflArr = getTeamByName(game.homeTeam)?.codes;
+            if (awayTeamNflArr) {
+                awayTeamNflArr.forEach((awayTeamNfl) => {
+                    teamPlayedStatusMap.inProgress.add(awayTeamNfl);
+                });
             }
-            if (homeTeamNfl) {
-                teamPlayedStatusMap.inProgress.add(homeTeamNfl);
+            if (homeTeamNflArr) {
+                homeTeamNflArr.forEach((homeTeamNfl) => {
+                    teamPlayedStatusMap.inProgress.add(homeTeamNfl);
+                });
             }
         });
     });
 
     weeklySchedule.games.upcoming.forEach((bucket) => {
         bucket.games.forEach((game) => {
-            const awayTeamNfl = getTeamByName(game.awayTeam)?.codes[0];
-            const homeTeamNfl = getTeamByName(game.homeTeam)?.codes[0];
-            if (awayTeamNfl) {
-                teamPlayedStatusMap.upcoming.add(awayTeamNfl);
+            const awayTeamNflArr = getTeamByName(game.awayTeam)?.codes;
+            const homeTeamNflArr = getTeamByName(game.homeTeam)?.codes;
+            if (awayTeamNflArr) {
+                awayTeamNflArr.forEach((awayTeamNfl) => {
+                    teamPlayedStatusMap.upcoming.add(awayTeamNfl);
+                });
             }
-            if (homeTeamNfl) {
-                teamPlayedStatusMap.upcoming.add(homeTeamNfl);
+            if (homeTeamNflArr) {
+                homeTeamNflArr.forEach((homeTeamNfl) => {
+                    teamPlayedStatusMap.upcoming.add(homeTeamNfl);
+                });
             }
         });
     });
