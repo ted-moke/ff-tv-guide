@@ -15,13 +15,15 @@ export interface NFLGame {
 //   fantasyTeams: string[];
 // }
 
+export type RosterSlotType = 'start' | 'bench' | 'bestBall';
+
 export interface OwnedPlayer {
   platformId: string;
   leagueName: string;
   shortLeagueName: string;
   leagueId: string;
   externalLeagueId: string;
-  rosterSlotType: 'start' | 'bench' | 'bestBall';
+  rosterSlotType: RosterSlotType;
   team: 'self' | 'opponent';
 }
 

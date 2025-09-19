@@ -86,14 +86,18 @@ export const LeagueCardHeader = ({
               justify="space-around"
               gap={0.25}
               fullHeight
-              className={styles.statusCountInProgress}
+              className={`${styles.statusCountInProgress} ${
+                team.stats.playerStatusCount &&
+                team.stats.playerStatusCount.inProgress > 0
+                  ? styles.hasPlayers
+                  : ""
+              }`}
             >
               <p>{team.stats.playerStatusCount?.inProgress}</p>
               <LuTv size={12} color="#a0a0a0" />
               {opponent && (
                 <p>{opponent.stats.playerStatusCount?.inProgress}</p>
               )}
-
             </Stack>
             <Stack
               align="center"

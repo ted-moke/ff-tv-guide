@@ -11,6 +11,10 @@
   cursor: pointer;
 }
 
+.leagueCard.otherSelected {
+  display: none;
+}
+
 .leagueCardHeader {
   display: flex;
   height: 100%;

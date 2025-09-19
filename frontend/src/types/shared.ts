@@ -1,11 +1,13 @@
   // Shared types that can be used across frontend and backend
 
+import { RosterSlotType } from "../features/nfl/nflTypes";
+
 export interface Player {
   name: string;
   logicalName: string;
   team: string;
   position: string;
-  rosterSlotType: "start" | "bench" | "ir" | "taxi" | "reserve" | "bestBall";
+  rosterSlotType: RosterSlotType;
   playedStatus: PlayedStatus;
 }
 

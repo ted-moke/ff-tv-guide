@@ -60,7 +60,7 @@ const MatchupGuide = () => {
     <div className={`${styles["matchup-guide"]} page-container`}>
       {!isMobile && isTickerVisible && (
         <div className={`${styles.leagueTickerWrapper} ${styles.fixed}`}>
-          <LeagueTicker />
+          {/* <LeagueTicker /> */}
         </div>
       )}
       <LeagueCardsSection />

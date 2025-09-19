@@ -4,7 +4,6 @@ import { FantasyTeam } from "../teams/teamTypes";
 
 export interface LeagueCardData {
   team: FantasyTeam;
-  isExpanded: boolean;
   winning: boolean;
   losing: boolean;
   tied: boolean;
@@ -13,13 +12,14 @@ export interface LeagueCardData {
 
 export const useLeagueCards = () => {
   const { visibleTeams, visibleOpponentTeams, matchupPlayers } = useView();
-  const [expandedCardId, setExpandedCardId] = useState<string | null>(null);
+  const [selectedTeamId, setselectedTeamId] = useState<string | null>(null);
 
   const leagueCardsData = useMemo((): LeagueCardData[] => {
     if (!matchupPlayers) {
       return [];
     }
 
+    console.log('visibleTeams', visibleTeams);
     return Object.values(visibleTeams).map((team) => {
       const winning =
         team.weekPoints != null &&
@@ -33,7 +33,6 @@ export const useLeagueCards = () => {
 
       return {
         team,
-        isExpanded: expandedCardId === team.id,
         winning,
         losing,
         tied,
@@ -43,14 +42,17 @@ export const useLeagueCards = () => {
           ) || null,
       };
     });
-  }, [visibleTeams, expandedCardId, visibleOpponentTeams]);
+  }, [visibleTeams, selectedTeamId, visibleOpponentTeams]);
+
+  console.log('leagueCardsData', leagueCardsData);
 
   const toggleCardExpansion = (teamId: string) => {
-    setExpandedCardId((prev) => (prev === teamId ? null : teamId));
+    setselectedTeamId((prev) => (prev === teamId ? null : teamId));
   };
 
   return {
     leagueCardsData,
     toggleCardExpansion,
+    selectedTeamId,
   };
 };

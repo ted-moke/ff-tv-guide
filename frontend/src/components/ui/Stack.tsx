@@ -16,7 +16,7 @@ export const Stack = ({
   direction?: "column" | "row";
   gap?: number;
   align?: "start" | "center" | "end" | "baseline";
-  justify?: "start" | "center" | "end" | "space-between" | "space-around" | "around" | "evenly";
+  justify?: "start" | "center" | "end" | "space-between" | "space-around" | "around" | "space-evenly";
   className?: string;
   fullHeight?: boolean;
   fullWidth?: boolean;

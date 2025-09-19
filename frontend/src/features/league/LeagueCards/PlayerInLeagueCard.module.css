@@ -1,0 +1,41 @@
+.playerInLeagueCard {
+  padding: var(--size1) var(--size0_5);
+  display: grid;
+  align-items: center;
+  justify-items: flex-start;
+  grid-template-columns: 35px 1fr 60px;
+  column-gap: var(--size3);
+  overflow-wrap: break-word; /* Allow long words to break */
+  overflow: hidden; /* Hide overflow content */
+  text-overflow: ellipsis; /* Optional: add ellipsis for overflowed text */
+  border-bottom: 1px solid var(--background-color-offset-2);
+  width: 300px;
+  max-width: 450px;
+}
+
+.none {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.playerPosition.QB {
+  color: var(--color-red);
+}
+
+.playerPosition.RB {
+  color: var(--secondary-color);
+}
+
+.playerPosition.WR {
+  color: var(--color-blue);
+}
+
+.playerPosition.TE {
+  color: var(--primary-color);
+}
+
+.playerPosition.K {
+  color: var(--color-purple);
+}

@@ -19,6 +19,10 @@
   gap: var(--size1);
 }
 
+.leagueCardsGrid.expanded {
+  grid-template-columns: repeat(1, 1fr);
+}
+
 .sectionTitle {
   font-size: var(--font-size-small);
   font-weight: normal;

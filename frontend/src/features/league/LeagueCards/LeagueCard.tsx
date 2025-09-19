@@ -8,9 +8,11 @@ interface LeagueCardProps {
   cardData: LeagueCardData;
   onToggleExpansion: (teamId: string) => void;
   hasWeekStarted: boolean;
+  selectedTeamId: string | null;
 }
 
 export const LeagueCard: React.FC<LeagueCardProps> = ({
+  selectedTeamId,
   cardData,
   onToggleExpansion,
   hasWeekStarted,
@@ -23,6 +25,7 @@ export const LeagueCard: React.FC<LeagueCardProps> = ({
         cardData={cardData}
         onToggleExpansion={onToggleExpansion}
         hasWeekStarted={hasWeekStarted}
+        selectedTeamId={selectedTeamId}
       />
     );
   }
@@ -32,6 +35,7 @@ export const LeagueCard: React.FC<LeagueCardProps> = ({
       cardData={cardData}
       onToggleExpansion={onToggleExpansion}
       hasWeekStarted={hasWeekStarted}
+      selectedTeamId={selectedTeamId}
     />
   );
 };

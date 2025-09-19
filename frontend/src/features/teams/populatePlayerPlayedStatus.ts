@@ -19,21 +19,30 @@ export const populatePlayerPlayedStatus = (
     unknown: 0,
   };
   team.playerData.forEach((player) => {
-    if (player.rosterSlotType === "bench") {
-      return;
-    }
     if (teamPlayedStatusMap.completed.has(player.team)) {
-      team.stats.playerStatusCount!.completed++;
       player.playedStatus = "completed";
+      if (player.rosterSlotType === "bench") {
+        return;
+      }
+      team.stats.playerStatusCount!.completed++;
     } else if (teamPlayedStatusMap.inProgress.has(player.team)) {
-      team.stats.playerStatusCount!.inProgress++;
       player.playedStatus = "inProgress";
+      if (player.rosterSlotType === "bench") {
+        return;
+      }
+      team.stats.playerStatusCount!.inProgress++;
     } else if (teamPlayedStatusMap.upcoming.has(player.team)) {
-      team.stats.playerStatusCount!.upcoming++;
       player.playedStatus = "upcoming";
+      if (player.rosterSlotType === "bench") {
+        return;
+      }
+      team.stats.playerStatusCount!.upcoming++;
     } else {
-      team.stats.playerStatusCount!.unknown++;
       player.playedStatus = "unknown";
+      if (player.rosterSlotType === "bench") {
+        return;
+      }
+      team.stats.playerStatusCount!.unknown++;
     }
   });
   return team;

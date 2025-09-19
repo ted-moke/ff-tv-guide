@@ -7,14 +7,16 @@ interface LeagueCardMobileProps {
   cardData: LeagueCardData;
   onToggleExpansion: (teamId: string) => void;
   hasWeekStarted: boolean;
+  selectedTeamId: string | null;
 }
 
 export const LeagueCardMobile: React.FC<LeagueCardMobileProps> = ({
+  selectedTeamId,
   cardData,
   onToggleExpansion,
   hasWeekStarted,
 }) => {
-  const { team, isExpanded, winning, losing } = cardData;
+  const { team, winning, losing } = cardData;
 
   const handleCardClick = () => {
     onToggleExpansion(team.id || "");
@@ -28,7 +30,7 @@ export const LeagueCardMobile: React.FC<LeagueCardMobileProps> = ({
   const pointsAgainst = team.stats.pointsAgainst || 0;
   const averagePointsFor = team.stats.averagePointsFor || 0;
   const winPercentage = totalGames > 0 ? wins / totalGames : 0;
-const opponent = cardData.opponent;
+  const opponent = cardData.opponent;
 
   const recordStr = `${wins}-${losses}${ties ? `-${ties}` : ""}`;
 
@@ -40,22 +42,25 @@ const opponent = cardData.opponent;
       : "winPercentageNeutral";
 
   const winningEval = winning ? "winning" : losing ? "losing" : "tied";
+
+  const isSelected = selectedTeamId === team.id;
+  const otherSelected = selectedTeamId !== team.id && selectedTeamId !== null;
   return (
     <div
-      className={`${styles.leagueCard} ${isExpanded ? styles.expanded : ""} ${
-        styles[winningEval]
-      } ${styles[winPctEval]}`}
+      className={`${styles.leagueCard} ${isSelected ? styles.expanded : ""} ${
+        otherSelected ? styles.otherSelected : ""
+      } ${styles[winningEval]} ${styles[winPctEval]}`}
       id={`league-${team.id}`}
     >
       <div
         className={styles.leagueCardHeader}
         role="button"
         onClick={handleCardClick}
-        aria-expanded={isExpanded}
+        aria-expanded={isSelected}
       >
         <LeagueCardHeader
           hasWeekStarted={hasWeekStarted}
-          isCollapsed={isExpanded}
+          isCollapsed={isSelected}
           team={team}
           opponent={opponent}
           recordStr={recordStr}
@@ -63,7 +68,7 @@ const opponent = cardData.opponent;
           winningEval={winningEval}
         />
       </div>
-      {isExpanded && (
+      {isSelected && (
         <>
           <hr className={styles.divider} />
           <div className={styles.expandedContent}>

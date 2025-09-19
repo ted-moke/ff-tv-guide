@@ -7,7 +7,7 @@ import { TeamPlayedStatusMap } from "../nfl/getTeamPlayedStatusMap";
 export const IDPPositions = ["DB", "S", "CB", "DE", "EDR", "DL", "IL", "LB"];
 
 // Define the order of positions
-const positionOrder = ["QB", "RB", "WR", "TE", "K", "DEF", ...IDPPositions];
+export const positionOrder = ["QB", "RB", "WR", "TE", "K", "DEF", ...IDPPositions];
 
 // Custom sorting function
 const sortPlayers = (a: Player, b: Player) => {
