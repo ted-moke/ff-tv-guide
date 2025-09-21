@@ -47,7 +47,7 @@ export const useUserTeams = ({
   let hasTeamsToUpdate = false;
   let hasTeamsToMigrate = false;
 
-  const { data, isLoading, isPending, error } = useQuery<{
+  const { data, isLoading, isPending, error, isSuccess } = useQuery<{
     teamsBySeason: Record<number, FantasyTeam[]>;
     teamsNeedingUpdate: FantasyTeam[];
   }>({
@@ -91,7 +91,7 @@ export const useUserTeams = ({
 
         hasTeamsToUpdate = teamsNeedingUpdate.length > 0;
 
-        if (teamPlayedStatusMap) {
+        if (teamPlayedStatusMap && teamsBySeason[CURRENT_SEASON]) {
           teamsBySeason[CURRENT_SEASON] = teamsBySeason[CURRENT_SEASON].map(
             (team) => populatePlayerPlayedStatus(team, teamPlayedStatusMap)
           );
@@ -132,6 +132,7 @@ export const useUserTeams = ({
     teamMap,
     hasTeamsToUpdate,
     hasTeamsToMigrate,
+    isSuccess,
   };
 };
 

@@ -139,6 +139,7 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     data: fetchedUserTeams,
     isLoading: userTeamsLoading,
     isPending: userTeamsPending,
+    isSuccess: userTeamsSuccess,
     error: userTeamsError,
     teamMap,
   } = useUserTeams({ teamPlayedStatusMap });
@@ -232,6 +233,7 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     opponentTeams: fetchedOpponentTeams || [],
     userTeamsLoading,
     userTeamsPending,
+    userTeamsSuccess,
     opponentTeamsLoading,
     userTeamsError,
     opponentTeamsError,
