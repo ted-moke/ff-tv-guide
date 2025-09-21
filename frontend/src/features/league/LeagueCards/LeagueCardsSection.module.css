@@ -7,11 +7,6 @@
   gap: var(--size1);
 }
 
-.leagueCardsSection h2 {
-  font-size: var(--font-size-m_l);
-  margin-bottom: 0;
-  padding-left: var(--size1_5);
-}
 
 .leagueCardsGrid {
   display: grid;
@@ -24,16 +19,16 @@
 }
 
 .sectionTitle {
-  font-size: var(--font-size-small);
+  font-size: var(--font-size-medium);
   font-weight: normal;
   margin: 0;
   color: var(--text-color-muted);
-  text-align: center;
+  padding-left: var(--size1_5);
 }
 
 @media (max-width: 768px) {
   .leagueCardsGrid {
     grid-template-columns: repeat(2, 1fr);
-    gap: var(--size1);
+    gap: var(--size1_5) var(--size1);
   }
 }

@@ -66,8 +66,7 @@
   text-align: center;
 }
 
-.at-symbol {
-  margin: 0 var(--size1);
+.team-names-container .at-symbol {
   color: var(--text-color-muted);
   font-weight: normal;
 }

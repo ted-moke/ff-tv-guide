@@ -14,6 +14,8 @@
 .player-count h4 {
   margin: 0;
   line-height: 1;
+  font-weight: normal;
+  font-size: var(--font-size-small);
 }
 
 .top-game {
@@ -21,7 +23,7 @@
 }
 
 .top-game .vs {
-  color: var(--color-yellow);
+  color: var(--primary-color);
 }
 
 .starters {
@@ -29,7 +31,7 @@
   font-weight: bold;
   line-height: 1;
   margin-bottom: 1px;
-  color: var(--text-color-muted);
+  /* color: var(--text-color-muted); */
 }
 
 .starters-none {
@@ -37,5 +39,5 @@
 }
 
 .collapsed h4 {
-  font-size: var(--font-size-medium);
+  font-size: var(--font-size-small);
 }

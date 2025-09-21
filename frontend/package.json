@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "deploy": "firebase deploy --only hosting"
+    "deploy": "yarn run build && yarn run deploy-frontend",
+    "deploy-frontend": "firebase deploy --only hosting"
   },
   "dependencies": {
     "ag-charts-react": "^12.1.2",

@@ -22,7 +22,7 @@ const PlayerCount: React.FC<PlayerCountProps> = ({ game, variant = "expanded" })
       >
         {game.totals.self.starters}
       </div>
-      <h4 className={styles["vs"]}>vs</h4>
+      <h4 className={styles["vs"]}>VS</h4>
       <div
         className={`${styles["starters"]} ${
           game.starters.length === 0 ? styles["starters-none"] : ""

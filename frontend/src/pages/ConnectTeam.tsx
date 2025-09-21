@@ -131,56 +131,41 @@ const ConnectTeam: React.FC = () => {
   const showSplash = !selectedCredential && noUserTeams;
   const hasCredentials = credentials && credentials.length > 0;
 
+  const splashText = (
+    <>
+      <h3 className={styles.splashTagline}>
+        <span>Stop flipping between apps and teams.</span> Enjoy your NFL
+        and fantasy experience on gameday.
+      </h3>
+      <ul className="list-disc">
+        <li>
+          Know who to watch in each NFL game: <span>your players and who you're up against.</span>
+        </li>
+        <li><span>Track live scores</span>   of your fantasy matchups.</li>
+        <li>
+          Research and reflect on <span>your fantasy portfolio</span> in a whole new way.
+        </li>
+      </ul>
+    </>
+  );
+
   return (
-    <div className={`${styles.connectTeamPageContainer} page-container`}>
+    <div className={styles.connectTeamPageContainer}>
       <div className={styles.pageHeader}>
         {!isMobile && <FFTVGLogo size="large" withText />}
       </div>
 
       {isMobile && showSplash && (
         <Stack gap={1} className={styles.splashTextWrapperMobile}>
-          <h3>Streamline your <span>NFL and fantasy</span> viewing experience</h3>
-          <ul className="list-disc">
-            <li>
-              <span>Stop flipping between apps</span> and websites, see who to
-              watch in each NFL game
-            </li>
-            <li>
-              Easily see <span>who playing for your opponents</span>
-            </li>
-            <li>
-              <span>Track your ownership</span> across NFL teams and divisions
-            </li>
-          </ul>
+          {splashText}
         </Stack>
       )}
 
       {showSplash && !isMobile && (
         <div className={styles.splashImageWrapperDesktop}>
-            <div className={styles.overlayText}>
-              <Stack gap={1}>
-                <h3><span>Streamline</span> your NFL and fantasy viewing experience</h3>
-                <p>
-                  If you're like us, your're sick of the sensory overload on
-                  game day. It's already crazy enough to be following 8+ games
-                  at a time, let alone trying to remember who you started and
-                  who you're against.
-                </p>
-                <ul className="list-disc">
-                  <li>
-                    <span>Stop flipping between apps</span> and websites, see
-                    who to watch in each NFL game
-                  </li>
-                  <li>
-                    See what players <span>your opponents have</span>
-                  </li>
-                  <li>
-                    <span>Track your ownership</span> across NFL teams and
-                    divisions
-                  </li>
-                </ul>
-              </Stack>
-            </div>
+          <div className={styles.overlayText}>
+            <Stack gap={1}>{splashText}</Stack>
+          </div>
           <img src={splashImage} alt="Splash Image" />
         </div>
       )}
@@ -232,10 +217,12 @@ const ConnectTeam: React.FC = () => {
 
       {isMobile && showSplash && (
         <>
-        <div className={`${styles.splashImageWrapper} ${styles.splashImageWrapperMobile}`}>
-          <img src={splashImage} alt="Splash Image" />
-        </div>
-        {/* <div className={`${styles.splashImageWrapper} ${styles.splashImageWrapperMobile}`}>
+          <div
+            className={`${styles.splashImageWrapper} ${styles.splashImageWrapperMobile}`}
+          >
+            <img src={splashImage} alt="Splash Image" />
+          </div>
+          {/* <div className={`${styles.splashImageWrapper} ${styles.splashImageWrapperMobile}`}>
           <img src={mobileImageShares} alt="Splash Image" />
         </div> */}
         </>

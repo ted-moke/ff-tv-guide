@@ -7,7 +7,7 @@
   min-height: 100vh;
   height: 100%;
   gap: var(--size4);
-  padding-bottom: var(--size4); 
+  padding: var(--size4) var(--size2); 
 }
 
 .pageHeader {
@@ -124,6 +124,7 @@ li {
   display: flex;
   justify-content: center;
   align-items: center;
+  gap: var(--size2);
 }
 
 .splashImageWrapperDesktop img {
@@ -155,9 +156,19 @@ li {
     min-width: 90vw;
   }
 
+.splashTagline {
+  line-height: 1.25;
+  max-width: 700px;
+}
+
+.splashTagline span {
+  color: var(--primary-color);
+}
+
 @media (min-width: 768px) {
   .connectTeamPageContainer {
     gap: var(--size4);
+    padding: var(--size4); 
   }
 
   .connectTeamFormWrapper {
