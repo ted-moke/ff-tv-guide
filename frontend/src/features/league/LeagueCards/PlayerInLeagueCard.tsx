@@ -2,7 +2,7 @@ import { Player } from "../../../types/shared";
 import styles from "./PlayerInLeagueCard.module.css";
 import { useView } from "../../view/ViewContext";
 
-export const PlayerInLeagueCard = ({ player }: { player: Player | null }) => {
+export const PlayerInLeagueCard = ({ player, hasPlayed = false }: { player: Player | null, hasPlayed?: boolean }) => {
     const { isMobile } = useView();
   if (!player) {
     return (
@@ -13,11 +13,11 @@ export const PlayerInLeagueCard = ({ player }: { player: Player | null }) => {
   }
 
   return (
-    <div className={`${styles.playerInLeagueCard} ${isMobile ? styles.mobile : ""}`}>
+    <div className={`${styles.playerInLeagueCard} ${isMobile ? styles.mobile : ""} ${hasPlayed ? styles.hasPlayed : ""}`}>
       <p className={`${styles.playerPosition} ${styles[player.position]}`}>
         {player.position}
       </p>
-      <p>{player.name}</p>
+      <p className={styles.playerName}>{player.name}</p>
       <p className="muted">{player.team}</p>
     </div>
   );

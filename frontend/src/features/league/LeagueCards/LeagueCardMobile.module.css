@@ -5,7 +5,7 @@
 .leagueCard {
   background-color: var(--background-color-offset);
   border-radius: var(--size0_5);
-  padding: var(--size0_5) var(--size1);
+  /* padding: var(--size0_5) var(--size1); */
   display: flex;
   flex-direction: column;
   cursor: pointer;
@@ -15,13 +15,20 @@
   display: none;
 }
 
-.leagueCardHeader {
+.leagueCardHeaderWrapper {
   display: flex;
   height: 100%;
   justify-content: space-between;
   align-items: center;
   gap: var(--size1);
   cursor: pointer;
+  background-color: var(--background-color-offset);
+  padding: var(--size1);
+}
+
+.expanded .leagueCardHeaderWrapper {
+  background-color: var(--background-color-offset-2);
+  padding: var(--size1) var(--size1_5);
 }
 
 .weekPoints {
@@ -43,7 +50,7 @@
 }
 
 .expandedContent {
-  margin-top: var(--size1);
+  padding: var(--size2) var(--size1);
 }
 
 .expandedStats {

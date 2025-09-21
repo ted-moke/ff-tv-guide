@@ -78,7 +78,21 @@ export const LeagueCardExpanded = ({
     };
   }, [team.playerData]);
 
-  const isBestBall = teamPlayersByStatus.bestBall.inProgress.length > 0;
+  console.log(teamPlayersByStatus);
+
+  const isBestBall = useMemo(() => {
+    // loop through players: im prgoress, cokmpleted, upcoming.  until you find one is a best ball slot type then return true, else false
+    if (teamPlayersByStatus.bestBall.inProgress.length > 0) {
+      return true;
+    }
+    if (teamPlayersByStatus.bestBall.completed.length > 0) {
+      return true;
+    }
+    if (teamPlayersByStatus.bestBall.upcoming.length > 0) {
+      return true;
+    }
+    return false;
+  }, [teamPlayersByStatus]);
 
   const teamPlayersGroupToShowByDefault = isBestBall
     ? teamPlayersByStatus.bestBall
@@ -93,7 +107,7 @@ export const LeagueCardExpanded = ({
         <Stack
           direction="row"
           align="center"
-          justify={isMobile ? "space-around" : "center"}
+          justify="space-between"
           fullWidth
           gap={isMobile ? 1 : 3}
           className={styles.expandedPlayersHeader}
@@ -103,9 +117,9 @@ export const LeagueCardExpanded = ({
             <LuTv color="var(--primary-color)" size={20} />
             <h4 className="primary">In Progress</h4>
           </Stack>
-          {opponent && <p className="muted">Opponent Team</p>}
+          {opponent && <p className="muted">Opponent</p>}
         </Stack>
-        <Stack direction="row" align="start" justify="center" gap={2} fullWidth>
+        <Stack direction="row" align="start" justify="center" gap={1} fullWidth>
           <Stack fullHeight justify="start" fullWidth>
             {teamPlayersGroupToShowByDefault.inProgress.length <= 0 && (
               <PlayerInLeagueCard player={null} />
@@ -127,10 +141,10 @@ export const LeagueCardExpanded = ({
         </Stack>
         <hr className={styles.divider} />
         <Stack direction="row" align="center" justify="center">
-            <LuClock size={20} />
-            <h4>Upcoming</h4>
+            <LuClock size={20} color="var(--primary-color)" />
+            <h4 className="muted">Upcoming</h4>
           </Stack>
-        <Stack direction="row" align="start" justify="center" gap={2} fullWidth>
+        <Stack direction="row" align="start" justify="center" gap={1} fullWidth>
           <Stack fullHeight justify="start" fullWidth>
             {teamPlayersGroupToShowByDefault.upcoming.length <= 0 && (
               <PlayerInLeagueCard player={null} />
@@ -152,25 +166,25 @@ export const LeagueCardExpanded = ({
         </Stack>
         <hr className={styles.divider} />
         <Stack direction="row" align="center" justify="center">
-            <LuCheck size={20} />
-            <h4>Completed</h4>
+            <LuCheck size={20} color="var(--color-green)" />
+            <h4 className="muted">Completed</h4>
           </Stack>
-        <Stack direction="row" align="start" justify="center" gap={2} fullWidth>
+        <Stack direction="row" align="start" justify="center" gap={1} fullWidth>
           <Stack fullHeight justify="start" fullWidth>
             {teamPlayersGroupToShowByDefault.completed.length <= 0 && (
-              <PlayerInLeagueCard player={null} />
+              <PlayerInLeagueCard hasPlayed player={null} />
             )}
             {teamPlayersGroupToShowByDefault.completed.map((player) => (
-              <PlayerInLeagueCard key={player.name} player={player} />
+              <PlayerInLeagueCard hasPlayed key={player.name} player={player} />
             ))}
           </Stack>
           {opponent && (
             <Stack fullHeight justify="start" fullWidth>
               {opponentPlayersGroupToShowByDefault.completed.length <= 0 && (
-                <PlayerInLeagueCard player={null} />
+                <PlayerInLeagueCard hasPlayed player={null} />
               )}
               {opponentPlayersGroupToShowByDefault.completed.map((player) => (
-                <PlayerInLeagueCard key={player.name} player={player} />
+                <PlayerInLeagueCard hasPlayed key={player.name} player={player} />
               ))}
             </Stack>
           )}

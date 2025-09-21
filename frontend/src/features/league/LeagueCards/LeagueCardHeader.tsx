@@ -35,8 +35,17 @@ export const LeagueCardHeader = ({
           gap={0.5}
         >
           <Stack align="center" gap={0.25}>
-            <h3 className={styles.leagueName}>{team.shortLeagueName}</h3>
-            <h3 className={styles.leagueRecord}>{recordStr}</h3>
+            <h3 className={styles.leagueName}>
+              {isCollapsed ? team.shortLeagueName : team.leagueName}
+            </h3>
+            <Stack direction="row" align="center" gap={1}>
+              <h3 className={styles.leagueRecord}>{recordStr}</h3>
+              {!isCollapsed && (
+                <p className={styles.leagueRecord}>
+                  {team.stats.averagePointsFor?.toFixed(1) || "0.0"} avg
+                </p>
+              )}
+            </Stack>
           </Stack>
 
           <Stack
@@ -106,7 +115,10 @@ export const LeagueCardHeader = ({
                     opponent.stats.playerStatusCount.inProgress > 0
                       ? styles.hasPlayers
                       : ""
-                  }>{opponent.stats.playerStatusCount?.inProgress}</p>
+                  }
+                >
+                  {opponent.stats.playerStatusCount?.inProgress}
+                </p>
               )}
             </Stack>
             <Stack

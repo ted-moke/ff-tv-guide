@@ -54,14 +54,14 @@ export const LeagueCardMobile: React.FC<LeagueCardMobileProps> = ({
       id={`league-${team.id}`}
     >
       <div
-        className={styles.leagueCardHeader}
+        className={styles.leagueCardHeaderWrapper}
         role="button"
         onClick={handleCardClick}
         aria-expanded={isSelected}
       >
         <LeagueCardHeader
           hasWeekStarted={hasWeekStarted}
-          isCollapsed={isSelected}
+          isCollapsed={!isSelected}
           team={team}
           opponent={opponent}
           recordStr={recordStr}
@@ -71,7 +71,6 @@ export const LeagueCardMobile: React.FC<LeagueCardMobileProps> = ({
       </div>
       {isSelected && (
         <>
-          <hr className={styles.divider} />
           <LeagueCardExpanded team={team} opponent={opponent} />
           {/* <div className={styles.expandedContent}>
             <div className={styles.expandedStats}>

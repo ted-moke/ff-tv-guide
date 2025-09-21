@@ -73,12 +73,7 @@ export const LeagueCardDesktop: React.FC<LeagueCardDesktopProps> = ({
           winningEval={winningEval}
         />
       </div>
-      {isSelected && (
-        <>
-          <hr className={styles.divider} />
-          <LeagueCardExpanded team={team} opponent={opponent} />
-        </>
-      )}
+      {isSelected && <LeagueCardExpanded team={team} opponent={opponent} />}
     </div>
   );
 };

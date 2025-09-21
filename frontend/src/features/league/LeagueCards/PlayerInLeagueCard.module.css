@@ -35,6 +35,14 @@
     font-size: var(--font-size-small);
 }
 
+.hasPlayed .playerName {
+  color: var(--text-color-muted);
+}
+
+.playerPosition {
+  color: var(--text-color-muted);
+}
+
 .playerPosition.QB {
   color: var(--color-red);
 }
