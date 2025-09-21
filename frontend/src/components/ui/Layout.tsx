@@ -7,12 +7,22 @@ import { useAuthContext } from "../../features/auth/AuthProvider2";
 import LoadingSpinner from "./LoadingSpinner";
 import { Navigate } from "react-router-dom";
 
-const Layout = ({ isAuthBlocking = true, children }: { isAuthBlocking?: boolean, children: React.ReactNode }) => {
+const Layout = ({
+  isAuthBlocking = true,
+  children,
+}: {
+  isAuthBlocking?: boolean;
+  children: React.ReactNode;
+}) => {
   const { isMobile, isMenuOpen } = useView();
   const { user, isLoading: isAuthLoading } = useAuthContext();
 
-  if (isAuthLoading && isAuthBlocking) {
-    return <LoadingSpinner />;
+    if (isAuthLoading && isAuthBlocking) {
+    return (
+      <div className={`${styles["app-container"]}`}>
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   if (!user && isAuthBlocking) {
@@ -21,7 +31,11 @@ const Layout = ({ isAuthBlocking = true, children }: { isAuthBlocking?: boolean,
   }
 
   return (
-    <div className={`${styles["app-container"]} ${isMenuOpen ? styles["sidebar-open"] : ""}`}>
+    <div
+      className={`${styles["app-container"]} ${
+        isMenuOpen ? styles["sidebar-open"] : ""
+      }`}
+    >
       {isMobile && (
         <div className={styles["header"]}>
           <Navigation />
@@ -30,7 +44,9 @@ const Layout = ({ isAuthBlocking = true, children }: { isAuthBlocking?: boolean,
       <div className={styles["sidebar-container"]}>
         <Sidebar />
       </div>
-      <div id="layout-content" className={styles["content"]}>{children}</div>
+      <div id="layout-content" className={styles["content"]}>
+        {children}
+      </div>
     </div>
   );
 };
