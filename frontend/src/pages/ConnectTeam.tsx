@@ -33,9 +33,10 @@ const ConnectTeam: React.FC = () => {
     refetch: refetchCredentials,
   } = useCredentials({ backendUser });
   const { mutateAsync: connectLeague } = useConnectLeague();
-  const { isMobile, selectedWeek, userTeams } = useView();
+  const { isMobile, selectedWeek, userTeams, scrollToTop } = useView();
 
   const handleSelectCredential = (credential: PlatformCredential) => {
+    scrollToTop();
     setSelectedCredential(credential);
   };
 

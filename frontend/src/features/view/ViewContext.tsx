@@ -92,6 +92,7 @@ interface ViewContextType {
   isMobile: boolean;
   setIsMobile: (isMobile: boolean) => void;
   scrollToElement: (elementId: string, highlight?: boolean) => void;
+  scrollToTop: (behavior?: ScrollBehavior) => void;
   viewMode: ViewMode;
   setViewMode: (mode: ViewMode) => void;
   isMenuOpen: boolean;
@@ -198,6 +199,14 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     }
   };
 
+  const scrollToTop = (behavior: ScrollBehavior = 'smooth') => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior
+    });
+  };
+
   useEffect(() => {
     const checkScreenSize = () => {
       setIsMobile(window.innerWidth < 768);
@@ -270,6 +279,7 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     setIsMobile,
     // Utility
     scrollToElement,
+    scrollToTop,
 
     // UI Data
     isMenuOpen,

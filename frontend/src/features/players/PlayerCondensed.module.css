@@ -128,6 +128,15 @@
     column-gap: var(--size1);
     padding: var(--size1) var(--size0_5);
     max-width: none;
+    font-size: var(--font-size-small);
+  }
+
+  .player-position {
+    font-size: var(--font-size-medium);
+  }
+
+  .player-name {
+    font-size: var(--font-size-medium);
   }
 
   .player-user-teams-chips {

@@ -106,8 +106,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({
         </div>
       </div>
       {actualExpandedState && (
-        <>
-          <hr className={styles["divider"]} />
+        <div className={styles["matchup-content"]}>
           {game.hasPlayers ? (
             <div className={styles["team-players"]}>
               {game.awayPlayers.starters.length > 0 && (
@@ -219,7 +218,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({
           ) : (
             <p className={styles["no-players"]}>No fantasy players</p>
           )}
-        </>
+        </div>
       )}
     </div>
   );
