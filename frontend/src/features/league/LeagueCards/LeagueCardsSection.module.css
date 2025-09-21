@@ -26,6 +26,25 @@
   padding-left: var(--size1_5);
 }
 
+.paginationControls {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: var(--size1);
+  padding: 0 var(--size1);
+}
+
+.pageIndicator {
+  font-size: var(--font-size-small);
+  color: var(--text-color-muted);
+  font-weight: 500;
+}
+
+.expandButtonText {
+  font-size: var(--font-size-small);
+}
+
 @media (max-width: 768px) {
   .leagueCardsGrid {
     grid-template-columns: repeat(2, 1fr);

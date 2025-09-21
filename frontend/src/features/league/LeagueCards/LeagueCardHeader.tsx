@@ -20,6 +20,8 @@ export const LeagueCardHeader = ({
   winPctEval: string;
   winningEval: string;
 }) => {
+
+  console.log({isCollapsed});
   return (
     <div
       className={`${styles.leagueCardWrapper} ${
