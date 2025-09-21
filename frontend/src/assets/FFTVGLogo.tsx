@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 const sizeMap = {
   xsmall: {
-    logoFontSize: 38,
+    logoFontSize: 32,
     className: styles.xsmall,
   },
   small: {

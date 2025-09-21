@@ -3,7 +3,7 @@
   padding: var(--size0_5) var(--size1_5);
   display: flex;
   align-items: center;
-  gap: var(--size1);
+  gap: var(--size1_5);
   box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.8);
   min-height: var(--size6); /* Ensure consistent height */
 }

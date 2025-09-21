@@ -8,6 +8,9 @@
 
 .logoContainer {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .logoContainer > h1 {
@@ -24,7 +27,7 @@
 }
 
 .xsmall h1 {
-  font-size: var(--size2);
+  font-size: var(--size1_75);
 }
 
 .large h1 {
@@ -33,12 +36,16 @@
 
 .logoWrapper .text {
   margin-top: var(--size0_5);
-}
+} 
 
 .logoWrapper.large .text {
   margin-top: 6px;
 }
 
 .logoText {
-  /* color: var(--primary-color); */
+  padding-top: var(--size0_5); 
 } 
+
+.text {
+  padding-top: var(--size0_25); 
+}
