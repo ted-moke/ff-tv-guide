@@ -182,6 +182,7 @@ const ConnectTeam: React.FC = () => {
         <div className={styles.connectTeamFormWrapper}>
           <ConnectPlatformCredential
             onSuccess={async (newCredential) => {
+              scrollToTop();
               setSelectedCredential(newCredential);
               setShowNewCredentialForm(false);
               await refetchCredentials();

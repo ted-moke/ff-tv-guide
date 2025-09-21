@@ -44,6 +44,7 @@ interface ViewContextType {
   // Teams
   userTeamsLoading: boolean;
   userTeamsPending: boolean;
+  userTeamsSuccess: boolean;
   opponentTeamsLoading: boolean;
   userTeamsError: Error | null;
   opponentTeamsError: Error | null;

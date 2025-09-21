@@ -82,7 +82,7 @@
     max-width: 80vw;
     transition: left 0.3s ease;
     z-index: 1001;
-    top: var(--size8);
+    top: var(--size6);
     padding: var(--size2) var(--size1_5);
   }
 

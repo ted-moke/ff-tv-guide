@@ -89,7 +89,7 @@ export const LeagueCardHeader = ({
               className={styles.statusCountCompleted}
             >
               <p>{team.stats.playerStatusCount?.completed}</p>
-              <LuCheck size={12} />
+              <LuCheck color="var(--text-color-muted)" size={12} />
               {opponent && <p>{opponent.stats.playerStatusCount?.completed}</p>}
             </Stack>
             <Stack

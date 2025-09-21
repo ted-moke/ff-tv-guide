@@ -233,7 +233,7 @@ const PlayerShares: React.FC = () => {
   if (!players) return <LoadingSpinner />;
 
   return (
-    <div className={`${styles.playerShares} page-container`}>
+    <div className={styles.playerShares}>
       <h1>Player Shares</h1>
       <TextInput
         type="text"

@@ -8,6 +8,10 @@
   gap: var(--size2);
 }
 
+.playerShares h1 {
+  margin: 0;
+}
+
 .sortBy {
   margin: 0;
   color: var(--text-color-muted);
@@ -116,5 +120,9 @@
     flex-direction: row;
     align-items: center;
     gap: var(--size1);
+  }
+
+  .playerShares {
+    padding: var(--size7) var(--size2) var(--size2);
   }
 }
