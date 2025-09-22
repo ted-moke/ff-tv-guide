@@ -131,19 +131,25 @@ async function updateAllLeaguesBackground() {
       `Processing batch of ${leaguesSnapshot.size} leagues. (${totalLeaguesProcessed} so far)`,
     );
 
-    const updatePromises = leaguesSnapshot.docs.map(async (doc) => {
+    // Process leagues sequentially to reduce contention
+    for (const doc of leaguesSnapshot.docs) {
       const leagueData = doc.data() as League;
       console.log("Upserting teams for league:", leagueData.name);
-      const platformService = PlatformServiceFactory.getService(
-        leagueData.platform.name,
-      );
-      await platformService.upsertTeams(leagueData);
+      
+      try {
+        const platformService = PlatformServiceFactory.getService(
+          leagueData.platform.name,
+        );
+        await platformService.upsertTeams(leagueData);
 
-      // Update lastModified
-      await doc.ref.update({ lastModified: new Date() });
-    });
-
-    await Promise.all(updatePromises);
+        // Update lastModified
+        await doc.ref.update({ lastModified: new Date() });
+        console.log(`Successfully processed league: ${leagueData.name}`);
+      } catch (error) {
+        console.error(`Failed to process league ${leagueData.name}:`, error);
+        // Continue with other leagues even if one fails
+      }
+    }
 
     totalLeaguesProcessed += leaguesSnapshot.size;
 

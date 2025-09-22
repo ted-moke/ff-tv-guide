@@ -13,6 +13,7 @@ import userTeamRoutes from "./routes/userTeamRoutes";
 import userTeamHistoryRoutes from "./routes/userTeamHistoryRoutes";
 import tradeRoutes from "./routes/tradeRoutes";
 import migrationRoutes from "./routes/migrationRoutes";
+import debugRoutes from "./routes/debugRoutes";
 const app = express();
 
 console.log("🚀 Starting server - v2 with cache control middleware - DEPLOYMENT TEST");
@@ -65,6 +66,7 @@ app.use("/user-teams", userTeamRoutes);
 app.use("/user-team-history", userTeamHistoryRoutes);
 app.use("/trades", tradeRoutes);
 app.use("/migration", migrationRoutes);
+app.use("/debug", debugRoutes);
 
 app.get("/health", (req, res) => {
   res.json({
