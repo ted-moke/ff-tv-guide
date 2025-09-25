@@ -359,93 +359,93 @@
         {
           "date": "2025-09-25",
           "time": "20:15",
+          "awayTeam": "Seattle Seahawks",
+          "homeTeam": "Arizona Cardinals",
+          "channel": "Prime Video"
+        },
+        {
+          "date": "2025-09-28",
+          "time": "09:30",
           "awayTeam": "Minnesota Vikings",
           "homeTeam": "Pittsburgh Steelers",
-          "channel": "Prime Video",
+          "channel": "NFL+",
           "notes": "Dublin"
         },
         {
           "date": "2025-09-28",
           "time": "13:00",
-          "awayTeam": "Baltimore Ravens",
-          "homeTeam": "Arizona Cardinals",
-          "channel": "CBS"
-        },
-        {
-          "date": "2025-09-28",
-          "time": "13:00",
-          "awayTeam": "Atlanta Falcons",
-          "homeTeam": "Chicago Bears",
-          "channel": "FOX"
-        },
-        {
-          "date": "2025-09-28",
-          "time": "13:00",
-          "awayTeam": "Cincinnati Bengals",
-          "homeTeam": "Houston Texans",
+          "awayTeam": "New Orleans Saints",
+          "homeTeam": "Buffalo Bills",
           "channel": "CBS"
         },
         {
           "date": "2025-09-28",
           "time": "13:00",
           "awayTeam": "Tennessee Titans",
-          "homeTeam": "Indianapolis Colts",
+          "homeTeam": "Houston Texans",
           "channel": "CBS"
         },
         {
           "date": "2025-09-28",
           "time": "13:00",
-          "awayTeam": "Jacksonville Jaguars",
-          "homeTeam": "Kansas City Chiefs",
-          "channel": "CBS"
-        },
-        {
-          "date": "2025-09-28",
-          "time": "13:00",
-          "awayTeam": "Denver Broncos",
-          "homeTeam": "Miami Dolphins",
-          "channel": "CBS"
+          "awayTeam": "Cleveland Browns",
+          "homeTeam": "Detroit Lions",
+          "channel": "FOX"
         },
         {
           "date": "2025-09-28",
           "time": "13:00",
           "awayTeam": "Washington Commanders",
-          "homeTeam": "Philadelphia Eagles",
-          "channel": "FOX"
+          "homeTeam": "Atlanta Falcons",
+          "channel": "CBS"
         },
         {
           "date": "2025-09-28",
           "time": "13:00",
-          "awayTeam": "Detroit Lions",
+          "awayTeam": "Philadelphia Eagles",
           "homeTeam": "Tampa Bay Buccaneers",
           "channel": "FOX"
         },
         {
           "date": "2025-09-28",
-          "time": "16:05",
-          "awayTeam": "Buffalo Bills",
-          "homeTeam": "Los Angeles Rams",
+          "time": "13:00",
+          "awayTeam": "Carolina Panthers",
+          "homeTeam": "New England Patriots",
+          "channel": "FOX"
+        },
+        {
+          "date": "2025-09-28",
+          "time": "13:00",
+          "awayTeam": "Los Angeles Chargers",
+          "homeTeam": "New York Giants",
           "channel": "CBS"
         },
         {
           "date": "2025-09-28",
           "time": "16:05",
-          "awayTeam": "Cleveland Browns",
-          "homeTeam": "Seattle Seahawks",
+          "awayTeam": "Jacksonville Jaguars",
+          "homeTeam": "San Francisco 49ers",
+          "channel": "FOX"
+        },
+        {
+          "date": "2025-09-28",
+          "time": "16:05",
+          "awayTeam": "Indianapolis Colts",
+          "homeTeam": "Los Angeles Rams",
           "channel": "FOX"
         },
         {
           "date": "2025-09-28",
           "time": "16:25",
-          "awayTeam": "New England Patriots",
+          "awayTeam": "Chicago Bears",
           "homeTeam": "Las Vegas Raiders",
           "channel": "CBS"
         },
         {
           "date": "2025-09-28",
           "time": "16:25",
-          "awayTeam": "New York Jets",
-          "homeTeam": "San Francisco 49ers",
+          "awayTeam": "Baltimore Ravens",
+          "homeTeam": "Kansas City Chiefs",
           "channel": "CBS"
         },
         {
@@ -457,10 +457,17 @@
         },
         {
           "date": "2025-09-29",
-          "time": "20:15",
-          "awayTeam": "Los Angeles Chargers",
-          "homeTeam": "New Orleans Saints",
+          "time": "19:15",
+          "awayTeam": "New York Jets",
+          "homeTeam": "Miami Dolphins",
           "channel": "ESPN"
+        },
+        {
+          "date": "2025-09-29",
+          "time": "20:15",
+          "awayTeam": "Cincinnati Bengals",
+          "homeTeam": "Denver Broncos",
+          "channel": "ABC"
         }
       ]
     },
