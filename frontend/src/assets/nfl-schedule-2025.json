@@ -477,6 +477,13 @@
         {
           "date": "2025-10-02",
           "time": "20:15",
+          "awayTeam": "San Francisco 49ers",
+          "homeTeam": "Los Angeles Rams",
+          "channel": "Prime Video"
+        },
+        {
+          "date": "2025-10-05",
+          "time": "09:30",
           "awayTeam": "Minnesota Vikings",
           "homeTeam": "Cleveland Browns",
           "channel": "Prime Video",
@@ -485,92 +492,78 @@
         {
           "date": "2025-10-05",
           "time": "13:00",
-          "awayTeam": "Indianapolis Colts",
-          "homeTeam": "Baltimore Ravens",
+          "awayTeam": "Dallas Cowboys",
+          "homeTeam": "New York Jets",
+          "channel": "FOX"
+        },
+        {
+          "date": "2025-10-05",
+          "time": "13:00",
+          "awayTeam": "Denver Broncos",
+          "homeTeam": "Philadelphia Eagles",
           "channel": "CBS"
         },
         {
           "date": "2025-10-05",
           "time": "13:00",
           "awayTeam": "Houston Texans",
-          "homeTeam": "Buffalo Bills",
+          "homeTeam": "Baltimore Ravens",
           "channel": "CBS"
         },
         {
           "date": "2025-10-05",
           "time": "13:00",
-          "awayTeam": "Carolina Panthers",
-          "homeTeam": "Detroit Lions",
-          "channel": "FOX"
-        },
-        {
-          "date": "2025-10-05",
-          "time": "13:00",
-          "awayTeam": "Tennessee Titans",
-          "homeTeam": "Miami Dolphins",
+          "awayTeam": "New York Giants",
+          "homeTeam": "New Orleans Saints",
           "channel": "CBS"
         },
         {
           "date": "2025-10-05",
           "time": "13:00",
-          "awayTeam": "New Orleans Saints",
-          "homeTeam": "New England Patriots",
+          "awayTeam": "Las Vegas Raiders",
+          "homeTeam": "Indianapolis Colts",
           "channel": "FOX"
         },
         {
           "date": "2025-10-05",
           "time": "13:00",
-          "awayTeam": "Tampa Bay Buccaneers",
-          "homeTeam": "New York Giants",
-          "channel": "FOX"
-        },
-        {
-          "date": "2025-10-05",
-          "time": "13:00",
-          "awayTeam": "Arizona Cardinals",
-          "homeTeam": "Pittsburgh Steelers",
+          "awayTeam": "Miami Dolphins",
+          "homeTeam": "Carolina Panthers",
           "channel": "FOX"
         },
         {
           "date": "2025-10-05",
           "time": "16:05",
-          "awayTeam": "Cincinnati Bengals",
+          "awayTeam": "Tampa Bay Buccaneers",
           "homeTeam": "Seattle Seahawks",
           "channel": "CBS"
         },
         {
           "date": "2025-10-05",
           "time": "16:05",
-          "awayTeam": "Chicago Bears",
-          "homeTeam": "Washington Commanders",
-          "channel": "FOX"
-        },
-        {
-          "date": "2025-10-05",
-          "time": "16:25",
-          "awayTeam": "Philadelphia Eagles",
-          "homeTeam": "Los Angeles Rams",
-          "channel": "FOX"
-        },
-        {
-          "date": "2025-10-05",
-          "time": "16:25",
-          "awayTeam": "Denver Broncos",
-          "homeTeam": "New York Jets",
+          "awayTeam": "Tennessee Titans",
+          "homeTeam": "Arizona Cardinals",
           "channel": "CBS"
         },
         {
           "date": "2025-10-05",
           "time": "16:25",
-          "awayTeam": "Green Bay Packers",
-          "homeTeam": "San Francisco 49ers",
+          "awayTeam": "Washington Commanders",
+          "homeTeam": "Los Angeles Chargers",
+          "channel": "FOX"
+        },
+        {
+          "date": "2025-10-05",
+          "time": "16:25",
+          "awayTeam": "Detroit Lions",
+          "homeTeam": "Cincinnati Bengals",
           "channel": "FOX"
         },
         {
           "date": "2025-10-05",
           "time": "20:20",
-          "awayTeam": "Dallas Cowboys",
-          "homeTeam": "Los Angeles Chargers",
+          "awayTeam": "New England Patriots",
+          "homeTeam": "Buffalo Bills",
           "channel": "NBC"
         },
         {
