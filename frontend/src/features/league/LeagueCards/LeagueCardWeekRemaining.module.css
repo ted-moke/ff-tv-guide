@@ -1,0 +1,9 @@
+.leagueCardWeekRemainingWrapper {
+  background-color: var(--background-color-offset);
+  border-radius: var(--size0_5);
+  padding: var(--size1);
+}
+
+.leagueName {
+  font-size: var(--font-size-medium);
+}

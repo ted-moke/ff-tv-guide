@@ -1,6 +1,15 @@
 import { useState, useMemo } from "react";
 import { useView } from "../view/ViewContext";
 import { FantasyTeam } from "../teams/teamTypes";
+import { Player } from "../../types";
+
+interface MatchupStatus {
+  result: string;
+  complete: boolean;
+  closeGame: boolean;
+  pointsDifference: number;
+  losingNeedsPerPlayer: number | null;
+}
 
 export interface LeagueCardData {
   team: FantasyTeam;
@@ -8,7 +17,125 @@ export interface LeagueCardData {
   losing: boolean;
   tied: boolean;
   opponent: FantasyTeam | null;
+  matchupStatus: MatchupStatus | null;
 }
+
+
+const getResultVsOpponent = ({
+  weekPoints,
+  opponentWeekPoints,
+  opponentRemainingPlayers,
+  remainingPlayers,
+}: {
+  weekPoints: number;
+  opponentWeekPoints: number;
+  opponentRemainingPlayers: Player[];
+  remainingPlayers: Player[];
+}): MatchupStatus => {
+  const pointDifference = weekPoints - opponentWeekPoints;
+  const isWinning = pointDifference > 0;
+  const remainingNum = remainingPlayers.length;
+  const opponentRemainingNum = opponentRemainingPlayers.length;
+  const remainingDifference = remainingNum - opponentRemainingNum;
+  const avgPlayerScore = 13;
+
+  if (isWinning && opponentRemainingNum === 0) {
+    return {
+      result: "Win",
+      complete: true,
+      closeGame: false, // TODO: Still want to make a way to display a game thats over was close
+      pointsDifference: pointDifference,
+      losingNeedsPerPlayer: null
+    };
+  } else if (!isWinning && remainingNum === 0) {
+    return {
+      result: "Loss",
+      complete: true,
+      closeGame: false,
+      pointsDifference: pointDifference,
+      losingNeedsPerPlayer: null
+    };
+  } else if (
+    pointDifference === 0 &&
+    remainingNum === 0 &&
+    opponentRemainingNum === 0
+  ) {
+    return {
+      result: "Tie",
+      complete: true,
+      closeGame: false,
+      pointsDifference: pointDifference,
+      losingNeedsPerPlayer: null
+    };
+  }
+
+  //   const hasMoreRemaining = remainingDifference > 0;
+  //   const hasEqualRemaining = remainingDifference === 0;
+
+  let amountPerPlayerLosingTeamNeeds = (() => {
+    if (isWinning) {
+      if (remainingNum === 0) {
+        return Math.abs(pointDifference / opponentRemainingNum);
+      }
+
+      const adjustedDifference =
+        pointDifference + avgPlayerScore * remainingNum;
+      const losingNeedsPerPlayer = Math.abs(
+        adjustedDifference / opponentRemainingNum
+      );
+
+      return losingNeedsPerPlayer;
+    } else {
+      if (opponentRemainingNum === 0) {
+        return Math.abs(pointDifference / remainingNum);
+      }
+
+      const adjustedDifference =
+        pointDifference + avgPlayerScore * opponentRemainingNum;
+      const losingNeedsPerPlayer = Math.abs(adjustedDifference / remainingNum);
+
+      return losingNeedsPerPlayer;
+    }
+  })();
+
+  if (amountPerPlayerLosingTeamNeeds / avgPlayerScore > 3) {
+    if (isWinning) {
+      return {
+        result: "Winning",
+        complete: false,
+        closeGame: false,
+        pointsDifference: pointDifference,
+        losingNeedsPerPlayer: amountPerPlayerLosingTeamNeeds
+      };
+    } else {
+      return {
+        result: "Losing",
+        complete: false,
+        closeGame: false,
+        pointsDifference: pointDifference,
+        losingNeedsPerPlayer: amountPerPlayerLosingTeamNeeds
+      };
+    }
+  }
+
+  if (isWinning) {
+    return {
+      result: "Winning",
+      complete: false,
+      closeGame: true,
+      pointsDifference: pointDifference,
+      losingNeedsPerPlayer: amountPerPlayerLosingTeamNeeds
+    };
+  }
+
+  return {
+    result: "Losing",
+    complete: false,
+    closeGame: true,
+    pointsDifference: pointDifference,
+    losingNeedsPerPlayer: amountPerPlayerLosingTeamNeeds
+  };
+};
 
 export const useLeagueCards = () => {
   const { visibleTeams, visibleOpponentTeams, matchupPlayers } = useView();
@@ -19,7 +146,7 @@ export const useLeagueCards = () => {
       return [];
     }
 
-    return Object.values(visibleTeams).map((team) => {
+    const cardData =  Object.values(visibleTeams).map((team) => {
       const winning =
         team.weekPoints != null &&
         team.weekPointsAgainst != null &&
@@ -41,6 +168,27 @@ export const useLeagueCards = () => {
           ) || null,
       };
     });
+
+    const cardDataWithMatchupStatus = cardData.map((data) => {
+      if (!data.team.weekPoints || !data.opponent?.weekPoints || !data.opponent?.playerData || !data.team.playerData) {
+        return {
+          ...data,
+          matchupStatus: null,
+        };
+      }
+      
+      const matchupStatus = getResultVsOpponent({
+        weekPoints: data.team.weekPoints,
+        opponentWeekPoints: data.opponent?.weekPoints,
+        opponentRemainingPlayers: data.opponent?.playerData,
+        remainingPlayers: data.team.playerData,
+      });
+      return {
+        ...data,
+        matchupStatus,
+      };
+    });
+    return cardDataWithMatchupStatus;
   }, [visibleTeams, selectedTeamId, visibleOpponentTeams]);
 
   const toggleCardExpansion = (teamId: string) => {

@@ -3,6 +3,7 @@ import { LeagueCardData } from "../useLeagueCards";
 import { LeagueCardDesktop } from "./LeagueCardDesktop";
 import { LeagueCardMobile } from "./LeagueCardMobile";
 import { useView } from "../../view/ViewContext";
+import { LeagueCardWeekRemaining } from "./LeagueCardWeekRemaining";
 
 interface LeagueCardProps {
   cardData: LeagueCardData;
@@ -18,6 +19,8 @@ export const LeagueCard: React.FC<LeagueCardProps> = ({
   hasWeekStarted,
 }) => {
   const { isMobile } = useView();
+
+  return <LeagueCardWeekRemaining data={cardData} />
 
   if (isMobile) {
     return (
