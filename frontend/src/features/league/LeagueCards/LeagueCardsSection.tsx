@@ -19,7 +19,7 @@ export const LeagueCardsSection: React.FC = () => {
   }
 
   // Mobile pagination logic
-  const ITEMS_PER_PAGE = 6;
+  const ITEMS_PER_PAGE = 4;
   const shouldShowPagination = isMobile && leagueCardsData.length > ITEMS_PER_PAGE;
   const totalPages = Math.ceil(leagueCardsData.length / ITEMS_PER_PAGE);
   

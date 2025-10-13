@@ -23,7 +23,7 @@
   gap: var(--size1);
   cursor: pointer;
   background-color: var(--background-color-offset);
-  padding: var(--size1);
+  padding: var(--size0_5) var(--size1);
 }
 
 .expanded .leagueCardHeaderWrapper {
