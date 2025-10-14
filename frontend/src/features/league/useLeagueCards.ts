@@ -36,9 +36,6 @@ const getResultVsOpponent = ({
   const remainingNum = remainingPlayers.length;
   const opponentRemainingNum = opponentRemainingPlayers.length;
 
-  if (opponentRemainingNum === 7) {
-    console.log({ opponentRemainingPlayers });
-  }
   const avgPlayerScore = 13;
   const closeGamePerPlayer = 3; // per player, i.e. if the game is close, then the losing team needs 1.75 points per player to win
 
@@ -183,8 +180,6 @@ export const useLeagueCards = () => {
           matchupStatus: null,
         };
       }
-
-      console.log({ data });
 
       const matchupStatus = getResultVsOpponent({
         weekPoints: data.team.weekPoints,

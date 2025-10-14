@@ -96,7 +96,7 @@ export const useWeeklySchedule = (selectedWeek: number) => {
       const gameStartTime = new Date(year, month - 1, day, hours, minutes);
 
       const gameEndTime = new Date(
-        gameStartTime.getTime() + 3 * 60 * 60 * 1000 // Changed to 3 hours game duration
+        gameStartTime.getTime() + 3.25 * 60 * 60 * 1000 // Changed to 3 hours game duration
       );
 
       if (now < gameStartTime) {

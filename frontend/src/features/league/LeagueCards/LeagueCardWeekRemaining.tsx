@@ -26,8 +26,6 @@ export const LeagueCardWeekRemaining = ({
       (player.playedStatus === "inProgress" || player.playedStatus === "upcoming") && player.rosterSlotType !== "bench"
   );
 
-  console.log({team: team.leagueName, playerRemainingTeam, playerRemainingOpponent});
-
   const isWinning =
     data.matchupStatus?.result === "Winning" ||
     data.matchupStatus?.result === "Win";
@@ -36,8 +34,6 @@ export const LeagueCardWeekRemaining = ({
     data.matchupStatus?.result === "Loss";
   const isComplete = data.matchupStatus?.complete;
   const isCloseGame = data.matchupStatus?.closeGame;
-
-  console.log({isCloseGame})
 
   return (
     <button

@@ -71,6 +71,10 @@ export const LeagueCardsSection: React.FC = () => {
   const lossesIncludingTrending =
     portfolioData.losses + portfolioData.trendingLosses;
   const tiesIncludingTrending = portfolioData.ties + portfolioData.trendingTies;
+  const hasTrending =
+    portfolioData.trendingWins > 0 ||
+    portfolioData.trendingLosses > 0 ||
+    portfolioData.trendingTies > 0;
 
   return (
     <div className={styles.leagueCardsSection} data-section="league-cards">
@@ -82,20 +86,24 @@ export const LeagueCardsSection: React.FC = () => {
         <Stack direction="row" align="center" justify="center" gap={0.5}>
           <h2 className={styles.sectionTitle}>Complete:</h2>
           <Stack direction="row" align="center" justify="start" gap={0.1}>
-            <p>{portfolioData.wins}</p>
+            <p className={styles.recordValue}>{portfolioData.wins}</p>
             <p>-</p>
-            <p>{portfolioData.losses}</p>
+            <p className={styles.recordValue}>{portfolioData.losses}</p>
             <p>-</p>
-            <p>{portfolioData.ties}</p>
+            <p className={styles.recordValue}>{portfolioData.ties}</p>
           </Stack>
-          <h2 className={styles.sectionTitle}>Trending for:</h2>
-          <Stack direction="row" align="center" justify="start" gap={0.1}>
-            <p>{winsIncludingTrending}</p>
-            <p>-</p>
-            <p>{lossesIncludingTrending}</p>
-            <p>-</p>
-            <p>{tiesIncludingTrending}</p>
-          </Stack>
+          {hasTrending && (
+            <>
+              <h2 className={styles.sectionTitle}>Trending for:</h2>
+              <Stack direction="row" align="center" justify="start" gap={0.1}>
+                <p>{winsIncludingTrending}</p>
+                <p>-</p>
+                <p>{lossesIncludingTrending}</p>
+                <p>-</p>
+                <p>{tiesIncludingTrending}</p>
+              </Stack>
+            </>
+          )}
         </Stack>
       )}
       <div

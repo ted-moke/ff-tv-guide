@@ -80,8 +80,6 @@ export const LeagueCardExpanded = ({
     };
   }, [team.playerData]);
 
-  console.log(teamPlayersByStatus);
-
   const isBestBall = useMemo(() => {
     // loop through players: im prgoress, cokmpleted, upcoming.  until you find one is a best ball slot type then return true, else false
     if (teamPlayersByStatus.bestBall.inProgress.length > 0) {

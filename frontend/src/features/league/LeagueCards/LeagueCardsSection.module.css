@@ -46,6 +46,10 @@
   font-size: var(--font-size-small);
 }
 
+.recordValue {
+  font-weight: bold;
+}
+
 @media (max-width: 768px) {
   .leagueCardsGrid {
     grid-template-columns: repeat(2, 1fr);
