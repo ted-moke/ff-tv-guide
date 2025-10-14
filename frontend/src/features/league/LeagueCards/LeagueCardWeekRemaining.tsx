@@ -18,13 +18,15 @@ export const LeagueCardWeekRemaining = ({
 
   const playerRemainingTeam = playerData.filter(
     (player) =>
-      player.playedStatus !== "completed" && player.rosterSlotType !== "bench"
+      (player.playedStatus === "inProgress" || player.playedStatus === "upcoming") && player.rosterSlotType !== "bench"
   );
 
   const playerRemainingOpponent = opponent?.playerData.filter(
     (player) =>
-      player.playedStatus !== "completed" && player.rosterSlotType !== "bench"
+      (player.playedStatus === "inProgress" || player.playedStatus === "upcoming") && player.rosterSlotType !== "bench"
   );
+
+  console.log({team: team.leagueName, playerRemainingTeam, playerRemainingOpponent});
 
   const isWinning =
     data.matchupStatus?.result === "Winning" ||
