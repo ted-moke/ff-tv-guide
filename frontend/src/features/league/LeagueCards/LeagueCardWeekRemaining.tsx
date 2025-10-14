@@ -18,12 +18,16 @@ export const LeagueCardWeekRemaining = ({
 
   const playerRemainingTeam = playerData.filter(
     (player) =>
-      (player.playedStatus === "inProgress" || player.playedStatus === "upcoming") && player.rosterSlotType !== "bench"
+      (player.playedStatus === "inProgress" ||
+        player.playedStatus === "upcoming") &&
+      player.rosterSlotType !== "bench"
   );
 
   const playerRemainingOpponent = opponent?.playerData.filter(
     (player) =>
-      (player.playedStatus === "inProgress" || player.playedStatus === "upcoming") && player.rosterSlotType !== "bench"
+      (player.playedStatus === "inProgress" ||
+        player.playedStatus === "upcoming") &&
+      player.rosterSlotType !== "bench"
   );
 
   const isWinning =
@@ -53,8 +57,7 @@ export const LeagueCardWeekRemaining = ({
             <LuFlame size={14} color="var(--primary-color)" />
           ) : null}
         </Stack>
-
-        <Stack direction="row" align="center" justify="center">
+        {opponent ? (
           <p className={styles.matchupStatusPointsDifference}>
             {data.matchupStatus?.pointsDifference &&
             data.matchupStatus?.pointsDifference > 0
@@ -62,7 +65,11 @@ export const LeagueCardWeekRemaining = ({
               : ""}
             {data.matchupStatus?.pointsDifference?.toFixed(2)}
           </p>
-        </Stack>
+        ) : (
+          <p className={styles.matchupStatusPointsDifference}>
+            {data.team.weekPoints}
+          </p>
+        )}
         {isComplete ? (
           <p className={styles.matchupStatusResult}>
             {data.matchupStatus?.result}
@@ -71,10 +78,16 @@ export const LeagueCardWeekRemaining = ({
         {!isComplete && (
           <Stack direction="row" align="center" justify="center" gap={0.2}>
             <p className={styles.playerCount}>{playerRemainingTeam.length}</p>
-            <small className="muted">vs</small>
-            <p className={styles.playerCountOpponent}>
-              {playerRemainingOpponent?.length}
-            </p>
+            {opponent ? (
+              <>
+                <small className="muted">vs</small>
+                <p className={styles.playerCountOpponent}>
+                  {playerRemainingOpponent?.length}
+                </p>
+              </>
+            ) : (
+              <small>rem</small>
+            )}
           </Stack>
         )}
       </div>
