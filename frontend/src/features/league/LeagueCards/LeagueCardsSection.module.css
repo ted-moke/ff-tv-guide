@@ -48,6 +48,5 @@
 @media (max-width: 768px) {
   .leagueCardsGrid {
     grid-template-columns: repeat(2, 1fr);
-    gap: var(--size1_5) var(--size1);
   }
 }

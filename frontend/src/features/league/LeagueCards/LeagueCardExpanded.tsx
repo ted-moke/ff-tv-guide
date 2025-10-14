@@ -14,9 +14,11 @@ type PlayersBy = Record<RosterSlotType, Record<PlayedStatus, Player[]>>;
 export const LeagueCardExpanded = ({
   team,
   opponent,
+  includeScores = false,
 }: {
   team: FantasyTeam;
   opponent: FantasyTeam | null;
+  includeScores?: boolean;
 }) => {
   const { isMobile } = useView();
   const { teamPlayersByStatus, opponentPlayersByStatus } = useMemo(() => {
@@ -102,7 +104,9 @@ export const LeagueCardExpanded = ({
     : opponentPlayersByStatus.start;
 
   return (
-    <div className={`${styles.expandedContent} ${isMobile ? styles.mobile : ""}`}>
+    <div
+      className={`${styles.expandedContent} ${isMobile ? styles.mobile : ""}`}
+    >
       <Stack className={styles.expandedPlayers} align="center" gap={0.5}>
         <Stack
           direction="row"
@@ -112,12 +116,21 @@ export const LeagueCardExpanded = ({
           gap={isMobile ? 1 : 3}
           className={styles.expandedPlayersHeader}
         >
-          <p className="muted">Your Team</p>
+          <Stack align="center" justify="center" gap={0.25}>
+            {includeScores && <p>{team.weekPoints?.toFixed(2)}</p>}
+            <p className="muted">Your Team</p>
+          </Stack>
           <Stack direction="row" align="center" justify="center">
             <LuTv color="var(--primary-color)" size={20} />
             <h4 className="primary">In Progress</h4>
           </Stack>
-          {opponent && <p className="muted">Opponent</p>}
+
+          {opponent && (
+            <Stack align="center" justify="center" gap={0.25}>
+              {includeScores && <p>{opponent.weekPoints?.toFixed(2)}</p>}
+              <p className="muted">Opponent</p>
+            </Stack>
+          )}
         </Stack>
         <Stack direction="row" align="start" justify="center" gap={1} fullWidth>
           <Stack fullHeight justify="start" fullWidth>
@@ -141,9 +154,9 @@ export const LeagueCardExpanded = ({
         </Stack>
         <hr className={styles.divider} />
         <Stack direction="row" align="center" justify="center">
-            <LuClock size={20} color="var(--primary-color)" />
-            <h4 className="muted">Upcoming</h4>
-          </Stack>
+          <LuClock size={20} color="var(--primary-color)" />
+          <h4 className="muted">Upcoming</h4>
+        </Stack>
         <Stack direction="row" align="start" justify="center" gap={1} fullWidth>
           <Stack fullHeight justify="start" fullWidth>
             {teamPlayersGroupToShowByDefault.upcoming.length <= 0 && (
@@ -166,9 +179,9 @@ export const LeagueCardExpanded = ({
         </Stack>
         <hr className={styles.divider} />
         <Stack direction="row" align="center" justify="center">
-            <LuCheck size={20} color="var(--color-green)" />
-            <h4 className="muted">Completed</h4>
-          </Stack>
+          <LuCheck size={20} color="var(--color-green)" />
+          <h4 className="muted">Completed</h4>
+        </Stack>
         <Stack direction="row" align="start" justify="center" gap={1} fullWidth>
           <Stack fullHeight justify="start" fullWidth>
             {teamPlayersGroupToShowByDefault.completed.length <= 0 && (
@@ -184,7 +197,11 @@ export const LeagueCardExpanded = ({
                 <PlayerInLeagueCard hasPlayed player={null} />
               )}
               {opponentPlayersGroupToShowByDefault.completed.map((player) => (
-                <PlayerInLeagueCard hasPlayed key={player.name} player={player} />
+                <PlayerInLeagueCard
+                  hasPlayed
+                  key={player.name}
+                  player={player}
+                />
               ))}
             </Stack>
           )}

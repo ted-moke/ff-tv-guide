@@ -2,8 +2,37 @@
   background-color: var(--background-color-offset);
   border-radius: var(--size0_5);
   padding: var(--size1);
+  display: grid;
+  gap: var(--size1);
+  grid-template-columns: 50px 2fr 40px;
+  flex: 1;
 }
 
 .leagueName {
   font-size: var(--font-size-medium);
+}
+
+.matchupStatusResult {
+  font-weight: bold;
+  text-align: center;
+}
+
+.winning .matchupStatusResult, .winning .matchupStatusPointsDifference {
+  color: var(--color-green);
+}
+
+.losing .matchupStatusResult, .losing .matchupStatusPointsDifference {
+  color: var(--color-red);
+}
+
+.complete .matchupStatusPointsDifference {
+  color: var(--text-color-muted);
+}
+
+.leagueName {
+  margin-bottom: 0;
+}
+
+.playerCount, .playerCountOpponent {
+  font-weight: bold;
 }

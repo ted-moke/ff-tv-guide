@@ -36,8 +36,12 @@ const getResultVsOpponent = ({
   const isWinning = pointDifference > 0;
   const remainingNum = remainingPlayers.length;
   const opponentRemainingNum = opponentRemainingPlayers.length;
-  const remainingDifference = remainingNum - opponentRemainingNum;
+
+  if (opponentRemainingNum === 7) {
+    console.log({opponentRemainingPlayers});
+  }
   const avgPlayerScore = 13;
+  const closeGamePerPlayer = 1.75; // per player, i.e. if the game is close, then the losing team needs 1.75 points per player to win
 
   if (isWinning && opponentRemainingNum === 0) {
     return {
@@ -77,9 +81,8 @@ const getResultVsOpponent = ({
       if (remainingNum === 0) {
         return Math.abs(pointDifference / opponentRemainingNum);
       }
-
       const adjustedDifference =
-        pointDifference + avgPlayerScore * remainingNum;
+      pointDifference + (avgPlayerScore * remainingNum);
       const losingNeedsPerPlayer = Math.abs(
         adjustedDifference / opponentRemainingNum
       );
@@ -89,16 +92,16 @@ const getResultVsOpponent = ({
       if (opponentRemainingNum === 0) {
         return Math.abs(pointDifference / remainingNum);
       }
-
+      
       const adjustedDifference =
-        pointDifference + avgPlayerScore * opponentRemainingNum;
+      pointDifference - (avgPlayerScore * opponentRemainingNum);
       const losingNeedsPerPlayer = Math.abs(adjustedDifference / remainingNum);
 
       return losingNeedsPerPlayer;
     }
   })();
 
-  if (amountPerPlayerLosingTeamNeeds / avgPlayerScore > 3) {
+  if (amountPerPlayerLosingTeamNeeds / avgPlayerScore > closeGamePerPlayer) {
     if (isWinning) {
       return {
         result: "Winning",
@@ -176,19 +179,31 @@ export const useLeagueCards = () => {
           matchupStatus: null,
         };
       }
+
+      console.log({data});
       
       const matchupStatus = getResultVsOpponent({
         weekPoints: data.team.weekPoints,
         opponentWeekPoints: data.opponent?.weekPoints,
-        opponentRemainingPlayers: data.opponent?.playerData,
-        remainingPlayers: data.team.playerData,
+        opponentRemainingPlayers: data.opponent?.playerData.filter(player => player.playedStatus !== "completed" && player.rosterSlotType !== "bench"),
+        remainingPlayers: data.team.playerData.filter(player => player.playedStatus !== "completed" && player.rosterSlotType !== "bench"),
       });
       return {
         ...data,
         matchupStatus,
       };
     });
-    return cardDataWithMatchupStatus;
+
+
+    return cardDataWithMatchupStatus.sort((a, b) => {
+      if (!a.matchupStatus?.pointsDifference || !b.matchupStatus?.pointsDifference) {
+        return 0;
+      }
+      if (Math.abs(a.matchupStatus?.pointsDifference) < Math.abs(b.matchupStatus?.pointsDifference)) {
+        return -1;
+      }
+      return 1;
+    });
   }, [visibleTeams, selectedTeamId, visibleOpponentTeams]);
 
   const toggleCardExpansion = (teamId: string) => {

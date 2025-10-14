@@ -9,7 +9,7 @@ export const getCurrentWeek = (): number | null => {
   const easternTime = new Date(
     now.toLocaleString("en-US", { timeZone: "America/New_York" })
   );
-  const seasonStart = new Date("2025-09-02T00:00:00-04:00"); // First game of 2025 season
+  const seasonStart = new Date("2025-09-03T00:00:00-04:00"); // First game of 2025 season
   const THREE_DAYS = 3 * 24 * 60 * 60 * 1000;
 
   // If the current date is more than 3 days before the season start, return null
@@ -105,4 +105,20 @@ export const hasWeekStarted = (): boolean => {
 
   // For all other days (Friday-Sunday), the week has started
   return true;
+};
+
+export const thruSundayDayGames = (): boolean => {
+  const now = new Date();
+  const easternTime = new Date(
+    now.toLocaleString("en-US", { timeZone: "America/New_York" })
+  );
+  
+  // If it's sunday and after 7:30 PM, or monday return true
+  if (easternTime.getDay() === 0 && easternTime.getHours() >= 19 && easternTime.getMinutes() >= 30) {
+    return true;
+  }
+  if (easternTime.getDay() === 1) {
+    return true;
+  }
+  return false;
 };

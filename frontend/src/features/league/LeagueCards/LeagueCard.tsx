@@ -18,9 +18,18 @@ export const LeagueCard: React.FC<LeagueCardProps> = ({
   onToggleExpansion,
   hasWeekStarted,
 }) => {
-  const { isMobile } = useView();
+  const { isMobile, thruSundayDayGames } = useView();
 
-  return <LeagueCardWeekRemaining data={cardData} />
+  if (thruSundayDayGames) {
+    return (
+      <LeagueCardWeekRemaining
+        data={cardData}
+        selectedTeamId={selectedTeamId}
+        onToggleExpansion={onToggleExpansion}
+      />
+    );
+  }
+  
 
   if (isMobile) {
     return (

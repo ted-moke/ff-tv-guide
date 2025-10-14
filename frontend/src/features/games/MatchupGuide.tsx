@@ -62,6 +62,7 @@ const MatchupGuide = () => {
           {/* <LeagueTicker /> */}
         </div>
       )}
+      {/* <WeekRemainingSection /> */}
       <LeagueCardsSection />
       {matchupPlayers && (
         <div className={styles.gameBucketGroups}>

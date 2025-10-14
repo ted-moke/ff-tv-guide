@@ -17,7 +17,7 @@ import { useMatchupPlayers } from "../players/useMatchupPlayers";
 import { ProcessedGames } from "../../hooks/useProcessedSchedule";
 import { usePlayers } from "../players/usePlayers";
 import { Player } from "../nfl/nflTypes";
-import { getCurrentWeek, hasWeekStarted } from "../../utils/weekUtils";
+import { getCurrentWeek, hasWeekStarted, thruSundayDayGames } from "../../utils/weekUtils";
 import { useWeeklySchedule } from "../../hooks/useWeeklySchedule";
 import { getTeamPlayedStatusMap } from "../nfl/getTeamPlayedStatusMap";
 
@@ -89,6 +89,7 @@ interface ViewContextType {
   selectedWeek: number | null;
   setSelectedWeek: (week: number) => void;
   hasWeekStarted: boolean;
+  thruSundayDayGames: boolean;
   // UI Data
   isMobile: boolean;
   setIsMobile: (isMobile: boolean) => void;
@@ -226,6 +227,8 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
 
   const hasWeekStartedValue = useMemo(() => hasWeekStarted(), []);
 
+  const thruSundayDayGamesValue = useMemo(() => thruSundayDayGames(), []);
+
   const value = {
     // League Stats
     leagueStats,
@@ -277,6 +280,7 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     selectedWeek,
     setSelectedWeek,
     hasWeekStarted: hasWeekStartedValue,
+    thruSundayDayGames: thruSundayDayGamesValue,
     // Mobile
     isMobile,
     setIsMobile,
