@@ -37,6 +37,8 @@ export const LeagueCardWeekRemaining = ({
   const isComplete = data.matchupStatus?.complete;
   const isCloseGame = data.matchupStatus?.closeGame;
 
+  console.log({isCloseGame})
+
   return (
     <button
       onClick={() => onToggleExpansion(team.id || "")}
@@ -49,10 +51,10 @@ export const LeagueCardWeekRemaining = ({
           isCloseGame ? styles.closeGame : ""
         }`}
       >
-        <Stack direction="row" align="center" justify="start" gap={0.25}>
+        <Stack direction="row" align="center" justify="start" gap={0.1}>
           <h3 className={styles.leagueName}>{team.shortLeagueName}</h3>
           {data.matchupStatus?.closeGame ? (
-            <LuFlame size={16} color="var(--primary-color)" />
+            <LuFlame size={14} color="var(--primary-color)" />
           ) : null}
         </Stack>
 

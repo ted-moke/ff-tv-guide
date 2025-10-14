@@ -40,7 +40,7 @@ const getResultVsOpponent = ({
     console.log({ opponentRemainingPlayers });
   }
   const avgPlayerScore = 13;
-  const closeGamePerPlayer = 1.75; // per player, i.e. if the game is close, then the losing team needs 1.75 points per player to win
+  const closeGamePerPlayer = 3; // per player, i.e. if the game is close, then the losing team needs 1.75 points per player to win
 
   if (isWinning && opponentRemainingNum === 0) {
     return {

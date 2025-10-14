@@ -4,7 +4,7 @@
   padding: var(--size1);
   display: grid;
   gap: var(--size1);
-  grid-template-columns: 50px 2fr 40px;
+  grid-template-columns: 70px 2fr 40px;
   flex: 1;
 }
 
