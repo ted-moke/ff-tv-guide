@@ -74,7 +74,7 @@
   align-items: center;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .sidebar {
     left: -100%;
     max-height: calc(100% - var(--size9));

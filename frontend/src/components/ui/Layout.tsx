@@ -14,10 +14,10 @@ const Layout = ({
   isAuthBlocking?: boolean;
   children: React.ReactNode;
 }) => {
-  const { isMobile, isMenuOpen } = useView();
+  const { isMenuOpen } = useView();
   const { user, isLoading: isAuthLoading } = useAuthContext();
 
-    if (isAuthLoading && isAuthBlocking) {
+  if (isAuthLoading && isAuthBlocking) {
     return (
       <div className={`${styles["app-container"]}`}>
         <LoadingSpinner />
@@ -36,11 +36,9 @@ const Layout = ({
         isMenuOpen ? styles["sidebar-open"] : ""
       }`}
     >
-      {isMobile && (
-        <div className={styles["header"]}>
-          <Navigation />
-        </div>
-      )}
+      <div className={styles["header"]}>
+        <Navigation />
+      </div>
       <div className={styles["sidebar-container"]}>
         <Sidebar />
       </div>

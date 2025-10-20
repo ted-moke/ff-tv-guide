@@ -144,7 +144,7 @@ button:focus-visible {
   margin-bottom: var(--size2);
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .page-container {
     padding: var(--size8) var(--size1_5) var(--size2);
   }

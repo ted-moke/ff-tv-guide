@@ -108,13 +108,22 @@ export const hasWeekStarted = (): boolean => {
 };
 
 export const thruSundayDayGames = (): boolean => {
+  console.log("thruSundayDayGames");
   const now = new Date();
   const easternTime = new Date(
     now.toLocaleString("en-US", { timeZone: "America/New_York" })
   );
-  
+
+  console.log({ easternTime });
+  console.log(easternTime.getDay());
+  console.log(easternTime.getHours());
+  console.log(easternTime.getMinutes());
   // If it's sunday and after 7:30 PM, or monday return true
-  if (easternTime.getDay() === 0 && easternTime.getHours() >= 19 && easternTime.getMinutes() >= 30) {
+  if (
+    easternTime.getDay() === 0 &&
+    ((easternTime.getHours() === 19 && easternTime.getMinutes() >= 30) ||
+      easternTime.getHours() > 19)
+  ) {
     return true;
   }
   if (easternTime.getDay() === 1) {

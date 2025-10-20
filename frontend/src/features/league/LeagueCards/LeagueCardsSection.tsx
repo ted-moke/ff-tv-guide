@@ -76,6 +76,8 @@ export const LeagueCardsSection: React.FC = () => {
     portfolioData.trendingLosses > 0 ||
     portfolioData.trendingTies > 0;
 
+    console.log({thruSundayDayGames});
+
   return (
     <div className={styles.leagueCardsSection} data-section="league-cards">
       {!thruSundayDayGames ? (

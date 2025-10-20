@@ -62,3 +62,15 @@
 .playerPosition.K {
   color: var(--color-purple);
 }
+
+@media (max-width: 1024px) {
+  .playerInLeagueCard p {
+    font-size: var(--font-size-medium);
+  }
+}
+
+@media (max-width: 768px) {
+  .playerInLeagueCard p {
+    font-size: var(--font-size-small);
+  }
+}

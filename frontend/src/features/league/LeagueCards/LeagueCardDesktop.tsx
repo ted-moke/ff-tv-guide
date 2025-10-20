@@ -41,13 +41,8 @@ export const LeagueCardDesktop: React.FC<LeagueCardDesktopProps> = ({
 
   const winningEval = winning ? "winning" : losing ? "losing" : "tied";
 
-  console.log({selectedTeamId});
-  console.log({teamId: team.id});
-
   const isSelected = selectedTeamId === team.id;
   const otherSelected = selectedTeamId !== team.id && selectedTeamId !== null;
-
-  console.log({isSelected});
 
   return (
     <div

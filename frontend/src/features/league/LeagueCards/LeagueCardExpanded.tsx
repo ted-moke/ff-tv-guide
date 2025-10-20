@@ -131,7 +131,7 @@ export const LeagueCardExpanded = ({
           )}
         </Stack>
         <Stack direction="row" align="start" justify="center" gap={1} fullWidth>
-          <Stack fullHeight justify="start" fullWidth>
+          <Stack fullHeight justify="start" align="center" fullWidth>
             {teamPlayersGroupToShowByDefault.inProgress.length <= 0 && (
               <PlayerInLeagueCard player={null} />
             )}
@@ -140,7 +140,7 @@ export const LeagueCardExpanded = ({
             ))}
           </Stack>
           {opponent && (
-            <Stack fullHeight justify="start" fullWidth>
+            <Stack fullHeight justify="start" align="center" fullWidth>
               {opponentPlayersGroupToShowByDefault.inProgress.length <= 0 && (
                 <PlayerInLeagueCard player={null} />
               )}
@@ -156,7 +156,7 @@ export const LeagueCardExpanded = ({
           <h4 className="muted">Upcoming</h4>
         </Stack>
         <Stack direction="row" align="start" justify="center" gap={1} fullWidth>
-          <Stack fullHeight justify="start" fullWidth>
+          <Stack fullHeight justify="start" align="center" fullWidth>
             {teamPlayersGroupToShowByDefault.upcoming.length <= 0 && (
               <PlayerInLeagueCard player={null} />
             )}
@@ -165,7 +165,7 @@ export const LeagueCardExpanded = ({
             ))}
           </Stack>
           {opponent && (
-            <Stack fullHeight justify="start" fullWidth>
+            <Stack fullHeight justify="start" align="center" fullWidth>
               {opponentPlayersGroupToShowByDefault.upcoming.length <= 0 && (
                 <PlayerInLeagueCard player={null} />
               )}
@@ -181,7 +181,7 @@ export const LeagueCardExpanded = ({
           <h4 className="muted">Completed</h4>
         </Stack>
         <Stack direction="row" align="start" justify="center" gap={1} fullWidth>
-          <Stack fullHeight justify="start" fullWidth>
+          <Stack fullHeight justify="start" align="center" fullWidth>
             {teamPlayersGroupToShowByDefault.completed.length <= 0 && (
               <PlayerInLeagueCard hasPlayed player={null} />
             )}
@@ -190,7 +190,7 @@ export const LeagueCardExpanded = ({
             ))}
           </Stack>
           {opponent && (
-            <Stack fullHeight justify="start" fullWidth>
+            <Stack fullHeight justify="start" align="center" fullWidth>
               {opponentPlayersGroupToShowByDefault.completed.length <= 0 && (
                 <PlayerInLeagueCard hasPlayed player={null} />
               )}
