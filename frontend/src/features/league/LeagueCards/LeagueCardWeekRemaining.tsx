@@ -40,57 +40,59 @@ export const LeagueCardWeekRemaining = ({
   const isCloseGame = data.matchupStatus?.closeGame;
 
   return (
-    <button
-      onClick={() => onToggleExpansion(team.id || "")}
-      className="buttonReset"
-    >
-      <div
-        className={`${styles.leagueCardWeekRemainingWrapper} ${
-          isWinning ? styles.winning : isLosing ? styles.losing : ""
-        } ${isComplete ? styles.complete : ""} ${
-          isCloseGame ? styles.closeGame : ""
-        }`}
+    <Stack fullWidth gap={0}>
+      <button
+        onClick={() => onToggleExpansion(team.id || "")}
+        className={`${styles.leagueCardWeekRemainingButton} buttonReset`}
       >
-        <Stack direction="row" align="center" justify="start" gap={0.1}>
-          <h3 className={styles.leagueName}>{team.shortLeagueName}</h3>
-          {data.matchupStatus?.closeGame ? (
-            <LuFlame size={14} color="var(--primary-color)" />
-          ) : null}
-        </Stack>
-        {opponent ? (
-          <p className={styles.matchupStatusPointsDifference}>
-            {data.matchupStatus?.pointsDifference &&
-            data.matchupStatus?.pointsDifference > 0
-              ? "+"
-              : ""}
-            {data.matchupStatus?.pointsDifference?.toFixed(2)}
-          </p>
-        ) : (
-          <p className={styles.matchupStatusPointsDifference}>
-            {data.team.weekPoints}
-          </p>
-        )}
-        {isComplete ? (
-          <p className={styles.matchupStatusResult}>
-            {data.matchupStatus?.result}
-          </p>
-        ) : null}
-        {!isComplete && (
-          <Stack direction="row" align="center" justify="center" gap={0.2}>
-            <p className={styles.playerCount}>{playerRemainingTeam.length}</p>
-            {opponent ? (
-              <>
-                <small className="muted">vs</small>
-                <p className={styles.playerCountOpponent}>
-                  {playerRemainingOpponent?.length}
-                </p>
-              </>
-            ) : (
-              <small>rem</small>
-            )}
+        <div
+          className={`${styles.leagueCardWeekRemainingWrapper} ${
+            isWinning ? styles.winning : isLosing ? styles.losing : ""
+          } ${isComplete ? styles.complete : ""} ${
+            isCloseGame ? styles.closeGame : ""
+          } ${selectedTeamId === team.id ? styles.selected : ""}`}
+        >
+          <Stack direction="row" align="center" justify="start" gap={0.1}>
+            <h3 className={styles.leagueName}>{team.shortLeagueName}</h3>
+            {data.matchupStatus?.closeGame ? (
+              <LuFlame size={16} color="var(--primary-color)" />
+            ) : null}
           </Stack>
-        )}
-      </div>
+          {opponent ? (
+            <p className={styles.matchupStatusPointsDifference}>
+              {data.matchupStatus?.pointsDifference &&
+              data.matchupStatus?.pointsDifference > 0
+                ? "+"
+                : ""}
+              {data.matchupStatus?.pointsDifference?.toFixed(2)}
+            </p>
+          ) : (
+            <p className={styles.matchupStatusPointsDifference}>
+              {data.team.weekPoints}
+            </p>
+          )}
+          {isComplete ? (
+            <p className={styles.matchupStatusResult}>
+              {data.matchupStatus?.result}
+            </p>
+          ) : null}
+          {!isComplete && (
+            <Stack direction="row" align="center" justify="center" gap={0.2}>
+              <p className={styles.playerCount}>{playerRemainingTeam.length}</p>
+              {opponent ? (
+                <>
+                  <small className="muted">vs</small>
+                  <p className={styles.playerCountOpponent}>
+                    {playerRemainingOpponent?.length}
+                  </p>
+                </>
+              ) : (
+                <small>rem</small>
+              )}
+            </Stack>
+          )}
+        </div>
+      </button>
       {selectedTeamId === team.id && (
         <LeagueCardExpanded
           team={team}
@@ -98,6 +100,6 @@ export const LeagueCardWeekRemaining = ({
           includeScores={true}
         />
       )}
-    </button>
+    </Stack>
   );
 };

@@ -141,7 +141,7 @@
   color: var(--primary-color);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .weekPoints {
     font-size: var(--font-size-large);
   }

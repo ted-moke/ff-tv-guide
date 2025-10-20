@@ -72,3 +72,13 @@
 .blackLinkButton:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+
+.small {
+  font-size: var(--font-size-small);
+  padding: var(--size0_5) var(--size1);
+}
+
+.large {
+  font-size: var(--font-size-large);
+  padding: var(--size1_5) var(--size2);
+}

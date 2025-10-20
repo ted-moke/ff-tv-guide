@@ -33,6 +33,7 @@ interface LinkButtonProps {
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   type?: 'button' | 'submit' | 'reset';
   target?: '_blank' | '_self' | '_parent' | '_top';
+  size?: 'small' | 'medium' | 'large';
 }
 
 const LinkButton: React.FC<LinkButtonProps> = ({
@@ -40,6 +41,7 @@ const LinkButton: React.FC<LinkButtonProps> = ({
   color = LinkButtonColor.DEFAULT,
   children,
   onClick,
+  size = 'medium',
   underline = true,
   type = 'button',
   target = '_self'
@@ -48,7 +50,7 @@ const LinkButton: React.FC<LinkButtonProps> = ({
 
   const buttonElement = (
     <button
-      className={`${styles.linkButton} ${linkButtonClass} ${underline ? styles.underline : ""}`}
+      className={`${styles.linkButton} ${linkButtonClass} ${underline ? styles.underline : ""} ${styles[size]}`}
       onClick={onClick}
       type={type}
     >

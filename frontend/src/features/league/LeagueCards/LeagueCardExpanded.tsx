@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Stack } from "../../../components/ui/Stack";
 import { PlayerInLeagueCard } from "./PlayerInLeagueCard";
 import { RosterSlotType } from "../../nfl/nflTypes";
@@ -8,6 +8,7 @@ import { FantasyTeam } from "../../teams/teamTypes";
 import styles from "./LeagueCardDesktop.module.css";
 import { LuCheck, LuClock, LuTv } from "react-icons/lu";
 import { useView } from "../../view/ViewContext";
+import LinkButton, { LinkButtonColor } from "../../../components/ui/LinkButton";
 
 type PlayersBy = Record<RosterSlotType, Record<PlayedStatus, Player[]>>;
 
@@ -20,6 +21,7 @@ export const LeagueCardExpanded = ({
   opponent: FantasyTeam | null;
   includeScores?: boolean;
 }) => {
+  const [completePlayersOpen, setCompletePlayersOpen] = useState(false);
   const { isMobile } = useView();
   const { teamPlayersByStatus, opponentPlayersByStatus } = useMemo(() => {
     const playersBy: PlayersBy = {
@@ -180,21 +182,19 @@ export const LeagueCardExpanded = ({
           <LuCheck size={20} color="var(--color-green)" />
           <h4 className="muted">Completed</h4>
         </Stack>
-        <Stack direction="row" align="start" justify="center" gap={1} fullWidth>
-          <Stack fullHeight justify="start" align="center" fullWidth>
-            {teamPlayersGroupToShowByDefault.completed.length <= 0 && (
-              <PlayerInLeagueCard hasPlayed player={null} />
-            )}
-            {teamPlayersGroupToShowByDefault.completed.map((player) => (
-              <PlayerInLeagueCard hasPlayed key={player.name} player={player} />
-            ))}
-          </Stack>
-          {opponent && (
+        {completePlayersOpen && (
+          <Stack
+            direction="row"
+            align="start"
+            justify="center"
+            gap={1}
+            fullWidth
+          >
             <Stack fullHeight justify="start" align="center" fullWidth>
-              {opponentPlayersGroupToShowByDefault.completed.length <= 0 && (
+              {teamPlayersGroupToShowByDefault.completed.length <= 0 && (
                 <PlayerInLeagueCard hasPlayed player={null} />
               )}
-              {opponentPlayersGroupToShowByDefault.completed.map((player) => (
+              {teamPlayersGroupToShowByDefault.completed.map((player) => (
                 <PlayerInLeagueCard
                   hasPlayed
                   key={player.name}
@@ -202,19 +202,30 @@ export const LeagueCardExpanded = ({
                 />
               ))}
             </Stack>
-          )}
-        </Stack>
+            {opponent && (
+              <Stack fullHeight justify="start" align="center" fullWidth>
+                {opponentPlayersGroupToShowByDefault.completed.length <= 0 && (
+                  <PlayerInLeagueCard hasPlayed player={null} />
+                )}
+                {opponentPlayersGroupToShowByDefault.completed.map((player) => (
+                  <PlayerInLeagueCard
+                    hasPlayed
+                    key={player.name}
+                    player={player}
+                  />
+                ))}
+              </Stack>
+            )}
+          </Stack>
+        )}
+        <LinkButton
+          onClick={() => setCompletePlayersOpen(!completePlayersOpen)}
+          color={LinkButtonColor.MUTED}
+          size="small"
+        >
+          {completePlayersOpen ? "Hide Completed" : "Show Completed"}
+        </LinkButton>
       </Stack>
-
-      {/* 
-        <div className={styles.leagueActions}>
-          <button className={styles.actionButton}>
-            View Details
-          </button>
-          <button className={styles.actionButton}>
-            League Settings
-          </button>
-        </div> */}
     </div>
   );
 };

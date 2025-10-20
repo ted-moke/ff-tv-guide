@@ -114,10 +114,6 @@ export const thruSundayDayGames = (): boolean => {
     now.toLocaleString("en-US", { timeZone: "America/New_York" })
   );
 
-  console.log({ easternTime });
-  console.log(easternTime.getDay());
-  console.log(easternTime.getHours());
-  console.log(easternTime.getMinutes());
   // If it's sunday and after 7:30 PM, or monday return true
   if (
     easternTime.getDay() === 0 &&

@@ -6,6 +6,15 @@
   gap: var(--size1);
   grid-template-columns: 70px 2fr 40px;
   flex: 1;
+  align-items: center;
+}
+
+.leagueCardWeekRemainingWrapper.selected {
+  background-color: var(--background-color-offset-2);
+}
+
+.leagueCardWeekRemainingButton {
+  width: 100%;
 }
 
 .leagueName {
@@ -35,4 +44,25 @@
 
 .playerCount, .playerCountOpponent {
   font-weight: bold;
+}
+
+@media (min-width: 1024px) {
+  .leagueCardWeekRemainingWrapper {
+    grid-template-columns: 90px 1fr 40px;
+  }
+  .leagueName { 
+    font-size: var(--font-size-m_l);
+  }
+
+  .playerCount, .playerCountOpponent {
+    font-size: var(--font-size-large);
+  }
+
+  .matchupStatusResult {
+    font-size: var(--font-size-large);
+  }
+
+  .matchupStatusPointsDifference {
+    font-size: var(--font-size-m_l);
+  }
 }
