@@ -15,6 +15,7 @@ export interface TeamStats {
   pointsFor: number;
   pointsAgainst: number;
   averagePointsFor: number;
+  winPercentage?: number;
 }
 
 export interface Team {

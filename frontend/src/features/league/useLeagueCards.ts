@@ -137,7 +137,12 @@ const getResultVsOpponent = ({
 };
 
 export const useLeagueCards = () => {
-  const { visibleTeams, visibleOpponentTeams, matchupPlayers } = useView();
+  const {
+    visibleTeams,
+    visibleOpponentTeams,
+    matchupPlayers,
+    thruSundayDayGames,
+  } = useView();
   const [selectedTeamId, setselectedTeamId] = useState<string | null>(null);
 
   const leagueCardsData = useMemo((): LeagueCardData[] => {
@@ -203,26 +208,35 @@ export const useLeagueCards = () => {
       };
     });
 
-    return cardDataWithMatchupStatus.sort((a, b) => {
-      if (a.matchupStatus?.complete && !b.matchupStatus?.complete) {
+    if (thruSundayDayGames) {
+      return cardDataWithMatchupStatus.sort((a, b) => {
+        if (a.matchupStatus?.complete && !b.matchupStatus?.complete) {
+          return 1;
+        }
+        if (!a.matchupStatus?.complete && b.matchupStatus?.complete) {
+          return -1;
+        }
+        if (
+          !a.matchupStatus?.pointsDifference ||
+          !b.matchupStatus?.pointsDifference
+        ) {
+          return 0;
+        }
+        if (
+          Math.abs(a.matchupStatus?.pointsDifference) <
+          Math.abs(b.matchupStatus?.pointsDifference)
+        ) {
+          return -1;
+        }
         return 1;
+      });
+    }
+
+    return cardDataWithMatchupStatus.sort((a, b) => {
+      if (a.team.stats.winPercentage && b.team.stats.winPercentage) {
+        return b.team.stats.winPercentage - a.team.stats.winPercentage;
       }
-      if (!a.matchupStatus?.complete && b.matchupStatus?.complete) {
-        return -1;
-      }
-      if (
-        !a.matchupStatus?.pointsDifference ||
-        !b.matchupStatus?.pointsDifference
-      ) {
-        return 0;
-      }
-      if (
-        Math.abs(a.matchupStatus?.pointsDifference) <
-        Math.abs(b.matchupStatus?.pointsDifference)
-      ) {
-        return -1;
-      }
-      return 1;
+      return 0;
     });
   }, [visibleTeams, selectedTeamId, visibleOpponentTeams]);
 

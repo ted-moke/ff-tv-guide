@@ -244,6 +244,7 @@ export class SleeperService {
       : 0;
     const currentWeek = getCurrentWeek();
     const averagePointsFor = currentWeek - 1 > 0 ? pointsFor / (currentWeek - 1) : 0;
+    const winPercentage = wins / (wins + losses + ties);
 
     return {
       externalLeagueId: league.externalLeagueId,
@@ -269,6 +270,7 @@ export class SleeperService {
         pointsFor,
         pointsAgainst,
         averagePointsFor,
+        winPercentage,
       },
       lastSynced: new Date(),
       lastFetched: new Date(),

@@ -186,6 +186,7 @@ export class FleaflickerService {
             pointsFor: currentRoster?.pointsFor ?? 0,
             pointsAgainst: currentRoster?.pointsAgainst ?? 0,
             averagePointsFor: currentRoster?.averagePointsFor ?? 0,
+            winPercentage: teamData.recordOverall.winPercentage.value ?? 0,
           },
           lastSynced: new Date(),
           lastFetched: new Date(),

@@ -21,6 +21,7 @@ export interface TeamStats {
   averagePointsFor: number;
   pointsAgainst: number;
   playerStatusCount?: Record<PlayedStatus, number>;
+  winPercentage?: number;
 }
 
 export interface Team {
