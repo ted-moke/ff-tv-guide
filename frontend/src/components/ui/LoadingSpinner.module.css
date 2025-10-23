@@ -2,6 +2,8 @@
 
 .spinnerContainer {
   display: flex;
+  flex-direction: column;
+  gap: var(--size1);
   justify-content: center;
   align-items: center;
   max-height: 100vh;

@@ -19,8 +19,8 @@ const Layout = ({
 
   if (isAuthLoading && isAuthBlocking) {
     return (
-      <div className={`${styles["app-container"]}`}>
-        <LoadingSpinner />
+      <div className={styles.layoutSpinnerWrapper}>
+        <LoadingSpinner text="Loading..." />
       </div>
     );
   }
