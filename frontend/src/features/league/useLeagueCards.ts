@@ -2,6 +2,7 @@ import { useState, useMemo } from "react";
 import { useView } from "../view/ViewContext";
 import { FantasyTeam } from "../teams/teamTypes";
 import { Player } from "../../types";
+import { CURRENT_SEASON } from "../../constants";
 
 interface MatchupStatus {
   result: string;
@@ -138,19 +139,23 @@ const getResultVsOpponent = ({
 
 export const useLeagueCards = () => {
   const {
-    visibleTeams,
+    userTeams,
     visibleOpponentTeams,
     matchupPlayers,
     thruSundayDayGames,
   } = useView();
   const [selectedTeamId, setselectedTeamId] = useState<string | null>(null);
 
+  const currentSeasonTeams = useMemo(() => {
+    return userTeams[CURRENT_SEASON];
+  }, [userTeams]);
+
   const leagueCardsData = useMemo((): LeagueCardData[] => {
     if (!matchupPlayers) {
       return [];
     }
 
-    const cardData = Object.values(visibleTeams).map((team) => {
+    const cardData = Object.values(currentSeasonTeams).map((team) => {
       const winning =
         team.weekPoints != null &&
         team.weekPointsAgainst != null &&
@@ -238,7 +243,7 @@ export const useLeagueCards = () => {
       }
       return 0;
     });
-  }, [visibleTeams, selectedTeamId, visibleOpponentTeams]);
+  }, [currentSeasonTeams, selectedTeamId, visibleOpponentTeams]);
 
   const toggleCardExpansion = (teamId: string) => {
     setselectedTeamId((prev) => (prev === teamId ? null : teamId));

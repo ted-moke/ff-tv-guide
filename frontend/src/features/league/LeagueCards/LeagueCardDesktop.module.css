@@ -77,13 +77,14 @@
 
 .expandedContent {
   width: 100%;
-  padding: var(--size2) var(--size1);
+  padding: var(--size1);
   background-color: var(--background-color-offset);
 }
 
 .expandedContent.mobile .expandedPlayersHeader p,
 .expandedContent.mobile h4 {
   font-size: var(--font-size-medium);
+  font-weight: bold;
 }
 
 .expandedStats {

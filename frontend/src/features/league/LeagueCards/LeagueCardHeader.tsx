@@ -21,7 +21,6 @@ export const LeagueCardHeader = ({
   winningEval: string;
 }) => {
 
-  console.log({isCollapsed});
   return (
     <div
       className={`${styles.leagueCardWrapper} ${
