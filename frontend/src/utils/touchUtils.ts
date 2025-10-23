@@ -104,7 +104,7 @@ export const useTouchGestures = (options: TouchGestureOptions = {}): TouchGestur
 export const useHorizontalSwipe = (
   onSwipeLeft?: () => void,
   onSwipeRight?: () => void,
-  threshold: number = 50
+  threshold: number = 60
 ): TouchGestureCallbacks => {
   return useTouchGestures({
     onSwipeLeft,
