@@ -26,6 +26,10 @@
   /* color: var(--primary-color); */
 }
 
+.vs {
+  color: var(--text-color-muted);
+}
+
 .starters {
   font-size: var(--font-size-xl);
   font-weight: bold;
