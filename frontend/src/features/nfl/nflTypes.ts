@@ -37,9 +37,22 @@ export interface Player {
 
 export type Conference = 'AFC' | 'NFC' | 'Both';
 
+export interface TeamColor {
+  hex: string;
+  rgb: string;
+  isHiViz: boolean;
+}
+
+export interface TeamColors {
+  primary: TeamColor;
+  secondary: TeamColor;
+  neutral: TeamColor;
+}
+
 export interface NFLTeam {
   name: string;
   codes: string[]; // Array of codes
   conference: string;
   division: string;
+  colors: TeamColors;
 }

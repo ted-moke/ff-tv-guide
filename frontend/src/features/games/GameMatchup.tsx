@@ -8,10 +8,11 @@ import LinkButton, { LinkButtonColor } from "../../components/ui/LinkButton";
 import {
   LuChevronDown as ChevronDown,
   LuChevronRight as ChevronRight,
-  LuFlame as Flame,
   LuChevronUp as ChevronUp,
 } from "react-icons/lu";
 import IconButton from "../../components/IconButton";
+import { getMatchupColors } from "../nfl/matchupColors";
+import { Stack } from "../../components/ui/Stack";
 
 interface GameMatchupProps {
   game: ProcessedGame;
@@ -20,14 +21,21 @@ interface GameMatchupProps {
   forceExpanded?: boolean;
 }
 
-const GameMatchup: React.FC<GameMatchupProps> = ({ 
-  game, 
-  id, 
-  onExpansionChange, 
-  forceExpanded 
+const GameMatchup: React.FC<GameMatchupProps> = ({
+  game,
+  id,
+  onExpansionChange,
+  forceExpanded,
 }) => {
   const [isBenchExpanded, setIsBenchExpanded] = useState(false);
   const [isMatchupExpanded, setIsMatchupExpanded] = useState(false);
+
+  const gameHomeCode = game.homeTeam?.codes[0];
+  const gameAwayCode = game.awayTeam?.codes[0];
+
+  if (!gameAwayCode || !gameHomeCode) return null;
+
+  const matchupColors = getMatchupColors([gameAwayCode, gameHomeCode]);
 
   const toggleBench = () => {
     setIsBenchExpanded(!isBenchExpanded);
@@ -40,7 +48,8 @@ const GameMatchup: React.FC<GameMatchupProps> = ({
   };
 
   // Use forceExpanded if provided (for mobile), otherwise use local state
-  const actualExpandedState = forceExpanded !== undefined ? forceExpanded : isMatchupExpanded;
+  const actualExpandedState =
+    forceExpanded !== undefined ? forceExpanded : isMatchupExpanded;
 
   // take date and time from bucket, assume the listed time is in EDT, and format it in the users time zone like "12:00 PM"
   const formattedDate = new Date(`${game.date}T${game.time}`).toLocaleString(
@@ -69,14 +78,27 @@ const GameMatchup: React.FC<GameMatchupProps> = ({
         <div className={styles["matchup-header-left"]}>
           <div className={styles["team-names"]}>
             <div className={styles["team-names-container"]}>
-              <h3 className={styles["away-team"]}>{game.awayTeam?.codes[0]}</h3>
-              <h3 className={styles["at-symbol"]}>@</h3>
-              <h3 className={styles["home-team"]}>{game.homeTeam?.codes[0]}</h3>
-              {game.isTopGame && (
-                <div className={styles["top-game-badge"]}>
-                  <Flame size={20} />
-                </div>
-              )}
+              <Stack direction="row" gap={0.5} align="center">
+                <h3
+                  className={styles["away-team"]}
+                  style={{
+                    color: matchupColors?.team1.color.hex,
+                    backgroundColor: matchupColors?.team1.strokeColor,
+                  }}
+                >
+                  {gameAwayCode}
+                </h3>
+                <small className={styles["at-symbol"]}>vs.</small>
+                <h3
+                  className={styles["home-team"]}
+                  style={{
+                    color: matchupColors?.team2.color.hex,
+                    backgroundColor: matchupColors?.team2.strokeColor,
+                  }}
+                >
+                  {gameHomeCode}
+                </h3>
+              </Stack>
             </div>
           </div>
           {actualExpandedState ? (
@@ -85,7 +107,9 @@ const GameMatchup: React.FC<GameMatchupProps> = ({
             </div>
           ) : (
             <div className={styles["matchup-subheader"]}>
-              {game.hasPlayers ? <PlayerCount game={game} variant="collapsed" /> : null}
+              {game.hasPlayers ? (
+                <PlayerCount game={game} variant="collapsed" />
+              ) : null}
             </div>
           )}
         </div>
@@ -111,7 +135,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({
             <div className={styles["team-players"]}>
               {game.awayPlayers.starters.length > 0 && (
                 <div className={styles["players-wrapper"]}>
-                  <h4>{game.awayTeam?.codes[0]}</h4>
+                  <h4>{gameAwayCode}</h4>
                   <div className={styles["team-players-header-container"]}>
                     <div className={styles["team-players-header"]}>
                       <h6>Pos</h6>
@@ -131,7 +155,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({
               )}
               {game.homePlayers.starters.length > 0 && (
                 <div className={styles["players-wrapper"]}>
-                  <h4>{game.homeTeam?.codes[0]}</h4>
+                  <h4>{gameHomeCode}</h4>
                   <div className={styles["team-players-header-container"]}>
                     <div className={styles["team-players-header"]}>
                       <h6>Pos</h6>
@@ -166,7 +190,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({
                     <>
                       {game.awayPlayers.others.length > 0 && (
                         <div className={styles["players-wrapper"]}>
-                          <h4>{game.awayTeam?.codes[0]}</h4>
+                          <h4>{gameAwayCode}</h4>
                           <div
                             className={styles["team-players-header-container"]}
                           >
@@ -188,7 +212,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({
                       )}
                       {game.homePlayers.others.length > 0 && (
                         <div className={styles["players-wrapper"]}>
-                          <h4>{game.homeTeam?.codes[0]}</h4>
+                          <h4>{gameHomeCode}</h4>
                           <div
                             className={styles["team-players-header-container"]}
                           >

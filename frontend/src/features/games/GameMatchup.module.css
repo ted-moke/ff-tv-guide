@@ -64,7 +64,7 @@
 .team-names-container {
   display: flex;
   align-items: center;
-  gap: var(--size1);
+  gap: var(--size0_5);
 }
 
 .team-names h3 {
