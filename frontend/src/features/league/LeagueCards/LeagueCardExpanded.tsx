@@ -198,7 +198,7 @@ export const LeagueCardExpanded = ({
           </LinkButton>
         )}
       </Stack>
-      <Stack className={styles.expandedPlayers} align="center" gap={0.5}>
+      <Stack className={styles.expandedPlayers} align="center" gap={0.5} fullWidth>
         <Stack
           direction="row"
           align="center"
@@ -227,36 +227,35 @@ export const LeagueCardExpanded = ({
         </Stack>
         {hasInProgressPlayers && (
           <>
-          <Stack
-            direction="row"
-            align="start"
-            justify="center"
-            gap={1}
-            fullWidth
-          >
-            <Stack fullHeight justify="start" align="center" fullWidth>
-              {teamPlayersGroupToShowByDefault.inProgress.length <= 0 && (
-                <PlayerInLeagueCard player={null} />
-              )}
-              {teamPlayersGroupToShowByDefault.inProgress.map((player) => (
-                <PlayerInLeagueCard key={player.name} player={player} />
-              ))}
-            </Stack>
-            {opponent && (
+            <Stack
+              direction="row"
+              align="start"
+              justify="center"
+              gap={1}
+              fullWidth
+            >
               <Stack fullHeight justify="start" align="center" fullWidth>
-                {opponentPlayersGroupToShowByDefault.inProgress.length <= 0 && (
+                {teamPlayersGroupToShowByDefault.inProgress.length <= 0 && (
                   <PlayerInLeagueCard player={null} />
                 )}
-                {opponentPlayersGroupToShowByDefault.inProgress.map(
-                  (player) => (
-                    <PlayerInLeagueCard key={player.name} player={player} />
-                  )
-                )}
+                {teamPlayersGroupToShowByDefault.inProgress.map((player) => (
+                  <PlayerInLeagueCard key={player.name} player={player} />
+                ))}
               </Stack>
-            )}
-          </Stack>
-        <hr className={styles.divider} />
-        </>
+              {opponent && (
+                <Stack fullHeight justify="start" align="center" fullWidth>
+                  {opponentPlayersGroupToShowByDefault.inProgress.length <=
+                    0 && <PlayerInLeagueCard player={null} />}
+                  {opponentPlayersGroupToShowByDefault.inProgress.map(
+                    (player) => (
+                      <PlayerInLeagueCard key={player.name} player={player} />
+                    )
+                  )}
+                </Stack>
+              )}
+            </Stack>
+            <hr className={styles.divider} />
+          </>
         )}
         <Stack direction="row" align="center" justify="center">
           <LuClock size={20} color="var(--primary-color)" />
