@@ -589,7 +589,7 @@
           "date": "2025-10-12",
           "time": "09:30",
           "awayTeam": "Denver Broncos",
-          "homeTeam": "New York Jets",
+          "homeTeam": "Pittsburgh Steelers",
           "channel": "NFL Network"
         },
         {
@@ -890,8 +890,324 @@
           "channel": "ESPN, ABC, ESPN2, ESPN DEPORTES"
         }
       ]
+    },
+    {
+      "weekNumber": 9,
+      "games": [
+        {
+          "date": "2025-10-30",
+          "time": "20:15",
+          "awayTeam": "Baltimore Ravens",
+          "homeTeam": "Miami Dolphins",
+          "channel": "Prime Video"
+        },
+        {
+          "date": "2025-11-02",
+          "time": "13:00",
+          "awayTeam": "Chicago Bears",
+          "homeTeam": "Cincinnati Bengals",
+          "channel": "CBS"
+        },
+        {
+          "date": "2025-11-02",
+          "time": "13:00",
+          "awayTeam": "Minnesota Vikings",
+          "homeTeam": "Detroit Lions",
+          "channel": "FOX"
+        },
+        {
+          "date": "2025-11-02",
+          "time": "13:00",
+          "awayTeam": "Carolina Panthers",
+          "homeTeam": "Green Bay Packers",
+          "channel": "FOX"
+        },
+        {
+          "date": "2025-11-02",
+          "time": "13:00",
+          "awayTeam": "Denver Broncos",
+          "homeTeam": "Houston Texans",
+          "channel": "FOX"
+        },
+        {
+          "date": "2025-11-02",
+          "time": "13:00",
+          "awayTeam": "Atlanta Falcons",
+          "homeTeam": "New England Patriots",
+          "channel": "CBS"
+        },
+        {
+          "date": "2025-11-02",
+          "time": "13:00",
+          "awayTeam": "San Francisco 49ers",
+          "homeTeam": "New York Giants",
+          "channel": "CBS"
+        },
+        {
+          "date": "2025-11-02",
+          "time": "13:00",
+          "awayTeam": "Indianapolis Colts",
+          "homeTeam": "Pittsburgh Steelers",
+          "channel": "CBS"
+        },
+        {
+          "date": "2025-11-02",
+          "time": "13:00",
+          "awayTeam": "Los Angeles Chargers",
+          "homeTeam": "Tennessee Titans",
+          "channel": "CBS"
+        },
+        {
+          "date": "2025-11-02",
+          "time": "16:25",
+          "awayTeam": "New Orleans Saints",
+          "homeTeam": "Los Angeles Rams",
+          "channel": "FOX"
+        },
+        {
+          "date": "2025-11-02",
+          "time": "16:05",
+          "awayTeam": "Jacksonville Jaguars",
+          "homeTeam": "Las Vegas Raiders",
+          "channel": "FOX"
+        },
+        {
+          "date": "2025-11-02",
+          "time": "16:25",
+          "awayTeam": "Kansas City Chiefs",
+          "homeTeam": "Buffalo Bills",
+          "channel": "CBS"
+        },
+        {
+          "date": "2025-11-02",
+          "time": "20:20",
+          "awayTeam": "Seattle Seahawks",
+          "homeTeam": "Washington Commanders",
+          "channel": "NBC"
+        },
+        {
+          "date": "2025-11-03",
+          "time": "20:15",
+          "awayTeam": "Arizona Cardinals",
+          "homeTeam": "Dallas Cowboys",
+          "channel": "ESPN, ABC"
+        }
+      ]
+    },
+    {
+      "weekNumber": 10,
+      "games": [
+        {
+          "date": "2025-11-06",
+          "time": "20:15",
+          "awayTeam": "Las Vegas Raiders",
+          "homeTeam": "Denver Broncos",
+          "channel": "Prime Video"
+        },
+        {
+          "date": "2025-11-09",
+          "time": "09:30",
+          "awayTeam": "Atlanta Falcons",
+          "homeTeam": "Indianapolis Colts",
+          "channel": "NFL Network",
+          "notes": "Berlin"
+        },
+        {
+          "date": "2025-11-09",
+          "time": "13:00",
+          "awayTeam": "New Orleans Saints",
+          "homeTeam": "Carolina Panthers",
+          "channel": "FOX"
+        },
+        {
+          "date": "2025-11-09",
+          "time": "13:00",
+          "awayTeam": "New York Giants",
+          "homeTeam": "Chicago Bears",
+          "channel": "FOX"
+        },
+        {
+          "date": "2025-11-09",
+          "time": "13:00",
+          "awayTeam": "Jacksonville Jaguars",
+          "homeTeam": "Houston Texans",
+          "channel": "CBS"
+        },
+        {
+          "date": "2025-11-09",
+          "time": "13:00",
+          "awayTeam": "Buffalo Bills",
+          "homeTeam": "Miami Dolphins",
+          "channel": "CBS"
+        },
+        {
+          "date": "2025-11-09",
+          "time": "13:00",
+          "awayTeam": "Baltimore Ravens",
+          "homeTeam": "Minnesota Vikings",
+          "channel": "FOX"
+        },
+        {
+          "date": "2025-11-09",
+          "time": "13:00",
+          "awayTeam": "Cleveland Browns",
+          "homeTeam": "New York Jets",
+          "channel": "CBS"
+        },
+        {
+          "date": "2025-11-09",
+          "time": "13:00",
+          "awayTeam": "New England Patriots",
+          "homeTeam": "Tampa Bay Buccaneers",
+          "channel": "CBS"
+        },
+        {
+          "date": "2025-11-09",
+          "time": "16:05",
+          "awayTeam": "Arizona Cardinals",
+          "homeTeam": "Seattle Seahawks",
+          "channel": "CBS"
+        },
+        {
+          "date": "2025-11-09",
+          "time": "16:25",
+          "awayTeam": "Los Angeles Rams",
+          "homeTeam": "San Francisco 49ers",
+          "channel": "FOX"
+        },
+        {
+          "date": "2025-11-09",
+          "time": "16:25",
+          "awayTeam": "Detroit Lions",
+          "homeTeam": "Washington Commanders",
+          "channel": "FOX"
+        },
+        {
+          "date": "2025-11-09",
+          "time": "20:20",
+          "awayTeam": "Pittsburgh Steelers",
+          "homeTeam": "Los Angeles Chargers",
+          "channel": "NBC"
+        },
+        {
+          "date": "2025-11-10",
+          "time": "20:15",
+          "awayTeam": "Philadelphia Eagles",
+          "homeTeam": "Green Bay Packers",
+          "channel": "ESPN, ABC"
+        }
+      ]
+    },
+    {
+      "weekNumber": 11,
+      "games": [
+        {
+          "date": "2025-11-13",
+          "time": "20:15",
+          "awayTeam": "New York Jets",
+          "homeTeam": "New England Patriots",
+          "channel": "Prime Video"
+        },
+        {
+          "date": "2025-11-16",
+          "time": "09:30",
+          "awayTeam": "Washington Commanders",
+          "homeTeam": "Miami Dolphins",
+          "channel": "NFL Network",
+          "notes": "Madrid"
+        },
+        {
+          "date": "2025-11-16",
+          "time": "13:00",
+          "awayTeam": "Carolina Panthers",
+          "homeTeam": "Atlanta Falcons",
+          "channel": "FOX"
+        },
+        {
+          "date": "2025-11-16",
+          "time": "13:00",
+          "awayTeam": "Tampa Bay Buccaneers",
+          "homeTeam": "Buffalo Bills",
+          "channel": "CBS"
+        },
+        {
+          "date": "2025-11-16",
+          "time": "13:00",
+          "awayTeam": "Los Angeles Chargers",
+          "homeTeam": "Jacksonville Jaguars",
+          "channel": "CBS"
+        },
+        {
+          "date": "2025-11-16",
+          "time": "13:00",
+          "awayTeam": "Chicago Bears",
+          "homeTeam": "Minnesota Vikings",
+          "channel": "FOX"
+        },
+        {
+          "date": "2025-11-16",
+          "time": "13:00",
+          "awayTeam": "Green Bay Packers",
+          "homeTeam": "New York Giants",
+          "channel": "FOX"
+        },
+        {
+          "date": "2025-11-16",
+          "time": "13:00",
+          "awayTeam": "Cincinnati Bengals",
+          "homeTeam": "Pittsburgh Steelers",
+          "channel": "CBS"
+        },
+        {
+          "date": "2025-11-16",
+          "time": "13:00",
+          "awayTeam": "Houston Texans",
+          "homeTeam": "Tennessee Titans",
+          "channel": "FOX"
+        },
+        {
+          "date": "2025-11-16",
+          "time": "16:05",
+          "awayTeam": "San Francisco 49ers",
+          "homeTeam": "Arizona Cardinals",
+          "channel": "FOX"
+        },
+        {
+          "date": "2025-11-16",
+          "time": "16:25",
+          "awayTeam": "Seattle Seahawks",
+          "homeTeam": "Los Angeles Rams",
+          "channel": "FOX"
+        },
+        {
+          "date": "2025-11-16",
+          "time": "16:25",
+          "awayTeam": "Baltimore Ravens",
+          "homeTeam": "Cleveland Browns",
+          "channel": "CBS"
+        },
+        {
+          "date": "2025-11-16",
+          "time": "16:25",
+          "awayTeam": "Kansas City Chiefs",
+          "homeTeam": "Denver Broncos",
+          "channel": "CBS"
+        },
+        {
+          "date": "2025-11-16",
+          "time": "20:20",
+          "awayTeam": "Detroit Lions",
+          "homeTeam": "Philadelphia Eagles",
+          "channel": "NBC"
+        },
+        {
+          "date": "2025-11-17",
+          "time": "20:15",
+          "awayTeam": "Dallas Cowboys",
+          "homeTeam": "Las Vegas Raiders",
+          "channel": "ESPN, ABC"
+        }
+      ]
     }
-    
-    
   ]
 }

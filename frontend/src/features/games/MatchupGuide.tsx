@@ -8,7 +8,6 @@ import { useView } from "../view/ViewContext";
 import { LeagueCardsSection } from "../league/LeagueCards/LeagueCardsSection";
 import { useLeagueTickerVisibility } from "../league/useLeagueTickerVisibility";
 
-
 // const hideAlertOnLoad = localStorage.getItem("hideAlertShip24") === "true";
 
 const MatchupGuide = () => {
@@ -29,7 +28,8 @@ const MatchupGuide = () => {
   // const [hideAlert, setHideAlert] = useState(hideAlertOnLoad);
 
   if (matchupPlayersLoading || needsConnectLoading || isAuthLoading) {
-    return <LoadingSpinner />;
+    console.log({ matchupPlayersLoading, needsConnectLoading, isAuthLoading });
+    return <LoadingSpinner text="Loading..." />;
   }
 
   if (matchupPlayersError) {

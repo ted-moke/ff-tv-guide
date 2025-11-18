@@ -110,7 +110,10 @@ export const AuthProvider2 = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const auth = getAuth(app);
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      if (isAuthInitializing || backendUser) return;
+      if (isAuthInitializing || backendUser) {
+        console.log({isAuthInitializing, backendUser});
+        return;
+      }
       try {
 
         setUser(currentUser);

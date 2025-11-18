@@ -41,7 +41,7 @@ export const useUserTeams = ({
   seasonEnd?: number | null;
   teamPlayedStatusMap?: TeamPlayedStatusMap | null;
 } = {}) => {
-  const { backendUser, user, isLoading: isAuthLoading } = useAuthContext();
+  const { backendUser, user } = useAuthContext();
   const queryClient = useQueryClient();
 
   let hasTeamsToUpdate = false;
@@ -126,7 +126,7 @@ export const useUserTeams = ({
 
   return {
     data,
-    isLoading: isAuthLoading || isLoading,
+    isLoading,
     isPending,
     error,
     teamMap,
