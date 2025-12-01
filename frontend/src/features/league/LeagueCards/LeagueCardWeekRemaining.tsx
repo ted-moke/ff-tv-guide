@@ -1,17 +1,19 @@
 import { LeagueCardData } from "../useLeagueCards";
 import { Stack } from "../../../components/ui/Stack";
 import styles from "./LeagueCardWeekRemaining.module.css";
-import { LuFlame } from "react-icons/lu";
+import { LuEyeOff, LuFlame } from "react-icons/lu";
 import { LeagueCardExpanded } from "./LeagueCardExpanded";
 
 export const LeagueCardWeekRemaining = ({
   data,
   selectedTeamId,
   onToggleExpansion,
+  isMobile,
 }: {
   data: LeagueCardData;
   selectedTeamId: string | null;
   onToggleExpansion: (teamId: string) => void;
+  isMobile: boolean;
 }) => {
   const { team, opponent } = data;
   const { playerData } = team;
@@ -43,7 +45,7 @@ export const LeagueCardWeekRemaining = ({
     <Stack fullWidth gap={0}>
       <button
         onClick={() => onToggleExpansion(team.id || "")}
-        className={`${styles.leagueCardWeekRemainingButton} buttonReset`}
+        className={`${styles.leagueCardWeekRemainingButton} buttonReset ${!data.visibility.team && styles.teamHidden}`}
       >
         <div
           className={`${styles.leagueCardWeekRemainingWrapper} ${
@@ -71,12 +73,15 @@ export const LeagueCardWeekRemaining = ({
               {data.team.weekPoints}
             </p>
           )}
-          {isComplete ? (
+          {!data.visibility.team ? (
+            <Stack direction="row" align="center" justify="center" >
+              <LuEyeOff size={isMobile ? 18 : 24} color="var(--text-color-muted)" />
+            </Stack>
+          ) : isComplete ? (
             <p className={styles.matchupStatusResult}>
               {data.matchupStatus?.result}
             </p>
-          ) : null}
-          {!isComplete && (
+          ) : (
             <Stack direction="row" align="center" justify="center" gap={0.2}>
               <p className={styles.playerCount}>{playerRemainingTeam.length}</p>
               {opponent ? (

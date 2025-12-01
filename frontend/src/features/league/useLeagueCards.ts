@@ -19,6 +19,10 @@ export interface LeagueCardData {
   tied: boolean;
   opponent: FantasyTeam | null;
   matchupStatus: MatchupStatus | null;
+  visibility: {
+    team: boolean;
+    opponent: boolean;
+  };
 }
 
 const getResultVsOpponent = ({
@@ -140,6 +144,7 @@ const getResultVsOpponent = ({
 export const useLeagueCards = () => {
   const {
     userTeams,
+    visibleTeams,
     visibleOpponentTeams,
     matchupPlayers,
     thruSundayDayGames,
@@ -166,15 +171,25 @@ export const useLeagueCards = () => {
         team.weekPoints < team.weekPointsAgainst;
       const tied = !winning && !losing;
 
+      const opponent =
+        visibleOpponentTeams.find(
+          (opponent) => opponent.leagueMasterId === team.leagueMasterId
+        ) || null;
+
+      const isTeamVisible = visibleTeams.some((t) => t.leagueId === team.leagueId);
+
+      console.log('isTeamVisible', isTeamVisible, team.leagueId, visibleTeams);
+
       return {
         team,
         winning,
         losing,
         tied,
-        opponent:
-          visibleOpponentTeams.find(
-            (opponent) => opponent.leagueMasterId === team.leagueMasterId
-          ) || null,
+        opponent,
+        visibility: {
+          team: isTeamVisible,
+          opponent: !!opponent,
+        },
       };
     });
 
@@ -215,18 +230,33 @@ export const useLeagueCards = () => {
 
     if (thruSundayDayGames) {
       return cardDataWithMatchupStatus.sort((a, b) => {
+        // Sort so hidden teams are at the bottom 
+        if (!a.visibility.team && b.visibility.team) {
+          return 1;
+        }
+        if (a.visibility.team && !b.visibility.team) {
+          return -1;
+        }
+
+        // Sort so completed games are at the bottom
         if (a.matchupStatus?.complete && !b.matchupStatus?.complete) {
           return 1;
         }
+
+        // Sort so incomplete games are the next highest
         if (!a.matchupStatus?.complete && b.matchupStatus?.complete) {
           return -1;
         }
+
+        // Sort so games where we're hiding the opponent are the next highest
         if (
           !a.matchupStatus?.pointsDifference ||
           !b.matchupStatus?.pointsDifference
         ) {
           return 0;
         }
+
+        // Sort so games with less points difference are the next highest
         if (
           Math.abs(a.matchupStatus?.pointsDifference) <
           Math.abs(b.matchupStatus?.pointsDifference)

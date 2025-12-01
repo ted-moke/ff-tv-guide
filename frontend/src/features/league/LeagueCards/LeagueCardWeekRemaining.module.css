@@ -46,6 +46,10 @@
   font-weight: bold;
 }
 
+.leagueCardWeekRemainingButton.teamHidden {
+  opacity: 0.5;
+}
+
 @media (min-width: 1024px) {
   .leagueCardWeekRemainingWrapper {
     grid-template-columns: 90px 1fr 40px;

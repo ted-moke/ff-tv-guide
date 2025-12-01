@@ -228,7 +228,6 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
   const hasWeekStartedValue = useMemo(() => hasWeekStarted(), []);
 
   const thruSundayDayGamesValue = useMemo(() => {
-    console.log("thruSundayDayGamesValue");
     return thruSundayDayGames();
   }, []);
 

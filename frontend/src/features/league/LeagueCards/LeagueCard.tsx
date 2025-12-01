@@ -26,6 +26,7 @@ export const LeagueCard: React.FC<LeagueCardProps> = ({
         data={cardData}
         selectedTeamId={selectedTeamId}
         onToggleExpansion={onToggleExpansion}
+        isMobile={isMobile}
       />
     );
   }
