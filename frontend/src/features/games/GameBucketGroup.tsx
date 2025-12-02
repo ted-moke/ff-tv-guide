@@ -4,11 +4,18 @@ import GameMatchup from "./GameMatchup";
 import { ProcessedGameBucket } from "../../hooks/useProcessedSchedule";
 import { LuChevronDown } from "react-icons/lu"; // Example icons
 import { useView } from "../view/ViewContext";
+import { getUniqueGameId } from "./Game.utils";
 
 interface GameBucketGroupProps {
   status: string;
   gameBuckets: ProcessedGameBucket[];
 }
+
+const getInitialGameId = (gameBuckets: ProcessedGameBucket[]) => {
+  if (gameBuckets.length === 1) return getUniqueGameId(gameBuckets[0].games[0]);
+
+  return null;
+};
 
 const GameBucketGroup: React.FC<GameBucketGroupProps> = ({
   status,
@@ -18,7 +25,9 @@ const GameBucketGroup: React.FC<GameBucketGroupProps> = ({
   const [collapsedBuckets, setCollapsedBuckets] = useState<boolean[]>(
     gameBuckets.map((_) => status === "completed")
   );
-  const [expandedGameId, setExpandedGameId] = useState<string | null>(null);
+  const [expandedGameId, setExpandedGameId] = useState<string | null>(
+    getInitialGameId(gameBuckets)
+  );
 
   const toggleCollapse = (index: number) => {
     setCollapsedBuckets((prevState) => {
@@ -77,14 +86,14 @@ const GameBucketGroup: React.FC<GameBucketGroupProps> = ({
               }`}
             >
               {bucket.games.map((game, gameIndex) => {
-                const gameId = `matchup-${game.awayTeam?.codes[0]}-${game.homeTeam?.codes[0]}`;
-                const isExpanded = isMobile ? expandedGameId === gameId : true;
+                const gameId = getUniqueGameId(game);
+                const onlyGame = bucket.games.length === 1;
+                const isExpanded = onlyGame ? true : expandedGameId === gameId;
+
                 const selectedIndex =
                   isMobile && expandedGameId
                     ? bucket.games.findIndex(
-                        (g) =>
-                          `matchup-${g.awayTeam?.codes[0]}-${g.homeTeam?.codes[0]}` ===
-                          expandedGameId
+                        (g) => getUniqueGameId(g) === expandedGameId
                       )
                     : null;
                 const gridPosition = getGridPosition(gameIndex, selectedIndex);
@@ -100,7 +109,7 @@ const GameBucketGroup: React.FC<GameBucketGroupProps> = ({
                       onExpansionChange={(expanded) =>
                         handleGameExpansion(gameId, expanded)
                       }
-                      forceExpanded={isMobile ? isExpanded : undefined}
+                      forceExpanded={isExpanded}
                     />
                   </div>
                 );
