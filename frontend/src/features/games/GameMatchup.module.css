@@ -17,11 +17,16 @@
   cursor: pointer;
   padding-left: var(--size2);
   padding-right: var(--size2);
-  background-color: var(--background-color-offset-2);
+  background-color: var(--background-color-offset);
+  border: 5px solid var(--background-color-offset-2);
+  border-top: none;
+  border-radius: 0 0 var(--border-radius-medium) var(--border-radius-medium);
 }
+
 
 .collapsed .matchup-header {
   background-color: transparent;
+  border-color: transparent;
 }
 
 .matchup-content {

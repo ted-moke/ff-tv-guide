@@ -38,9 +38,7 @@ const GameBucketGroup: React.FC<GameBucketGroupProps> = ({
   };
 
   const handleGameExpansion = (gameId: string, isExpanded: boolean) => {
-    if (isMobile) {
       setExpandedGameId(isExpanded ? gameId : null);
-    }
   };
 
   const getGridPosition = (gameIndex: number, selectedIndex: number | null) => {
@@ -88,7 +86,7 @@ const GameBucketGroup: React.FC<GameBucketGroupProps> = ({
               {bucket.games.map((game, gameIndex) => {
                 const gameId = getUniqueGameId(game);
                 const onlyGame = bucket.games.length === 1;
-                const isExpanded = onlyGame ? true : expandedGameId === gameId;
+                const isExpanded = expandedGameId === gameId;
 
                 const selectedIndex =
                   isMobile && expandedGameId
