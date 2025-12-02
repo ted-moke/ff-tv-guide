@@ -7,7 +7,6 @@
   gap: var(--size1);
 }
 
-
 .leagueCardsGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -27,23 +26,51 @@
   line-height: 1;
 }
 
+.recordContainer p {
+  font-size: var(--font-size-medium);
+  color: var(--text-color-muted);
+}
+
 .paginationControls {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
   gap: var(--size1);
   padding: 0 var(--size1);
 }
 
 .pageIndicator {
-  font-size: var(--font-size-small);
-  color: var(--text-color-muted);
-  font-weight: 500;
+  display: flex;
+  flex-direction: row;
+  gap: var(--size0_5);
+  align-items: center;
+}
+
+.pip {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: none;
+  background-color: var(--text-color-muted);
+  opacity: 0.3;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.pip:hover {
+  opacity: 0.6;
+}
+
+.pipActive {
+  opacity: 1;
+  transform: scale(1.2);
 }
 
 .expandButtonText {
   font-size: var(--font-size-small);
+  color: var(--text-color-muted);
 }
 
 .recordValue {

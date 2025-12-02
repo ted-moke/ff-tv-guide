@@ -76,7 +76,7 @@ export const LeagueCardsSection: React.FC = () => {
     portfolioData.trendingLosses > 0 ||
     portfolioData.trendingTies > 0;
 
-    console.log({thruSundayDayGames});
+  console.log({ thruSundayDayGames });
 
   return (
     <div className={styles.leagueCardsSection} data-section="league-cards">
@@ -85,18 +85,10 @@ export const LeagueCardsSection: React.FC = () => {
           My Leagues - Week {selectedWeek}
         </h2>
       ) : (
-        <Stack direction="row" align="center" justify="center" gap={0.5}>
-          <h2 className={styles.sectionTitle}>Complete:</h2>
-          <Stack direction="row" align="center" justify="start" gap={0.1}>
-            <p className={styles.recordValue}>{portfolioData.wins}</p>
-            <p>-</p>
-            <p className={styles.recordValue}>{portfolioData.losses}</p>
-            <p>-</p>
-            <p className={styles.recordValue}>{portfolioData.ties}</p>
-          </Stack>
-          {hasTrending && (
-            <>
-              <h2 className={styles.sectionTitle}>Trending for:</h2>
+        <Stack direction="row" align="center"  gap={0.5}>
+          {hasTrending ? (
+            <Stack direction="row" align="center" justify="start" gap={0.5} className={styles.recordContainer}>
+              <h2 className={styles.sectionTitle}>This Week:</h2>
               <Stack direction="row" align="center" justify="start" gap={0.1}>
                 <p>{winsIncludingTrending}</p>
                 <p>-</p>
@@ -104,7 +96,18 @@ export const LeagueCardsSection: React.FC = () => {
                 <p>-</p>
                 <p>{tiesIncludingTrending}</p>
               </Stack>
-            </>
+            </Stack>
+          ) : (
+            <Stack direction="row" align="center" justify="start" gap={0.5} className={styles.recordContainer} >
+              <h2 className={styles.sectionTitle}>Complete:</h2>
+              <Stack direction="row" align="center" justify="start" gap={0.1}>
+                <p className={styles.recordValue}>{portfolioData.wins}</p>
+                <p>-</p>
+                <p className={styles.recordValue}>{portfolioData.losses}</p>
+                <p>-</p>
+                <p className={styles.recordValue}>{portfolioData.ties}</p>
+              </Stack>
+            </Stack>
           )}
         </Stack>
       )}
@@ -130,14 +133,23 @@ export const LeagueCardsSection: React.FC = () => {
       {shouldShowPagination && (
         <div className={styles.paginationControls}>
           <div className={styles.pageIndicator}>
-            Page {currentPage + 1} of {totalPages}
+            {Array.from({ length: totalPages }).map((_, index) => (
+              <button
+                key={index}
+                className={`${styles.pip} ${
+                  index === currentPage ? styles.pipActive : ""
+                }`}
+                onClick={() => setCurrentPage(index)}
+                aria-label={`Go to page ${index + 1}`}
+              />
+            ))}
           </div>
           <LinkButton
-            color={LinkButtonColor.DEFAULT}
+            color={LinkButtonColor.MUTED}
             onClick={handleToggleExpansion}
           >
             <p className={styles.expandButtonText}>
-              {isExpanded ? "Collapse" : `Show All (${leagueCardsData.length})`}
+              {isExpanded ? "Collapse" : `Show All`}
             </p>
           </LinkButton>
         </div>
