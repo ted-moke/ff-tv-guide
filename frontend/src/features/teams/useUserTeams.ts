@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuthContext } from "../auth/AuthProvider2";
 import { FantasyTeam } from "./teamTypes";
@@ -7,18 +8,19 @@ import { UserTeams } from "../view/ViewContext";
 import { TeamPlayedStatusMap } from "../nfl/getTeamPlayedStatusMap";
 import { populatePlayerPlayedStatus } from "./populatePlayerPlayedStatus";
 
-const updateStaleTeams = async (teams: FantasyTeam[], queryClient: any) => {
-  const teamsToUpdate = teams.filter((team) => team.needsUpdate);
-  let ids = teamsToUpdate.map((team) => team.leagueId);
-
-  if (ids.length > 0) {
-    try {
+const updateStaleTeams = async (
+  teamsIds: string[],
+  queryClient: any,
+  callback?: () => void
+) => {
+  try {
+    if (teamsIds.length > 0) {
       await fetch(`${API_URL}/leagues/update-by-ids`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ids, idType: "internal" }),
+        body: JSON.stringify({ ids: teamsIds, idType: "internal" }),
       });
 
       // Invalidate queries after update
@@ -26,8 +28,12 @@ const updateStaleTeams = async (teams: FantasyTeam[], queryClient: any) => {
       queryClient.invalidateQueries({ queryKey: ["opponentTeams"] });
 
       console.log("teams updated");
-    } catch (error) {
-      console.error("Error updating leagues by IDs:", error);
+    }
+  } catch (error) {
+    console.error("Error updating leagues by IDs:", error);
+  } finally {
+    if (callback) {
+      callback();
     }
   }
 };
@@ -41,6 +47,9 @@ export const useUserTeams = ({
   seasonEnd?: number | null;
   teamPlayedStatusMap?: TeamPlayedStatusMap | null;
 } = {}) => {
+  const [teamsIdsCurrentlyUpdating, setTeamsIdsCurrentlyUpdating] = useState<
+    string[]
+  >([]);
   const { backendUser, user } = useAuthContext();
   const queryClient = useQueryClient();
 
@@ -97,8 +106,18 @@ export const useUserTeams = ({
           );
         }
 
-        // Call the abstracted updateStaleTeams function in the background
-        updateStaleTeams(teamsNeedingUpdate, queryClient);
+        const teamsToUpdate = teamsNeedingUpdate
+          .filter((team) => team.needsUpdate)
+          .map((team) => team.leagueId);
+
+        if (teamsToUpdate.length > 0) {
+          setTeamsIdsCurrentlyUpdating(teamsToUpdate);
+          updateStaleTeams(teamsToUpdate, queryClient, () => {
+            setTeamsIdsCurrentlyUpdating([]);
+          });
+        } else {
+          setTeamsIdsCurrentlyUpdating([]);
+        }
 
         return { teamsBySeason, teamsNeedingUpdate };
       } catch (error) {
@@ -133,13 +152,17 @@ export const useUserTeams = ({
     hasTeamsToUpdate,
     hasTeamsToMigrate,
     isSuccess,
+    teamsIdsCurrentlyUpdating,
   };
 };
 
 export const useOpponentTeams = ({
   enabled = true,
   teamPlayedStatusMap,
-}: { enabled?: boolean; teamPlayedStatusMap?: TeamPlayedStatusMap | null } = {}) => {
+}: {
+  enabled?: boolean;
+  teamPlayedStatusMap?: TeamPlayedStatusMap | null;
+} = {}) => {
   const { user } = useAuthContext();
 
   return useQuery<FantasyTeam[]>({
@@ -164,7 +187,9 @@ export const useOpponentTeams = ({
       }
       const data = await response.json();
       if (teamPlayedStatusMap) {
-        data.opponents = data.opponents.map((team: FantasyTeam) => populatePlayerPlayedStatus(team, teamPlayedStatusMap));
+        data.opponents = data.opponents.map((team: FantasyTeam) =>
+          populatePlayerPlayedStatus(team, teamPlayedStatusMap)
+        );
       }
       return data.opponents;
     },

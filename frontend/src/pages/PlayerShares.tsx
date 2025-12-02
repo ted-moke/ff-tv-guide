@@ -219,7 +219,7 @@ const PlayerShares: React.FC = () => {
     };
   }, [sortedGroupedPlayers]);
 
-  if (isAuthLoading || needsConnectLoading) return <LoadingSpinner />;
+  if (isAuthLoading || needsConnectLoading) return <LoadingSpinner text="Authenticating..." />;
   if (needsAccount) {
     console.warn("needsAccount", needsAccount);
     return <Navigate to="/connect-team" />;
@@ -230,7 +230,7 @@ const PlayerShares: React.FC = () => {
     return <Navigate to="/connect-team" />;
   }
 
-  if (!players) return <LoadingSpinner />;
+  if (!players) return <LoadingSpinner text="Loading players..." />;
 
   return (
     <div className={styles.playerShares}>

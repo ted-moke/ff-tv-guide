@@ -11,7 +11,7 @@ const TeamHistory: React.FC = () => {
   const { isLoading: needsConnectLoading, needsConnect, needsAccount } = useNeedsResources();
 
   if (needsConnectLoading) {
-    return <LoadingSpinner />;
+    return <LoadingSpinner text="Authenticating..." />;
   }
 
   if (needsAccount) { 
@@ -28,7 +28,7 @@ const TeamHistory: React.FC = () => {
     return (
       <div className={`${styles.container} page-container`}>
         <div className={styles.loading}>
-          <LoadingSpinner />
+          <LoadingSpinner text="Loading team history..." />
           <span style={{ marginLeft: "1rem" }}>Loading team history...</span>
         </div>
       </div>

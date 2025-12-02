@@ -20,7 +20,7 @@ const Layout = ({
   if (isAuthLoading && isAuthBlocking) {
     return (
       <div className={styles.layoutSpinnerWrapper}>
-        <LoadingSpinner text="Loading..." />
+        <LoadingSpinner text="Authenticating..." />
       </div>
     );
   }

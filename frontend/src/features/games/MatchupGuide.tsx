@@ -27,9 +27,12 @@ const MatchupGuide = () => {
   } = useNeedsResources();
   // const [hideAlert, setHideAlert] = useState(hideAlertOnLoad);
 
-  if (matchupPlayersLoading || needsConnectLoading || isAuthLoading) {
-    console.log({ matchupPlayersLoading, needsConnectLoading, isAuthLoading });
-    return <LoadingSpinner text="Loading..." />;
+  if (matchupPlayersLoading) {
+    return <LoadingSpinner text="Calculating matchups..." />;
+  }
+
+  if (needsConnectLoading || isAuthLoading) {
+    return <LoadingSpinner text="Authenticating..." />;
   }
 
   if (matchupPlayersError) {

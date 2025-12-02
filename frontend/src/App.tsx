@@ -34,7 +34,7 @@ const AdminRoute: React.FC<{ element: React.ReactElement }> = ({ element }) => {
   const { user, isLoading } = useAuthContext();
 
   if (isLoading) {
-    return <LoadingSpinner />;
+    return <LoadingSpinner text="Authenticating..." />;
   }
 
   if (!user || user.email !== "theodore.moke@gmail.com") {

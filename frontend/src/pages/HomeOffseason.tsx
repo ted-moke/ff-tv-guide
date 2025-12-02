@@ -9,7 +9,7 @@ const HomeOffseason: React.FC = () => {
   const { isLoading: needsConnectLoading, needsConnect, needsAccount } = useNeedsResources();
 
   if (needsConnectLoading) {
-    return <LoadingSpinner />;
+    return <LoadingSpinner text="Authenticating..." />;
   }
 
   if (needsAccount) { 

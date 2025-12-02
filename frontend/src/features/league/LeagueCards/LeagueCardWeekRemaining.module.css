@@ -42,6 +42,10 @@
   margin-bottom: 0;
 }
 
+.updating .leagueName, .updating p {
+  font-style: italic;
+}
+
 .playerCount, .playerCountOpponent {
   font-weight: bold;
 }

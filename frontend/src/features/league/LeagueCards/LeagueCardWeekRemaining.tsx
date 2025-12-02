@@ -45,7 +45,9 @@ export const LeagueCardWeekRemaining = ({
     <Stack fullWidth gap={0}>
       <button
         onClick={() => onToggleExpansion(team.id || "")}
-        className={`${styles.leagueCardWeekRemainingButton} buttonReset ${!data.visibility.team && styles.teamHidden}`}
+        className={`${styles.leagueCardWeekRemainingButton} buttonReset ${
+          !data.visibility.team && styles.teamHidden
+        } ${data.isUpdating ? styles.updating : ""}`}
       >
         <div
           className={`${styles.leagueCardWeekRemainingWrapper} ${
@@ -74,8 +76,11 @@ export const LeagueCardWeekRemaining = ({
             </p>
           )}
           {!data.visibility.team ? (
-            <Stack direction="row" align="center" justify="center" >
-              <LuEyeOff size={isMobile ? 18 : 24} color="var(--text-color-muted)" />
+            <Stack direction="row" align="center" justify="center">
+              <LuEyeOff
+                size={isMobile ? 18 : 24}
+                color="var(--text-color-muted)"
+              />
             </Stack>
           ) : isComplete ? (
             <p className={styles.matchupStatusResult}>

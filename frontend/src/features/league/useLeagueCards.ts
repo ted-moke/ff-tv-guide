@@ -17,6 +17,7 @@ export interface LeagueCardData {
   winning: boolean;
   losing: boolean;
   tied: boolean;
+  isUpdating: boolean;
   opponent: FantasyTeam | null;
   matchupStatus: MatchupStatus | null;
   visibility: {
@@ -148,6 +149,7 @@ export const useLeagueCards = () => {
     visibleOpponentTeams,
     matchupPlayers,
     thruSundayDayGames,
+    teamsIdsCurrentlyUpdating,
   } = useView();
   const [selectedTeamId, setselectedTeamId] = useState<string | null>(null);
 
@@ -177,13 +179,13 @@ export const useLeagueCards = () => {
         ) || null;
 
       const isTeamVisible = visibleTeams.some((t) => t.leagueId === team.leagueId);
-
-      console.log('isTeamVisible', isTeamVisible, team.leagueId, visibleTeams);
+      const isTeamUpdating = teamsIdsCurrentlyUpdating.includes(team.leagueId);
 
       return {
         team,
         winning,
         losing,
+        isUpdating: isTeamUpdating,
         tied,
         opponent,
         visibility: {
@@ -230,6 +232,7 @@ export const useLeagueCards = () => {
 
     if (thruSundayDayGames) {
       return cardDataWithMatchupStatus.sort((a, b) => {
+
         // Sort so hidden teams are at the bottom 
         if (!a.visibility.team && b.visibility.team) {
           return 1;

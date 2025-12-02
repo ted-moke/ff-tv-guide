@@ -45,6 +45,7 @@ interface ViewContextType {
   userTeamsLoading: boolean;
   userTeamsPending: boolean;
   userTeamsSuccess: boolean;
+  teamsIdsCurrentlyUpdating: string[];  
   opponentTeamsLoading: boolean;
   userTeamsError: Error | null;
   opponentTeamsError: Error | null;
@@ -144,6 +145,7 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     isSuccess: userTeamsSuccess,
     error: userTeamsError,
     teamMap,
+    teamsIdsCurrentlyUpdating,
   } = useUserTeams({ teamPlayedStatusMap });
   const {
     data: fetchedOpponentTeams,
@@ -243,6 +245,7 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     opponentTeamsLoading,
     userTeamsError,
     opponentTeamsError,
+    teamsIdsCurrentlyUpdating,
     // Team Visibility
     visibleTeams,
     visibleOpponentTeams,

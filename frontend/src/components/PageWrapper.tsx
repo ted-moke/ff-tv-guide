@@ -6,7 +6,7 @@ export const PageWrapper = ({ children }: { children: React.ReactNode }) => {
   const { user, isLoading: isAuthLoading } = useAuthContext();
 
   if (isAuthLoading) {
-    return <LoadingSpinner />;
+    return <LoadingSpinner text="Authenticating..." />;
   }
 
   if (!user) {
