@@ -141,6 +141,10 @@
   color: var(--primary-color);
 }
 
+.hidden {
+  opacity: 0.5;
+}
+
 @media (min-width: 1024px) {
   .weekPoints {
     font-size: var(--font-size-large);

@@ -1,7 +1,7 @@
 import { Stack } from "../../../components/ui/Stack";
 import { FantasyTeam } from "../../teams/teamTypes";
 import styles from "./LeagueCardHeader.module.css";
-import { LuCheck, LuClock, LuTv } from "react-icons/lu";
+import { LuCheck, LuClock, LuEyeOff, LuTv } from "react-icons/lu";
 
 export const LeagueCardHeader = ({
   hasWeekStarted,
@@ -11,6 +11,7 @@ export const LeagueCardHeader = ({
   recordStr,
   winPctEval,
   winningEval,
+  isHidden = false,
 }: {
   hasWeekStarted: boolean;
   isCollapsed: boolean;
@@ -19,13 +20,15 @@ export const LeagueCardHeader = ({
   recordStr: string;
   winPctEval: string;
   winningEval: string;
+  isHidden?: boolean;
 }) => {
-
   return (
     <div
       className={`${styles.leagueCardWrapper} ${
         isCollapsed ? styles.collapsed : ""
-      } ${styles[winPctEval]} ${styles[winningEval]}`}
+      } ${styles[winPctEval]} ${styles[winningEval]} ${
+        isHidden ? styles.hidden : ""
+      }`}
     >
       {hasWeekStarted ? (
         <Stack
@@ -39,14 +42,20 @@ export const LeagueCardHeader = ({
             <h3 className={styles.leagueName}>
               {isCollapsed ? team.shortLeagueName : team.leagueName}
             </h3>
-            <Stack direction="row" align="center" gap={1}>
-              <h3 className={styles.leagueRecord}>{recordStr}</h3>
-              {!isCollapsed && (
-                <p className={styles.leagueRecord}>
-                  {team.stats.averagePointsFor?.toFixed(1) || "0.0"} avg
-                </p>
-              )}
-            </Stack>
+            {isHidden ? (
+              <Stack direction="row" justify="center">
+                <LuEyeOff size={16} color="var(--text-color-muted)" />
+              </Stack>
+            ) : (
+              <Stack direction="row" align="center" gap={1}>
+                <h3 className={styles.leagueRecord}>{recordStr}</h3>
+                {!isCollapsed && (
+                  <p className={styles.leagueRecord}>
+                    {team.stats.averagePointsFor?.toFixed(1) || "0.0"} avg
+                  </p>
+                )}
+              </Stack>
+            )}
           </Stack>
 
           <Stack
@@ -141,7 +150,13 @@ export const LeagueCardHeader = ({
         >
           <div className={styles.leagueCardTop}>
             <h3 className={styles.leagueName}>{team.shortLeagueName}</h3>
-            <h3 className={styles.leagueRecord}>{recordStr}</h3>
+            {isHidden ? (
+              <Stack direction="row" justify="center">
+                <LuEyeOff size={16} color="var(--text-color-muted)" />
+              </Stack>
+            ) : (
+              <h3 className={styles.leagueRecord}>{recordStr}</h3>
+            )}
           </div>
           <div className={styles.leagueCardBottom}>
             <p className={styles.avgPointsLabel}>Avg</p>

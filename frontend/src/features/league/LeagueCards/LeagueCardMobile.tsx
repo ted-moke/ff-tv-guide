@@ -50,7 +50,9 @@ export const LeagueCardMobile: React.FC<LeagueCardMobileProps> = ({
     <div
       className={`${styles.leagueCard} ${isSelected ? styles.expanded : ""} ${
         otherSelected ? styles.otherSelected : ""
-      } ${styles[winningEval]} ${styles[winPctEval]}`}
+      } ${styles[winningEval]} ${styles[winPctEval]} ${
+        cardData.visibility.team ? "" : styles.hidden
+      }`}
       id={`league-${team.id}`}
     >
       <div
@@ -60,6 +62,7 @@ export const LeagueCardMobile: React.FC<LeagueCardMobileProps> = ({
         aria-expanded={isSelected}
       >
         <LeagueCardHeader
+          isHidden={!cardData.visibility.team}
           hasWeekStarted={hasWeekStarted}
           isCollapsed={!isSelected}
           team={team}
@@ -96,15 +99,15 @@ export const LeagueCardMobile: React.FC<LeagueCardMobileProps> = ({
                   {pointsAgainst?.toFixed(1) || "0.0"}
                 </span>
               </div> */}
-              {/* <div className={styles.statItem}>
+          {/* <div className={styles.statItem}>
                 <span className={styles.statLabel}>Avg Points</span>
                 <span className={styles.statValue}>
                   {team.stats.averagePointsFor?.toFixed(1) || "0.0"}
                 </span>
               </div> */}
-            {/* </div> */}
+          {/* </div> */}
 
-            {/* <div className={styles.leagueActions}>
+          {/* <div className={styles.leagueActions}>
               <button className={styles.actionButton}>
                 View Details
               </button>

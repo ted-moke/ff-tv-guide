@@ -85,7 +85,6 @@ const GameBucketGroup: React.FC<GameBucketGroupProps> = ({
             >
               {bucket.games.map((game, gameIndex) => {
                 const gameId = getUniqueGameId(game);
-                const onlyGame = bucket.games.length === 1;
                 const isExpanded = expandedGameId === gameId;
 
                 const selectedIndex =

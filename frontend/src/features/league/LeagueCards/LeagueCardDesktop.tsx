@@ -70,6 +70,7 @@ export const LeagueCardDesktop: React.FC<LeagueCardDesktopProps> = ({
           opponent={opponent}
           recordStr={recordStr}
           winPctEval={winPctEval}
+          isHidden={!cardData.visibility.team}
           winningEval={winningEval}
         />
       </div>
