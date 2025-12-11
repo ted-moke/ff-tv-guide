@@ -100,6 +100,8 @@ interface ViewContextType {
   setViewMode: (mode: ViewMode) => void;
   isMenuOpen: boolean;
   setIsMenuOpen: (isOpen: boolean) => void;
+  isPreferencesOpen: boolean;
+  setIsPreferencesOpen: (isOpen: boolean) => void;
 }
 
 const ViewContext = createContext<ViewContextType | undefined>(undefined);
@@ -129,7 +131,7 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     useState<string>("");
   const [selectedWeek, setSelectedWeek] = useState(getCurrentWeek());
   const [isMobile, setIsMobile] = useState(false);
-
+  const [isPreferencesOpen, setIsPreferencesOpen] = useState(false);
   
   
   const weeklySchedule = useWeeklySchedule(selectedWeek || 0);
@@ -300,6 +302,8 @@ export const ViewProvider: React.FC<ViewProviderProps> = ({ children }) => {
     setSelectedConference,
     viewMode,
     setViewMode,
+    isPreferencesOpen,
+    setIsPreferencesOpen,
   };
 
   return <ViewContext.Provider value={value}>{children}</ViewContext.Provider>;

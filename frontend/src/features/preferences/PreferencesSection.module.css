@@ -1,0 +1,75 @@
+@import "../../styles/variables.css";
+@import "../../styles/utils.css";
+
+.preferencesSection {
+  padding: var(--size2);
+  margin-bottom: var(--size2);
+  background-color: var(--background-color-offset);
+}
+
+.preferencesSection h4 {
+  margin-bottom: var(--size1);
+}
+
+.closeButton {
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.teamsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size1);
+}
+
+.teamRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: var(--size0-5);
+  padding: var(--size1);
+  border-bottom: 1px solid var(--background-color-offset-2);
+}
+
+.teamRow:last-child {
+  border-bottom: none;
+}
+
+.teamHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--size1);
+}
+
+.teamName {
+  font-weight: 500;
+}
+
+.status {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--size0-5);
+  font-size: 0.875rem;
+  color: var(--text-color-muted);
+}
+
+.statusText {
+  font-style: italic;
+}
+
+.controls {
+  padding-left: 0;
+}
+
+.hidden {
+  opacity: 0.5;
+}
+
+
+@media (max-width: 768px) {
+ .teamRow {
+    flex-direction: column;
+ }
+}

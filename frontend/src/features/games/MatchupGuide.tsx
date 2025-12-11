@@ -6,26 +6,28 @@ import { useAuthContext } from "../auth/AuthProvider2";
 import { useNeedsResources } from "../teams/useNeedsResources";
 import { useView } from "../view/ViewContext";
 import { LeagueCardsSection } from "../league/LeagueCards/LeagueCardsSection";
-import { useLeagueTickerVisibility } from "../league/useLeagueTickerVisibility";
+import Alert from "../../components/ui/Alert";
+import { useState } from "react";
+import { PreferencesSection } from "../preferences/PreferencesSection";
 
-// const hideAlertOnLoad = localStorage.getItem("hideAlertShip24") === "true";
+const hideAlertOnLoad = localStorage.getItem("hideAlertShip25") === "true";
 
 const MatchupGuide = () => {
   const {
-    isMobile,
     matchupPlayers,
     matchupPlayersLoading,
     matchupPlayersInitialized,
     matchupPlayersError,
+    isPreferencesOpen,
+    setIsPreferencesOpen,
   } = useView();
-  const isTickerVisible = useLeagueTickerVisibility();
   const { isLoading: isAuthLoading } = useAuthContext();
   const {
     isLoading: needsConnectLoading,
     needsConnect,
     needsAccount,
   } = useNeedsResources();
-  // const [hideAlert, setHideAlert] = useState(hideAlertOnLoad);
+  const [hideAlert, setHideAlert] = useState(hideAlertOnLoad);
 
   if (matchupPlayersLoading) {
     return <LoadingSpinner text="Calculating matchups..." />;
@@ -60,28 +62,24 @@ const MatchupGuide = () => {
 
   return (
     <div className={`${styles["matchup-guide"]} page-container`}>
-      {!isMobile && isTickerVisible && (
-        <div className={`${styles.leagueTickerWrapper} ${styles.fixed}`}>
-          {/* <LeagueTicker /> */}
+      {!hideAlert && (
+        <div className={styles.alertContainer}>
+          <Alert
+            message="&#127941; Good luck in your playoffs! &#127941;"
+            buttonText="Edit Team Visibility"
+            variant="outlined"
+            onButtonClick={() => {
+              setIsPreferencesOpen(true);
+              setHideAlert(true);
+              localStorage.setItem("hideAlertShip25", "true");
+            }}
+          />
         </div>
       )}
-      {/* <WeekRemainingSection /> */}
+      {isPreferencesOpen && <PreferencesSection />}
       <LeagueCardsSection />
       {matchupPlayers && (
         <div className={styles.gameBucketGroups}>
-          {/* {!hideAlert && (
-            <div className={styles.alertContainer}>
-              <Alert
-                message="&#127941; Good luck in your championships! &#127941;"
-                buttonText="Hide"
-                variant="outlined"
-                onButtonClick={() => {
-                  setHideAlert(true);
-                  localStorage.setItem("hideAlertShip24", "true");
-                }}
-              />
-            </div>
-          )} */}
           {matchupPlayers.games.inProgress.length > 0 && (
             <GameBucketGroup
               key={"inProgress"}

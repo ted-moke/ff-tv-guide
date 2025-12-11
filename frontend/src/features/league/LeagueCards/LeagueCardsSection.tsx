@@ -6,6 +6,7 @@ import { useView } from "../../view/ViewContext";
 import { useHorizontalSwipe } from "../../../utils/touchUtils";
 import LinkButton, { LinkButtonColor } from "../../../components/ui/LinkButton";
 import { Stack } from "../../../components/ui/Stack";
+import { LuSettings } from "react-icons/lu";
 
 const ITEMS_PER_PAGE = 2;
 export const LeagueCardsSection: React.FC = () => {
@@ -15,8 +16,14 @@ export const LeagueCardsSection: React.FC = () => {
     selectedTeamId,
     portfolioData,
   } = useLeagueCards();
-  const { selectedWeek, hasWeekStarted, isMobile, thruSundayDayGames } =
-    useView();
+  const {
+    selectedWeek,
+    hasWeekStarted,
+    isMobile,
+    thruSundayDayGames,
+    isPreferencesOpen,
+    setIsPreferencesOpen,
+  } = useView();
   const [isExpanded, setIsExpanded] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -79,13 +86,31 @@ export const LeagueCardsSection: React.FC = () => {
   return (
     <div className={styles.leagueCardsSection} data-section="league-cards">
       {!thruSundayDayGames ? (
-        <h2 className={styles.sectionTitle}>
-          My Leagues - Week {selectedWeek}
-        </h2>
+        <Stack direction="row" align="center" justify="space-between" gap={0.5}>
+          <h2 className={styles.sectionTitle}>My Leagues</h2>
+          <LinkButton
+            color={LinkButtonColor.MUTED}
+            onClick={() => setIsPreferencesOpen(!isPreferencesOpen)}
+            underline={false}
+          >
+            <Stack direction="row" align="center" justify="start" gap={0.5}>
+              <p className={styles.expandButtonText}>
+                {isPreferencesOpen ? "Hide Preferences" : "Edit Preferences"}
+              </p>
+              <LuSettings />
+            </Stack>
+          </LinkButton>
+        </Stack>
       ) : (
-        <Stack direction="row" align="center"  gap={0.5}>
+        <Stack direction="row" align="center" gap={0.5}>
           {hasTrending ? (
-            <Stack direction="row" align="center" justify="start" gap={0.5} className={styles.recordContainer}>
+            <Stack
+              direction="row"
+              align="center"
+              justify="start"
+              gap={0.5}
+              className={styles.recordContainer}
+            >
               <h2 className={styles.sectionTitle}>This Week:</h2>
               <Stack direction="row" align="center" justify="start" gap={0.1}>
                 <p>{winsIncludingTrending}</p>
@@ -96,7 +121,13 @@ export const LeagueCardsSection: React.FC = () => {
               </Stack>
             </Stack>
           ) : (
-            <Stack direction="row" align="center" justify="start" gap={0.5} className={styles.recordContainer} >
+            <Stack
+              direction="row"
+              align="center"
+              justify="start"
+              gap={0.5}
+              className={styles.recordContainer}
+            >
               <h2 className={styles.sectionTitle}>Complete:</h2>
               <Stack direction="row" align="center" justify="start" gap={0.1}>
                 <p className={styles.recordValue}>{portfolioData.wins}</p>
