@@ -1462,7 +1462,7 @@
         },
         {
           "date": "2025-12-07",
-          "time": "13:00",
+          "time": "16:25",
           "awayTeam": "Chicago Bears",
           "homeTeam": "Green Bay Packers",
           "channel": "FOX"
@@ -1511,7 +1511,7 @@
         },
         {
           "date": "2025-12-07",
-          "time": "16:25",
+          "time": "13:00",
           "awayTeam": "Cincinnati Bengals",
           "homeTeam": "Buffalo Bills",
           "channel": "FOX"
@@ -1717,7 +1717,7 @@
         },
         {
           "date": "2025-12-21",
-          "time": "16:25",
+          "time": "16:05",
           "awayTeam": "Jacksonville Jaguars",
           "homeTeam": "Denver Broncos",
           "channel": "FOX"
@@ -1744,15 +1744,15 @@
           "channel": "NBC"
         },
         {
-          "date": "2025-12-21",
-          "time": "16:25",
+          "date": "2025-12-20",
+          "time": "20:20",
           "awayTeam": "Green Bay Packers",
           "homeTeam": "Chicago Bears",
           "channel": "FOX"
         },
         {
-          "date": "2025-12-21",
-          "time": "13:00",
+          "date": "2025-12-20",
+          "time": "17:00",
           "awayTeam": "Philadelphia Eagles",
           "homeTeam": "Washington Commanders",
           "channel": "FOX"
@@ -1763,6 +1763,123 @@
           "awayTeam": "San Francisco 49ers",
           "homeTeam": "Indianapolis Colts",
           "channel": "ESPN, ABC"
+        }
+      ]
+    },
+    {
+      "weekNumber": 17,
+      "games": [
+        {
+          "date": "2025-12-25",
+          "time": "13:00",
+          "awayTeam": "Dallas Cowboys",
+          "homeTeam": "Washington Commanders",
+          "channel": "Netflix"
+        },
+        {
+          "date": "2025-12-25",
+          "time": "16:30",
+          "awayTeam": "Detroit Lions",
+          "homeTeam": "Minnesota Vikings",
+          "channel": "Netflix"
+        },
+        {
+          "date": "2025-12-25",
+          "time": "20:15",
+          "awayTeam": "Denver Broncos",
+          "homeTeam": "Kansas City Chiefs",
+          "channel": "Prime Video"
+        },
+        {
+          "date": "2025-12-28",
+          "time": "13:00",
+          "awayTeam": "Pittsburgh Steelers",
+          "homeTeam": "Cleveland Browns",
+          "channel": "CBS"
+        },
+        {
+          "date": "2025-12-28",
+          "time": "13:00",
+          "awayTeam": "Jacksonville Jaguars",
+          "homeTeam": "Indianapolis Colts",
+          "channel": "FOX"
+        },
+        {
+          "date": "2025-12-28",
+          "time": "13:00",
+          "awayTeam": "Tampa Bay Buccaneers",
+          "homeTeam": "Miami Dolphins",
+          "channel": "FOX"
+        },
+        {
+          "date": "2025-12-28",
+          "time": "13:00",
+          "awayTeam": "New England Patriots",
+          "homeTeam": "New York Jets",
+          "channel": "CBS"
+        },
+        {
+          "date": "2025-12-28",
+          "time": "13:00",
+          "awayTeam": "New Orleans Saints",
+          "homeTeam": "Tennessee Titans",
+          "channel": "CBS"
+        },
+        {
+          "date": "2025-12-28",
+          "time": "16:25",
+          "awayTeam": "Philadelphia Eagles",
+          "homeTeam": "Buffalo Bills",
+          "channel": "FOX"
+        },
+        {
+          "date": "2025-12-28",
+          "time": "20:20",
+          "awayTeam": "Chicago Bears",
+          "homeTeam": "San Francisco 49ers",
+          "channel": "NBC"
+        },
+        {
+          "date": "2025-12-29",
+          "time": "20:15",
+          "awayTeam": "Los Angeles Rams",
+          "homeTeam": "Atlanta Falcons",
+          "channel": "ESPN, ABC"
+        },
+        {
+          "date": "2025-12-28",
+          "time": "13:00",
+          "awayTeam": "Seattle Seahawks",
+          "homeTeam": "Carolina Panthers",
+          "channel": "TBD"
+        },
+        {
+          "date": "2025-12-28",
+          "time": "13:00",
+          "awayTeam": "Arizona Cardinals",
+          "homeTeam": "Cincinnati Bengals",
+          "channel": "TBD"
+        },
+        {
+          "date": "2025-12-28",
+          "time": "16:25",
+          "awayTeam": "Baltimore Ravens",
+          "homeTeam": "Green Bay Packers",
+          "channel": "TBD"
+        },
+        {
+          "date": "2025-12-28",
+          "time": "16:25",
+          "awayTeam": "Houston Texans",
+          "homeTeam": "Los Angeles Chargers",
+          "channel": "TBD"
+        },
+        {
+          "date": "2025-12-28",
+          "time": "13:00",
+          "awayTeam": "New York Giants",
+          "homeTeam": "Las Vegas Raiders",
+          "channel": "TBD"
         }
       ]
     }
