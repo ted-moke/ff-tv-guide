@@ -7,6 +7,7 @@ import { useHorizontalSwipe } from "../../../utils/touchUtils";
 import LinkButton, { LinkButtonColor } from "../../../components/ui/LinkButton";
 import { Stack } from "../../../components/ui/Stack";
 
+const ITEMS_PER_PAGE = 2;
 export const LeagueCardsSection: React.FC = () => {
   const {
     leagueCardsData,
@@ -25,7 +26,6 @@ export const LeagueCardsSection: React.FC = () => {
   }
 
   // Mobile pagination logic
-  const ITEMS_PER_PAGE = 4;
   const shouldShowPagination =
     isMobile && leagueCardsData.length > ITEMS_PER_PAGE;
   const totalPages = Math.ceil(leagueCardsData.length / ITEMS_PER_PAGE);
@@ -75,8 +75,6 @@ export const LeagueCardsSection: React.FC = () => {
     portfolioData.trendingWins > 0 ||
     portfolioData.trendingLosses > 0 ||
     portfolioData.trendingTies > 0;
-
-  console.log({ thruSundayDayGames });
 
   return (
     <div className={styles.leagueCardsSection} data-section="league-cards">
