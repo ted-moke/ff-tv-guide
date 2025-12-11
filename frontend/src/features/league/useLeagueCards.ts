@@ -178,7 +178,9 @@ export const useLeagueCards = () => {
           (opponent) => opponent.leagueMasterId === team.leagueMasterId
         ) || null;
 
-      const isTeamVisible = visibleTeams.some((t) => t.leagueId === team.leagueId);
+      const isTeamVisible = visibleTeams.some(
+        (t) => t.leagueId === team.leagueId
+      );
       const isTeamUpdating = teamsIdsCurrentlyUpdating.includes(team.leagueId);
 
       return {
@@ -232,8 +234,7 @@ export const useLeagueCards = () => {
 
     if (thruSundayDayGames) {
       return cardDataWithMatchupStatus.sort((a, b) => {
-
-        // Sort so hidden teams are at the bottom 
+        // Sort so hidden teams are at the bottom
         if (!a.visibility.team && b.visibility.team) {
           return 1;
         }
@@ -271,6 +272,14 @@ export const useLeagueCards = () => {
     }
 
     return cardDataWithMatchupStatus.sort((a, b) => {
+      // Sort so hidden teams are at the bottom
+      if (!a.visibility.team && b.visibility.team) {
+        return 1;
+      }
+      if (a.visibility.team && !b.visibility.team) {
+        return -1;
+      }
+
       if (a.team.stats.winPercentage && b.team.stats.winPercentage) {
         return b.team.stats.winPercentage - a.team.stats.winPercentage;
       }
