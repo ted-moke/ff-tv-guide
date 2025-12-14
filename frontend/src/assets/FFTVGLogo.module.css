@@ -26,6 +26,11 @@
   margin: 0; 
 }
 
+.xxsmall h1 {
+  font-size: var(--size1_25);
+  margin-top: -1px
+}
+
 .xsmall h1 {
   font-size: var(--size1_75);
 }

@@ -134,7 +134,7 @@ const PlayerCondensed: React.FC<PlayerProps> = ({ player, slotTypes }) => {
                     Avg Points For
                   </p>
                   <p className={styles.leaguePopupContentValue}>
-                    {currentSeasonStats?.[selectedCopy.leagueId]?.averagePointsFor ?? "N/A"}
+                    {(currentSeasonStats?.[selectedCopy.leagueId]?.averagePointsFor.toFixed(2)) ?? "N/A"}
                   </p>
                   <p className={styles.leaguePopupContentLabel}>Points For</p>
                   <p className={styles.leaguePopupContentValue}>

@@ -2,10 +2,11 @@
 
 .popup {
   position: absolute;
-  background-color: var(--background-color-offset-2);
+  background-color: var(--background-color-offset);
   padding: var(--size1) var(--size2) var(--size2);
+  border: 3px solid var(--background-color-offset-2);
   border-radius: var(--border-radius-small);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
   z-index: 1000;
   max-width: calc(100vw - 20px);
   overflow-wrap: break-word;

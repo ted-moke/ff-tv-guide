@@ -57,14 +57,14 @@ const FantasyTeamOptions: React.FC = () => {
         </div>
       ) : (
         <div className={styles["fantasy-team-list-container"]}>
-          <Stack gap={0.5}>
-          <small className="muted">Click league to change visibility</small>
-            <div className={styles["fantasy-team-actions"]}>
+          <Stack gap={0.5} align="center">
+            <small className="muted">Click league to change visibility</small>
+            {/* <div className={styles["fantasy-team-actions"]}>
               <LinkButton onClick={handleHideAllTeams}>Hide All</LinkButton>
               <LinkButton onClick={handleSelectAllFantasyTeams}>
                 Show All
               </LinkButton>
-            </div>
+            </div> */}
             <div className={styles["fantasy-team-list"]}>
               {Object.values(userTeams[CURRENT_SEASON.toString()]).map(
                 (team) => {
@@ -85,7 +85,9 @@ const FantasyTeamOptions: React.FC = () => {
                       showOpponentTeam={showOpponentTeam}
                       hideOpponentTeam={hideOpponentTeam}
                       selected={selectedLeagueId === team.leagueId}
-                      handleToggleLeagueSelected={() => handleToggleLeagueSelected(team.leagueId)}
+                      handleToggleLeagueSelected={() =>
+                        handleToggleLeagueSelected(team.leagueId)
+                      }
                     />
                   );
                 }

@@ -1,12 +1,29 @@
 @import "../../styles/variables.css";
 
 .menuItem {
-  display: block;
+  display: flex;
+  align-items: center;
+  /* flex-direction: row; */
+  gap: var(--size1);
   padding: var(--size1) var(--size2);
   color: var(--text-color);
   text-decoration: none;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  border-left: 2px solid transparent;
+}
+
+/* .menuItemContent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--size1);
+} */
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .menuItem:hover {

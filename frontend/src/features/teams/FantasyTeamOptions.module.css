@@ -16,6 +16,10 @@
   margin-bottom: var(--size1);
 }
 
+.fantasy-team-list-wrapper small {
+  text-align: right;
+}
+
 .fantasy-team-list {
   display: flex;
   flex-direction: column;
@@ -27,7 +31,7 @@
 }
 
 .fantasy-team-list-container {
-  background-color: var(--background-color-offset);
+  /* background-color: var(--background-color-offset); */
   border-radius: var(--border-radius-small);
   padding: var(--size1);
 }

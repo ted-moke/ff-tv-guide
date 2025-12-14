@@ -5,7 +5,8 @@
 }
 
 .fantasy-team-item p {
-  text-decoration: underline;
+  /* text-decoration: underline; */
+  color: var(--text-color-muted);
 
 }
 

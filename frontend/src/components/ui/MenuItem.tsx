@@ -7,13 +7,15 @@ interface MenuItemProps {
   to?: string;
   isActive: boolean;
   onClick?: () => void;
+  icon?: React.ReactNode;
 }
 
-const MenuItem: React.FC<MenuItemProps> = ({ text, to, isActive, onClick }) => {
+const MenuItem: React.FC<MenuItemProps> = ({ text, to, isActive, icon, onClick }) => {
 
   return (
     <Link to={to ? to : "#"} className={`${styles.menuItem} ${isActive ? styles.active : ''}`} onClick={onClick}>
-      {text}
+      {icon && <div className={styles.icon}>{icon}</div>}
+      <span>{text}</span>
     </Link>
   );
 };
