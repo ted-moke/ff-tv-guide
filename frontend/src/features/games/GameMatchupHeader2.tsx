@@ -77,11 +77,23 @@ const GameMatchupHeader: React.FC<GameMatchupHeaderProps> = ({
       </div>
       {isExpanded ? (
         <div className={styles["matchup-subheader"]}>
-          {game.hasPlayers ? isMobile ? <PlayerCountSquare game={game} variant="expanded" /> : <PlayerCount game={game} variant="expanded" /> : null}
+          {game.hasPlayers ? (
+            isMobile ? (
+              <PlayerCountSquare game={game} variant="expanded" />
+            ) : (
+              <PlayerCount game={game} variant="expanded" />
+            )
+          ) : null}
         </div>
       ) : (
         <div className={styles["matchup-subheader"]}>
-          {game.hasPlayers ? isMobile ? <PlayerCountSquare game={game} variant="collapsed" /> : <PlayerCount game={game} variant="collapsed" /> : null}
+          {game.hasPlayers ? (
+            isMobile ? (
+              <PlayerCountSquare game={game} variant="collapsed" />
+            ) : (
+              <PlayerCount game={game} variant="collapsed" />
+            )
+          ) : null}
         </div>
       )}
 
