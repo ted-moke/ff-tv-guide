@@ -31,11 +31,15 @@
 }
 
 .starters {
-  font-size: var(--font-size-xxl);
+  font-size: var(--font-size-xl);
   font-weight: bold;
   line-height: 1;
 }
 
 .starters-none {
   color: var(--text-color-muted);
+}
+
+.collapsed h4 {
+  font-size: var(--font-size-medium);
 }

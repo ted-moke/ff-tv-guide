@@ -9,6 +9,7 @@ import {
   LuChevronRight as ChevronRight,
 } from "react-icons/lu";
 import GameMatchupHeader from "./GameMatchupHeader";
+import GameMatchupHeader2 from "./GameMatchupHeader2";
 
 interface GameMatchupProps {
   game: ProcessedGame;
@@ -52,7 +53,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({
       }`}
       id={id}
     >
-      <GameMatchupHeader
+      <GameMatchupHeader2
         game={game}
         isExpanded={actualExpandedState}
         onToggle={toggleMatchup}

@@ -111,7 +111,10 @@ export const useProcessedSchedule = (
           team.totalWithCopies++;
           if (copy.rosterSlotType === "start") {
             team.startersWithCopies++;
-          } else if (copy.rosterSlotType === "bestBall") team.bestBall++;
+          } else if (copy.rosterSlotType === "bestBall") {
+            team.startersWithCopies++;
+            team.bestBall++
+          };
         });
       });
       others.forEach((player) => {
