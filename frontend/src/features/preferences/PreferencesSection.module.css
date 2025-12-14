@@ -46,17 +46,25 @@
   font-weight: 500;
 }
 
-.status {
+.eyeIcon {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: var(--size0-5);
-  font-size: 0.875rem;
-  color: var(--text-color-muted);
+  cursor: pointer;
+  padding: var(--size0-5);
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.eyeIcon:hover {
+  background-color: var(--background-color-offset-2);
 }
 
 .statusText {
   font-style: italic;
+  font-size: 0.875rem;
+  color: var(--text-color-muted);
 }
 
 .controls {

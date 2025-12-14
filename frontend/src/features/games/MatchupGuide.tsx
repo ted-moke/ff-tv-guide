@@ -66,7 +66,7 @@ const MatchupGuide = () => {
         <div className={styles.alertContainer}>
           <Alert
             message="&#127941; Good luck in your playoffs! &#127941;"
-            buttonText="Edit Team Visibility"
+            buttonText="Edit Visible Leagues"
             variant="outlined"
             onButtonClick={() => {
               setIsPreferencesOpen(true);

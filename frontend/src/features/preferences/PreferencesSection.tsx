@@ -1,11 +1,11 @@
 import { useMemo } from "react";
 import { useView } from "../view/ViewContext";
 import { Stack } from "../../components/ui/Stack";
-import LinkButton, { LinkButtonColor } from "../../components/ui/LinkButton";
 import { CURRENT_SEASON } from "../../constants";
 import styles from "./PreferencesSection.module.css";
 import IconButton from "../../components/IconButton";
-import { LuX, LuEyeOff } from "react-icons/lu";
+import { LuX, LuEyeOff, LuEye } from "react-icons/lu";
+import Button from "../../components/ui/Button";
 
 export const PreferencesSection = () => {
   const {
@@ -56,8 +56,12 @@ export const PreferencesSection = () => {
           }}
         />
       </Stack>
+      <small className="muted">
+        Click the eye icon to change which players are shown in the app.
+      </small>
       <div className={styles.teamsList}>
         {allTeams.map((team) => {
+          console.log(team);
           const opponent = opponentMap.get(team.leagueMasterId);
           const isTeamVisible = visibleTeams.some(
             (t) => t.leagueId === team.leagueId
@@ -69,84 +73,74 @@ export const PreferencesSection = () => {
           const allHidden = !isTeamVisible && !isOpponentVisible;
           const hasOpponent = !!opponent;
           const oppHidden = hasOpponent && !isOpponentVisible && isTeamVisible;
-          const showHiddenIcon = allHidden || oppHidden;
+          const allVisible =
+            isTeamVisible && (!hasOpponent || isOpponentVisible);
+
+          const handleEyeClick = () => {
+            if (allVisible) {
+              // All visible -> All hidden
+              hideTeam(team.leagueId);
+              if (hasOpponent) {
+                hideOpponentTeam(team.leagueId);
+              }
+            } else if (allHidden) {
+              // All hidden -> Hide opponent only (if has opponent) or All visible
+              if (hasOpponent) {
+                showTeam(team.leagueId);
+                // Opponent stays hidden
+              } else {
+                showTeam(team.leagueId);
+              }
+            } else if (oppHidden) {
+              // Hide opponent only -> All visible
+              showOpponentTeam(team.leagueId);
+            }
+          };
 
           return (
             <div key={team.leagueId} className={styles.teamRow}>
               <div className={styles.teamHeader}>
-                {showHiddenIcon && (
-                    <div className={styles.status}>
+                <div
+                  className={styles.eyeIcon}
+                  onClick={handleEyeClick}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleEyeClick();
+                    }
+                  }}
+                >
+                  {allVisible ? (
+                    <LuEye size={16} color="var(--text-color-muted)" />
+                  ) : allHidden ? (
                     <LuEyeOff size={16} color="var(--text-color-muted)" />
-                    {oppHidden && (
-                        <span className={styles.statusText}>(hidden opponent)</span>
-                    )}
-                  </div>
-                )}
-                <div className={`${styles.teamName} ${allHidden ? styles.hidden : ""}`}>{team.leagueName}</div>
+                  ) : (
+                    <Stack direction="row" align="center" gap={0.5}>
+                      <LuEyeOff size={16} color="var(--text-color-muted)" />
+                      <span className={styles.statusText}>
+                        (hidden opponent)
+                      </span>
+                    </Stack>
+                  )}
+                </div>
+                <div
+                  className={`${styles.teamName} ${
+                    allHidden ? styles.hidden : ""
+                  }`}
+                >
+                  {team.leagueName}
+                </div>
               </div>
-              <Stack
-                direction="row"
-                gap={0.5}
-                align="center"
-                className={styles.controls}
-              >
-                {allHidden ? (
-                  <>
-                    <LinkButton
-                      color={LinkButtonColor.MUTED}
-                      size="small"
-                      onClick={() => {
-                        showTeam(team.leagueId);
-                        if (hasOpponent) {
-                          showOpponentTeam(team.leagueId);
-                        }
-                      }}
-                    >
-                      Show All
-                    </LinkButton>
-                    <LinkButton
-                      color={LinkButtonColor.MUTED}
-                      size="small"
-                      onClick={() => showTeam(team.leagueId)}
-                    >
-                      Show Team
-                    </LinkButton>
-                  </>
-                ) : (
-                  <>
-                    <LinkButton
-                      color={LinkButtonColor.MUTED}
-                      size="small"
-                      onClick={() => {
-                        hideTeam(team.leagueId);
-                        if (hasOpponent) {
-                          hideOpponentTeam(team.leagueId);
-                        }
-                      }}
-                    >
-                      Hide All
-                    </LinkButton>
-                    {hasOpponent && (
-                      <LinkButton
-                        color={LinkButtonColor.MUTED}
-                        size="small"
-                        onClick={() => {
-                          if (isOpponentVisible) {
-                            hideOpponentTeam(team.leagueId);
-                          } else {
-                            showOpponentTeam(team.leagueId);
-                          }
-                        }}
-                      >
-                        {isOpponentVisible ? "Hide Opponent" : "Show Opponent"}
-                      </LinkButton>
-                    )}
-                  </>
-                )}
-              </Stack>
             </div>
           );
         })}
+        <Button onClick={() => {
+          setIsPreferencesOpen(false);
+        }}>
+          Done
+        </Button>
       </div>
     </div>
   );

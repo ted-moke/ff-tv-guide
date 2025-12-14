@@ -87,7 +87,19 @@ export const LeagueCardsSection: React.FC = () => {
     <div className={styles.leagueCardsSection} data-section="league-cards">
       {!thruSundayDayGames ? (
         <Stack direction="row" align="center" justify="space-between" gap={0.5}>
-          <h2 className={styles.sectionTitle}>My Leagues</h2>
+          {shouldShowPagination && (
+            <div className={styles.paginationControls}>
+              <LinkButton
+                color={LinkButtonColor.MUTED}
+                onClick={handleToggleExpansion}
+                underline={false}
+              >
+                <p className={styles.expandButtonText}>
+                  {isExpanded ? "Collapse" : `Show All Leagues`}
+                </p>
+              </LinkButton>
+            </div>
+          )}{" "}
           <LinkButton
             color={LinkButtonColor.MUTED}
             onClick={() => setIsPreferencesOpen(!isPreferencesOpen)}
@@ -159,30 +171,18 @@ export const LeagueCardsSection: React.FC = () => {
           />
         ))}
       </div>
-      {shouldShowPagination && (
-        <div className={styles.paginationControls}>
-          <div className={styles.pageIndicator}>
-            {Array.from({ length: totalPages }).map((_, index) => (
-              <button
-                key={index}
-                className={`${styles.pip} ${
-                  index === currentPage ? styles.pipActive : ""
-                }`}
-                onClick={() => setCurrentPage(index)}
-                aria-label={`Go to page ${index + 1}`}
-              />
-            ))}
-          </div>
-          <LinkButton
-            color={LinkButtonColor.MUTED}
-            onClick={handleToggleExpansion}
-          >
-            <p className={styles.expandButtonText}>
-              {isExpanded ? "Collapse" : `Show All`}
-            </p>
-          </LinkButton>
-        </div>
-      )}
+      <div className={styles.pageIndicator}>
+        {Array.from({ length: totalPages }).map((_, index) => (
+          <button
+            key={index}
+            className={`${styles.pip} ${
+              index === currentPage ? styles.pipActive : ""
+            }`}
+            onClick={() => setCurrentPage(index)}
+            aria-label={`Go to page ${index + 1}`}
+          />
+        ))}
+      </div>
     </div>
   );
 };

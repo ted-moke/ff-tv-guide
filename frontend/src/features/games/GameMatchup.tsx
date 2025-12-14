@@ -1,18 +1,14 @@
 import React, { useState } from "react";
 import styles from "./GameMatchup.module.css";
 import PlayerCondensed from "../players/PlayerCondensed";
-import PlayerCount from "./PlayerCount";
 import { ProcessedGame } from "../../hooks/useProcessedSchedule";
 import { Player } from "../nfl/nflTypes";
 import LinkButton, { LinkButtonColor } from "../../components/ui/LinkButton";
 import {
   LuChevronDown as ChevronDown,
   LuChevronRight as ChevronRight,
-  LuChevronUp as ChevronUp,
 } from "react-icons/lu";
-import IconButton from "../../components/IconButton";
-import { getMatchupColors } from "../nfl/matchupColors";
-import { Stack } from "../../components/ui/Stack";
+import GameMatchupHeader from "./GameMatchupHeader";
 
 interface GameMatchupProps {
   game: ProcessedGame;
@@ -35,8 +31,6 @@ const GameMatchup: React.FC<GameMatchupProps> = ({
 
   if (!gameAwayCode || !gameHomeCode) return null;
 
-  const matchupColors = getMatchupColors([gameAwayCode, gameHomeCode]);
-
   const toggleBench = () => {
     setIsBenchExpanded(!isBenchExpanded);
   };
@@ -51,17 +45,6 @@ const GameMatchup: React.FC<GameMatchupProps> = ({
   const actualExpandedState =
     forceExpanded !== undefined ? forceExpanded : isMatchupExpanded;
 
-  // take date and time from bucket, assume the listed time is in EDT, and format it in the users time zone like "12:00 PM"
-  const formattedDate = new Date(`${game.date}T${game.time}`).toLocaleString(
-    "en-US",
-    {
-      timeZone: "America/New_York",
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    }
-  );
-
   return (
     <div
       className={`${styles.matchup} ${
@@ -69,66 +52,12 @@ const GameMatchup: React.FC<GameMatchupProps> = ({
       }`}
       id={id}
     >
-      <div
-        className={styles["matchup-header"]}
-        role="button"
-        onClick={toggleMatchup}
-        aria-expanded={actualExpandedState}
-      >
-        <div className={styles["matchup-header-left"]}>
-          <div className={styles["team-names"]}>
-            <div className={styles["team-names-container"]}>
-              <Stack direction="row" gap={0.5} align="center">
-                <h3
-                  className={styles["away-team"]}
-                  style={{
-                    color: matchupColors?.team1.color.hex,
-                    backgroundColor: matchupColors?.team1.strokeColor,
-                  }}
-                >
-                  {gameAwayCode}
-                </h3>
-                <small className={styles["at-symbol"]}>vs.</small>
-                <h3
-                  className={styles["home-team"]}
-                  style={{
-                    color: matchupColors?.team2.color.hex,
-                    backgroundColor: matchupColors?.team2.strokeColor,
-                  }}
-                >
-                  {gameHomeCode}
-                </h3>
-              </Stack>
-            </div>
-          </div>
-          {actualExpandedState ? (
-            <div className={styles["matchup-subheader"]}>
-              {game.hasPlayers ? <PlayerCount game={game} /> : null}
-            </div>
-          ) : (
-            <div className={styles["matchup-subheader"]}>
-              {game.hasPlayers ? (
-                <PlayerCount game={game} variant="collapsed" />
-              ) : null}
-            </div>
-          )}
-        </div>
-        <div className={styles["matchup-header-right"]}>
-          <div className={styles["schedule-info"]}>
-            <IconButton
-              icon={actualExpandedState ? <ChevronUp /> : <ChevronDown />}
-              onClick={toggleMatchup}
-              color="clear"
-            />
-            {actualExpandedState && (
-              <>
-                <p className={styles.channel}>{game.channel}</p>
-                <p className={styles.date}>{formattedDate}</p>
-              </>
-            )}
-          </div>
-        </div>
-      </div>
+      <GameMatchupHeader
+        game={game}
+        isExpanded={actualExpandedState}
+        onToggle={toggleMatchup}
+        isCollapsed={!actualExpandedState}
+      />
       {actualExpandedState && (
         <div className={styles["matchup-content"]}>
           {game.hasPlayers ? (
