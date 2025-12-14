@@ -51,6 +51,11 @@
   padding-top: var(--size0_5); 
 } 
 
+.large .logoText {
+  padding-top: var(--size1);
+}
+
+
 .text {
   padding-top: var(--size0_25); 
 }

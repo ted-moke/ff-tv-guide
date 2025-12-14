@@ -17,8 +17,8 @@ const FantasyTeamOptions: React.FC = () => {
     visibleTeams,
     hideTeam,
     showTeam,
-    hideAllTeams,
-    showAllTeams,
+    // hideAllTeams,
+    // showAllTeams,
     visibleOpponentTeams,
     hideOpponentTeam,
     showOpponentTeam,
@@ -26,15 +26,15 @@ const FantasyTeamOptions: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const handleSelectAllFantasyTeams = () => {
-    if (!userTeams) return;
-    showAllTeams();
-  };
+  // const handleSelectAllFantasyTeams = () => {
+  //   if (!userTeams) return;
+  //   showAllTeams();
+  // };
 
-  const handleHideAllTeams = () => {
-    if (!visibleOpponentTeams) return;
-    hideAllTeams();
-  };
+  // const handleHideAllTeams = () => {
+  //   if (!visibleOpponentTeams) return;
+  //   hideAllTeams();
+  // };
 
   const handleToggleLeagueSelected = (leagueId: string) => {
     if (leagueId === selectedLeagueId) {

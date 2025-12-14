@@ -8,7 +8,6 @@ import {
   LuChevronDown as ChevronDown,
   LuChevronRight as ChevronRight,
 } from "react-icons/lu";
-import GameMatchupHeader from "./GameMatchupHeader";
 import GameMatchupHeader2 from "./GameMatchupHeader2";
 
 interface GameMatchupProps {
