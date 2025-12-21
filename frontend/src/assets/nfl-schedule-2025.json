@@ -1661,10 +1661,10 @@
         },
         {
           "date": "2025-12-21",
-          "time": "13:00",
+          "time": "20:20",
           "awayTeam": "New England Patriots",
           "homeTeam": "Baltimore Ravens",
-          "channel": "CBS"
+          "channel": "Peacock"
         },
         {
           "date": "2025-12-21",
@@ -1738,10 +1738,10 @@
         },
         {
           "date": "2025-12-21",
-          "time": "20:20",
+          "time": "13:00",
           "awayTeam": "Cincinnati Bengals",
           "homeTeam": "Miami Dolphins",
-          "channel": "NBC"
+          "channel": "CBS"
         },
         {
           "date": "2025-12-20",
@@ -1851,35 +1851,35 @@
           "time": "13:00",
           "awayTeam": "Seattle Seahawks",
           "homeTeam": "Carolina Panthers",
-          "channel": "TBD"
+          "channel": "CBS"
         },
         {
           "date": "2025-12-28",
           "time": "13:00",
           "awayTeam": "Arizona Cardinals",
           "homeTeam": "Cincinnati Bengals",
-          "channel": "TBD"
+          "channel": "FOX"
         },
         {
-          "date": "2025-12-28",
-          "time": "16:25",
+          "date": "2025-12-27",
+          "time": "20:00",
           "awayTeam": "Baltimore Ravens",
           "homeTeam": "Green Bay Packers",
-          "channel": "TBD"
+          "channel": "Peacock"
         },
         {
-          "date": "2025-12-28",
-          "time": "16:25",
+          "date": "2025-12-27",
+          "time": "16:30",
           "awayTeam": "Houston Texans",
           "homeTeam": "Los Angeles Chargers",
-          "channel": "TBD"
+          "channel": "NFL Network"
         },
         {
           "date": "2025-12-28",
-          "time": "13:00",
+          "time": "16:05",
           "awayTeam": "New York Giants",
           "homeTeam": "Las Vegas Raiders",
-          "channel": "TBD"
+          "channel": "CBS"
         }
       ]
     }
