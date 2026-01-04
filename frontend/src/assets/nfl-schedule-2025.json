@@ -1882,6 +1882,123 @@
           "channel": "CBS"
         }
       ]
+    },
+    {
+      "weekNumber": 18,
+      "games": [
+        {
+          "date": "2026-01-03",
+          "time": "16:30",
+          "awayTeam": "Carolina Panthers",
+          "homeTeam": "Tampa Bay Buccaneers",
+          "channel": "ABC/ESPN"
+        },
+        {
+          "date": "2026-01-03",
+          "time": "20:00",
+          "awayTeam": "Seattle Seahawks",
+          "homeTeam": "San Francisco 49ers",
+          "channel": "ABC/ESPN"
+        },
+        {
+          "date": "2026-01-04",
+          "time": "13:00",
+          "awayTeam": "New Orleans Saints",
+          "homeTeam": "Atlanta Falcons",
+          "channel": "FOX"
+        },
+        {
+          "date": "2026-01-04",
+          "time": "13:00",
+          "awayTeam": "Cleveland Browns",
+          "homeTeam": "Cincinnati Bengals",
+          "channel": "CBS"
+        },
+        {
+          "date": "2026-01-04",
+          "time": "13:00",
+          "awayTeam": "Indianapolis Colts",
+          "homeTeam": "Houston Texans",
+          "channel": "CBS"
+        },
+        {
+          "date": "2026-01-04",
+          "time": "13:00",
+          "awayTeam": "Tennessee Titans",
+          "homeTeam": "Jacksonville Jaguars",
+          "channel": "FOX"
+        },
+        {
+          "date": "2026-01-04",
+          "time": "13:00",
+          "awayTeam": "Green Bay Packers",
+          "homeTeam": "Minnesota Vikings",
+          "channel": "CBS"
+        },
+        {
+          "date": "2026-01-04",
+          "time": "13:00",
+          "awayTeam": "Dallas Cowboys",
+          "homeTeam": "New York Giants",
+          "channel": "FOX"
+        },
+        {
+          "date": "2026-01-04",
+          "time": "13:00",
+          "awayTeam": "New York Jets",
+          "homeTeam": "Buffalo Bills",
+          "channel": "CBS"
+        },
+        {
+          "date": "2026-01-04",
+          "time": "13:00",
+          "awayTeam": "Detroit Lions",
+          "homeTeam": "Chicago Bears",
+          "channel": "FOX"
+        },
+        {
+          "date": "2026-01-04",
+          "time": "16:25",
+          "awayTeam": "Los Angeles Chargers",
+          "homeTeam": "Denver Broncos",
+          "channel": "CBS"
+        },
+        {
+          "date": "2026-01-04",
+          "time": "16:25",
+          "awayTeam": "Arizona Cardinals",
+          "homeTeam": "Los Angeles Rams",
+          "channel": "FOX"
+        },
+        {
+          "date": "2026-01-04",
+          "time": "16:25",
+          "awayTeam": "Kansas City Chiefs",
+          "homeTeam": "Las Vegas Raiders",
+          "channel": "CBS"
+        },
+        {
+          "date": "2026-01-04",
+          "time": "16:25",
+          "awayTeam": "Miami Dolphins",
+          "homeTeam": "New England Patriots",
+          "channel": "FOX"
+        },
+        {
+          "date": "2026-01-04",
+          "time": "16:25",
+          "awayTeam": "Washington Commanders",
+          "homeTeam": "Philadelphia Eagles",
+          "channel": "CBS"
+        },
+        {
+          "date": "2026-01-04",
+          "time": "20:20",
+          "awayTeam": "Baltimore Ravens",
+          "homeTeam": "Pittsburgh Steelers",
+          "channel": "NBC"
+        }
+      ]
     }
   ]
 }
