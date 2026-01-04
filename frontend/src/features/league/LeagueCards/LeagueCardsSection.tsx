@@ -85,73 +85,72 @@ export const LeagueCardsSection: React.FC = () => {
 
   return (
     <div className={styles.leagueCardsSection} data-section="league-cards">
-      {!thruSundayDayGames ? (
-        <Stack direction="row" align="center" justify="space-between" gap={0.5}>
-          {shouldShowPagination && (
-            <div className={styles.paginationControls}>
-              <LinkButton
-                color={LinkButtonColor.MUTED}
-                onClick={handleToggleExpansion}
-                underline={false}
-              >
-                <p className={styles.expandButtonText}>
-                  {isExpanded ? "Collapse" : `Show All Leagues`}
-                </p>
-              </LinkButton>
-            </div>
-          )}{" "}
-          <LinkButton
-            color={LinkButtonColor.MUTED}
-            onClick={() => setIsPreferencesOpen(!isPreferencesOpen)}
-            underline={false}
-          >
-            <Stack direction="row" align="center" justify="start" gap={0.5}>
+      <Stack direction="row" align="center" justify="space-between" gap={0.5}>
+        {shouldShowPagination && (
+          <div className={styles.paginationControls}>
+            <LinkButton
+              color={LinkButtonColor.MUTED}
+              onClick={handleToggleExpansion}
+              underline={isMobile ? true : false}
+            >
               <p className={styles.expandButtonText}>
-                {isPreferencesOpen ? "Hide Preferences" : "Edit Preferences"}
+                {isExpanded ? "Collapse" : `Expand All`}
               </p>
-              <LuSettings />
-            </Stack>
-          </LinkButton>
-        </Stack>
-      ) : (
-        <Stack direction="row" align="center" gap={0.5}>
-          {hasTrending ? (
-            <Stack
-              direction="row"
-              align="center"
-              justify="start"
-              gap={0.5}
-              className={styles.recordContainer}
-            >
-              <h2 className={styles.sectionTitle}>This Week:</h2>
-              <Stack direction="row" align="center" justify="start" gap={0.1}>
-                <p>{winsIncludingTrending}</p>
-                <p>-</p>
-                <p>{lossesIncludingTrending}</p>
-                <p>-</p>
-                <p>{tiesIncludingTrending}</p>
+            </LinkButton>
+          </div>
+        )}
+        {thruSundayDayGames && (
+          <Stack direction="row" align="center" gap={0.5}>
+            {hasTrending ? (
+              <Stack
+                direction={isMobile ? "column" : "row"}
+                align="center"
+                justify="start"
+                gap={0.25}
+                className={styles.recordContainer}
+              >
+                <p>This Week:</p>
+                <Stack direction="row" align="center" justify="start" gap={0.1}>
+                  <p>{winsIncludingTrending}</p>
+                  <p>-</p>
+                  <p>{lossesIncludingTrending}</p>
+                  <p>-</p>
+                  <p>{tiesIncludingTrending}</p>
+                </Stack>
               </Stack>
-            </Stack>
-          ) : (
-            <Stack
-              direction="row"
-              align="center"
-              justify="start"
-              gap={0.5}
-              className={styles.recordContainer}
-            >
-              <h2 className={styles.sectionTitle}>Complete:</h2>
-              <Stack direction="row" align="center" justify="start" gap={0.1}>
-                <p className={styles.recordValue}>{portfolioData.wins}</p>
-                <p>-</p>
-                <p className={styles.recordValue}>{portfolioData.losses}</p>
-                <p>-</p>
-                <p className={styles.recordValue}>{portfolioData.ties}</p>
+            ) : (
+              <Stack
+                direction="row"
+                align="center"
+                justify="start"
+                gap={0.5}
+                className={styles.recordContainer}
+              >
+                <h2 className={styles.sectionTitle}>Complete:</h2>
+                <Stack direction="row" align="center" justify="start" gap={0.1}>
+                  <p className={styles.recordValue}>{portfolioData.wins}</p>
+                  <p>-</p>
+                  <p className={styles.recordValue}>{portfolioData.losses}</p>
+                  <p>-</p>
+                  <p className={styles.recordValue}>{portfolioData.ties}</p>
+                </Stack>
               </Stack>
-            </Stack>
-          )}
-        </Stack>
-      )}
+            )}
+          </Stack>
+        )}
+        <LinkButton
+          color={LinkButtonColor.MUTED}
+          onClick={() => setIsPreferencesOpen(!isPreferencesOpen)}
+          underline={isMobile ? true : false}
+        >
+          <Stack direction="row" align="center" justify="start" gap={0.5}>
+            <p className={styles.expandButtonText}>
+              {isPreferencesOpen ? "Hide Preferences" : "Edit Preferences"}
+            </p>
+            <LuSettings />
+          </Stack>
+        </LinkButton>
+      </Stack>
       <div
         ref={containerRef}
         className={`${styles.leagueCardsGrid} ${
