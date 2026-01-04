@@ -31,9 +31,11 @@ interface LinkButtonProps {
   children: React.ReactNode;
   underline?: boolean;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  type?: 'button' | 'submit' | 'reset';
-  target?: '_blank' | '_self' | '_parent' | '_top';
-  size?: 'small' | 'medium' | 'large';
+  type?: "button" | "submit" | "reset";
+  target?: "_blank" | "_self" | "_parent" | "_top";
+  size?: "small" | "medium" | "large";
+  pY?: "none" | "medium";
+  pX?: "none" | "medium";
 }
 
 const LinkButton: React.FC<LinkButtonProps> = ({
@@ -41,16 +43,22 @@ const LinkButton: React.FC<LinkButtonProps> = ({
   color = LinkButtonColor.DEFAULT,
   children,
   onClick,
-  size = 'medium',
+  size = "medium",
   underline = true,
-  type = 'button',
-  target = '_self'
+  type = "button",
+  target = "_self",
+  pY = "medium",
+  pX = "medium",
 }) => {
   const linkButtonClass = getLinkButtonClass(color);
+  const pYClass = `pY${pY}`;
+  const pXClass = `pX${pX}`;
 
   const buttonElement = (
     <button
-      className={`${styles.linkButton} ${linkButtonClass} ${underline ? styles.underline : ""} ${styles[size]}`}
+      className={`${styles.linkButton} ${linkButtonClass} ${
+        underline ? styles.underline : ""
+      } ${styles[size]} ${styles[pYClass]} ${styles[pXClass]}`}
       onClick={onClick}
       type={type}
     >

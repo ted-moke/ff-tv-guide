@@ -64,13 +64,12 @@ const GameMatchup: React.FC<GameMatchupProps> = ({
             <div className={styles["team-players"]}>
               {game.awayPlayers.starters.length > 0 && (
                 <div className={styles["players-wrapper"]}>
-                  <h4>{gameAwayCode}</h4>
                   <div className={styles["team-players-header-container"]}>
                     <div className={styles["team-players-header"]}>
                       <h6>Pos</h6>
                       <h6>Name</h6>
-                      <h6>Own</h6>
-                      <h6>Against</h6>
+                      <h6 className={styles.centerHeader}>Own</h6>
+                      <h6 className={styles.centerHeader}>Against</h6>
                     </div>
                   </div>
                   {game.awayPlayers.starters.map((player: Player) => (
@@ -84,13 +83,12 @@ const GameMatchup: React.FC<GameMatchupProps> = ({
               )}
               {game.homePlayers.starters.length > 0 && (
                 <div className={styles["players-wrapper"]}>
-                  <h4>{gameHomeCode}</h4>
                   <div className={styles["team-players-header-container"]}>
                     <div className={styles["team-players-header"]}>
                       <h6>Pos</h6>
                       <h6>Name</h6>
-                      <h6>Own</h6>
-                      <h6>Against</h6>
+                      <h6 className={styles.centerHeader}>Own</h6>
+                      <h6 className={styles.centerHeader}>Against</h6>
                     </div>
                   </div>
                   {game.homePlayers.starters.map((player: Player) => (
@@ -105,9 +103,12 @@ const GameMatchup: React.FC<GameMatchupProps> = ({
               {game.others.length > 0 && (
                 <>
                   <LinkButton
-                    onClick={toggleBench}
+                  onClick={toggleBench}
                     color={LinkButtonColor.MUTED}
                     underline={false}
+                    size="small"
+                    pY="none"
+                    pX="none"
                   >
                     <div className={styles["bench-button-content"]}>
                       {game.totals.self.bench} Bench Player
@@ -119,7 +120,6 @@ const GameMatchup: React.FC<GameMatchupProps> = ({
                     <>
                       {game.awayPlayers.others.length > 0 && (
                         <div className={styles["players-wrapper"]}>
-                          <h4>{gameAwayCode}</h4>
                           <div
                             className={styles["team-players-header-container"]}
                           >
@@ -141,7 +141,6 @@ const GameMatchup: React.FC<GameMatchupProps> = ({
                       )}
                       {game.homePlayers.others.length > 0 && (
                         <div className={styles["players-wrapper"]}>
-                          <h4>{gameHomeCode}</h4>
                           <div
                             className={styles["team-players-header-container"]}
                           >
@@ -169,7 +168,7 @@ const GameMatchup: React.FC<GameMatchupProps> = ({
               </div>
             </div>
           ) : (
-            <p className={styles["no-players"]}>No fantasy players</p>
+            <p className={styles["no-players"]}>No players</p>
           )}
         </div>
       )}

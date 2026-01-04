@@ -12,7 +12,7 @@
 
 .matchup-content {
   width: 100%;
-  padding: var(--size2) var(--size1);
+  padding: var(--size1_25) var(--size1) var(--size1);
 }
 
 
@@ -30,7 +30,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: var(--size3);
+  margin-bottom: var(--size0_5);
 }
 
 .players-wrapper:last-of-type {
@@ -82,8 +82,14 @@
   justify-items: flex-start;
 }
 
-.team-players-header h5 {
+.team-players-header h5,
+.team-players-header h6 {
   margin: 0;
+}
+
+.team-players-header h6.centerHeader {
+  text-align: center;
+  width: 100%;
 }
 
 .team-players-header-container {
@@ -97,11 +103,13 @@
   color: var(--text-color-muted);
   text-align: center;
   margin: 0;
+  margin-bottom: var(--size1);
 }
 
 .cardFooter {
   align-self: flex-end;
   color: var(--text-color-muted);
+  line-height: 1;
 }
 
 @media (max-width: 768px) {

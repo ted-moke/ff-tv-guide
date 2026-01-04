@@ -13,6 +13,10 @@
   max-width: 450px;
 }
 
+.player:last-of-type {
+  border-bottom: none;
+}
+
 .player p {
   margin: 0;
 }
@@ -148,4 +152,6 @@
   display: flex;
   flex-direction: column;
   gap: var(--size0_75);
+  width: 100%;
+  justify-content: center;
 }

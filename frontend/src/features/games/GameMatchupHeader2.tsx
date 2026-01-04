@@ -93,7 +93,7 @@ const GameMatchupHeader: React.FC<GameMatchupHeaderProps> = ({
             ) : (
               <PlayerCount game={game} variant="collapsed" />
             )
-          ) : null}
+          ) : <div className={styles.noPlayers}>No players</div>}
         </div>
       )}
 

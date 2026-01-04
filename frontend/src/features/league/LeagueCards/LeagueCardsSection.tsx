@@ -170,18 +170,20 @@ export const LeagueCardsSection: React.FC = () => {
           />
         ))}
       </div>
-      <div className={styles.pageIndicator}>
-        {Array.from({ length: totalPages }).map((_, index) => (
-          <button
-            key={index}
-            className={`${styles.pip} ${
-              index === currentPage ? styles.pipActive : ""
-            }`}
-            onClick={() => setCurrentPage(index)}
-            aria-label={`Go to page ${index + 1}`}
-          />
-        ))}
-      </div>
+      {shouldShowPagination && (
+        <div className={styles.pageIndicator}>
+          {Array.from({ length: totalPages }).map((_, index) => (
+            <button
+              key={index}
+              className={`${styles.pip} ${
+                index === currentPage ? styles.pipActive : ""
+              }`}
+              onClick={() => setCurrentPage(index)}
+              aria-label={`Go to page ${index + 1}`}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

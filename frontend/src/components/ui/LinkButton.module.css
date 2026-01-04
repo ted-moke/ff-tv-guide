@@ -82,3 +82,23 @@
   font-size: var(--font-size-large);
   padding: var(--size1_5) var(--size2);
 }
+
+.linkButton.pYnone {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.linkButton.pYmedium {
+  padding-top: var(--size1);
+  padding-bottom: var(--size1);
+}
+
+.linkButton.pXnone { 
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.linkButton.pXmedium {
+  padding-left: var(--size2);
+  padding-right: var(--size2);
+}
