@@ -6,7 +6,7 @@ import TextInput from "../../components/ui/TextInput";
 import styles from "./MigrationTools.module.css";
 
 const MigrationTools: React.FC = () => {
-  const [migrationSeason, setMigrationSeason] = useState("2025");
+  const [migrationSeason, setMigrationSeason] = useState("2026");
   const [singleLeagueId, setSingleLeagueId] = useState("");
 
   const migrationMutation = useMutation({
@@ -77,7 +77,7 @@ const MigrationTools: React.FC = () => {
             type="number"
             value={migrationSeason}
             onChange={(e) => setMigrationSeason(e.target.value)}
-            placeholder="2025"
+            placeholder="2026"
           />
         </div>
         <div className={styles.migrationInput}>

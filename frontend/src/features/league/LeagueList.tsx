@@ -8,6 +8,7 @@ import Dropdown from "../../components/ui/Dropdown";
 import TextInput from "../../components/ui/TextInput";
 import { Stack } from "../../components/ui/Stack";
 import Chip from "../../components/ui/Chip";
+import { CURRENT_SEASON } from "../../constants";
 
 const LeagueList: React.FC = () => {
   const [page, setPage] = useState(1);
@@ -15,7 +16,8 @@ const LeagueList: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [startAfter, setStartAfter] = useState<string | undefined>(undefined);
   const [localSeason, setLocalSeason] = useState<string>("");
-  const [localExternalLeagueId, setLocalExternalLeagueId] = useState<string>("");
+  const [localExternalLeagueId, setLocalExternalLeagueId] =
+    useState<string>("");
   const [localId, setLocalId] = useState<string>("");
   const [localLeagueMasterId, setLocalLeagueMasterId] = useState<string>("");
   const [localName, setLocalName] = useState<string>("");
@@ -37,7 +39,8 @@ const LeagueList: React.FC = () => {
   };
 
   // Check if any filters are active
-  const hasActiveFilters = season || externalLeagueId || id || leagueMasterId || name;
+  const hasActiveFilters =
+    season || externalLeagueId || id || leagueMasterId || name;
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["leagues", page, startAfter, sortBy, sortOrder, filters],
@@ -69,32 +72,28 @@ const LeagueList: React.FC = () => {
           <div className={styles.activeFilters}>
             <Stack direction="row">
               <span>Active filters: </span>
-              {season && (
-                <Chip label={`Season: ${season}`} />
-            )}
-            {externalLeagueId && (
-              <Chip label={`External ID: ${externalLeagueId}`} />
-            )}
-            {id && <Chip label={`ID: ${id}`} />}
-            {leagueMasterId && (
-              <Chip label={`Master ID: ${leagueMasterId}`} />
-            )}
-            {name && (
-              <Chip label={`Name: ${name}`} />
-            )}
+              {season && <Chip label={`Season: ${season}`} />}
+              {externalLeagueId && (
+                <Chip label={`External ID: ${externalLeagueId}`} />
+              )}
+              {id && <Chip label={`ID: ${id}`} />}
+              {leagueMasterId && (
+                <Chip label={`Master ID: ${leagueMasterId}`} />
+              )}
+              {name && <Chip label={`Name: ${name}`} />}
             </Stack>
           </div>
         )}
         <div className={styles.filterRow}>
           <div className={styles.filterField}>
             <label htmlFor="season-filter">Season:</label>
-              <TextInput
-                id="season-filter"
-                type="number"
-                value={localSeason}
-                onChange={(e) => setLocalSeason(e.target.value)}
-                placeholder="e.g., 2025"
-              />
+            <TextInput
+              id="season-filter"
+              type="number"
+              value={localSeason}
+              onChange={(e) => setLocalSeason(e.target.value)}
+              placeholder={`e.g., ${CURRENT_SEASON}`}
+            />
           </div>
           <div className={styles.filterField}>
             <label htmlFor="name-filter">Name Search:</label>
@@ -139,18 +138,18 @@ const LeagueList: React.FC = () => {
             />
           </div>
           <Button
-                onClick={() => {
-                  setSeason(localSeason);
-                  setExternalLeagueId(localExternalLeagueId);
-                  setId(localId);
-                  setLeagueMasterId(localLeagueMasterId);
-                  setName(localName);
-                }}
-                color="primary"
-                outline
-              >
-                Apply
-              </Button>
+            onClick={() => {
+              setSeason(localSeason);
+              setExternalLeagueId(localExternalLeagueId);
+              setId(localId);
+              setLeagueMasterId(localLeagueMasterId);
+              setName(localName);
+            }}
+            color="primary"
+            outline
+          >
+            Apply
+          </Button>
         </div>
         <div className={styles.filterActions}>
           <Button

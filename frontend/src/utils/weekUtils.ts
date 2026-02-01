@@ -1,15 +1,17 @@
 import nflSchedule from "../assets/nfl-schedule-2025.json";
+import { getCurrentSeason } from "../constants";
 
 /**
  * Get the current NFL week based on the current date
  * @returns The current week number (1-18) or null if before/after season
  */
 export const getCurrentWeek = (): number | null => {
+  const currentSeason = getCurrentSeason();
   const now = new Date();
   const easternTime = new Date(
-    now.toLocaleString("en-US", { timeZone: "America/New_York" })
+    now.toLocaleString("en-US", { timeZone: "America/New_York" }),
   );
-  const seasonStart = new Date("2025-09-03T00:00:00-04:00"); // First game of 2025 season
+  const seasonStart = new Date(`${currentSeason}-09-03T00:00:00-04:00`); // First game of current season
   const THREE_DAYS = 3 * 24 * 60 * 60 * 1000;
 
   // If the current date is more than 3 days before the season start, return null
@@ -22,7 +24,7 @@ export const getCurrentWeek = (): number | null => {
   }
 
   const weeksPassed = Math.floor(
-    (easternTime.getTime() - seasonStart.getTime()) / (7 * 24 * 60 * 60 * 1000)
+    (easternTime.getTime() - seasonStart.getTime()) / (7 * 24 * 60 * 60 * 1000),
   );
 
   if (weeksPassed >= 19) {
@@ -75,7 +77,7 @@ export const getFirstGameOfWeek = (weekNumber: number): Date | null => {
 export const hasWeekStarted = (): boolean => {
   const now = new Date();
   const easternTime = new Date(
-    now.toLocaleString("en-US", { timeZone: "America/New_York" })
+    now.toLocaleString("en-US", { timeZone: "America/New_York" }),
   );
   const day = easternTime.getDay();
 
@@ -110,7 +112,7 @@ export const hasWeekStarted = (): boolean => {
 export const thruSundayDayGames = (): boolean => {
   const now = new Date();
   const easternTime = new Date(
-    now.toLocaleString("en-US", { timeZone: "America/New_York" })
+    now.toLocaleString("en-US", { timeZone: "America/New_York" }),
   );
 
   // If it's sunday and after 6:30 PM, or monday return true

@@ -4,6 +4,7 @@ import { getDb } from "../firebase";
 import type { League } from "../types/shared";
 import { LeagueMasterService } from "../services/leagueMasterService";
 import { startBackgroundJob } from "../utils/backgroundJobs";
+import { getCurrentSeason } from "../utils/getCurrentSeason";
 
 const BATCH_SIZE = 7; // Adjust as needed
 
@@ -15,7 +16,7 @@ export const upsertLeague = async (req: Request, res: Response) => {
     platformCredentialId,
     platformId,
     externalTeamId,
-    season = 2025, // Default to current season
+    season = getCurrentSeason(), // Default to current season
   } = req.body;
 
   if (

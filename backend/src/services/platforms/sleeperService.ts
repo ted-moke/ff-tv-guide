@@ -8,6 +8,7 @@ import * as path from "path";
 import { z } from "zod";
 import { SleeperMatchup, SleeperRoster } from "../../types/sleeperTypes";
 import { generateShortLeagueName } from "../../utils/generateShortLeagueName";
+import { getCurrentSeason } from "../../utils/getCurrentSeason";
 
 export class SleeperService {
   private static instance: SleeperService;
@@ -25,11 +26,12 @@ export class SleeperService {
   }
 
   private loadNFLPlayers() {
+    const year = getCurrentSeason();
     const filePath = path.join(
       process.cwd(),
       "src",
       "seed",
-      "nflPlayers-2025.json",
+      `nflPlayers-${year}.json`,
     );
     try {
       const fileContent = fs.readFileSync(filePath, "utf-8");
@@ -243,7 +245,8 @@ export class SleeperService {
         )
       : 0;
     const currentWeek = getCurrentWeek();
-    const averagePointsFor = currentWeek - 1 > 0 ? pointsFor / (currentWeek - 1) : 0;
+    const averagePointsFor =
+      currentWeek - 1 > 0 ? pointsFor / (currentWeek - 1) : 0;
     const winPercentage = wins / (wins + losses + ties);
 
     return {
